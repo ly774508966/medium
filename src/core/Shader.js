@@ -11,34 +11,34 @@ export default class Shader {
 		this.vertexShader = this._compile('vs', glslify('../../shaders/vertex.glsl'))
 		this.fragmentShader = this._compile('fs', glslify('../../shaders/frag.glsl'))
 
-		this.shaderProgram = gl.createProgram()
+		this.program = gl.createProgram()
 
-		gl.attachShader(this.shaderProgram, this.vertexShader)
-		gl.attachShader(this.shaderProgram, this.fragmentShader)
-		gl.linkProgram(this.shaderProgram)
+		gl.attachShader(this.program, this.vertexShader)
+		gl.attachShader(this.program, this.fragmentShader)
+		gl.linkProgram(this.program)
 
-		if(!gl.getProgramParameter(this.shaderProgram, gl.LINK_STATUS)) {
+		if(!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
 			console.warn('Failed to initialise shaders')
 		}
 
-		gl.useProgram(this.shaderProgram)
+		gl.useProgram(this.program)
 
-		this.vertexPositionAttribute = gl.getAttribLocation(this.shaderProgram, 'aVertexPosition')
-		gl.enableVertexAttribArray(this.shaderProgram.vertexPositionAttribute)
+		this.vertexPositionAttribute = gl.getAttribLocation(this.program, 'aVertexPosition')
+		gl.enableVertexAttribArray(this.vertexPositionAttribute)
 
-		this.vertexColorAttribute = gl.getAttribLocation(this.shaderProgram, 'aVertexColor')
-		gl.enableVertexAttribArray(this.shaderProgram.vertexColorAttribute)
+		this.vertexColorAttribute = gl.getAttribLocation(this.program, 'aVertexColor')
+		gl.enableVertexAttribArray(this.vertexColorAttribute)
 
-		this.pMatrixUniform = gl.getUniformLocation(this.shaderProgram, 'uPMatrix')
-		this.mvMatrixUniform = gl.getUniformLocation(this.shaderProgram, 'uMVMatrix')
+		this.pMatrixUniform = gl.getUniformLocation(this.program, 'uPMatrix')
+		this.mvMatrixUniform = gl.getUniformLocation(this.program, 'uMVMatrix')
 	}
 
-	setMatrixUniforms(pMatrix, mvMatrix) {
+	setUniforms(modelViewMatrix, projectionMatrix) {
 
 		const gl = GL.get()
 
-		gl.uniformMatrix4fv(this.pMatrixUniform, false, pMatrix)
-		gl.uniformMatrix4fv(this.mvMatrixUniform, false, mvMatrix)
+		gl.uniformMatrix4fv(this.pMatrixUniform, false, projectionMatrix)
+		gl.uniformMatrix4fv(this.mvMatrixUniform, false, modelViewMatrix)
 	}
 
 	_compile(type, source) {

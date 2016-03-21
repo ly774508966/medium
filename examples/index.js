@@ -9,7 +9,7 @@ document.body.appendChild(renderer.canvas)
 const scene = new Leonardo.Scene()
 
 const geometry = new Leonardo.PlaneGeometry()
-const material = new Leonardo.ShaderMaterial()
+const material = new Leonardo.Shader()
 const plane = new Leonardo.Mesh(geometry, material)
 
 scene.add(plane)

@@ -1,5 +1,6 @@
 import * as GL from './GL'
 import {mat4} from 'gl-matrix'
+import {degToRad} from '../utils/math'
 
 export default class Renderer {
 
@@ -51,21 +52,31 @@ export default class Renderer {
 
 		gl.viewportWidth = width
 		gl.viewportHeight = height
+
+		this.rotation = 0
 	}
 
 	render(scene) {
 
 		const gl = GL.get()
 
+		this.rotation++
+
 		gl.viewport(0.0, 0.0, gl.viewportWidth, gl.viewportHeight)
 
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
-		mat4.perspective(this.modelViewMatrix, 45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0)
+		mat4.perspective(this.projectionMatrix, 45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0)
+
+		mat4.identity(this.modelViewMatrix)
+
+		mat4.translate(this.modelViewMatrix, this.modelViewMatrix, [0, 0, -5])
+
+		mat4.rotate(this.modelViewMatrix, this.modelViewMatrix, degToRad(this.rotation), [0, 1, 0])
 
 		// Render the scene
 		scene.children.forEach(child => {
-			// console.log(child);
+			child.draw(this.modelViewMatrix, this.projectionMatrix)
 		})
 	}
 }

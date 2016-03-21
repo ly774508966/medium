@@ -4,7 +4,7 @@
   "description": "",
   "main": "lib/index.js",
   "scripts": {
-    "examples": "budo --port 3000 examples/index.js --watch-glob src/**/* --css examples/style.css --live -- -t [ babelify --extensions .js ] -t glslify",
+    "examples": "budo --port 3000 examples/index.js --watch-glob lib/**/* --css examples/style.css --live -- -t [ babelify --extensions .js ] -t glslify",
     "watch": "babel --presents es2015 --watch src --out-dir lib",
     "build": "babel --presents es2015 src --out-dir lib",
     "lint": "eslint src"

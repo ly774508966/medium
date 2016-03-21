@@ -12,7 +12,7 @@ import Shader from './core/Shader'
 export {Shader}
 
 // Materials
-import ShaderMaterial from './materials/ShaderMaterial'
+import ShaderMaterial from './materials/Shader'
 export {ShaderMaterial}
 
 // Objects
