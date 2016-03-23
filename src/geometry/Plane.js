@@ -40,9 +40,10 @@ export default class Plane {
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexColorBuffer)
 
 		let colors = []
-        for (var i=0; i < 4; i++) {
-            colors = colors.concat([1, 1, i/4, 1.0]);
-        }
+        colors = colors.concat([1, 0, 0, 1.0])
+        colors = colors.concat([0, 1, 0, 1.0])
+        colors = colors.concat([0, 0, 1, 1.0])
+        colors = colors.concat([1, 1, 0, 1.0])
 
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW)
 
