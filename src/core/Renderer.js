@@ -1,6 +1,6 @@
 import * as GL from './GL'
 import {mat4} from 'gl-matrix'
-import {degToRad} from '../utils/math'
+import {degToRad} from 'utils/math'
 
 export default class Renderer {
 
@@ -27,6 +27,8 @@ export default class Renderer {
 		// Matrix stack for scene object translations
 		this.modelViewMatrixStack = []
 
+		this.pixelRatio = 1
+
 		// Try initialising gl
 		try {
 			const gl = this.canvas.getContext('experimental-webgl')
@@ -47,16 +49,24 @@ export default class Renderer {
 
 		const gl = GL.get()
 
-		this.width = width
-		this.height = height
+		this.width = width * this.pixelRatio
+		this.height = height * this.pixelRatio
 
 		this.canvas.width = this.width
 		this.canvas.height = this.height
 
-		gl.viewportWidth = width
-		gl.viewportHeight = height
+		this.canvas.style.width = `${width}px`
+		this.canvas.style.height = `${height}px`
+
+		gl.viewportWidth = this.width
+		gl.viewportHeight = this.height
 
 		this.rotation = 0
+	}
+
+	setDevicePixelRatio(ratio = 1) {
+		this.pixelRatio = ratio || 1
+		this.setSize(this.width, this.height)
 	}
 
 	modelViewPushMatrix() {
@@ -82,19 +92,17 @@ export default class Renderer {
 
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
-		mat4.perspective(this.projectionMatrix, 45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0)
+		mat4.perspective(this.projectionMatrix, camera.fov, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0)
 
 		mat4.identity(this.modelViewMatrix)
 
 		mat4.lookAt(this.modelViewMatrix, camera.position, camera.center, camera.up)
 
-		// mat4.rotate(this.modelViewMatrix, this.modelViewMatrix, degToRad(this.rotation), [0, 1, 0])
-
 		// Render the scene
 		scene.children.forEach(child => {
 			this.modelViewPushMatrix()
 			// mat4.translate(this.modelViewMatrix, this.modelViewMatrix, [0, 0, -5])
-			mat4.rotateX(this.modelViewMatrix, this.modelViewMatrix, Math.PI/2)
+			// mat4.rotateX(this.modelViewMatrix, this.modelViewMatrix, Math.PI/2)
 			child.draw(this.modelViewMatrix, this.projectionMatrix)
 			this.modelViewPopMatrix()
 		})

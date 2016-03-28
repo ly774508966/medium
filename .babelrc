@@ -1,0 +1,13 @@
+{
+	"presets": ["es2015"],
+	"plugins": [
+		["babel-plugin-module-alias", [
+			{ "src": "./src/core", "expose": "core" },
+			{ "src": "./src/geometry", "expose": "geometry" },
+			{ "src": "./src/utils", "expose": "utils" },
+			{ "src": "./src/helpers", "expose": "helpers" },
+			{ "src": "./src/shaders", "expose": "shaders" }
+			]
+		]
+	]
+}

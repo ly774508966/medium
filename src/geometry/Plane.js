@@ -1,13 +1,14 @@
-import * as GL from '../core/GL'
+import * as GL from 'core/GL'
 
 export default class Plane {
 
-	constructor( width = 1, height = 1, divisionsX = 1, divisionsY = 1 ) {
+	constructor(width = 1, height = 1, divisionsX = 1, divisionsY = 1) {
 
 		this._width  = width
 		this._height = height
 		this._divisionsX = divisionsX
 		this._divisionsY = divisionsY
+		this.colors = []
 
 		const gl = GL.get()
 
@@ -34,16 +35,21 @@ export default class Plane {
 
 		this.vertexPositionBuffer.itemSize = 3
 		this.vertexPositionBuffer.numItems = 4
+	}
+
+	setVertexColors(colors) {
+
+		const gl = GL.get()
 
 		// Vertex colors
 		this.vertexColorBuffer = gl.createBuffer()
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexColorBuffer)
 
-		let colors = []
-        colors = colors.concat([1, 0, 0, 1.0])
-        colors = colors.concat([0, 1, 0, 1.0])
-        colors = colors.concat([0, 0, 1, 1.0])
-        colors = colors.concat([1, 1, 0, 1.0])
+		// let colors = []
+		// colors = colors.concat([1, 0, 0, 1.0])
+		// colors = colors.concat([0, 1, 0, 1.0])
+		// colors = colors.concat([0, 0, 1, 1.0])
+		// colors = colors.concat([1, 1, 0, 1.0])
 
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW)
 

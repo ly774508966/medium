@@ -1,15 +1,25 @@
 const glslify = require('glslify')
 import * as GL from './GL'
+import VertexShader from 'shaders/vertex.glsl'
+import FragmentShader from 'shaders/frag.glsl'
 
 export default class Shader {
 
-	constructor() {
+	constructor(options) {
+
+		const defaults = {
+			vertexColors: false,
+			vertexShader: VertexShader,
+			fragmentShader: FragmentShader,
+		}
+
+		this.settings = Object.assign({}, defaults, options)
 
 		const gl = GL.get()
 
 		// Create program
-		this.vertexShader = this._compile('vs', glslify('../../shaders/vertex.glsl'))
-		this.fragmentShader = this._compile('fs', glslify('../../shaders/frag.glsl'))
+		this.vertexShader = this._compile('vs', this.settings.vertexShader)
+		this.fragmentShader = this._compile('fs', this.settings.fragmentShader)
 
 		this.program = gl.createProgram()
 
@@ -26,11 +36,18 @@ export default class Shader {
 		this.vertexPositionAttribute = gl.getAttribLocation(this.program, 'aVertexPosition')
 		gl.enableVertexAttribArray(this.vertexPositionAttribute)
 
-		this.vertexColorAttribute = gl.getAttribLocation(this.program, 'aVertexColor')
-		gl.enableVertexAttribArray(this.vertexColorAttribute)
+		if(this.settings.vertexColors){
+			this.vertexColorAttribute = gl.getAttribLocation(this.program, 'aVertexColor')
+			gl.enableVertexAttribArray(this.vertexColorAttribute)
+		}
 
 		this.pMatrixUniform = gl.getUniformLocation(this.program, 'uPMatrix')
 		this.mvMatrixUniform = gl.getUniformLocation(this.program, 'uMVMatrix')
+	}
+
+	bindProgram() {
+		const gl = GL.get()
+		gl.useProgram(this.program)
 	}
 
 	setUniforms(modelViewMatrix, projectionMatrix) {

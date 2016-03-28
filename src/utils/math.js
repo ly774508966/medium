@@ -9,3 +9,7 @@ export function radToDeg(radians) {
 export function clamp(value, min, max) {
 	return Math.max(Math.min(value, max), min)
 }
+
+export function lerp(min, max, alpha) {
+	return min + ((max - min) * alpha)
+}
