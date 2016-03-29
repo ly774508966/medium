@@ -14,10 +14,6 @@ export {Mesh}
 import Shader from 'core/Shader'
 export {Shader}
 
-import Shader2 from 'core/Shader'
-export {Shader2}
-
-
 // Materials
 // import ShaderMaterial from 'materials/Shader'
 // export {ShaderMaterial}

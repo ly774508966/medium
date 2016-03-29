@@ -1,4 +1,4 @@
-import {vec3} from 'gl-matrix'
+import {vec3, mat4} from 'gl-matrix'
 import {lerp} from 'utils/math'
 import Mesh from 'core/Mesh'
 import Shader from 'core/Shader'
@@ -10,9 +10,10 @@ attribute vec3 aVertexPosition;
 
 uniform mat4 uMVMatrix;
 uniform mat4 uPMatrix;
+uniform mat4 uModelMatrix;
 
 void main(void){
-	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+	gl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
 }
 `
 
@@ -86,7 +87,9 @@ export default class Grid extends Mesh {
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexPositionBuffer)
 		gl.vertexAttribPointer(this.shader.vertexPositionAttribute, this.geometry.vertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0)
 
-		this.shader.setUniforms(modelViewMatrix, projectionMatrix)
+		let modelMatrix = mat4.create()
+
+		this.shader.setUniforms(modelViewMatrix, projectionMatrix, modelMatrix)
 
 		gl.drawArrays(gl.LINES, 0, this.geometry.vertexPositionBuffer.numItems)
 	}

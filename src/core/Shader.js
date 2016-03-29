@@ -43,6 +43,7 @@ export default class Shader {
 
 		this.pMatrixUniform = gl.getUniformLocation(this.program, 'uPMatrix')
 		this.mvMatrixUniform = gl.getUniformLocation(this.program, 'uMVMatrix')
+		this.mMatrixUniform = gl.getUniformLocation(this.program, 'uModelMatrix')
 	}
 
 	bindProgram() {
@@ -50,12 +51,13 @@ export default class Shader {
 		gl.useProgram(this.program)
 	}
 
-	setUniforms(modelViewMatrix, projectionMatrix) {
+	setUniforms(modelViewMatrix, projectionMatrix, modelMatrix) {
 
 		const gl = GL.get()
 
 		gl.uniformMatrix4fv(this.pMatrixUniform, false, projectionMatrix)
 		gl.uniformMatrix4fv(this.mvMatrixUniform, false, modelViewMatrix)
+		gl.uniformMatrix4fv(this.mMatrixUniform, false, modelMatrix)
 	}
 
 	_compile(type, source) {

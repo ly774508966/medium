@@ -1,5 +1,5 @@
 import * as GL from './GL'
-import {mat4} from 'gl-matrix'
+import {mat4, quat} from 'gl-matrix'
 import {degToRad} from 'utils/math'
 
 export default class Renderer {
@@ -79,7 +79,7 @@ export default class Renderer {
 		if(this.modelViewMatrixStack.length === 0){
 			throw 'Invalid modelViewPopMatrix'
 		}
-		this.modelViewMatrixStack.pop()
+		this.modelViewMatrix = this.modelViewMatrixStack.pop()
 	}
 
 	render(scene, camera) {
@@ -99,10 +99,8 @@ export default class Renderer {
 		mat4.lookAt(this.modelViewMatrix, camera.position, camera.center, camera.up)
 
 		// Render the scene
-		scene.children.forEach(child => {
+		scene.children.forEach((child, i) => {
 			this.modelViewPushMatrix()
-			// mat4.translate(this.modelViewMatrix, this.modelViewMatrix, [0, 0, -5])
-			// mat4.rotateX(this.modelViewMatrix, this.modelViewMatrix, Math.PI/2)
 			child.draw(this.modelViewMatrix, this.projectionMatrix)
 			this.modelViewPopMatrix()
 		})
