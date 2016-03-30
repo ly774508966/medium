@@ -79,6 +79,7 @@
 	geometry.setVertexColors(colors);
 	var material = new _index.Shader({
 		vertexColors: true,
+		vertexNormals: true,
 		vertexShader: __webpack_require__(28),
 		fragmentShader: __webpack_require__(29)
 	});
@@ -94,7 +95,7 @@
 	scene.add(plane);
 
 	// Helpers
-	var controls = new _index.OrbitControls(camera, document);
+	var controls = new _index.OrbitControls(camera, renderer.canvas);
 	var grid = new _index.Grid(10);
 	var gui = new _datGui2.default.GUI();
 
@@ -7124,6 +7125,9 @@
 				gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexColorBuffer);
 				gl.vertexAttribPointer(this.shader.vertexColorAttribute, this.geometry.vertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
+				gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexNormalBuffer);
+				gl.vertexAttribPointer(this.shader.vertexNormalAttribute, this.geometry.vertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
 				_glMatrix.mat4.identity(this.modelMatrix);
 				_glMatrix.mat4.translate(this.modelMatrix, this.modelMatrix, this.position);
 				_glMatrix.mat4.rotate(this.modelMatrix, this.modelMatrix, this.rotation[0], [1, 0, 0]);
@@ -7263,6 +7267,7 @@
 
 			var defaults = {
 				vertexColors: false,
+				vertexNormals: false,
 				vertexShader: _vertex2.default,
 				fragmentShader: _frag2.default
 			};
@@ -7285,15 +7290,24 @@
 				console.warn('Failed to initialise shaders');
 			}
 
-			gl.useProgram(this.program);
-
 			this.vertexPositionAttribute = gl.getAttribLocation(this.program, 'aVertexPosition');
 			gl.enableVertexAttribArray(this.vertexPositionAttribute);
+
+			if (this.settings.vertexNormals) {
+				this.vertexNormalAttribute = gl.getAttribLocation(this.program, 'aVertexNormal');
+				gl.enableVertexAttribArray(this.vertexNormalAttribute);
+			}
 
 			if (this.settings.vertexColors) {
 				this.vertexColorAttribute = gl.getAttribLocation(this.program, 'aVertexColor');
 				gl.enableVertexAttribArray(this.vertexColorAttribute);
 			}
+
+			// console.log(this.vertexPositionAttribute);
+			// console.log(this.vertexNormalAttribute);
+			// console.log(this.vertexColorAttribute);
+
+			gl.useProgram(this.program);
 
 			this.pMatrixUniform = gl.getUniformLocation(this.program, 'uPMatrix');
 			this.mvMatrixUniform = gl.getUniformLocation(this.program, 'uMVMatrix');
@@ -7354,7 +7368,7 @@
 
 	"use strict";
 
-	module.exports = "\nattribute vec3 aVertexPosition;\nattribute vec4 aVertexColor;\n\nuniform mat4 uMVMatrix;\nuniform mat4 uPMatrix;\nuniform mat4 uModelMatrix;\n\nvarying vec4 vColor;\n\nvoid main(void){\n\tvColor = aVertexColor;\n\tgl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);\n}\n";
+	module.exports = "\nattribute vec3 aVertexPosition;\nattribute vec3 aVertexNormal;\nattribute vec4 aVertexColor;\n\nuniform mat4 uMVMatrix;\nuniform mat4 uPMatrix;\nuniform mat4 uModelMatrix;\n\nvarying vec4 vColor;\nvarying vec3 vNormal;\n\nvoid main(void){\n\tvColor = aVertexColor;\n\tvNormal = aVertexNormal;\n\tgl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);\n}\n";
 
 /***/ },
 /* 20 */
@@ -7456,6 +7470,17 @@
 
 			this.vertexPositionBuffer.itemSize = 3;
 			this.vertexPositionBuffer.numItems = 4;
+
+			// Vertex normals
+			this.vertexNormalBuffer = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexNormalBuffer);
+
+			var normals = [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0];
+
+			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+
+			this.vertexNormalBuffer.itemSize = 3;
+			this.vertexNormalBuffer.numItems = 4;
 		}
 
 		_createClass(Plane, [{
@@ -12238,7 +12263,7 @@
 
 	"use strict";
 
-	module.exports = "\nattribute vec3 aVertexPosition;\nattribute vec4 aVertexColor;\n\nuniform mat4 uMVMatrix;\nuniform mat4 uPMatrix;\nuniform mat4 uModelMatrix;\n\nvarying vec4 vColor;\n\nvoid main(void){\n\tvColor = aVertexColor;\n\tgl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);\n}\n";
+	module.exports = "\nattribute vec3 aVertexPosition;\nattribute vec3 aVertexNormal;\nattribute vec4 aVertexColor;\n\nuniform mat4 uMVMatrix;\nuniform mat4 uPMatrix;\nuniform mat4 uModelMatrix;\n\nvarying vec4 vColor;\nvarying vec3 vNormal;\n\nvoid main(void){\n\tvColor = aVertexColor;\n\tvNormal = aVertexNormal;\n\tgl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);\n}\n";
 
 /***/ },
 /* 29 */

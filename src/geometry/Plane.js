@@ -35,6 +35,22 @@ export default class Plane {
 
 		this.vertexPositionBuffer.itemSize = 3
 		this.vertexPositionBuffer.numItems = 4
+
+		// Vertex normals
+		this.vertexNormalBuffer = gl.createBuffer()
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexNormalBuffer)
+
+		const normals = [
+			0.0, 0.0, 1.0,
+			0.0, 0.0, 1.0,
+			0.0, 0.0, 1.0,
+			0.0, 0.0, 1.0,
+		]
+
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW)
+
+		this.vertexNormalBuffer.itemSize = 3
+		this.vertexNormalBuffer.numItems = 4
 	}
 
 	setVertexColors(colors) {

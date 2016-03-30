@@ -9,6 +9,7 @@ export default class Shader {
 
 		const defaults = {
 			vertexColors: false,
+			vertexNormals: false,
 			vertexShader: VertexShader,
 			fragmentShader: FragmentShader,
 		}
@@ -31,15 +32,24 @@ export default class Shader {
 			console.warn('Failed to initialise shaders')
 		}
 
-		gl.useProgram(this.program)
-
 		this.vertexPositionAttribute = gl.getAttribLocation(this.program, 'aVertexPosition')
 		gl.enableVertexAttribArray(this.vertexPositionAttribute)
+
+		if(this.settings.vertexNormals){
+			this.vertexNormalAttribute = gl.getAttribLocation(this.program, 'aVertexNormal')
+			gl.enableVertexAttribArray(this.vertexNormalAttribute)
+		}
 
 		if(this.settings.vertexColors){
 			this.vertexColorAttribute = gl.getAttribLocation(this.program, 'aVertexColor')
 			gl.enableVertexAttribArray(this.vertexColorAttribute)
 		}
+
+		// console.log(this.vertexPositionAttribute);
+		// console.log(this.vertexNormalAttribute);
+		// console.log(this.vertexColorAttribute);
+
+		gl.useProgram(this.program)
 
 		this.pMatrixUniform = gl.getUniformLocation(this.program, 'uPMatrix')
 		this.mvMatrixUniform = gl.getUniformLocation(this.program, 'uMVMatrix')

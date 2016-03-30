@@ -28,6 +28,7 @@ const geometry = new PlaneGeometry()
 geometry.setVertexColors(colors)
 const material = new Shader({
 	vertexColors: true,
+	vertexNormals: true,
 	vertexShader: require('shaders/vertex.glsl'),
 	fragmentShader: require('shaders/frag.glsl'),
 })
@@ -43,7 +44,7 @@ plane.rotationZ = Math.PI/4
 scene.add(plane)
 
 // Helpers
-const controls = new OrbitControls(camera, document)
+const controls = new OrbitControls(camera, renderer.canvas)
 const grid = new Grid(10)
 const gui = new dat.GUI()
 
