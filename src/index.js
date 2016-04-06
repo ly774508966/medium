@@ -22,6 +22,9 @@ export {Shader}
 import PlaneGeometry from 'geometry/Plane'
 export {PlaneGeometry}
 
+import BoxGeometry from 'geometry/Box'
+export {BoxGeometry}
+
 // Helpers
 import OrbitControls from 'helpers/OrbitControls'
 export {OrbitControls}

@@ -48,7 +48,7 @@
 
 	var _index = __webpack_require__(1);
 
-	var _datGui = __webpack_require__(25);
+	var _datGui = __webpack_require__(26);
 
 	var _datGui2 = _interopRequireDefault(_datGui);
 
@@ -75,38 +75,66 @@
 	colors = colors.concat([0, 0, 1, 1.0]);
 	colors = colors.concat([1, 1, 0, 1.0]);
 
-	var geometry = new _index.PlaneGeometry();
+	// const geometry = new PlaneGeometry()
+	// geometry.setVertexColors(colors)
+	// const material = new Shader({
+	// 	vertexColors: true,
+	// 	vertexNormals: true,
+	// 	vertexShader: require('shaders/vertex.glsl'),
+	// 	fragmentShader: require('shaders/frag.glsl'),
+	// })
+	// const plane = new Mesh(geometry, material)
+	colors = [];
+	for (var i = 0; i < 6; i++) {
+		for (var j = 0; j < 4; j++) {
+			colors = colors.concat([Math.random(), Math.random(), Math.random(), 1.0]);
+		}
+	}
+	console.log(colors.length);
+
+	var geometry = new _index.BoxGeometry();
 	geometry.setVertexColors(colors);
 	var material = new _index.Shader({
 		vertexColors: true,
 		vertexNormals: true,
-		vertexShader: __webpack_require__(28),
-		fragmentShader: __webpack_require__(29)
+		vertexShader: __webpack_require__(29),
+		fragmentShader: __webpack_require__(30)
 	});
-	var plane = new _index.Mesh(geometry, material);
+	var box = new _index.Mesh(geometry, material);
 
-	plane.x = 2;
-	plane.y = 2;
-	plane.z = 2;
-	plane.rotationX = Math.PI / 4;
-	plane.rotationY = Math.PI / 4;
-	plane.rotationZ = Math.PI / 4;
+	scene.add(box);
 
-	scene.add(plane);
+	// plane.x = 2
+	// plane.y = 2
+	// plane.z = 2
+	// plane.rotationX = Math.PI/4
+	// plane.rotationY = Math.PI/4
+	// plane.rotationZ = Math.PI/4
+
+	// scene.add(plane)
 
 	// Helpers
 	var controls = new _index.OrbitControls(camera, renderer.canvas);
-	var grid = new _index.Grid(10);
+	// const grid = new Grid(10)
 	var gui = new _datGui2.default.GUI();
+	var cameraGUI = gui.addFolder('camera');
+	cameraGUI.open();
+	var lightingGUI = gui.addFolder('lighting');
+	lightingGUI.open();
 
-	scene.add(grid);
+	// scene.add(grid)
 
 	// gui.add(controls, '_rotationX', -Math.PI/2, Math.PI/2).listen().onChange(()=> {controls.update()})
 	// gui.add(controls, '_rotationY', 0, Math.PI*2).listen().onChange(()=> {controls.update()})
 	// gui.add(controls, '_radius').listen()
-	gui.add(plane, 'rotationX', 0, Math.PI * 2).listen();
-	gui.add(plane, 'rotationY', 0, Math.PI * 2).listen();
-	gui.add(plane, 'rotationZ', 0, Math.PI * 2).listen();
+	cameraGUI.add(box, 'rotationX', 0, Math.PI * 2).listen();
+	cameraGUI.add(box, 'rotationY', 0, Math.PI * 2).listen();
+	cameraGUI.add(box, 'rotationZ', 0, Math.PI * 2).listen();
+
+	// let range = 1
+	// lightingGUI.add(directionallight, 'x', -range, range)
+	// lightingGUI.add(directionallight, 'y', -range, range)
+	// lightingGUI.add(directionallight, 'z', -range, range)
 
 	controls.update();
 
@@ -119,6 +147,10 @@
 
 	function update() {
 		requestAnimationFrame(update);
+
+		box.rotationX += 0.01;
+		// box.rotationZ += 0.01
+
 		renderer.render(scene, camera);
 	}
 	update();
@@ -132,7 +164,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.Grid = exports.OrbitControls = exports.PlaneGeometry = exports.Shader = exports.Mesh = exports.Scene = exports.PerspectiveCamera = exports.Renderer = undefined;
+	exports.Grid = exports.OrbitControls = exports.BoxGeometry = exports.PlaneGeometry = exports.Shader = exports.Mesh = exports.Scene = exports.PerspectiveCamera = exports.Renderer = undefined;
 
 	var _Renderer = __webpack_require__(2);
 
@@ -158,11 +190,15 @@
 
 	var _Plane2 = _interopRequireDefault(_Plane);
 
-	var _OrbitControls = __webpack_require__(23);
+	var _Box = __webpack_require__(23);
+
+	var _Box2 = _interopRequireDefault(_Box);
+
+	var _OrbitControls = __webpack_require__(24);
 
 	var _OrbitControls2 = _interopRequireDefault(_OrbitControls);
 
-	var _Grid = __webpack_require__(24);
+	var _Grid = __webpack_require__(25);
 
 	var _Grid2 = _interopRequireDefault(_Grid);
 
@@ -184,6 +220,7 @@
 	// Objects
 
 	exports.PlaneGeometry = _Plane2.default;
+	exports.BoxGeometry = _Box2.default;
 
 	// Helpers
 
@@ -7109,6 +7146,7 @@
 
 			this.position = _glMatrix.vec3.create();
 			this.rotation = _glMatrix.vec3.create();
+			this.scale = _glMatrix.vec3.fromValues(1, 1, 1);
 			this.modelMatrix = _glMatrix.mat4.create();
 		}
 
@@ -7122,21 +7160,27 @@
 				gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexPositionBuffer);
 				gl.vertexAttribPointer(this.shader.vertexPositionAttribute, this.geometry.vertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
-				gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexColorBuffer);
-				gl.vertexAttribPointer(this.shader.vertexColorAttribute, this.geometry.vertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
+				if (this.shader.settings.vertexColors) {
+					gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexColorBuffer);
+					gl.vertexAttribPointer(this.shader.vertexColorAttribute, this.geometry.vertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
+				}
 
 				gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexNormalBuffer);
 				gl.vertexAttribPointer(this.shader.vertexNormalAttribute, this.geometry.vertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+				gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.geometry.vertexIndexBuffer);
 
 				_glMatrix.mat4.identity(this.modelMatrix);
 				_glMatrix.mat4.translate(this.modelMatrix, this.modelMatrix, this.position);
 				_glMatrix.mat4.rotate(this.modelMatrix, this.modelMatrix, this.rotation[0], [1, 0, 0]);
 				_glMatrix.mat4.rotate(this.modelMatrix, this.modelMatrix, this.rotation[1], [0, 1, 0]);
 				_glMatrix.mat4.rotate(this.modelMatrix, this.modelMatrix, this.rotation[2], [0, 0, 1]);
+				_glMatrix.mat4.scale(this.modelMatrix, this.modelMatrix, this.scale);
 
 				this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
 
-				gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.geometry.vertexPositionBuffer.numItems);
+				// gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.geometry.vertexPositionBuffer.numItems)
+				gl.drawElements(gl.TRIANGLES, this.geometry.vertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 			}
 		}, {
 			key: 'x',
@@ -7198,6 +7242,36 @@
 			get: function get() {
 				return this.rotation[2];
 			}
+		}, {
+			key: 'scaleX',
+			set: function set() {
+				var value = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+				this.scale[0] = value;
+			},
+			get: function get() {
+				return this.scale[0];
+			}
+		}, {
+			key: 'scaleY',
+			set: function set() {
+				var value = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+				this.scale[1] = value;
+			},
+			get: function get() {
+				return this.scale[1];
+			}
+		}, {
+			key: 'scaleZ',
+			set: function set() {
+				var value = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+				this.scale[2] = value;
+			},
+			get: function get() {
+				return this.scale[2];
+			}
 		}]);
 
 		return Mesh;
@@ -7228,6 +7302,8 @@
 	var _GL = __webpack_require__(3);
 
 	var GL = _interopRequireWildcard(_GL);
+
+	var _glMatrix = __webpack_require__(4);
 
 	var _vertex = __webpack_require__(19);
 
@@ -7312,6 +7388,10 @@
 			this.pMatrixUniform = gl.getUniformLocation(this.program, 'uPMatrix');
 			this.mvMatrixUniform = gl.getUniformLocation(this.program, 'uMVMatrix');
 			this.mMatrixUniform = gl.getUniformLocation(this.program, 'uModelMatrix');
+			this.nMatrixUniform = gl.getUniformLocation(this.program, 'uNormalMatrix');
+			this.ambientColorUniform = gl.getUniformLocation(this.program, 'uAmbientColor');
+			this.directionalColorUniform = gl.getUniformLocation(this.program, 'uDirectionalColor');
+			this.lightDirectionUniform = gl.getUniformLocation(this.program, 'uLightDirection');
 		}
 
 		_createClass(Shader, [{
@@ -7329,6 +7409,25 @@
 				gl.uniformMatrix4fv(this.pMatrixUniform, false, projectionMatrix);
 				gl.uniformMatrix4fv(this.mvMatrixUniform, false, modelViewMatrix);
 				gl.uniformMatrix4fv(this.mMatrixUniform, false, modelMatrix);
+				gl.uniform3f(this.ambientColorUniform, 0.1, 0.1, 0.1);
+				gl.uniform3f(this.directionalColorUniform, 1.0, 1.0, 1.0);
+
+				var direction = [0.0, 1.0, 1.0];
+				var directionalInversed = _glMatrix.vec3.create();
+				_glMatrix.vec3.normalize(directionalInversed, direction);
+				// vec3.scale(directionalInversed, directionalInversed, -1)
+
+				gl.uniform3fv(this.lightDirectionUniform, directionalInversed);
+
+				var inversedModelViewMatrix = _glMatrix.mat4.create();
+
+				_glMatrix.mat4.invert(inversedModelViewMatrix, modelMatrix);
+
+				// removes scale and translation
+				var normalMatrix = _glMatrix.mat3.create();
+				_glMatrix.mat3.fromMat4(normalMatrix, inversedModelViewMatrix);
+				_glMatrix.mat3.transpose(normalMatrix, normalMatrix);
+				gl.uniformMatrix3fv(this.nMatrixUniform, false, normalMatrix);
 			}
 		}, {
 			key: '_compile',
@@ -7368,7 +7467,7 @@
 
 	"use strict";
 
-	module.exports = "\nattribute vec3 aVertexPosition;\nattribute vec3 aVertexNormal;\nattribute vec4 aVertexColor;\n\nuniform mat4 uMVMatrix;\nuniform mat4 uPMatrix;\nuniform mat4 uModelMatrix;\n\nvarying vec4 vColor;\nvarying vec3 vNormal;\n\nvoid main(void){\n\tvColor = aVertexColor;\n\tvNormal = aVertexNormal;\n\tgl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);\n}\n";
+	module.exports = "\nattribute vec3 aVertexPosition;\nattribute vec3 aVertexNormal;\nattribute vec4 aVertexColor;\n\nuniform mat4 uMVMatrix;\nuniform mat4 uPMatrix;\nuniform mat4 uModelMatrix;\nuniform mat3 uNormalMatrix;\n\nvarying vec4 vColor;\nvarying vec3 vNormal;\n\nvoid main(void){\n\tvColor = aVertexColor;\n\tvNormal = uNormalMatrix * aVertexNormal;\n\tgl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);\n}\n";
 
 /***/ },
 /* 20 */
@@ -7376,7 +7475,7 @@
 
 	"use strict";
 
-	module.exports = "\nprecision mediump float;\nvarying vec4 vColor;\nvoid main(void){\n\t// gl_FragColor = vec4(vec3(1.0), 1.0);\n\tgl_FragColor = vColor;\n}\n";
+	module.exports = "\nprecision mediump float;\nuniform vec3 uAmbientColor;\nuniform vec3 uDirectionalColor;\nuniform vec3 uLightDirection;\nvarying vec4 vColor;\nvarying vec3 vNormal;\n\nvoid main(void){\n\n\tfloat light = max(dot(vNormal, uLightDirection), 0.0);\n\n\tvec3 color = vColor.rgb * (uAmbientColor + uDirectionalColor * vec3(light));\n\n\tgl_FragColor = vec4(color.rgb, vColor.a);\n\t// gl_FragColor = vec4(vec3(1.0), vColor.a);\n}\n";
 
 /***/ },
 /* 21 */
@@ -7531,6 +7630,165 @@
 		};
 	}();
 
+	var _GL = __webpack_require__(3);
+
+	var GL = _interopRequireWildcard(_GL);
+
+	function _interopRequireWildcard(obj) {
+		if (obj && obj.__esModule) {
+			return obj;
+		} else {
+			var newObj = {};if (obj != null) {
+				for (var key in obj) {
+					if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+				}
+			}newObj.default = obj;return newObj;
+		}
+	}
+
+	function _classCallCheck(instance, Constructor) {
+		if (!(instance instanceof Constructor)) {
+			throw new TypeError("Cannot call a class as a function");
+		}
+	}
+
+	var Box = function () {
+		function Box() {
+			var width = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+			var height = arguments.length <= 1 || arguments[1] === undefined ? 1 : arguments[1];
+			var depth = arguments.length <= 2 || arguments[2] === undefined ? 1 : arguments[2];
+
+			_classCallCheck(this, Box);
+
+			this._width = width;
+			this._height = height;
+			this._depth = depth;
+			this.colors = [];
+
+			var gl = GL.get();
+
+			/*
+	  	(-1, 1)  (0, 1)  (1, 1)
+	  		(-1, 0)  (0, 0)  (1, 0)
+	  		(-1,-1)  (0,-1)  (1,-1)
+	   */
+
+			// Vertex positions
+			this.vertexPositionBuffer = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexPositionBuffer);
+
+			var vertices = [
+
+			// Front face
+			-1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0,
+
+			// Back face
+			-1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, -1.0,
+
+			// Top face
+			-1.0, 1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0,
+
+			// Bottom face
+			-1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0,
+
+			// Right face
+			1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0,
+
+			// Left face
+			-1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0];
+
+			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+			this.vertexPositionBuffer.itemSize = 3;
+			this.vertexPositionBuffer.numItems = 24;
+
+			// Vertex indices
+			this.vertexIndexBuffer = gl.createBuffer();
+			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.vertexIndexBuffer);
+
+			var indices = [0, 1, 2, 0, 2, 3, // Front face
+			4, 5, 6, 4, 6, 7, // Back face
+			8, 9, 10, 8, 10, 11, // Top face
+			12, 13, 14, 12, 14, 15, // Bottom face
+			16, 17, 18, 16, 18, 19, // Right face
+			20, 21, 22, 20, 22, 23 // Left face
+			];
+
+			gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+			this.vertexIndexBuffer.itemSize = 1;
+			this.vertexIndexBuffer.numItems = 36;
+
+			// Vertex normals
+			this.vertexNormalBuffer = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexNormalBuffer);
+
+			var normals = [
+
+			// Front
+			0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0,
+
+			// Back
+			0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0,
+
+			// Top
+			0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
+
+			// Bottom
+			0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0,
+
+			// Right
+			1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0,
+
+			// Left
+			-1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0];
+
+			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+
+			this.vertexNormalBuffer.itemSize = 3;
+			this.vertexNormalBuffer.numItems = 24;
+		}
+
+		_createClass(Box, [{
+			key: 'setVertexColors',
+			value: function setVertexColors(colors) {
+
+				var gl = GL.get();
+
+				// Vertex colors
+				this.vertexColorBuffer = gl.createBuffer();
+				gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexColorBuffer);
+				gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+
+				this.vertexColorBuffer.itemSize = 4;
+				this.vertexColorBuffer.numItems = 24;
+			}
+		}]);
+
+		return Box;
+	}();
+
+	exports.default = Box;
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () {
+		function defineProperties(target, props) {
+			for (var i = 0; i < props.length; i++) {
+				var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+			}
+		}return function (Constructor, protoProps, staticProps) {
+			if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+		};
+	}();
+
 	var _glMatrix = __webpack_require__(4);
 
 	var _math = __webpack_require__(14);
@@ -7539,10 +7797,6 @@
 		if (!(instance instanceof Constructor)) {
 			throw new TypeError("Cannot call a class as a function");
 		}
-	}
-
-	function length(x, y) {
-		return y - x;
 	}
 
 	var OrbitControls = function () {
@@ -7670,7 +7924,7 @@
 	exports.default = OrbitControls;
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7826,14 +8080,14 @@
 	exports.default = Grid;
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(26)
-	module.exports.color = __webpack_require__(27)
+	module.exports = __webpack_require__(27)
+	module.exports.color = __webpack_require__(28)
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports) {
 
 	/**
@@ -11498,7 +11752,7 @@
 	dat.utils.common);
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports) {
 
 	/**
@@ -12258,20 +12512,20 @@
 	dat.utils.common);
 
 /***/ },
-/* 28 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	module.exports = "\nattribute vec3 aVertexPosition;\nattribute vec3 aVertexNormal;\nattribute vec4 aVertexColor;\n\nuniform mat4 uMVMatrix;\nuniform mat4 uPMatrix;\nuniform mat4 uModelMatrix;\n\nvarying vec4 vColor;\nvarying vec3 vNormal;\n\nvoid main(void){\n\tvColor = aVertexColor;\n\tvNormal = aVertexNormal;\n\tgl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);\n}\n";
-
-/***/ },
 /* 29 */
 /***/ function(module, exports) {
 
 	"use strict";
 
-	module.exports = "\nprecision mediump float;\nvarying vec4 vColor;\nvoid main(void){\n\t// gl_FragColor = vec4(vec3(1.0), 1.0);\n\tgl_FragColor = vColor;\n}\n";
+	module.exports = "\nattribute vec3 aVertexPosition;\nattribute vec3 aVertexNormal;\nattribute vec4 aVertexColor;\n\nuniform mat4 uMVMatrix;\nuniform mat4 uPMatrix;\nuniform mat4 uModelMatrix;\nuniform mat3 uNormalMatrix;\n\nvarying vec4 vColor;\nvarying vec3 vNormal;\n\nvoid main(void){\n\tvColor = aVertexColor;\n\tvNormal = uNormalMatrix * aVertexNormal;\n\tgl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);\n}\n";
+
+/***/ },
+/* 30 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	module.exports = "\nprecision mediump float;\nuniform vec3 uAmbientColor;\nuniform vec3 uDirectionalColor;\nuniform vec3 uLightDirection;\nvarying vec4 vColor;\nvarying vec3 vNormal;\n\nvoid main(void){\n\n\tfloat light = max(dot(vNormal, uLightDirection), 0.0);\n\n\tvec3 color = vColor.rgb * (uAmbientColor + uDirectionalColor * vec3(light));\n\n\tgl_FragColor = vec4(color.rgb, vColor.a);\n\t// gl_FragColor = vec4(vec3(1.0), vColor.a);\n}\n";
 
 /***/ }
 /******/ ]);

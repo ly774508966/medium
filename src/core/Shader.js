@@ -1,5 +1,6 @@
 const glslify = require('glslify')
 import * as GL from './GL'
+import {vec3, mat3, mat4} from 'gl-matrix'
 import VertexShader from 'shaders/vertex.glsl'
 import FragmentShader from 'shaders/frag.glsl'
 
@@ -54,6 +55,10 @@ export default class Shader {
 		this.pMatrixUniform = gl.getUniformLocation(this.program, 'uPMatrix')
 		this.mvMatrixUniform = gl.getUniformLocation(this.program, 'uMVMatrix')
 		this.mMatrixUniform = gl.getUniformLocation(this.program, 'uModelMatrix')
+		this.nMatrixUniform = gl.getUniformLocation(this.program, 'uNormalMatrix')
+		this.ambientColorUniform = gl.getUniformLocation(this.program, 'uAmbientColor')
+		this.directionalColorUniform = gl.getUniformLocation(this.program, 'uDirectionalColor')
+		this.lightDirectionUniform = gl.getUniformLocation(this.program, 'uLightDirection')
 	}
 
 	bindProgram() {
@@ -68,6 +73,25 @@ export default class Shader {
 		gl.uniformMatrix4fv(this.pMatrixUniform, false, projectionMatrix)
 		gl.uniformMatrix4fv(this.mvMatrixUniform, false, modelViewMatrix)
 		gl.uniformMatrix4fv(this.mMatrixUniform, false, modelMatrix)
+		gl.uniform3f(this.ambientColorUniform, 0.1, 0.1, 0.1);
+		gl.uniform3f(this.directionalColorUniform, 1.0, 1.0, 1.0);
+
+		let direction = [0.0, 1.0, 1.0]
+		let directionalInversed = vec3.create()
+		vec3.normalize(directionalInversed, direction)
+		// vec3.scale(directionalInversed, directionalInversed, -1)
+
+		gl.uniform3fv(this.lightDirectionUniform, directionalInversed);
+
+		let inversedModelViewMatrix = mat4.create()
+
+		mat4.invert(inversedModelViewMatrix, modelMatrix)
+
+		// removes scale and translation
+		let normalMatrix = mat3.create()
+		mat3.fromMat4(normalMatrix, inversedModelViewMatrix)
+		mat3.transpose(normalMatrix, normalMatrix)
+		gl.uniformMatrix3fv(this.nMatrixUniform, false, normalMatrix)
 	}
 
 	_compile(type, source) {

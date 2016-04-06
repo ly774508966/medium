@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "start": "concurrently 'npm run watch' 'npm run server' 'webpack --progress --colors --watch'",
-    "server": "live-server ./examples --port 3000 --quiet --watch ./examples --wait 0",
+    "server": "live-server ./examples --port 3000 --quiet --watch ./examples --watch ./lib --wait 0",
     "watch": "babel --watch src --out-dir lib",
     "build": "babel src --out-dir lib"
   },

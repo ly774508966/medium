@@ -1,10 +1,6 @@
 import {vec3} from 'gl-matrix'
 import {radToDeg, clamp} from 'utils/math'
 
-function length(x, y) {
-	return y - x
-}
-
 export default class OrbitControls {
 
 	constructor(camera, element) {
