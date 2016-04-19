@@ -1,7 +1,7 @@
-import {Renderer, Scene, PerspectiveCamera} from '../src/index'
-import {Mesh, Shader, PlaneGeometry, BoxGeometry} from '../src/index'
-import {Grid, OrbitControls} from '../src/index'
-import {Texture} from '../src/index'
+import {Renderer, Scene, PerspectiveCamera} from '../../../src/index'
+import {Mesh, Shader, PlaneGeometry, BoxGeometry} from '../../../src/index'
+import {Grid, OrbitControls} from '../../../src/index'
+import {Texture} from '../../../src/index'
 import dat from 'dat-gui'
 
 // Renderer
