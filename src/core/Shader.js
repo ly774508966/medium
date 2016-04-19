@@ -1,4 +1,3 @@
-const glslify = require('glslify')
 import * as GL from './GL'
 import * as CONSTANTS from './constants'
 import {vec3, mat3, mat4} from 'gl-matrix'
