@@ -14,6 +14,9 @@ export {Mesh}
 import Shader from 'core/Shader'
 export {Shader}
 
+import Texture from 'core/Texture'
+export {Texture}
+
 // Materials
 // import ShaderMaterial from 'materials/Shader'
 // export {ShaderMaterial}

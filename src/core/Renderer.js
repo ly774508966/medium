@@ -10,6 +10,8 @@ export default class Renderer {
 		const defaults = {
 			width: 1280,
 			height: 720,
+			near: 0.1,
+			far: 100
 		}
 
 		// Apply defaults
@@ -92,7 +94,7 @@ export default class Renderer {
 
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
-		mat4.perspective(this.projectionMatrix, camera.fov, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0)
+		mat4.perspective(this.projectionMatrix, camera.fov, gl.viewportWidth / gl.viewportHeight, this.near, this.far)
 
 		mat4.identity(this.modelViewMatrix)
 

@@ -4,27 +4,30 @@ import Mesh from 'core/Mesh'
 import Shader from 'core/Shader'
 import * as GL from 'core/GL'
 
-const VertexShader =
-`
-attribute vec3 aVertexPosition;
+const VertexShader = function() {
+	return `
+	attribute vec3 aVertexPosition;
 
-uniform mat4 uMVMatrix;
-uniform mat4 uPMatrix;
-uniform mat4 uModelMatrix;
+	uniform mat4 uMVMatrix;
+	uniform mat4 uPMatrix;
+	uniform mat4 uModelMatrix;
 
-void main(void){
-	gl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
+	void main(void){
+		gl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
+	}
+	`
 }
-`
 
-const FragmentShader =
-`
-precision mediump float;
 
-void main(void){
-	gl_FragColor = vec4(vec3(0.5), 1.0);
+const FragmentShader = function() {
+	return `
+	precision mediump float;
+
+	void main(void){
+		gl_FragColor = vec4(vec3(0.5), 1.0);
+	}
+	`
 }
-`
 
 class GridGeometry {
 
@@ -72,10 +75,7 @@ class GridGeometry {
 export default class Grid extends Mesh {
 
 	constructor(size = 1, divisions = 10) {
-		super(new GridGeometry(size, divisions), new Shader({
-			vertexShader: VertexShader,
-			fragmentShader: FragmentShader
-		}))
+		super(new GridGeometry(size, divisions), new Shader({}, VertexShader, FragmentShader))
 	}
 
 	draw(modelViewMatrix, projectionMatrix) {

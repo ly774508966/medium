@@ -4,9 +4,8 @@
   "description": "Personal webgl toolkit.",
   "main": "lib/index.js",
   "scripts": {
-    "start": "concurrently 'npm run watch' 'npm run server' 'webpack --progress --colors --watch'",
-    "server": "live-server ./examples --port 3000 --quiet --watch ./examples --watch ./lib --wait 0",
-    "watch": "babel --watch src --out-dir lib",
+    "start": "concurrently 'npm run server' 'webpack --colors --watch'",
+    "server": "live-server ./examples --port 3000 --quiet --watch ./examples --watch ./src --wait 0",
     "build": "babel src --out-dir lib"
   },
   "author": "David Paul Rosser <info@davidpaulrosser.co.uk> (http://ivxvixviii.io/)",

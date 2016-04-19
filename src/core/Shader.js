@@ -1,27 +1,36 @@
 const glslify = require('glslify')
 import * as GL from './GL'
+import * as CONSTANTS from './constants'
 import {vec3, mat3, mat4} from 'gl-matrix'
 import VertexShader from 'shaders/vertex.glsl'
 import FragmentShader from 'shaders/frag.glsl'
 
 export default class Shader {
 
-	constructor(options) {
+	constructor(options, vertexShader, fragmentShader) {
 
 		const defaults = {
 			vertexColors: false,
 			vertexNormals: false,
-			vertexShader: VertexShader,
-			fragmentShader: FragmentShader,
+			lights: false,
+			culling: CONSTANTS.CULL_NONE
 		}
 
 		this.settings = Object.assign({}, defaults, options)
 
+		const vs = (vertexShader !== undefined) ? vertexShader : VertexShader
+		const fs = (fragmentShader !== undefined) ? fragmentShader : FragmentShader
+
 		const gl = GL.get()
 
 		// Create program
-		this.vertexShader = this._compile('vs', this.settings.vertexShader)
-		this.fragmentShader = this._compile('fs', this.settings.fragmentShader)
+		this.vertexShader = this._compile('vs', vs(this.settings))
+		this.fragmentShader = this._compile('fs', fs(this.settings))
+		this.texture = options.texture
+
+		// console.log(vs(this.settings));
+		// console.log('-----------------');
+		// console.log(fs(this.settings));
 
 		this.program = gl.createProgram()
 
@@ -46,9 +55,15 @@ export default class Shader {
 			gl.enableVertexAttribArray(this.vertexColorAttribute)
 		}
 
+		if(this.settings.texture){
+			this.textureCoordAttribute = gl.getAttribLocation(this.program, 'aTextureCoord')
+			gl.enableVertexAttribArray(this.textureCoordAttribute)
+		}
+
 		// console.log(this.vertexPositionAttribute);
 		// console.log(this.vertexNormalAttribute);
 		// console.log(this.vertexColorAttribute);
+		// console.log(this.textureCoordAttribute);
 
 		gl.useProgram(this.program)
 
@@ -59,6 +74,7 @@ export default class Shader {
 		this.ambientColorUniform = gl.getUniformLocation(this.program, 'uAmbientColor')
 		this.directionalColorUniform = gl.getUniformLocation(this.program, 'uDirectionalColor')
 		this.lightDirectionUniform = gl.getUniformLocation(this.program, 'uLightDirection')
+		this.samplerUniform = gl.getUniformLocation(this.program, 'uSampler')
 	}
 
 	bindProgram() {

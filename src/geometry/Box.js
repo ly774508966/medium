@@ -62,6 +62,12 @@ export default class Box {
             -1.0,  1.0, -1.0,
 		]
 
+		for (let i = 0; i < vertices.length; i+=3) {
+			vertices[i] *= width
+			vertices[i+1] *= height
+			vertices[i+2] *= depth
+		}
+
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW)
 
 		this.vertexPositionBuffer.itemSize = 3

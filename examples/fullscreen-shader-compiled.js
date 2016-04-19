@@ -48,7 +48,7 @@
 
 	var _index = __webpack_require__(1);
 
-	var _datGui = __webpack_require__(29);
+	var _datGui = __webpack_require__(28);
 
 	var _datGui2 = _interopRequireDefault(_datGui);
 
@@ -63,10 +63,10 @@
 	var scene = new _index.Scene();
 
 	// Camera
-	var camera = new _index.PerspectiveCamera({ fov: 45 });
+	var camera = new _index.PerspectiveCamera({ fov: 1 });
 
-	camera.setPosition(10, 5, 10);
-	camera.setLookAt();
+	camera.setPosition(0, 0, 1.8);
+	camera.setLookAt(0, 0, 0);
 
 	// Objects
 	var colors = [];
@@ -75,70 +75,21 @@
 	colors = colors.concat([0, 0, 1, 1.0]);
 	colors = colors.concat([1, 1, 0, 1.0]);
 
-	var geometry = new _index.PlaneGeometry();
+	var texture = new _index.Texture({ src: 'assets/desktop.jpg' });
+
+	var geometry = new _index.PlaneGeometry(window.innerWidth / window.innerHeight, 1);
 	geometry.setVertexColors(colors);
 	var material = new _index.Shader({
-		vertexColors: true,
+		vertexColors: false,
 		vertexNormals: true,
-		vertexShader: __webpack_require__(32),
-		fragmentShader: __webpack_require__(33)
+		lights: false,
+		texture: texture,
+		vertexShader: __webpack_require__(20),
+		fragmentShader: __webpack_require__(21)
 	});
 	var plane = new _index.Mesh(geometry, material);
 
-	// plane.y = 2
-	// plane.x = 2
-	// plane.rotationX = Math.PI/4
-	// plane.rotationY = Math.PI/4
-	// plane.rotationZ = Math.PI/4
-	// box.scaleX = 2
-
 	scene.add(plane);
-
-	colors = [];
-	for (var i = 0; i < 6; i++) {
-		for (var j = 0; j < 4; j++) {
-			colors = colors.concat([Math.random(), Math.random(), Math.random(), 1.0]);
-		}
-	}
-	geometry = new _index.BoxGeometry();
-	geometry.setVertexColors(colors);
-	material = new _index.Shader({
-		vertexColors: false,
-		vertexNormals: true,
-		vertexShader: __webpack_require__(32),
-		fragmentShader: __webpack_require__(33)
-	});
-	var box = new _index.Mesh(geometry, material);
-
-	scene.add(box);
-
-	box.x = 3;
-	box.y = 3;
-
-	// Helpers
-	var controls = new _index.OrbitControls(camera, renderer.canvas);
-	var gui = new _datGui2.default.GUI();
-	var cameraGUI = gui.addFolder('camera');
-	cameraGUI.open();
-	var lightingGUI = gui.addFolder('lighting');
-	lightingGUI.open();
-
-	var grid = new _index.Grid(10);
-	scene.add(grid);
-
-	// gui.add(controls, '_rotationX', -Math.PI/2, Math.PI/2).listen().onChange(()=> {controls.update()})
-	// gui.add(controls, '_rotationY', 0, Math.PI*2).listen().onChange(()=> {controls.update()})
-	// gui.add(controls, '_radius').listen()
-	// cameraGUI.add(box, 'rotationX', 0, Math.PI*2).listen()
-	// cameraGUI.add(box, 'rotationY', 0, Math.PI*2).listen()
-	// cameraGUI.add(box, 'rotationZ', 0, Math.PI*2).listen()
-
-	// let range = 1
-	// lightingGUI.add(directionallight, 'x', -range, range)
-	// lightingGUI.add(directionallight, 'y', -range, range)
-	// lightingGUI.add(directionallight, 'z', -range, range)
-
-	controls.update();
 
 	window.addEventListener('resize', resize);
 
@@ -150,11 +101,9 @@
 	function update() {
 		requestAnimationFrame(update);
 
-		box.rotationX += 0.01;
-		plane.rotationY += 0.01;
-
 		renderer.render(scene, camera);
 	}
+
 	update();
 
 /***/ },
@@ -166,7 +115,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.Grid = exports.OrbitControls = exports.BoxGeometry = exports.PlaneGeometry = exports.Shader = exports.Mesh = exports.Scene = exports.PerspectiveCamera = exports.Renderer = undefined;
+	exports.Grid = exports.OrbitControls = exports.BoxGeometry = exports.PlaneGeometry = exports.Texture = exports.Shader = exports.Mesh = exports.Scene = exports.PerspectiveCamera = exports.Renderer = undefined;
 
 	var _Renderer = __webpack_require__(2);
 
@@ -188,19 +137,23 @@
 
 	var _Shader2 = _interopRequireDefault(_Shader);
 
-	var _Plane = __webpack_require__(23);
+	var _Texture = __webpack_require__(23);
+
+	var _Texture2 = _interopRequireDefault(_Texture);
+
+	var _Plane = __webpack_require__(24);
 
 	var _Plane2 = _interopRequireDefault(_Plane);
 
-	var _Box = __webpack_require__(24);
+	var _Box = __webpack_require__(25);
 
 	var _Box2 = _interopRequireDefault(_Box);
 
-	var _OrbitControls = __webpack_require__(25);
+	var _OrbitControls = __webpack_require__(26);
 
 	var _OrbitControls2 = _interopRequireDefault(_OrbitControls);
 
-	var _Grid = __webpack_require__(26);
+	var _Grid = __webpack_require__(27);
 
 	var _Grid2 = _interopRequireDefault(_Grid);
 
@@ -212,6 +165,7 @@
 	exports.Scene = _Scene2.default;
 	exports.Mesh = _Mesh2.default;
 	exports.Shader = _Shader2.default;
+	exports.Texture = _Texture2.default;
 
 	// Materials
 	// import ShaderMaterial from 'materials/Shader'
@@ -260,7 +214,9 @@
 			// Default renderer settings
 			var defaults = {
 				width: 1280,
-				height: 720
+				height: 720,
+				near: 0.1,
+				far: 100
 			};
 
 			// Apply defaults
@@ -352,7 +308,7 @@
 
 				gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-				_glMatrix.mat4.perspective(this.projectionMatrix, camera.fov, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0);
+				_glMatrix.mat4.perspective(this.projectionMatrix, camera.fov, gl.viewportWidth / gl.viewportHeight, this.near, this.far);
 
 				_glMatrix.mat4.identity(this.modelViewMatrix);
 
@@ -7100,6 +7056,15 @@
 				gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexNormalBuffer);
 				gl.vertexAttribPointer(this.shader.vertexNormalAttribute, this.geometry.vertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
+				if (this.shader.settings.texture) {
+					gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.textureCoordBuffer);
+					gl.vertexAttribPointer(this.shader.textureCoordAttribute, this.geometry.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+					gl.activeTexture(gl.TEXTURE0);
+					gl.bindTexture(gl.TEXTURE_2D, this.shader.texture.texture);
+					gl.uniform1i(this.shader.samplerUniform, 0);
+				}
+
 				gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.geometry.vertexIndexBuffer);
 
 				_glMatrix.mat4.identity(this.modelMatrix);
@@ -7120,7 +7085,7 @@
 				// gl.disable(gl.CULL_FACE)
 			}
 		}, {
-			key: 'x',
+			key: 'translateX',
 			set: function set() {
 				var value = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
@@ -7130,7 +7095,7 @@
 				return this.position[0];
 			}
 		}, {
-			key: 'y',
+			key: 'translateY',
 			set: function set() {
 				var value = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
@@ -7140,7 +7105,7 @@
 				return this.position[1];
 			}
 		}, {
-			key: 'z',
+			key: 'translateZ',
 			set: function set() {
 				var value = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
@@ -7261,6 +7226,7 @@
 			var defaults = {
 				vertexColors: false,
 				vertexNormals: false,
+				lights: false,
 				culling: CONSTANTS.CULL_NONE
 			};
 
@@ -7274,6 +7240,11 @@
 			// Create program
 			this.vertexShader = this._compile('vs', vs(this.settings));
 			this.fragmentShader = this._compile('fs', fs(this.settings));
+			this.texture = options.texture;
+
+			// console.log(vs(this.settings));
+			// console.log('-----------------');
+			// console.log(fs(this.settings));
 
 			this.program = gl.createProgram();
 
@@ -7298,9 +7269,15 @@
 				gl.enableVertexAttribArray(this.vertexColorAttribute);
 			}
 
+			if (this.settings.texture) {
+				this.textureCoordAttribute = gl.getAttribLocation(this.program, 'aTextureCoord');
+				gl.enableVertexAttribArray(this.textureCoordAttribute);
+			}
+
 			// console.log(this.vertexPositionAttribute);
 			// console.log(this.vertexNormalAttribute);
 			// console.log(this.vertexColorAttribute);
+			// console.log(this.textureCoordAttribute);
 
 			gl.useProgram(this.program);
 
@@ -7311,6 +7288,7 @@
 			this.ambientColorUniform = gl.getUniformLocation(this.program, 'uAmbientColor');
 			this.directionalColorUniform = gl.getUniformLocation(this.program, 'uDirectionalColor');
 			this.lightDirectionUniform = gl.getUniformLocation(this.program, 'uLightDirection');
+			this.samplerUniform = gl.getUniformLocation(this.program, 'uSampler');
 		}
 
 		_createClass(Shader, [{
@@ -7404,7 +7382,9 @@
 	module.exports = function (_flags) {
 
 		var defaults = {
-			vertexColors: false
+			vertexColors: false,
+			lights: false,
+			texture: false
 		};
 
 		var flags = Object.assign(defaults, _flags);
@@ -7414,17 +7394,31 @@
 			if (flags[key]) defines += '#define ' + key + ' \n';
 		}
 
-		return '\n\n\t' + defines + '\n\n\tattribute vec3 aVertexPosition;\n\tattribute vec3 aVertexNormal;\n\n\t#ifdef vertexColors\n\tattribute vec4 aVertexColor;\n\t#endif\n\n\tuniform mat4 uMVMatrix;\n\tuniform mat4 uPMatrix;\n\tuniform mat4 uModelMatrix;\n\tuniform mat3 uNormalMatrix;\n\n\tvarying vec4 vColor;\n\tvarying vec3 vNormal;\n\n\tvoid main(void){\n\n\t\tvColor = vec4(1.0);\n\n\t\t#ifdef vertexColors\n\t\tvColor = aVertexColor;\n\t\t#endif\n\n\t\tvNormal = uNormalMatrix * aVertexNormal;\n\t\tgl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);\n\t}\n\t';
+		return '\n\n\t' + defines + '\n\n\tattribute vec3 aVertexPosition;\n\tattribute vec3 aVertexNormal;\n\n\t#ifdef vertexColors\n\tattribute vec4 aVertexColor;\n\t#endif\n\n\t#ifdef texture\n\tattribute vec2 aTextureCoord;\n\tvarying vec2 vTextureCoord;\n\t#endif\n\n\tuniform mat4 uMVMatrix;\n\tuniform mat4 uPMatrix;\n\tuniform mat4 uModelMatrix;\n\tuniform mat3 uNormalMatrix;\n\n\tvarying vec4 vColor;\n\tvarying vec3 vNormal;\n\n\tvoid main(void){\n\n\t\tvColor = vec4(1.0);\n\n\t\t#ifdef vertexColors\n\t\tvColor = aVertexColor;\n\t\t#endif\n\n\t\t#ifdef texture\n\t\tvTextureCoord = aTextureCoord;\n\t\t#endif\n\n\t\tvNormal = uNormalMatrix * aVertexNormal;\n\t\tgl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);\n\t}\n\t';
 	};
 
 /***/ },
 /* 21 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
-	module.exports = function (flags) {
-		return "\n\tprecision mediump float;\n\tuniform vec3 uAmbientColor;\n\tuniform vec3 uDirectionalColor;\n\tuniform vec3 uLightDirection;\n\tvarying vec4 vColor;\n\tvarying vec3 vNormal;\n\n\tvoid main(void){\n\n\t\tfloat light = max(dot(vNormal, uLightDirection), 0.0);\n\n\t\tvec3 color = vColor.rgb * (uAmbientColor + uDirectionalColor * vec3(light));\n\n\t\tgl_FragColor = vec4(color.rgb, vColor.a);\n\t\t// gl_FragColor = vec4(vec3(1.0), vColor.a);\n\t}\n\t";
+	module.exports = function (_flags) {
+
+		var defaults = {
+			vertexColors: false,
+			texture: false,
+			lights: false
+		};
+
+		var flags = Object.assign(defaults, _flags);
+
+		var defines = '';
+		for (var key in flags) {
+			if (flags[key]) defines += '#define ' + key + ' \n';
+		}
+
+		return '\n\n\t' + defines + '\n\n\tprecision mediump float;\n\tuniform vec3 uAmbientColor;\n\tuniform vec3 uDirectionalColor;\n\tuniform vec3 uLightDirection;\n\tvarying vec4 vColor;\n\tvarying vec3 vNormal;\n\n\t#ifdef texture\n\tvarying vec2 vTextureCoord;\n\tuniform sampler2D uSampler;\n\t#endif\n\n\tvoid main(void){\n\n\t\tvec3 color = vColor.rgb;\n\n\t\t#ifdef lights\n\t\tfloat light = max(dot(vNormal, uLightDirection), 0.0);\n\t\tcolor = vColor.rgb * (uAmbientColor + uDirectionalColor * vec3(light));\n\t\t#endif\n\n\t\tgl_FragColor = vec4(color.rgb, vColor.a);\n\n\t\t#ifdef texture\n\t\tgl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));\n\t\t#endif\n\n\t\t// gl_FragColor = vec4(vec3(1.0), vColor.a);\n\t}\n\t';
 	};
 
 /***/ },
@@ -7442,6 +7436,64 @@
 
 /***/ },
 /* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _GL = __webpack_require__(3);
+
+	var GL = _interopRequireWildcard(_GL);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Texture = function () {
+		function Texture(options) {
+			_classCallCheck(this, Texture);
+
+			var gl = GL.get();
+
+			var defaults = {
+				src: ''
+			};
+
+			this.settings = Object.assign({}, defaults, options);
+
+			this.texture = gl.createTexture();
+			this.image = new Image();
+			this.image.onload = this.onTextureLoaded.bind(this);
+			this.image.src = this.settings.src;
+		}
+
+		_createClass(Texture, [{
+			key: 'onTextureLoaded',
+			value: function onTextureLoaded() {
+
+				var gl = GL.get();
+
+				gl.bindTexture(gl.TEXTURE_2D, this.texture);
+				gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+				gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.image);
+				gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+				gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+				gl.bindTexture(gl.TEXTURE_2D, null);
+			}
+		}]);
+
+		return Texture;
+	}();
+
+	exports.default = Texture;
+
+/***/ },
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7519,6 +7571,17 @@
 
 			this.vertexNormalBuffer.itemSize = 3;
 			this.vertexNormalBuffer.numItems = 4;
+
+			// Texture coords
+			this.textureCoordBuffer = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordBuffer);
+
+			var coords = [0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0];
+
+			gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(coords), gl.STATIC_DRAW);
+
+			this.textureCoordBuffer.itemSize = 2;
+			this.textureCoordBuffer.numItems = 4;
 		}
 
 		_createClass(Plane, [{
@@ -7543,7 +7606,7 @@
 	exports.default = Plane;
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7686,7 +7749,7 @@
 	exports.default = Box;
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7828,7 +7891,7 @@
 	exports.default = OrbitControls;
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7843,11 +7906,11 @@
 
 	var _math = __webpack_require__(14);
 
-	var _Mesh2 = __webpack_require__(27);
+	var _Mesh2 = __webpack_require__(17);
 
 	var _Mesh3 = _interopRequireDefault(_Mesh2);
 
-	var _Shader = __webpack_require__(28);
+	var _Shader = __webpack_require__(18);
 
 	var _Shader2 = _interopRequireDefault(_Shader);
 
@@ -7951,347 +8014,14 @@
 	exports.default = Grid;
 
 /***/ },
-/* 27 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _GL = __webpack_require__(3);
-
-	var GL = _interopRequireWildcard(_GL);
-
-	var _glMatrix = __webpack_require__(4);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var Mesh = function () {
-		function Mesh(geometry, shader) {
-			_classCallCheck(this, Mesh);
-
-			this.geometry = geometry;
-			this.shader = shader;
-
-			this.position = _glMatrix.vec3.create();
-			this.rotation = _glMatrix.vec3.create();
-			this.scale = _glMatrix.vec3.fromValues(1, 1, 1);
-			this.modelMatrix = _glMatrix.mat4.create();
-		}
-
-		_createClass(Mesh, [{
-			key: 'draw',
-			value: function draw(modelViewMatrix, projectionMatrix) {
-				var gl = GL.get();
-
-				this.shader.bindProgram();
-
-				gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexPositionBuffer);
-				gl.vertexAttribPointer(this.shader.vertexPositionAttribute, this.geometry.vertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-				if (this.shader.settings.vertexColors) {
-					gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexColorBuffer);
-					gl.vertexAttribPointer(this.shader.vertexColorAttribute, this.geometry.vertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
-				}
-
-				gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexNormalBuffer);
-				gl.vertexAttribPointer(this.shader.vertexNormalAttribute, this.geometry.vertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
-
-				gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.geometry.vertexIndexBuffer);
-
-				_glMatrix.mat4.identity(this.modelMatrix);
-				_glMatrix.mat4.translate(this.modelMatrix, this.modelMatrix, this.position);
-				_glMatrix.mat4.rotate(this.modelMatrix, this.modelMatrix, this.rotation[0], [1, 0, 0]);
-				_glMatrix.mat4.rotate(this.modelMatrix, this.modelMatrix, this.rotation[1], [0, 1, 0]);
-				_glMatrix.mat4.rotate(this.modelMatrix, this.modelMatrix, this.rotation[2], [0, 0, 1]);
-				_glMatrix.mat4.scale(this.modelMatrix, this.modelMatrix, this.scale);
-
-				this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
-
-				// gl.enable(gl.CULL_FACE)
-				// gl.cullFace(gl.BACK)
-
-				// gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.geometry.vertexPositionBuffer.numItems)
-				gl.drawElements(gl.TRIANGLES, this.geometry.vertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
-
-				// gl.disable(gl.CULL_FACE)
-			}
-		}, {
-			key: 'x',
-			set: function set() {
-				var value = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-
-				this.position[0] = value;
-			},
-			get: function get() {
-				return this.position[0];
-			}
-		}, {
-			key: 'y',
-			set: function set() {
-				var value = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-
-				this.position[1] = value;
-			},
-			get: function get() {
-				return this.position[1];
-			}
-		}, {
-			key: 'z',
-			set: function set() {
-				var value = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-
-				this.position[2] = value;
-			},
-			get: function get() {
-				return this.position[2];
-			}
-		}, {
-			key: 'rotationX',
-			set: function set() {
-				var value = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-
-				this.rotation[0] = value;
-			},
-			get: function get() {
-				return this.rotation[0];
-			}
-		}, {
-			key: 'rotationY',
-			set: function set() {
-				var value = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-
-				this.rotation[1] = value;
-			},
-			get: function get() {
-				return this.rotation[1];
-			}
-		}, {
-			key: 'rotationZ',
-			set: function set() {
-				var value = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-
-				this.rotation[2] = value;
-			},
-			get: function get() {
-				return this.rotation[2];
-			}
-		}, {
-			key: 'scaleX',
-			set: function set() {
-				var value = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-
-				this.scale[0] = value;
-			},
-			get: function get() {
-				return this.scale[0];
-			}
-		}, {
-			key: 'scaleY',
-			set: function set() {
-				var value = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-
-				this.scale[1] = value;
-			},
-			get: function get() {
-				return this.scale[1];
-			}
-		}, {
-			key: 'scaleZ',
-			set: function set() {
-				var value = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-
-				this.scale[2] = value;
-			},
-			get: function get() {
-				return this.scale[2];
-			}
-		}]);
-
-		return Mesh;
-	}();
-
-	exports.default = Mesh;
-
-/***/ },
 /* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _GL = __webpack_require__(3);
-
-	var GL = _interopRequireWildcard(_GL);
-
-	var _constants = __webpack_require__(19);
-
-	var CONSTANTS = _interopRequireWildcard(_constants);
-
-	var _glMatrix = __webpack_require__(4);
-
-	var _vertex = __webpack_require__(20);
-
-	var _vertex2 = _interopRequireDefault(_vertex);
-
-	var _frag = __webpack_require__(21);
-
-	var _frag2 = _interopRequireDefault(_frag);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var glslify = __webpack_require__(22);
-
-	var Shader = function () {
-		function Shader(options, vertexShader, fragmentShader) {
-			_classCallCheck(this, Shader);
-
-			var defaults = {
-				vertexColors: false,
-				vertexNormals: false,
-				culling: CONSTANTS.CULL_NONE
-			};
-
-			this.settings = Object.assign({}, defaults, options);
-
-			var vs = vertexShader !== undefined ? vertexShader : _vertex2.default;
-			var fs = fragmentShader !== undefined ? fragmentShader : _frag2.default;
-
-			var gl = GL.get();
-
-			// Create program
-			this.vertexShader = this._compile('vs', vs(this.settings));
-			this.fragmentShader = this._compile('fs', fs(this.settings));
-
-			this.program = gl.createProgram();
-
-			gl.attachShader(this.program, this.vertexShader);
-			gl.attachShader(this.program, this.fragmentShader);
-			gl.linkProgram(this.program);
-
-			if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
-				console.warn('Failed to initialise shaders');
-			}
-
-			this.vertexPositionAttribute = gl.getAttribLocation(this.program, 'aVertexPosition');
-			gl.enableVertexAttribArray(this.vertexPositionAttribute);
-
-			if (this.settings.vertexNormals) {
-				this.vertexNormalAttribute = gl.getAttribLocation(this.program, 'aVertexNormal');
-				gl.enableVertexAttribArray(this.vertexNormalAttribute);
-			}
-
-			if (this.settings.vertexColors) {
-				this.vertexColorAttribute = gl.getAttribLocation(this.program, 'aVertexColor');
-				gl.enableVertexAttribArray(this.vertexColorAttribute);
-			}
-
-			// console.log(this.vertexPositionAttribute);
-			// console.log(this.vertexNormalAttribute);
-			// console.log(this.vertexColorAttribute);
-
-			gl.useProgram(this.program);
-
-			this.pMatrixUniform = gl.getUniformLocation(this.program, 'uPMatrix');
-			this.mvMatrixUniform = gl.getUniformLocation(this.program, 'uMVMatrix');
-			this.mMatrixUniform = gl.getUniformLocation(this.program, 'uModelMatrix');
-			this.nMatrixUniform = gl.getUniformLocation(this.program, 'uNormalMatrix');
-			this.ambientColorUniform = gl.getUniformLocation(this.program, 'uAmbientColor');
-			this.directionalColorUniform = gl.getUniformLocation(this.program, 'uDirectionalColor');
-			this.lightDirectionUniform = gl.getUniformLocation(this.program, 'uLightDirection');
-		}
-
-		_createClass(Shader, [{
-			key: 'bindProgram',
-			value: function bindProgram() {
-				var gl = GL.get();
-				gl.useProgram(this.program);
-			}
-		}, {
-			key: 'setUniforms',
-			value: function setUniforms(modelViewMatrix, projectionMatrix, modelMatrix) {
-
-				var gl = GL.get();
-
-				gl.uniformMatrix4fv(this.pMatrixUniform, false, projectionMatrix);
-				gl.uniformMatrix4fv(this.mvMatrixUniform, false, modelViewMatrix);
-				gl.uniformMatrix4fv(this.mMatrixUniform, false, modelMatrix);
-				gl.uniform3f(this.ambientColorUniform, 0.1, 0.1, 0.1);
-				gl.uniform3f(this.directionalColorUniform, 1.0, 1.0, 1.0);
-
-				var direction = [0.0, 1.0, 1.0];
-				var directionalInversed = _glMatrix.vec3.create();
-				_glMatrix.vec3.normalize(directionalInversed, direction);
-				// vec3.scale(directionalInversed, directionalInversed, -1)
-
-				gl.uniform3fv(this.lightDirectionUniform, directionalInversed);
-
-				var inversedModelViewMatrix = _glMatrix.mat4.create();
-
-				_glMatrix.mat4.invert(inversedModelViewMatrix, modelMatrix);
-
-				// removes scale and translation
-				var normalMatrix = _glMatrix.mat3.create();
-				_glMatrix.mat3.fromMat4(normalMatrix, inversedModelViewMatrix);
-				_glMatrix.mat3.transpose(normalMatrix, normalMatrix);
-				gl.uniformMatrix3fv(this.nMatrixUniform, false, normalMatrix);
-			}
-		}, {
-			key: '_compile',
-			value: function _compile(type, source) {
-
-				var gl = GL.get();
-				var shader = void 0;
-
-				switch (type) {
-					case 'vs':
-						shader = gl.createShader(gl.VERTEX_SHADER);
-						break;
-					default:
-						shader = gl.createShader(gl.FRAGMENT_SHADER);
-				}
-
-				gl.shaderSource(shader, source);
-				gl.compileShader(shader);
-
-				if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-					console.warn('Failed to compile shader', gl.getShaderInfoLog(shader));
-					return null;
-				}
-
-				return shader;
-			}
-		}]);
-
-		return Shader;
-	}();
-
-	exports.default = Shader;
+	module.exports = __webpack_require__(29)
+	module.exports.color = __webpack_require__(30)
 
 /***/ },
 /* 29 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(30)
-	module.exports.color = __webpack_require__(31)
-
-/***/ },
-/* 30 */
 /***/ function(module, exports) {
 
 	/**
@@ -11956,7 +11686,7 @@
 	dat.utils.common);
 
 /***/ },
-/* 31 */
+/* 30 */
 /***/ function(module, exports) {
 
 	/**
@@ -12714,38 +12444,6 @@
 	})(),
 	dat.color.toString,
 	dat.utils.common);
-
-/***/ },
-/* 32 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	module.exports = function (_flags) {
-
-		var defaults = {
-			vertexColors: false
-		};
-
-		var flags = Object.assign(defaults, _flags);
-
-		var defines = '';
-		for (var key in flags) {
-			if (flags[key]) defines += '#define ' + key + ' \n';
-		}
-
-		return '\n\n\t' + defines + '\n\n\tattribute vec3 aVertexPosition;\n\tattribute vec3 aVertexNormal;\n\n\t#ifdef vertexColors\n\tattribute vec4 aVertexColor;\n\t#endif\n\n\tuniform mat4 uMVMatrix;\n\tuniform mat4 uPMatrix;\n\tuniform mat4 uModelMatrix;\n\tuniform mat3 uNormalMatrix;\n\n\tvarying vec4 vColor;\n\tvarying vec3 vNormal;\n\n\tvoid main(void){\n\n\t\tvColor = vec4(1.0);\n\n\t\t#ifdef vertexColors\n\t\tvColor = aVertexColor;\n\t\t#endif\n\n\t\tvNormal = uNormalMatrix * aVertexNormal;\n\t\tgl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);\n\t}\n\t';
-	};
-
-/***/ },
-/* 33 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	module.exports = function (flags) {
-		return "\n\tprecision mediump float;\n\tuniform vec3 uAmbientColor;\n\tuniform vec3 uDirectionalColor;\n\tuniform vec3 uLightDirection;\n\tvarying vec4 vColor;\n\tvarying vec3 vNormal;\n\n\tvoid main(void){\n\n\t\tfloat light = max(dot(vNormal, uLightDirection), 0.0);\n\n\t\tvec3 color = vColor.rgb * (uAmbientColor + uDirectionalColor * vec3(light));\n\n\t\tgl_FragColor = vec4(color.rgb, vColor.a);\n\t\t// gl_FragColor = vec4(vec3(1.0), vColor.a);\n\t}\n\t";
-	};
 
 /***/ }
 /******/ ]);

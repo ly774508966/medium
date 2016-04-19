@@ -1,8 +1,10 @@
 module.exports = {
-	entry: "./examples/index.js",
+	// entry: "./examples/index.js",
+	entry: "./examples/fullscreen-shader.js",
 	output: {
 		path: './examples',
-		filename: "index-compiled.js"
+		// filename: "index-compiled.js"
+		filename: "fullscreen-shader-compiled.js"
 	},
 	module: {
 		loaders: [{
