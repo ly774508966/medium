@@ -48,6 +48,8 @@ module.exports = function(_flags) {
 
 		#ifdef texture
 		vTextureCoord = aTextureCoord;
+		// vTextureCoord.t *= 800.0/1280.0;
+		// vTextureCoord.t += 0.5 - (800.0/1280.0)/2.0;
 		#endif
 
 		vNormal = uNormalMatrix * aVertexNormal;

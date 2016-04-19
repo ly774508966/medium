@@ -98,8 +98,10 @@ export default class Mesh {
 			gl.vertexAttribPointer(this.shader.vertexColorAttribute, this.geometry.vertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0)
 		}
 
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexNormalBuffer)
-		gl.vertexAttribPointer(this.shader.vertexNormalAttribute, this.geometry.vertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0)
+		if(this.shader.settings.vertexNormals){
+			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexNormalBuffer)
+			gl.vertexAttribPointer(this.shader.vertexNormalAttribute, this.geometry.vertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0)
+		}
 
 		if(this.shader.settings.texture){
 			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.textureCoordBuffer)

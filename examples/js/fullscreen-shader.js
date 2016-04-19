@@ -48,6 +48,8 @@
 
 	var _index = __webpack_require__(1);
 
+	var _shaders = __webpack_require__(28);
+
 	var _datGui = __webpack_require__(29);
 
 	var _datGui2 = _interopRequireDefault(_datGui);
@@ -76,18 +78,13 @@
 	colors = colors.concat([0, 0, 1, 1.0]);
 	colors = colors.concat([1, 1, 0, 1.0]);
 
-	var texture = new _index.Texture({ src: 'assets/desktop.jpg' });
+	var texture = new _index.Texture({ src: 'assets/sierpinski.jpg' });
 
-	var geometry = new _index.PlaneGeometry(window.innerWidth / window.innerHeight, 1);
+	var geometry = new _index.PlaneGeometry(1, 1);
 	geometry.setVertexColors(colors);
 	var material = new _index.Shader({
-		vertexColors: false,
-		vertexNormals: true,
-		lights: false,
-		texture: texture,
-		vertexShader: __webpack_require__(21),
-		fragmentShader: __webpack_require__(22)
-	});
+		texture: texture
+	}, _shaders.vertexShader, _shaders.fragmentShader);
 	var plane = new _index.Mesh(geometry, material);
 
 	scene.add(plane);
@@ -95,7 +92,8 @@
 	window.addEventListener('resize', resize);
 
 	function resize() {
-		renderer.setSize(1280, 720);
+		var scale = 0.75;
+		renderer.setSize(1280 * scale, 720 * scale);
 		// renderer.setSize(window.innerWidth, window.innerHeight)
 	}
 	resize();
@@ -143,23 +141,23 @@
 
 	var _Shader2 = _interopRequireDefault(_Shader);
 
-	var _Texture = __webpack_require__(24);
+	var _Texture = __webpack_require__(23);
 
 	var _Texture2 = _interopRequireDefault(_Texture);
 
-	var _Plane = __webpack_require__(25);
+	var _Plane = __webpack_require__(24);
 
 	var _Plane2 = _interopRequireDefault(_Plane);
 
-	var _Box = __webpack_require__(26);
+	var _Box = __webpack_require__(25);
 
 	var _Box2 = _interopRequireDefault(_Box);
 
-	var _OrbitControls = __webpack_require__(27);
+	var _OrbitControls = __webpack_require__(26);
 
 	var _OrbitControls2 = _interopRequireDefault(_OrbitControls);
 
-	var _Grid = __webpack_require__(28);
+	var _Grid = __webpack_require__(27);
 
 	var _Grid2 = _interopRequireDefault(_Grid);
 
@@ -7133,8 +7131,10 @@
 					gl.vertexAttribPointer(this.shader.vertexColorAttribute, this.geometry.vertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
 				}
 
-				gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexNormalBuffer);
-				gl.vertexAttribPointer(this.shader.vertexNormalAttribute, this.geometry.vertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+				if (this.shader.settings.vertexNormals) {
+					gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexNormalBuffer);
+					gl.vertexAttribPointer(this.shader.vertexNormalAttribute, this.geometry.vertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+				}
 
 				if (this.shader.settings.texture) {
 					gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.textureCoordBuffer);
@@ -7297,8 +7297,6 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var glslify = __webpack_require__(23);
-
 	var Shader = function () {
 		function Shader(options, vertexShader, fragmentShader) {
 			_classCallCheck(this, Shader);
@@ -7386,25 +7384,30 @@
 				gl.uniformMatrix4fv(this.pMatrixUniform, false, projectionMatrix);
 				gl.uniformMatrix4fv(this.mvMatrixUniform, false, modelViewMatrix);
 				gl.uniformMatrix4fv(this.mMatrixUniform, false, modelMatrix);
-				gl.uniform3f(this.ambientColorUniform, 0.1, 0.1, 0.1);
-				gl.uniform3f(this.directionalColorUniform, 1.0, 1.0, 1.0);
 
-				var direction = [0.0, 1.0, 1.0];
-				var directionalInversed = _glMatrix.vec3.create();
-				_glMatrix.vec3.normalize(directionalInversed, direction);
-				// vec3.scale(directionalInversed, directionalInversed, -1)
+				if (this.settings.lights) {
+					gl.uniform3f(this.ambientColorUniform, 0.1, 0.1, 0.1);
+					gl.uniform3f(this.directionalColorUniform, 1.0, 1.0, 1.0);
 
-				gl.uniform3fv(this.lightDirectionUniform, directionalInversed);
+					var direction = [0.0, 1.0, 1.0];
+					var directionalInversed = _glMatrix.vec3.create();
+					_glMatrix.vec3.normalize(directionalInversed, direction);
+					// vec3.scale(directionalInversed, directionalInversed, -1)
+
+					gl.uniform3fv(this.lightDirectionUniform, directionalInversed);
+				}
 
 				var inversedModelViewMatrix = _glMatrix.mat4.create();
 
 				_glMatrix.mat4.invert(inversedModelViewMatrix, modelMatrix);
 
-				// removes scale and translation
-				var normalMatrix = _glMatrix.mat3.create();
-				_glMatrix.mat3.fromMat4(normalMatrix, inversedModelViewMatrix);
-				_glMatrix.mat3.transpose(normalMatrix, normalMatrix);
-				gl.uniformMatrix3fv(this.nMatrixUniform, false, normalMatrix);
+				if (this.settings.vertexNormals) {
+					// removes scale and translation
+					var normalMatrix = _glMatrix.mat3.create();
+					_glMatrix.mat3.fromMat4(normalMatrix, inversedModelViewMatrix);
+					_glMatrix.mat3.transpose(normalMatrix, normalMatrix);
+					gl.uniformMatrix3fv(this.nMatrixUniform, false, normalMatrix);
+				}
 			}
 		}, {
 			key: '_compile',
@@ -7474,7 +7477,7 @@
 			if (flags[key]) defines += '#define ' + key + ' \n';
 		}
 
-		return '\n\n\t' + defines + '\n\n\tattribute vec3 aVertexPosition;\n\tattribute vec3 aVertexNormal;\n\n\t#ifdef vertexColors\n\tattribute vec4 aVertexColor;\n\t#endif\n\n\t#ifdef texture\n\tattribute vec2 aTextureCoord;\n\tvarying vec2 vTextureCoord;\n\t#endif\n\n\tuniform mat4 uMVMatrix;\n\tuniform mat4 uPMatrix;\n\tuniform mat4 uModelMatrix;\n\tuniform mat3 uNormalMatrix;\n\n\tvarying vec4 vColor;\n\tvarying vec3 vNormal;\n\n\tvoid main(void){\n\n\t\tvColor = vec4(1.0);\n\n\t\t#ifdef vertexColors\n\t\tvColor = aVertexColor;\n\t\t#endif\n\n\t\t#ifdef texture\n\t\tvTextureCoord = aTextureCoord;\n\t\t// vTextureCoord.t *= 0.5625;\n\t\t#endif\n\n\t\tvNormal = uNormalMatrix * aVertexNormal;\n\t\tgl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);\n\t}\n\t';
+		return '\n\n\t' + defines + '\n\n\tattribute vec3 aVertexPosition;\n\tattribute vec3 aVertexNormal;\n\n\t#ifdef vertexColors\n\tattribute vec4 aVertexColor;\n\t#endif\n\n\t#ifdef texture\n\tattribute vec2 aTextureCoord;\n\tvarying vec2 vTextureCoord;\n\t#endif\n\n\tuniform mat4 uMVMatrix;\n\tuniform mat4 uPMatrix;\n\tuniform mat4 uModelMatrix;\n\tuniform mat3 uNormalMatrix;\n\n\tvarying vec4 vColor;\n\tvarying vec3 vNormal;\n\n\tvoid main(void){\n\n\t\tvColor = vec4(1.0);\n\n\t\t#ifdef vertexColors\n\t\tvColor = aVertexColor;\n\t\t#endif\n\n\t\t#ifdef texture\n\t\tvTextureCoord = aTextureCoord;\n\t\t// vTextureCoord.t *= 800.0/1280.0;\n\t\t// vTextureCoord.t += 0.5 - (800.0/1280.0)/2.0;\n\t\t#endif\n\n\t\tvNormal = uNormalMatrix * aVertexNormal;\n\t\tgl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);\n\t}\n\t';
 	};
 
 /***/ },
@@ -7503,19 +7506,6 @@
 
 /***/ },
 /* 23 */
-/***/ function(module, exports) {
-
-	module.exports = function() {
-	  throw new Error(
-	      "It appears that you're using glslify in browserify without "
-	    + "its transform applied. Make sure that you've set up glslify as a source transform: "
-	    + "https://github.com/substack/node-browserify#browserifytransform"
-	  )
-	}
-
-
-/***/ },
-/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7573,7 +7563,7 @@
 	exports.default = Texture;
 
 /***/ },
-/* 25 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7686,7 +7676,7 @@
 	exports.default = Plane;
 
 /***/ },
-/* 26 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7829,7 +7819,7 @@
 	exports.default = Box;
 
 /***/ },
-/* 27 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7971,7 +7961,7 @@
 	exports.default = OrbitControls;
 
 /***/ },
-/* 28 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8092,6 +8082,27 @@
 	}(_Mesh3.default);
 
 	exports.default = Grid;
+
+/***/ },
+/* 28 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.vertexShader = vertexShader;
+	exports.fragmentShader = fragmentShader;
+	function vertexShader(_flags) {
+
+		return "\n\tattribute vec3 aVertexPosition;\n\tattribute vec2 aTextureCoord;\n\tvarying vec2 vTextureCoord;\n\tuniform mat4 uMVMatrix;\n\tuniform mat4 uPMatrix;\n\tuniform mat4 uModelMatrix;\n\tuniform mat3 uNormalMatrix;\n\n\tvoid main(void){\n\t\tvTextureCoord = aTextureCoord;\n\t\tvTextureCoord.t *= 720.0/1280.0;\n\t\tvTextureCoord.t += 0.5 - (720.0/1280.0)/2.0;\n\t\tgl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);\n\t}\n\t";
+	}
+
+	function fragmentShader(_flags) {
+
+		return "\n\tprecision mediump float;\n\tvarying vec2 vTextureCoord;\n\tuniform sampler2D uSampler;\n\n\tvoid main(void){\n\t\tgl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));\n\t}\n\t";
+	}
 
 /***/ },
 /* 29 */

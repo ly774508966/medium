@@ -1,7 +1,8 @@
-import {Renderer, Scene, OrthographicCamera} from '../../../src/index'
-import {Mesh, Shader, PlaneGeometry, BoxGeometry} from '../../../src/index'
-import {Grid, OrbitControls} from '../../../src/index'
-import {Texture} from '../../../src/index'
+import {Renderer, Scene, OrthographicCamera, PerspectiveCamera} from 'src/index'
+import {Mesh, Shader, PlaneGeometry, BoxGeometry} from 'src/index'
+import {Grid, OrbitControls} from 'src/index'
+import {Texture} from 'src/index'
+import {vertexShader, fragmentShader} from './shaders.glsl'
 import dat from 'dat-gui'
 
 // Renderer
@@ -26,18 +27,13 @@ colors = colors.concat([0, 1, 0, 1.0])
 colors = colors.concat([0, 0, 1, 1.0])
 colors = colors.concat([1, 1, 0, 1.0])
 
-let texture = new Texture({src: 'assets/desktop.jpg'})
+let texture = new Texture({src: 'assets/sierpinski.jpg'})
 
-let geometry = new PlaneGeometry(window.innerWidth/window.innerHeight, 1)
+let geometry = new PlaneGeometry(1, 1)
 geometry.setVertexColors(colors)
 let material = new Shader({
-	vertexColors: false,
-	vertexNormals: true,
-	lights: false,
 	texture: texture,
-	vertexShader: require('shaders/vertex.glsl'),
-	fragmentShader: require('shaders/frag.glsl')
-})
+}, vertexShader, fragmentShader)
 const plane = new Mesh(geometry, material)
 
 scene.add(plane)
@@ -45,7 +41,8 @@ scene.add(plane)
 window.addEventListener('resize', resize)
 
 function resize() {
-	renderer.setSize(1280, 720)
+	let scale = 0.75
+	renderer.setSize(1280*scale, 720*scale)
 	// renderer.setSize(window.innerWidth, window.innerHeight)
 }
 resize()

@@ -1,7 +1,7 @@
 module.exports = {
 	entry: {
-		'index': "./examples/src/js/index.js",
-		'fullscreen-shader': "./examples/src/js/fullscreen-shader.js"
+		'index': "./examples/src/js/index/index.js",
+		'fullscreen-shader': "./examples/src/js/fullscreen/fullscreen-shader.js"
 	},
 	output: {
 		path: './examples/js',
