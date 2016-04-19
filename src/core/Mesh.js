@@ -93,23 +93,23 @@ export default class Mesh {
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexPositionBuffer)
 		gl.vertexAttribPointer(this.shader.vertexPositionAttribute, this.geometry.vertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0)
 
-		if(this.shader.settings.vertexColors){
+		if(this.shader.vertexColors){
 			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexColorBuffer)
 			gl.vertexAttribPointer(this.shader.vertexColorAttribute, this.geometry.vertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0)
 		}
 
-		if(this.shader.settings.vertexNormals){
+		if(this.shader.vertexNormals){
 			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexNormalBuffer)
 			gl.vertexAttribPointer(this.shader.vertexNormalAttribute, this.geometry.vertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0)
 		}
 
-		if(this.shader.settings.texture){
+		if(this.shader.texture){
 			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.textureCoordBuffer)
 			gl.vertexAttribPointer(this.shader.textureCoordAttribute, this.geometry.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0)
 
 			gl.activeTexture(gl.TEXTURE0)
 			gl.bindTexture(gl.TEXTURE_2D, this.shader.texture.texture)
-			gl.uniform1i(this.shader.samplerUniform, 0)
+			// gl.uniform1i(this.shader.samplerUniform, 0)
 		}
 
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.geometry.vertexIndexBuffer)

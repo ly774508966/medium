@@ -8,6 +8,7 @@ export function vertexShader(_flags) {
 	uniform mat4 uPMatrix;
 	uniform mat4 uModelMatrix;
 	uniform mat3 uNormalMatrix;
+	uniform float uTime;
 
 	void main(void){
 		vTextureCoord = aTextureCoord;

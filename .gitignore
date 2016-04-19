@@ -1,3 +1,6 @@
 node_modules
 .DS_Store
 npm-debug.log
+
+/examples/js/*.js
+/examples/*.html

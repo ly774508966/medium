@@ -63,8 +63,8 @@ const box = new Mesh(geometry, material)
 
 scene.add(box)
 
-box.x = 3
-box.y = 3
+// box.translateX = 3
+// box.translateY = 3
 
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas)

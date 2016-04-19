@@ -15,7 +15,7 @@ export default class Shader {
 			culling: CONSTANTS.CULL_NONE
 		}
 
-		this.settings = Object.assign({}, defaults, options)
+		Object.assign(this, defaults, options)
 
 		const vs = (vertexShader !== undefined) ? vertexShader : VertexShader
 		const fs = (fragmentShader !== undefined) ? fragmentShader : FragmentShader
@@ -23,9 +23,9 @@ export default class Shader {
 		const gl = GL.get()
 
 		// Create program
-		this.vertexShader = this._compile('vs', vs(this.settings))
-		this.fragmentShader = this._compile('fs', fs(this.settings))
-		this.texture = options.texture
+		this.vertexShader = this._compile('vs', vs(this))
+		this.fragmentShader = this._compile('fs', fs(this))
+		this.customUniforms = options.uniforms
 
 		// console.log(vs(this.settings));
 		// console.log('-----------------');
@@ -44,17 +44,17 @@ export default class Shader {
 		this.vertexPositionAttribute = gl.getAttribLocation(this.program, 'aVertexPosition')
 		gl.enableVertexAttribArray(this.vertexPositionAttribute)
 
-		if(this.settings.vertexNormals){
+		if(this.vertexNormals){
 			this.vertexNormalAttribute = gl.getAttribLocation(this.program, 'aVertexNormal')
 			gl.enableVertexAttribArray(this.vertexNormalAttribute)
 		}
 
-		if(this.settings.vertexColors){
+		if(this.vertexColors){
 			this.vertexColorAttribute = gl.getAttribLocation(this.program, 'aVertexColor')
 			gl.enableVertexAttribArray(this.vertexColorAttribute)
 		}
 
-		if(this.settings.texture){
+		if(this.texture){
 			this.textureCoordAttribute = gl.getAttribLocation(this.program, 'aTextureCoord')
 			gl.enableVertexAttribArray(this.textureCoordAttribute)
 		}
@@ -66,14 +66,21 @@ export default class Shader {
 
 		gl.useProgram(this.program)
 
-		this.pMatrixUniform = gl.getUniformLocation(this.program, 'uPMatrix')
-		this.mvMatrixUniform = gl.getUniformLocation(this.program, 'uMVMatrix')
-		this.mMatrixUniform = gl.getUniformLocation(this.program, 'uModelMatrix')
-		this.nMatrixUniform = gl.getUniformLocation(this.program, 'uNormalMatrix')
-		this.ambientColorUniform = gl.getUniformLocation(this.program, 'uAmbientColor')
-		this.directionalColorUniform = gl.getUniformLocation(this.program, 'uDirectionalColor')
-		this.lightDirectionUniform = gl.getUniformLocation(this.program, 'uLightDirection')
-		this.samplerUniform = gl.getUniformLocation(this.program, 'uSampler')
+		this.uniforms = Object.assign({
+			 uPMatrix: { type: '4fv' , value: null, location: null }
+			,uMVMatrix: { type: '4fv', value: null, location: null }
+			,uModelMatrix: { type: '4fv', value: null, location: null }
+			,uNormalMatrix: { type: '4fv', value: null, location: null }
+			,uAmbientColor: { type: '3f', value: null, location: null }
+			,uDirectionalColor: { type: '3f', value: null, location: null }
+			,uLightDirection: { type: '3f', value: null, location: null }
+		}, this.customUniforms)
+
+		for(let uniform in this.uniforms){
+			this.uniforms[uniform].location = gl.getUniformLocation(this.program, uniform)
+		}
+
+		console.log(this.uniforms);
 	}
 
 	bindProgram() {
@@ -85,32 +92,41 @@ export default class Shader {
 
 		const gl = GL.get()
 
-		gl.uniformMatrix4fv(this.pMatrixUniform, false, projectionMatrix)
-		gl.uniformMatrix4fv(this.mvMatrixUniform, false, modelViewMatrix)
-		gl.uniformMatrix4fv(this.mMatrixUniform, false, modelMatrix)
+		gl.uniformMatrix4fv(this.uniforms.uPMatrix.location, false, projectionMatrix)
+		gl.uniformMatrix4fv(this.uniforms.uMVMatrix.location, false, modelViewMatrix)
+		gl.uniformMatrix4fv(this.uniforms.uModelMatrix.location, false, modelMatrix)
 
-		if(this.settings.lights){
-			gl.uniform3f(this.ambientColorUniform, 0.1, 0.1, 0.1);
-			gl.uniform3f(this.directionalColorUniform, 1.0, 1.0, 1.0);
+		if(this.lights){
+			gl.uniform3f(this.uniforms.uAmbientColor.location, 0.1, 0.1, 0.1);
+			gl.uniform3f(this.uniforms.uDirectionalColor.location, 1.0, 1.0, 1.0);
 
 			let direction = [0.0, 1.0, 1.0]
 			let directionalInversed = vec3.create()
 			vec3.normalize(directionalInversed, direction)
 			// vec3.scale(directionalInversed, directionalInversed, -1)
 
-			gl.uniform3fv(this.lightDirectionUniform, directionalInversed);
+			gl.uniform3fv(this.uniforms.uLightDirection.location, directionalInversed);
 		}
 
 		let inversedModelViewMatrix = mat4.create()
-
 		mat4.invert(inversedModelViewMatrix, modelMatrix)
 
-		if(this.settings.vertexNormals){
+		if(this.vertexNormals){
 			// removes scale and translation
 			let normalMatrix = mat3.create()
 			mat3.fromMat4(normalMatrix, inversedModelViewMatrix)
 			mat3.transpose(normalMatrix, normalMatrix)
-			gl.uniformMatrix3fv(this.nMatrixUniform, false, normalMatrix)
+			gl.uniformMatrix3fv(this.uniforms.uNormalMatrix.location, false, normalMatrix)
+		}
+
+		// Update the other uniforms
+		for(let uniform in this.customUniforms){
+			switch (this.customUniforms[uniform].type) {
+				case 'f':
+					// console.log(this.uniforms[uniform].value);
+					gl.uniform1f(this.uniforms[uniform].location, this.uniforms[uniform].value);
+					break;
+			}
 		}
 	}
 

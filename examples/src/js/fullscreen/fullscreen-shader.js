@@ -33,6 +33,9 @@ let geometry = new PlaneGeometry(1, 1)
 geometry.setVertexColors(colors)
 let material = new Shader({
 	texture: texture,
+	uniforms: {
+		uTime: { type: 'f' , value: 0 }
+	}
 }, vertexShader, fragmentShader)
 const plane = new Mesh(geometry, material)
 
@@ -44,11 +47,14 @@ function resize() {
 	let scale = 0.75
 	renderer.setSize(1280*scale, 720*scale)
 	// renderer.setSize(window.innerWidth, window.innerHeight)
+	//
 }
 resize()
 
 function update() {
 	requestAnimationFrame(update)
+
+	material.uniforms.uTime.value++
 
 	renderer.render(scene, camera)
 }
