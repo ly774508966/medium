@@ -5,6 +5,9 @@ export {Renderer}
 import PerspectiveCamera from 'core/PerspectiveCamera'
 export {PerspectiveCamera}
 
+import OrthographicCamera from 'core/OrthographicCamera'
+export {OrthographicCamera}
+
 import Scene from 'core/Scene'
 export {Scene}
 

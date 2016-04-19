@@ -1,4 +1,4 @@
-import {Renderer, Scene, PerspectiveCamera} from '../../../src/index'
+import {Renderer, Scene, OrthographicCamera} from '../../../src/index'
 import {Mesh, Shader, PlaneGeometry, BoxGeometry} from '../../../src/index'
 import {Grid, OrbitControls} from '../../../src/index'
 import {Texture} from '../../../src/index'
@@ -13,9 +13,10 @@ document.body.appendChild(renderer.canvas)
 const scene = new Scene()
 
 // Camera
-const camera = new PerspectiveCamera({fov: 1})
+// const camera = new PerspectiveCamera({fov: 1})
+const camera = new OrthographicCamera()
 
-camera.setPosition(0, 0, 1.8)
+camera.setPosition(0, 0, 1)
 camera.setLookAt(0, 0, 0)
 
 // Objects
@@ -44,7 +45,8 @@ scene.add(plane)
 window.addEventListener('resize', resize)
 
 function resize() {
-	renderer.setSize(window.innerWidth, window.innerHeight)
+	renderer.setSize(1280, 720)
+	// renderer.setSize(window.innerWidth, window.innerHeight)
 }
 resize()
 

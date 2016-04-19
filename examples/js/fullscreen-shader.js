@@ -63,10 +63,11 @@
 	var scene = new _index.Scene();
 
 	// Camera
-	var camera = new _index.PerspectiveCamera({ fov: 45 });
+	// const camera = new PerspectiveCamera({fov: 1})
+	var camera = new _index.OrthographicCamera();
 
-	camera.setPosition(10, 5, 10);
-	camera.setLookAt();
+	camera.setPosition(0, 0, 1);
+	camera.setLookAt(0, 0, 0);
 
 	// Objects
 	var colors = [];
@@ -75,88 +76,36 @@
 	colors = colors.concat([0, 0, 1, 1.0]);
 	colors = colors.concat([1, 1, 0, 1.0]);
 
-	var geometry = new _index.PlaneGeometry();
+	var texture = new _index.Texture({ src: 'assets/desktop.jpg' });
+
+	var geometry = new _index.PlaneGeometry(window.innerWidth / window.innerHeight, 1);
 	geometry.setVertexColors(colors);
 	var material = new _index.Shader({
-		vertexColors: true,
+		vertexColors: false,
 		vertexNormals: true,
-		lights: true,
+		lights: false,
+		texture: texture,
 		vertexShader: __webpack_require__(21),
 		fragmentShader: __webpack_require__(22)
 	});
 	var plane = new _index.Mesh(geometry, material);
 
-	plane.translateX = 2;
-	plane.translateY = 2;
-	// plane.rotationX = Math.PI/4
-	// plane.rotationY = Math.PI/4
-	// plane.rotationZ = Math.PI/4
-	// box.scaleX = 2
-
 	scene.add(plane);
-
-	colors = [];
-	for (var i = 0; i < 6; i++) {
-		for (var j = 0; j < 4; j++) {
-			colors = colors.concat([Math.random(), Math.random(), Math.random(), 1.0]);
-		}
-	}
-	geometry = new _index.BoxGeometry();
-	geometry.setVertexColors(colors);
-	material = new _index.Shader({
-		vertexColors: false,
-		vertexNormals: true,
-		lights: true,
-		vertexShader: __webpack_require__(21),
-		fragmentShader: __webpack_require__(22)
-	});
-	var box = new _index.Mesh(geometry, material);
-
-	scene.add(box);
-
-	box.x = 3;
-	box.y = 3;
-
-	// Helpers
-	var controls = new _index.OrbitControls(camera, renderer.canvas);
-	var gui = new _datGui2.default.GUI();
-	var cameraGUI = gui.addFolder('camera');
-	cameraGUI.open();
-	var lightingGUI = gui.addFolder('lighting');
-	lightingGUI.open();
-
-	var grid = new _index.Grid(10);
-	scene.add(grid);
-
-	// gui.add(controls, '_rotationX', -Math.PI/2, Math.PI/2).listen().onChange(()=> {controls.update()})
-	// gui.add(controls, '_rotationY', 0, Math.PI*2).listen().onChange(()=> {controls.update()})
-	// gui.add(controls, '_radius').listen()
-	// cameraGUI.add(box, 'rotationX', 0, Math.PI*2).listen()
-	// cameraGUI.add(box, 'rotationY', 0, Math.PI*2).listen()
-	// cameraGUI.add(box, 'rotationZ', 0, Math.PI*2).listen()
-
-	// let range = 1
-	// lightingGUI.add(directionallight, 'x', -range, range)
-	// lightingGUI.add(directionallight, 'y', -range, range)
-	// lightingGUI.add(directionallight, 'z', -range, range)
-
-	controls.update();
 
 	window.addEventListener('resize', resize);
 
 	function resize() {
-		renderer.setSize(window.innerWidth, window.innerHeight);
+		renderer.setSize(1280, 720);
+		// renderer.setSize(window.innerWidth, window.innerHeight)
 	}
 	resize();
 
 	function update() {
 		requestAnimationFrame(update);
 
-		box.rotationX += 0.01;
-		plane.rotationY += 0.01;
-
 		renderer.render(scene, camera);
 	}
+
 	update();
 
 /***/ },

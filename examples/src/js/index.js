@@ -29,13 +29,14 @@ geometry.setVertexColors(colors)
 let material = new Shader({
 	vertexColors: true,
 	vertexNormals: true,
+	lights: true,
 	vertexShader: require('shaders/vertex.glsl'),
 	fragmentShader: require('shaders/frag.glsl')
 })
 const plane = new Mesh(geometry, material)
 
-// plane.y = 2
-// plane.x = 2
+plane.translateX = 2
+plane.translateY = 2
 // plane.rotationX = Math.PI/4
 // plane.rotationY = Math.PI/4
 // plane.rotationZ = Math.PI/4
@@ -54,6 +55,7 @@ geometry.setVertexColors(colors)
 material = new Shader({
 	vertexColors: false,
 	vertexNormals: true,
+	lights: true,
 	vertexShader: require('shaders/vertex.glsl'),
 	fragmentShader: require('shaders/frag.glsl'),
 })

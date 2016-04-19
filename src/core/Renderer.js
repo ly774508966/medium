@@ -1,6 +1,8 @@
 import * as GL from './GL'
 import {mat4, quat} from 'gl-matrix'
 import {degToRad} from 'utils/math'
+import PerspectiveCamera from 'core/PerspectiveCamera'
+import OrthographicCamera from 'core/OrthographicCamera'
 
 export default class Renderer {
 
@@ -94,7 +96,13 @@ export default class Renderer {
 
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
-		mat4.perspective(this.projectionMatrix, camera.fov, gl.viewportWidth / gl.viewportHeight, this.near, this.far)
+		if(camera instanceof PerspectiveCamera){
+			mat4.perspective(this.projectionMatrix, camera.fov, gl.viewportWidth / gl.viewportHeight, this.near, this.far)
+		} else if(camera instanceof OrthographicCamera) {
+			mat4.ortho(this.projectionMatrix, -1.0, 1.0, -1.0, 1.0, this.near, this.far)
+		} else {
+			throw 'Camera type not supported'
+		}
 
 		mat4.identity(this.modelViewMatrix)
 
