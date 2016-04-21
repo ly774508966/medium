@@ -26,23 +26,39 @@ colors = colors.concat([1, 1, 0, 1.0])
 
 let geometry = new PlaneGeometry()
 geometry.setVertexColors(colors)
-let material = new Shader({
+let material1 = new Shader({
 	vertexColors: true,
 	vertexNormals: true,
-	lights: true,
+	lights: false,
 	vertexShader: require('shaders/vertex.glsl'),
-	fragmentShader: require('shaders/frag.glsl')
+	fragmentShader: require('shaders/frag.glsl'),
+	uniforms: {
+		'uAlpha': {type: 'f', value: 1}
+	}
 })
-const plane = new Mesh(geometry, material)
+const plane = new Mesh(geometry, material1)
 
-plane.translateX = 2
-plane.translateY = 2
+let material2 = new Shader({
+	vertexColors: true,
+	vertexNormals: true,
+	lights: false,
+	vertexShader: require('shaders/vertex.glsl'),
+	fragmentShader: require('shaders/frag.glsl'),
+	uniforms: {
+		'uAlpha': {type: 'f', value: 0}
+	}
+})
+const plane2 = new Mesh(geometry, material2)
+
+// plane.translateX = 2
+plane2.translateZ = 1.1
 // plane.rotationX = Math.PI/4
 // plane.rotationY = Math.PI/4
 // plane.rotationZ = Math.PI/4
 // box.scaleX = 2
 
 scene.add(plane)
+scene.add(plane2)
 
 colors = []
 for (var i = 0; i < 6; i++) {
@@ -52,7 +68,7 @@ for (var i = 0; i < 6; i++) {
 }
 geometry = new BoxGeometry()
 geometry.setVertexColors(colors)
-material = new Shader({
+const material = new Shader({
 	vertexColors: false,
 	vertexNormals: true,
 	lights: true,
@@ -61,7 +77,7 @@ material = new Shader({
 })
 const box = new Mesh(geometry, material)
 
-scene.add(box)
+// scene.add(box)
 
 // box.translateX = 3
 // box.translateY = 3
@@ -101,8 +117,8 @@ resize()
 function update() {
 	requestAnimationFrame(update)
 
-	box.rotationX += 0.01
-	plane.rotationY += 0.01
+	// box.rotationX += 0.01
+	// plane.rotationY += 0.01
 
 	renderer.render(scene, camera)
 }

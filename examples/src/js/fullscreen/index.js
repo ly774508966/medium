@@ -27,7 +27,7 @@ colors = colors.concat([0, 1, 0, 1.0])
 colors = colors.concat([0, 0, 1, 1.0])
 colors = colors.concat([1, 1, 0, 1.0])
 
-let texture = new Texture({src: 'assets/sierpinski.jpg'})
+let texture = new Texture({src: 'assets/Screen.png'})
 
 let geometry = new PlaneGeometry(1, 1)
 geometry.setVertexColors(colors)
@@ -44,10 +44,9 @@ scene.add(plane)
 window.addEventListener('resize', resize)
 
 function resize() {
-	let scale = 0.75
-	renderer.setSize(1280*scale, 720*scale)
-	// renderer.setSize(window.innerWidth, window.innerHeight)
-	//
+	// let scale = 1
+	// renderer.setSize(1280*scale, 800*scale)
+	renderer.setSize(window.innerWidth, window.innerHeight)
 }
 resize()
 

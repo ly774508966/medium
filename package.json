@@ -24,6 +24,7 @@
     "webpack": "^1.12.14"
   },
   "dependencies": {
-    "gl-matrix": "^2.3.2"
+    "gl-matrix": "^2.3.2",
+    "happens": "^0.6.0"
   }
 }

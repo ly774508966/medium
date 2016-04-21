@@ -11,6 +11,7 @@ export default class Mesh {
 		this.rotation = vec3.create()
 		this.scale = vec3.fromValues(1, 1, 1)
 		this.modelMatrix = mat4.create()
+		this.visible = true
 	}
 
 	set translateX(value = 0) {
@@ -86,6 +87,11 @@ export default class Mesh {
 	}
 
 	draw(modelViewMatrix, projectionMatrix) {
+
+		// console.log(this.visible);
+
+		if(!this.visible) return
+
 		const gl = GL.get()
 
 		this.shader.bindProgram()

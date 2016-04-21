@@ -37,6 +37,7 @@ module.exports = function(_flags) {
 
 	varying vec4 vColor;
 	varying vec3 vNormal;
+	varying vec3 uUv;
 
 	void main(void){
 
@@ -48,11 +49,10 @@ module.exports = function(_flags) {
 
 		#ifdef texture
 		vTextureCoord = aTextureCoord;
-		// vTextureCoord.t *= 800.0/1280.0;
-		// vTextureCoord.t += 0.5 - (800.0/1280.0)/2.0;
 		#endif
 
 		vNormal = uNormalMatrix * aVertexNormal;
+		uUv = aVertexPosition;
 		gl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
 	}
 	`

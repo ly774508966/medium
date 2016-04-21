@@ -1,8 +1,17 @@
+var fs = require('fs'),
+	path = require('path');
+
+var dirs = fs.readdirSync('./examples/src/js/').filter(function(file) {
+	return fs.statSync(path.join('./examples/src/js/', file)).isDirectory()
+});
+
+var entries = {}
+dirs.forEach(dir => {
+	entries[dir] = './examples/src/js/' + dir + '/index.js'
+})
+
 module.exports = {
-	entry: {
-		'index': "./examples/src/js/index/index.js",
-		'fullscreen-shader': "./examples/src/js/fullscreen/fullscreen-shader.js"
-	},
+	entry: entries,
 	output: {
 		path: './examples/js',
 		filename: "[name].js"

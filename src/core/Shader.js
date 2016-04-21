@@ -123,8 +123,10 @@ export default class Shader {
 		for(let uniform in this.customUniforms){
 			switch (this.customUniforms[uniform].type) {
 				case 'f':
-					// console.log(this.uniforms[uniform].value);
 					gl.uniform1f(this.uniforms[uniform].location, this.uniforms[uniform].value);
+					break;
+				case '2f':
+					gl.uniform2f(this.uniforms[uniform].location, this.uniforms[uniform].value[0], this.uniforms[uniform].value[1]);
 					break;
 			}
 		}
