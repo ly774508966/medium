@@ -80,7 +80,7 @@ export default class Shader {
 			this.uniforms[uniform].location = gl.getUniformLocation(this.program, uniform)
 		}
 
-		console.log(this.uniforms);
+		// console.log(this.uniforms);
 	}
 
 	bindProgram() {
@@ -121,12 +121,48 @@ export default class Shader {
 
 		// Update the other uniforms
 		for(let uniform in this.customUniforms){
+
+			const value = this.uniforms[uniform].value
+
 			switch (this.customUniforms[uniform].type) {
+				case 'i':
+					gl.uniform1i(this.uniforms[uniform].location, value)
+					break;
 				case 'f':
-					gl.uniform1f(this.uniforms[uniform].location, this.uniforms[uniform].value);
+					gl.uniform1f(this.uniforms[uniform].location, value)
 					break;
 				case '2f':
-					gl.uniform2f(this.uniforms[uniform].location, this.uniforms[uniform].value[0], this.uniforms[uniform].value[1]);
+					gl.uniform2f(this.uniforms[uniform].location, value[0], value[1])
+					break;
+				case '3f':
+					gl.uniform3f(this.uniforms[uniform].location, value[0], value[1], value[2])
+					break;
+				case '4f':
+					gl.uniform4f(this.uniforms[uniform].location, value[0], value[1], value[2], value[3])
+					break;
+				case '1iv':
+					gl.uniform1iv(this.uniforms[uniform].location, value)
+					break;
+				case '2iv':
+					gl.uniform2iv(this.uniforms[uniform].location, value)
+					break;
+				case '1fv':
+					gl.uniform1fv(this.uniforms[uniform].location, value)
+					break;
+				case '2fv':
+					gl.uniform2fv(this.uniforms[uniform].location, value)
+					break;
+				case '3fv':
+					gl.uniform3fv(this.uniforms[uniform].location, value)
+					break;
+				case '4fv':
+					gl.uniform4fv(this.uniforms[uniform].location, value)
+					break;
+				case 'Matrix3fv':
+					gl.uniformMatrix3fv(this.uniforms[uniform].location, false, value)
+					break;
+				case 'Matrix4fv':
+					gl.uniformMatrix4fv(this.uniforms[uniform].location, false, value)
 					break;
 			}
 		}

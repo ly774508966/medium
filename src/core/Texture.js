@@ -10,7 +10,8 @@ export default class Texture {
 		const gl = GL.get()
 
 		const defaults = {
-			src: ''
+			src: '',
+			size: null
 		}
 
 		this.settings = Object.assign({}, defaults, options)
@@ -39,6 +40,12 @@ export default class Texture {
 		let size = sizes.reduce(function(prev, curr) {
 			return (Math.abs(curr - imageSize) < Math.abs(prev - imageSize) ? curr : prev);
 		})
+
+		if(this.settings.size){
+			size = this.settings.size
+		}
+
+		console.log('chosen size', size);
 
 		// Draw canvas with texture cropped inside
 		const canvas = document.createElement('canvas')
