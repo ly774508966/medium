@@ -11,6 +11,7 @@ export default class Shader {
 		const defaults = {
 			vertexColors: false,
 			vertexNormals: false,
+			textures: false,
 			lights: false,
 			culling: CONSTANTS.CULL_NONE
 		}
@@ -54,7 +55,17 @@ export default class Shader {
 			gl.enableVertexAttribArray(this.vertexColorAttribute)
 		}
 
-		if(this.texture){
+		this.uniformTextures = []
+		for(let key in this.customUniforms){
+			const uniform = this.customUniforms[key]
+			if(uniform.type === 't'){
+				this.uniformTextures.push(uniform)
+				uniform.value.load()
+			}
+		}
+		// console.log(this.uniformTextures);
+
+		if(this.uniformTextures.length > 0){
 			this.textureCoordAttribute = gl.getAttribLocation(this.program, 'aTextureCoord')
 			gl.enableVertexAttribArray(this.textureCoordAttribute)
 		}
@@ -80,7 +91,7 @@ export default class Shader {
 			this.uniforms[uniform].location = gl.getUniformLocation(this.program, uniform)
 		}
 
-		// console.log(this.uniforms);
+		console.log(this.uniforms);
 	}
 
 	bindProgram() {

@@ -1,9 +1,21 @@
-import {Renderer, Scene, OrthographicCamera, PerspectiveCamera} from 'src/index'
-import {Mesh, Shader, PlaneGeometry, BoxGeometry} from 'src/index'
-import {Grid, OrbitControls} from 'src/index'
-import {Texture} from 'src/index'
-import {vertexShader, fragmentShader} from './shaders.glsl'
 import dat from 'dat-gui'
+import {
+	Renderer,
+	Scene,
+	OrthographicCamera,
+	PerspectiveCamera,
+	Mesh,
+	Shader,
+	PlaneGeometry,
+	BoxGeometry,
+	Grid,
+	OrbitControls,
+	Texture
+} from 'src/index'
+import {
+	vertexShader,
+	fragmentShader
+} from './shaders.glsl'
 
 // Renderer
 const renderer = new Renderer()
@@ -27,15 +39,27 @@ colors = colors.concat([0, 1, 0, 1.0])
 colors = colors.concat([0, 0, 1, 1.0])
 colors = colors.concat([1, 1, 0, 1.0])
 
-let texture = new Texture({src: 'assets/Screen.png'})
-
 let geometry = new PlaneGeometry(1, 1)
 geometry.setVertexColors(colors)
 let material = new Shader({
-	texture: texture,
 	uniforms: {
-		uTime: { type: 'f' , value: 0 }
-	}
+		uTime: {
+			type: 'f',
+			value: 0
+		},
+		uSampler0: {
+			type: 't',
+			value: new Texture({
+				src: 'assets/Screen.png'
+			})
+		},
+		uSampler1: {
+			type: 't',
+			value: new Texture({
+				src: 'assets/texture.jpg'
+			})
+		}
+	},
 }, vertexShader, fragmentShader)
 const plane = new Mesh(geometry, material)
 
@@ -57,5 +81,9 @@ function update() {
 
 	renderer.render(scene, camera)
 }
+renderer.render(scene, camera)
+renderer.render(scene, camera)
+renderer.render(scene, camera)
+renderer.render(scene, camera)
 
 update()
