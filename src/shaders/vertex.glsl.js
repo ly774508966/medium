@@ -1,17 +1,15 @@
-module.exports = function(_flags) {
-
+export default function (_flags) {
 	const defaults = {
 		vertexColors: false,
-		lights: false,
 		texture: false,
-	}
+	};
 
-	const flags = Object.assign(defaults, _flags)
+	const flags = Object.assign(defaults, _flags);
 
-	let defines = ''
-	for(let key in flags){
-		if(flags[key])
-			defines += `#define ${key} \n`
+	let defines = '';
+	for (let key in flags) {
+		if (flags[key])
+			defines += `#define ${key} \n`;
 	}
 
 	return `
@@ -20,6 +18,11 @@ module.exports = function(_flags) {
 
 	attribute vec3 aVertexPosition;
 	attribute vec3 aVertexNormal;
+
+	#ifdef uv
+	attribute vec2 aUv;
+	varying vec2 vUv;
+	#endif
 
 	#ifdef vertexColors
 	attribute vec4 aVertexColor;
@@ -37,7 +40,6 @@ module.exports = function(_flags) {
 
 	varying vec4 vColor;
 	varying vec3 vNormal;
-	varying vec3 uUv;
 
 	void main(void){
 
@@ -51,9 +53,12 @@ module.exports = function(_flags) {
 		vTextureCoord = aTextureCoord;
 		#endif
 
+		#ifdef uv
+		vUv = aUv;
+		#endif
+
 		vNormal = uNormalMatrix * aVertexNormal;
-		uUv = aVertexPosition;
 		gl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
 	}
-	`
+	`;
 }

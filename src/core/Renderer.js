@@ -1,122 +1,123 @@
-import * as GL from './GL'
-import {mat4, quat} from 'gl-matrix'
-import {degToRad} from 'utils/math'
-import PerspectiveCamera from 'core/PerspectiveCamera'
-import OrthographicCamera from 'core/OrthographicCamera'
+import * as GL from './GL';
+import {
+	mat4,
+} from 'gl-matrix';
+import PerspectiveCamera from 'core/PerspectiveCamera';
+import OrthographicCamera from 'core/OrthographicCamera';
+import {
+	warn,
+} from 'utils/console';
 
 export default class Renderer {
-
 	constructor(settings = {}) {
-
 		// Default renderer settings
 		const defaults = {
 			width: 1280,
 			height: 720,
-			near: 0.1,
-			far: 100
-		}
+			preserveDrawingBuffer: false,
+		};
 
 		// Apply defaults
-		Object.assign(this, defaults, settings)
+		Object.assign(this, defaults, settings);
 
 		// Create canvas
-		this.canvas = document.createElement('canvas')
-		this.canvas.width = this.width
-		this.canvas.height = this.height
+		this.canvas = document.createElement('canvas');
+		this.canvas.width = this.width;
+		this.canvas.height = this.height;
 
 		// Setup matrices
-		this.modelViewMatrix = mat4.create()
-		this.projectionMatrix = mat4.create()
+		this.modelViewMatrix = mat4.create();
+		this.projectionMatrix = mat4.create();
 
 		// Matrix stack for scene object translations
-		this.modelViewMatrixStack = []
+		this.modelViewMatrixStack = [];
 
-		this.pixelRatio = 1
+		this.pixelRatio = 1;
 
 		// Try initialising gl
+		const attributes = {
+			preserveDrawingBuffer: this.preserveDrawingBuffer,
+		};
+
 		try {
-			const gl = this.canvas.getContext('experimental-webgl')
-			gl.viewportWidth = this.canvas.width
-			gl.viewportHeight = this.canvas.height
-			GL.set(gl)
+			const gl = this.canvas.getContext('webgl', attributes) ||
+				this.canvas.getContext('experimental-webgl', attributes);
+			gl.viewportWidth = this.canvas.width;
+			gl.viewportHeight = this.canvas.height;
+			GL.set(gl);
 		} catch (error) {
-			console.log('Webgl not supported')
+			warn('Webgl not supported');
 		}
 
-		const gl = GL.get()
+		const gl = GL.get();
 
-		gl.clearColor(0.0, 0.0, 0.0, 1.0)
-		gl.enable(gl.DEPTH_TEST)
+		gl.clearColor(0.0, 0.0, 0.0, 1.0);
+		gl.enable(gl.DEPTH_TEST);
 	}
 
 	setSize(width, height) {
+		const gl = GL.get();
 
-		const gl = GL.get()
+		this.width = width * this.pixelRatio;
+		this.height = height * this.pixelRatio;
 
-		this.width = width * this.pixelRatio
-		this.height = height * this.pixelRatio
+		this.canvas.width = this.width;
+		this.canvas.height = this.height;
 
-		this.canvas.width = this.width
-		this.canvas.height = this.height
+		this.canvas.style.width = `${width}px`;
+		this.canvas.style.height = `${height}px`;
 
-		this.canvas.style.width = `${width}px`
-		this.canvas.style.height = `${height}px`
-
-		gl.viewportWidth = this.width
-		gl.viewportHeight = this.height
-
-		this.rotation = 0
+		gl.viewportWidth = this.width;
+		gl.viewportHeight = this.height;
 	}
 
 	setDevicePixelRatio(ratio = 1) {
-		this.pixelRatio = ratio || 1
-		this.setSize(this.width, this.height)
+		this.pixelRatio = ratio || 1;
+		this.setSize(this.width, this.height);
 	}
 
 	modelViewPushMatrix() {
-		let copy = mat4.create()
-		mat4.copy(copy, this.modelViewMatrix)
-		this.modelViewMatrixStack.push(copy)
+		const copy = mat4.create();
+		mat4.copy(copy, this.modelViewMatrix);
+		this.modelViewMatrixStack.push(copy);
 	}
 
 	modelViewPopMatrix() {
-		if(this.modelViewMatrixStack.length === 0){
-			throw 'Invalid modelViewPopMatrix'
+		if (this.modelViewMatrixStack.length === 0) {
+			throw new Error('Invalid modelViewPopMatrix');
 		}
-		this.modelViewMatrix = this.modelViewMatrixStack.pop()
+		this.modelViewMatrix = this.modelViewMatrixStack.pop();
 	}
 
 	render(scene, camera) {
+		const gl = GL.get();
 
-		const gl = GL.get()
+		gl.viewport(0.0, 0.0, gl.viewportWidth, gl.viewportHeight);
 
-		this.rotation++
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-		gl.viewport(0.0, 0.0, gl.viewportWidth, gl.viewportHeight)
+		// gl.enable(gl.BLEND);
+		// gl.blendEquation(gl.FUNC_ADD);
+		// gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-
-		gl.enable( gl.BLEND );
-		gl.blendEquation( gl.FUNC_ADD );
-		gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA );
-
-		if(camera instanceof PerspectiveCamera){
-			mat4.perspective(this.projectionMatrix, camera.fov, gl.viewportWidth / gl.viewportHeight, this.near, this.far)
-		} else if(camera instanceof OrthographicCamera) {
-			mat4.ortho(this.projectionMatrix, -1.0, 1.0, -1.0, 1.0, this.near, this.far)
+		if (camera instanceof PerspectiveCamera) {
+			const ratio = gl.viewportWidth / gl.viewportHeight;
+			mat4.perspective(this.projectionMatrix, camera.fov, ratio, camera.near, camera.far);
+		} else if (camera instanceof OrthographicCamera) {
+			mat4.ortho(this.projectionMatrix, -1.0, 1.0, -1.0, 1.0, camera.near, camera.far);
 		} else {
-			throw 'Camera type not supported'
+			throw new Error('Camera type not supported');
 		}
 
-		mat4.identity(this.modelViewMatrix)
+		mat4.identity(this.modelViewMatrix);
 
-		mat4.lookAt(this.modelViewMatrix, camera.position, camera.center, camera.up)
+		mat4.lookAt(this.modelViewMatrix, camera.position.v, camera.center.v, camera.up.v);
 
 		// Render the scene
-		scene.children.forEach((child, i) => {
-			this.modelViewPushMatrix()
-			child.draw(this.modelViewMatrix, this.projectionMatrix)
-			this.modelViewPopMatrix()
-		})
+		scene.children.forEach(child => {
+			this.modelViewPushMatrix();
+			child.draw(this.modelViewMatrix, this.projectionMatrix);
+			this.modelViewPopMatrix();
+		});
 	}
 }

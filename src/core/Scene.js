@@ -1,10 +1,10 @@
 export default class Scene {
 
 	constructor() {
-		this.children = []
+		this.children = [];
 	}
 
 	add(object) {
-		this.children.push(object)
+		this.children.push(object);
 	}
 }

@@ -1,141 +1,78 @@
-import * as GL from '../core/GL'
-import {vec3, mat4} from 'gl-matrix'
+import * as GL from '../core/GL';
+import {
+	mat4,
+} from 'gl-matrix';
+import Vector3 from 'math/vector3';
 
 export default class Mesh {
-
 	constructor(geometry, shader) {
-		this.geometry = geometry
-		this.shader = shader
+		this.geometry = geometry;
+		this.shader = shader;
 
-		this.position = vec3.create()
-		this.rotation = vec3.create()
-		this.scale = vec3.fromValues(1, 1, 1)
-		this.modelMatrix = mat4.create()
-		this.visible = true
-	}
-
-	set translateX(value = 0) {
-		this.position[0] = value
-	}
-
-	get translateX() {
-		return this.position[0]
-	}
-
-	set translateY(value = 0) {
-		this.position[1] = value
-	}
-
-	get translateY() {
-		return this.position[1]
-	}
-
-	set translateZ(value = 0) {
-		this.position[2] = value
-	}
-
-	get translateZ() {
-		return this.position[2]
-	}
-
-	set rotationX(value = 0) {
-		this.rotation[0] = value
-	}
-
-	get rotationX() {
-		return this.rotation[0]
-	}
-
-	set rotationY(value = 0) {
-		this.rotation[1] = value
-	}
-
-	get rotationY() {
-		return this.rotation[1]
-	}
-
-	set rotationZ(value = 0) {
-		this.rotation[2] = value
-	}
-
-	get rotationZ() {
-		return this.rotation[2]
-	}
-
-	set scaleX(value = 0) {
-		this.scale[0] = value
-	}
-
-	get scaleX() {
-		return this.scale[0]
-	}
-
-	set scaleY(value = 0) {
-		this.scale[1] = value
-	}
-
-	get scaleY() {
-		return this.scale[1]
-	}
-
-	set scaleZ(value = 0) {
-		this.scale[2] = value
-	}
-
-	get scaleZ() {
-		return this.scale[2]
+		this.position = new Vector3();
+		this.rotation = new Vector3();
+		this.scale = new Vector3(1, 1, 1);
+		this.modelMatrix = mat4.create();
+		this.visible = true;
 	}
 
 	draw(modelViewMatrix, projectionMatrix) {
+		if (!this.visible) return;
 
-		// console.log(this.visible);
+		const gl = GL.get();
 
-		if(!this.visible) return
+		this.shader.bindProgram();
 
-		const gl = GL.get()
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexPositionBuffer);
+		gl.vertexAttribPointer(this.shader.vertexPositionAttribute,
+			this.geometry.vertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
-		this.shader.bindProgram()
-
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexPositionBuffer)
-		gl.vertexAttribPointer(this.shader.vertexPositionAttribute, this.geometry.vertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0)
-
-		if(this.shader.vertexColors){
-			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexColorBuffer)
-			gl.vertexAttribPointer(this.shader.vertexColorAttribute, this.geometry.vertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0)
+		if (this.shader.uv) {
+			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.uvBuffer);
+			gl.vertexAttribPointer(this.shader.vertexUvAttribute,
+				this.geometry.uvBuffer.itemSize, gl.FLOAT, false, 0, 0);
 		}
 
-		if(this.shader.vertexNormals){
-			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexNormalBuffer)
-			gl.vertexAttribPointer(this.shader.vertexNormalAttribute, this.geometry.vertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0)
+		if (this.shader.vertexColors) {
+			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexColorBuffer);
+			gl.vertexAttribPointer(this.shader.vertexColorAttribute,
+				this.geometry.vertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
 		}
 
-		if(this.shader.uniformTextures.length > 0){
-			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.textureCoordBuffer)
-			gl.vertexAttribPointer(this.shader.textureCoordAttribute, this.geometry.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0)
+		if (this.shader.vertexNormals) {
+			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexNormalBuffer);
+			gl.vertexAttribPointer(this.shader.vertexNormalAttribute,
+				this.geometry.vertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+		}
+
+		if (this.shader.uniformTextures.length > 0) {
+			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.textureCoordBuffer);
+			gl.vertexAttribPointer(this.shader.textureCoordAttribute,
+				this.geometry.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
 			this.shader.uniformTextures.forEach((uniform, i) => {
-				gl.activeTexture(gl[`TEXTURE${i}`])
-				gl.bindTexture(gl.TEXTURE_2D, uniform.value.texture)
-				gl.uniform1i(uniform.location, i)
-			})
+				gl.activeTexture(gl[`TEXTURE${i}`]);
+				gl.bindTexture(gl.TEXTURE_2D, uniform.value.texture);
+				gl.uniform1i(uniform.location, i);
+			});
 		}
 
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.geometry.vertexIndexBuffer)
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.geometry.vertexIndexBuffer);
 
-		mat4.identity(this.modelMatrix)
-		mat4.translate(this.modelMatrix, this.modelMatrix, this.position)
-		mat4.rotate(this.modelMatrix, this.modelMatrix, this.rotation[0], [1, 0, 0])
-		mat4.rotate(this.modelMatrix, this.modelMatrix, this.rotation[1], [0, 1, 0])
-		mat4.rotate(this.modelMatrix, this.modelMatrix, this.rotation[2], [0, 0, 1])
-		mat4.scale(this.modelMatrix, this.modelMatrix, this.scale)
+		mat4.identity(this.modelMatrix);
+		mat4.translate(this.modelMatrix, this.modelMatrix, this.position.v);
+		mat4.rotate(this.modelMatrix, this.modelMatrix, this.rotation.x, [1, 0, 0]);
+		mat4.rotate(this.modelMatrix, this.modelMatrix, this.rotation.y, [0, 1, 0]);
+		mat4.rotate(this.modelMatrix, this.modelMatrix, this.rotation.z, [0, 0, 1]);
+		mat4.scale(this.modelMatrix, this.modelMatrix, this.scale.v);
 
-		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix)
+		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
 
 		// gl.enable(gl.CULL_FACE)
 		// gl.cullFace(gl.BACK)
 
 		// gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.geometry.vertexPositionBuffer.numItems)
-		gl.drawElements(gl.TRIANGLES, this.geometry.vertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0)
+		gl.drawElements(gl.TRIANGLES, this.geometry.vertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 
 		// gl.disable(gl.CULL_FACE)
 	}

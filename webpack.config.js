@@ -1,30 +1,32 @@
-var fs = require('fs'),
-	path = require('path');
+const fs = require('fs');
+const path = require('path');
 
-var dirs = fs.readdirSync('./examples/src/js/').filter(function(file) {
-	return fs.statSync(path.join('./examples/src/js/', file)).isDirectory()
-});
+function isDir(file) {
+	return fs.statSync(path.join('./examples/src/js/', file)).isDirectory();
+}
+const dirs = fs.readdirSync('./examples/src/js/').filter(isDir);
 
-var entries = {}
+const entries = {};
 dirs.forEach(dir => {
-	entries[dir] = './examples/src/js/' + dir + '/index.js'
-})
+	entries[dir] = `./examples/src/js/${dir}/index.js`;
+});
 
 module.exports = {
 	entry: entries,
+	devtool: 'source-map',
 	output: {
 		path: './examples/js',
-		filename: "[name].js"
+		filename: '[name].js',
 	},
 	module: {
 		loaders: [{
 			test: /\.js$/,
 			exclude: /node_modules/,
-			loader: "babel",
+			loader: 'babel',
 			query: {
-				presets: ['es2015']
-			}
-		}]
+				presets: ['es2015', 'stage-0'],
+			},
+		}],
 	},
 	quiet: true,
 	noInfo: false,
@@ -35,6 +37,6 @@ module.exports = {
 		hash: false,
 		timings: false,
 		chunks: false,
-		chunkModules: false
+		chunkModules: false,
 	},
-}
+};
