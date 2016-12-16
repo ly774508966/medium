@@ -7,6 +7,7 @@
         "extras": "./extras",
         "geometry": "./geometry",
         "helpers": "./helpers",
+								"loaders": "./loaders",
         "materials": "./materials",
 								"math": "./math",
 								"shaders": "./shaders",

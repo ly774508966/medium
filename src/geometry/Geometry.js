@@ -1,33 +1,37 @@
 import * as GL from 'core/GL';
 
 export default class Geometry {
-	constructor(vertices, indices, normals, uvs) {
+	constructor(vertices, indices, normals, uvs, colors) {
 		const gl = GL.get();
+		this.vertices = vertices;
+		this.indices = indices;
+		this.normals = normals;
+		this.uvs = uvs;
+		this.colors = colors;
 
 		// Vertex positions
-		this.vertexPositionBuffer = GL.createBuffer(gl, gl.ARRAY_BUFFER, vertices, 3);
+		if (this.vertices) {
+			this.vertexPositionBuffer = GL.createBuffer(gl, gl.ARRAY_BUFFER, vertices, 3);
+		}
 
 		// Vertex indices
-		this.vertexIndexBuffer = GL.createBuffer(gl, gl.ELEMENT_ARRAY_BUFFER, indices, 1);
+		if (this.indices) {
+			this.vertexIndexBuffer = GL.createBuffer(gl, gl.ELEMENT_ARRAY_BUFFER, indices, 1);
+		}
 
 		// Vertex normals
-		this.vertexNormalBuffer = GL.createBuffer(gl, gl.ARRAY_BUFFER, normals, 3);
+		if (this.normals) {
+			this.vertexNormalBuffer = GL.createBuffer(gl, gl.ARRAY_BUFFER, normals, 3);
+		}
 
 		// uvs
-		if (uvs.length > 0) {
+		if (this.uvs) {
 			this.uvBuffer = GL.createBuffer(gl, gl.ARRAY_BUFFER, uvs, 2);
 		}
-	}
-
-	setVertexColors(colors) {
-		const gl = GL.get();
 
 		// Vertex colors
-		this.vertexColorBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexColorBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-
-		this.vertexColorBuffer.itemSize = 4;
-		this.vertexColorBuffer.numItems = 4;
+		if (this.colors) {
+			this.vertexColorBuffer = GL.createBuffer(gl, gl.ARRAY_BUFFER, colors, 4);
+		}
 	}
 }

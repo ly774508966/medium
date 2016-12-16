@@ -1,9 +1,3 @@
-import {
-	mat4,
-} from 'gl-matrix';
-import {
-	lerp,
-} from 'math/utils';
 import Mesh from 'core/Mesh';
 import Shader from 'core/Shader';
 import * as GL from 'core/GL';
@@ -11,59 +5,60 @@ import Geometry from 'geometry/Geometry';
 
 const vertexShader = `
 	attribute vec3 aVertexPosition;
+	attribute vec3 aVertexColor;
 
 	uniform mat4 uMVMatrix;
 	uniform mat4 uPMatrix;
 	uniform mat4 uModelMatrix;
 
+	varying vec3 vColor;
+
 	void main(void){
+		vColor = aVertexColor;
 		gl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
 	}
 `;
 
 const fragmentShader = `
 	precision mediump float;
+	varying vec3 vColor;
 
 	void main(void){
-		gl_FragColor = vec4(vec3(0.5), 1.0);
+		gl_FragColor = vec4(vColor, 1.0);
 	}
 `;
 
-class GridGeometry extends Geometry {
-	constructor(size, divisions) {
+class AxisGeometry extends Geometry {
+	constructor(size) {
 		let vertices = [];
-		const halfSize = size * 0.5;
 
-		for (let i = 0; i < divisions; i++) {
-			const x1 = lerp(-halfSize, halfSize, i / (divisions - 1));
-			const y1 = 0;
-			const z1 = -halfSize;
-			const x2 = lerp(-halfSize, halfSize, i / (divisions - 1));
-			const y2 = 0;
-			const z2 = halfSize;
-			vertices = vertices.concat([x1, y1, z1, x2, y2, z2]);
-		}
+		// X
+		vertices = vertices.concat([0, 0, 0, size, 0, 0]);
+		// Y
+		vertices = vertices.concat([0, 0, 0, 0, size, 0]);
+		// Z
+		vertices = vertices.concat([0, 0, 0, 0, 0, size]);
 
-		for (let i = 0; i < divisions; i++) {
-			const x1 = -halfSize;
-			const y1 = 0;
-			const z1 = lerp(-halfSize, halfSize, i / (divisions - 1));
-			const x2 = halfSize;
-			const y2 = 0;
-			const z2 = lerp(-halfSize, halfSize, i / (divisions - 1));
-			vertices = vertices.concat([x1, y1, z1, x2, y2, z2]);
-		}
-
-		super(vertices);
+		// Colors
+		const colors = [
+			1, 0, 0, 1,
+			1, 0, 0, 1,
+			0, 1, 0, 1,
+			0, 1, 0, 1,
+			0, 0, 1, 1,
+			0, 0, 1, 1,
+		];
+		super(vertices, null, null, null, colors);
 	}
 }
 
-export default class Grid extends Mesh {
-	constructor(size = 1, divisions = 10) {
-		super(new GridGeometry(size, divisions), new Shader({
+export default class Axis extends Mesh {
+	constructor(size = 1, lineWidth = 3) {
+		super(new AxisGeometry(size), new Shader({
 			vertexShader,
 			fragmentShader,
 		}));
+		this.lineWidth = lineWidth;
 	}
 
 	draw(modelViewMatrix, projectionMatrix) {
@@ -75,8 +70,13 @@ export default class Grid extends Mesh {
 		gl.vertexAttribPointer(this.shader.vertexPositionAttribute,
 			this.geometry.vertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexColorBuffer);
+		gl.vertexAttribPointer(this.shader.vertexColorAttribute,
+			this.geometry.vertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
 		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
 
+		gl.lineWidth(this.lineWidth);
 		gl.drawArrays(gl.LINES, 0, this.geometry.vertexPositionBuffer.numItems);
 	}
 }

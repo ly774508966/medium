@@ -1,67 +1,67 @@
 import * as GL from './GL';
-import * as CONSTANTS from './constants';
+import * as CONSTANTS from './Constants';
 import {
 	mat3,
 	mat4,
 } from 'gl-matrix';
-import VertexShader from 'shaders/vertex.glsl';
-import FragmentShader from 'shaders/frag.glsl';
+import vertexShader from 'shaders/vertex.glsl';
+import fragmentShader from 'shaders/frag.glsl';
 import {
 	warn,
-} from 'utils/console';
+} from 'utils/Console';
 
 export default class Shader {
-
-	constructor(options, vertexShader, fragmentShader) {
+	constructor(options) {
 		const defaults = {
-			uv: false,
-			vertexColors: false,
-			vertexNormals: false,
-			textures: false,
+			uniforms: {},
+			vertexShader: `${vertexShader}`,
+			fragmentShader: `${fragmentShader}`,
+			drawType: CONSTANTS.DRAW_TRIANGLES,
 			lights: false,
 			culling: CONSTANTS.CULL_NONE,
 		};
 
 		Object.assign(this, defaults, options);
+	}
 
-		const vs = (vertexShader !== undefined) ? vertexShader : VertexShader;
-		const fs = (fragmentShader !== undefined) ? fragmentShader : FragmentShader;
-
+	create(geometry) {
 		const gl = GL.get();
 
-		// Create program
-		this.vertexShader = this._compile('vs', vs(this));
-		this.fragmentShader = this._compile('fs', fs(this));
-		this.customUniforms = options.uniforms || {};
+		const vertexShader = this._processShader(this.vertexShader, geometry);
+		const fragmentShader = this._processShader(this.fragmentShader, geometry);
 
-		// console.log(vs(this.settings));
-		// console.log('-----------------');
-		// console.log(fs(this.settings));
+		// Create program
+		this.compiledVertexShader = this._compile('vs', vertexShader);
+		this.compiledFragmentShader = this._compile('fs', fragmentShader);
+		this.customUniforms = this.uniforms || {};
 
 		this.program = gl.createProgram();
 
-		gl.attachShader(this.program, this.vertexShader);
-		gl.attachShader(this.program, this.fragmentShader);
+		gl.attachShader(this.program, this.compiledVertexShader);
+		gl.attachShader(this.program, this.compiledFragmentShader);
 		gl.linkProgram(this.program);
 
 		if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
 			warn('Failed to initialise shaders');
 		}
 
-		this.vertexPositionAttribute = gl.getAttribLocation(this.program, 'aVertexPosition');
-		gl.enableVertexAttribArray(this.vertexPositionAttribute);
+		if (geometry.vertices) {
+			this.vertexPositionAttribute = gl.getAttribLocation(this.program, 'aVertexPosition');
+			gl.enableVertexAttribArray(this.vertexPositionAttribute);
+		}
 
-		if (this.uv) {
+		if (geometry.uvs) {
 			this.vertexUvAttribute = gl.getAttribLocation(this.program, 'aUv');
 			gl.enableVertexAttribArray(this.vertexUvAttribute);
 		}
 
-		if (this.vertexNormals) {
+		if (geometry.normals) {
+			this.vertexNormals = true;
 			this.vertexNormalAttribute = gl.getAttribLocation(this.program, 'aVertexNormal');
 			gl.enableVertexAttribArray(this.vertexNormalAttribute);
 		}
 
-		if (this.vertexColors) {
+		if (geometry.colors) {
 			this.vertexColorAttribute = gl.getAttribLocation(this.program, 'aVertexColor');
 			gl.enableVertexAttribArray(this.vertexColorAttribute);
 		}
@@ -74,7 +74,6 @@ export default class Shader {
 				uniform.value.load();
 			}
 		});
-		// console.log(this.uniformTextures);
 
 		if (this.uniformTextures.length > 0) {
 			this.textureCoordAttribute = gl.getAttribLocation(this.program, 'aTextureCoord');
@@ -87,7 +86,7 @@ export default class Shader {
 		// console.log(this.textureCoordAttribute);
 		// console.log(this.vertexUvAttribute);
 
-		gl.useProgram(this.program);
+		// gl.useProgram(this.program);
 
 		this.uniforms = Object.assign({
 			uPMatrix: {
@@ -115,8 +114,35 @@ export default class Shader {
 		Object.keys(this.uniforms).forEach(uniform => {
 			this.uniforms[uniform].location = gl.getUniformLocation(this.program, uniform);
 		});
+	}
 
-		// console.log(this.uniforms);
+	_processShader(shader, geometry) {
+		let defines = '';
+
+		function addDefine(define) {
+			defines += `#define ${define} \n`;
+		}
+
+		if (geometry.uvs) {
+			addDefine('uv');
+		}
+
+		if (geometry.colors) {
+			addDefine('vertexColors');
+		}
+
+		if (geometry.normals) {
+			addDefine('normals');
+		}
+
+		shader = shader.replace(/#HOOK_DEFINES/g, defines);
+		shader = shader.replace(/#HOOK_VERTEX_PRE/g, '');
+		shader = shader.replace(/#HOOK_VERTEX_MAIN/g, '');
+		shader = shader.replace(/#HOOK_VERTEX_END/g, '');
+		shader = shader.replace(/#HOOK_FRAGMENT_PRE/g, '');
+		shader = shader.replace(/#HOOK_FRAGMENT_MAIN/g, '');
+		shader = shader.replace(/#HOOK_FRAGMENT_END/g, '');
+		return shader;
 	}
 
 	bindProgram() {
@@ -194,6 +220,8 @@ export default class Shader {
 	_compile(type, source) {
 		const gl = GL.get();
 		let shader;
+
+		// console.log('source', source);
 
 		switch (type) {
 			case 'vs':

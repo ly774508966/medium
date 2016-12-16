@@ -1,4 +1,9 @@
 // Core
+import * as Constants from 'core/Constants';
+export {
+	Constants,
+};
+
 import Renderer from 'core/Renderer';
 export {
 	Renderer,
@@ -39,6 +44,11 @@ export {
 // export {ShaderMaterial}
 
 // Objects
+import Geometry from 'geometry/Geometry';
+export {
+	Geometry,
+};
+
 import PlaneGeometry from 'geometry/Plane';
 export {
 	PlaneGeometry,
@@ -58,6 +68,17 @@ export {
 import Grid from 'helpers/Grid';
 export {
 	Grid,
+};
+
+import Axis from 'helpers/Axis';
+export {
+	Axis,
+};
+
+// Loaders
+import ObjLoader from 'loaders/ObjLoader';
+export {
+	ObjLoader,
 };
 
 // Extras

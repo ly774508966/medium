@@ -8,6 +8,8 @@ import {
 	BoxGeometry,
 	Grid,
 	OrbitControls,
+	Axis,
+	Constants as CONSTANTS,
 } from 'index';
 import dat from 'dat-gui';
 
@@ -34,46 +36,17 @@ colors = colors.concat([0, 1, 0, 1.0]);
 colors = colors.concat([0, 0, 1, 1.0]);
 colors = colors.concat([1, 1, 0, 1.0]);
 
-let geometry = new PlaneGeometry();
-// geometry.setVertexColors(colors);
+let geometry = new PlaneGeometry(1, 1, colors);
 const material1 = new Shader({
-	uv: true,
-	// vertexColors: true,
-	vertexNormals: true,
-	lights: false,
-	vertexShader: require('shaders/vertex.glsl'),
-	fragmentShader: require('shaders/frag.glsl'),
-	uniforms: {
-		uAlpha: {
-			type: 'f',
-			value: 1,
-		},
-	},
+	drawType: CONSTANTS.DRAW_LINES,
 });
 
 const plane = new Mesh(geometry, material1);
-geometry.setVertexColors(colors);
-const material2 = new Shader({
-	uv: true,
-	vertexColors: true,
-	vertexNormals: true,
-	vertexShader: require('shaders/vertex.glsl'),
-	fragmentShader: require('shaders/frag.glsl'),
-	uniforms: {
-		uAlpha: {
-			type: 'f',
-			value: 1,
-		},
-	},
-});
+const material2 = new Shader();
 const plane2 = new Mesh(geometry, material2);
 
 plane.position.x = 2;
 plane2.position.z = 1.1;
-// plane.rotationX = Math.PI/4
-// plane.rotationY = Math.PI/4
-// plane.rotationZ = Math.PI/4
-// box.scaleX = 2
 
 scene.add(plane);
 scene.add(plane2);
@@ -85,15 +58,8 @@ for (let i = 0; i < 6; i++) {
 	}
 }
 
-geometry = new BoxGeometry();
-geometry.setVertexColors(colors);
-const material = new Shader({
-	vertexColors: true,
-	vertexNormals: true,
-	lights: false,
-	vertexShader: require('shaders/vertex.glsl'),
-	fragmentShader: require('shaders/frag.glsl'),
-});
+geometry = new BoxGeometry(1, 1, 1);
+const material = new Shader();
 const box = new Mesh(geometry, material);
 
 scene.add(box);
@@ -112,17 +78,8 @@ lightingGUI.open();
 const grid = new Grid(10);
 scene.add(grid);
 
-// gui.add(controls, '_rotationX', -Math.PI/2, Math.PI/2).listen().onChange(()=> {controls.update()})
-// gui.add(controls, '_rotationY', 0, Math.PI*2).listen().onChange(()=> {controls.update()})
-// gui.add(controls, '_radius').listen()
-// cameraGUI.add(box, 'rotationX', 0, Math.PI*2).listen()
-// cameraGUI.add(box, 'rotationY', 0, Math.PI*2).listen()
-// cameraGUI.add(box, 'rotationZ', 0, Math.PI*2).listen()
-
-// let range = 1
-// lightingGUI.add(directionallight, 'x', -range, range)
-// lightingGUI.add(directionallight, 'y', -range, range)
-// lightingGUI.add(directionallight, 'z', -range, range)
+const axis = new Axis(1);
+scene.add(axis);
 
 controls.update();
 

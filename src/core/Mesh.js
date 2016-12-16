@@ -2,12 +2,13 @@ import * as GL from '../core/GL';
 import {
 	mat4,
 } from 'gl-matrix';
-import Vector3 from 'math/vector3';
+import Vector3 from 'math/Vector3';
 
 export default class Mesh {
 	constructor(geometry, shader) {
 		this.geometry = geometry;
 		this.shader = shader;
+		this.shader.create(this.geometry);
 
 		this.position = new Vector3();
 		this.rotation = new Vector3();
@@ -23,23 +24,25 @@ export default class Mesh {
 
 		this.shader.bindProgram();
 
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexPositionBuffer);
-		gl.vertexAttribPointer(this.shader.vertexPositionAttribute,
-			this.geometry.vertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+		if (this.geometry.vertices) {
+			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexPositionBuffer);
+			gl.vertexAttribPointer(this.shader.vertexPositionAttribute,
+				this.geometry.vertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+		}
 
-		if (this.shader.uv) {
+		if (this.geometry.uvs) {
 			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.uvBuffer);
 			gl.vertexAttribPointer(this.shader.vertexUvAttribute,
 				this.geometry.uvBuffer.itemSize, gl.FLOAT, false, 0, 0);
 		}
 
-		if (this.shader.vertexColors) {
+		if (this.geometry.colors) {
 			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexColorBuffer);
 			gl.vertexAttribPointer(this.shader.vertexColorAttribute,
 				this.geometry.vertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
 		}
 
-		if (this.shader.vertexNormals) {
+		if (this.geometry.normals) {
 			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexNormalBuffer);
 			gl.vertexAttribPointer(this.shader.vertexNormalAttribute,
 				this.geometry.vertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
@@ -72,7 +75,9 @@ export default class Mesh {
 		// gl.cullFace(gl.BACK)
 
 		// gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.geometry.vertexPositionBuffer.numItems)
-		gl.drawElements(gl.TRIANGLES, this.geometry.vertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+
+		gl.drawElements(this.shader.drawType,
+			this.geometry.vertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 
 		// gl.disable(gl.CULL_FACE)
 	}

@@ -1,7 +1,7 @@
 import Geometry from './Geometry';
 
 export default class Plane extends Geometry {
-	constructor(width = 1, height = 1) {
+	constructor(width = 1, height = 1, colors) {
 		/*
 			(-1, 1)  (0, 1)  (1, 1)
 
@@ -41,6 +41,6 @@ export default class Plane extends Geometry {
 			0.0, 1.0,
 		];
 
-		super(vertices, indices, normals, uvs);
+		super(vertices, indices, normals, uvs, colors);
 	}
 }

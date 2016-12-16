@@ -3,6 +3,7 @@ node_modules
 npm-debug.log
 .eslintcache
 *.js.map
+lib
 
 /examples/js/*.js
 /examples/*.html

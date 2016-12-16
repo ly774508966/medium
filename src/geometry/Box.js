@@ -1,7 +1,7 @@
 import Geometry from './Geometry';
 
 export default class Box extends Geometry {
-	constructor(width = 1, height = 1, depth = 1) {
+	constructor(width = 1, height = 1, depth = 1, colors) {
 		// this.colors = [];
 
 		// Screenspace
@@ -94,8 +94,9 @@ export default class Box extends Geometry {
 			-1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0,
 		];
 
+		// @TODO
 		const uvs = [];
 
-		super(vertices, indices, normals, uvs);
+		super(vertices, indices, normals, null, colors);
 	}
 }

@@ -1,49 +1,28 @@
-export default function (_flags) {
-	const defaults = {
-		vertexColors: false,
-		texture: false,
-	};
-
-	const flags = Object.assign(defaults, _flags);
-
-	let defines = '';
-	for (let key in flags) {
-		if (flags[key])
-			defines += `#define ${key} \n`;
-	}
-
-	return `
-
-	${defines}
+export default `
+	#HOOK_DEFINES
 
 	precision mediump float;
-	uniform vec3 uAmbientColor;
-	uniform vec3 uDirectionalColor;
-	uniform vec3 uLightDirection;
-	uniform float uAlpha;
+
 	varying vec4 vColor;
+
+	#ifdef normal
 	varying vec3 vNormal;
+	#endif
 
 	#ifdef uv
 	varying vec2 vUv;
 	#endif
 
-	#ifdef texture
-	varying vec2 vTextureCoord;
-	uniform sampler2D uSampler;
-	#endif
+	#HOOK_FRAGMENT_PRE
 
 	void main(void){
 
 		vec3 color = vColor.rgb;
 
-		gl_FragColor = vec4(color.rgb, uAlpha);
+		#HOOK_VERTEX_MAIN
 
-		#ifdef texture
-		gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-		#endif
+		gl_FragColor = vec4(color.rgb, 1.0);
 
-		// gl_FragColor = vec4(vec3(1.0), vColor.a);
+		#HOOK_VERTEX_END
 	}
-	`;
-}
+`;

@@ -1,23 +1,13 @@
-export default function (_flags) {
-	const defaults = {
-		vertexColors: false,
-		texture: false,
-	};
+export default `
 
-	const flags = Object.assign(defaults, _flags);
-
-	let defines = '';
-	for (let key in flags) {
-		if (flags[key])
-			defines += `#define ${key} \n`;
-	}
-
-	return `
-
-	${defines}
+	#HOOK_DEFINES
 
 	attribute vec3 aVertexPosition;
+
+	#ifdef normals
 	attribute vec3 aVertexNormal;
+	varying vec3 vNormal;
+	#endif
 
 	#ifdef uv
 	attribute vec2 aUv;
@@ -28,18 +18,13 @@ export default function (_flags) {
 	attribute vec4 aVertexColor;
 	#endif
 
-	#ifdef texture
-	attribute vec2 aTextureCoord;
-	varying vec2 vTextureCoord;
-	#endif
-
 	uniform mat4 uMVMatrix;
 	uniform mat4 uPMatrix;
 	uniform mat4 uModelMatrix;
 	uniform mat3 uNormalMatrix;
-
 	varying vec4 vColor;
-	varying vec3 vNormal;
+
+	#HOOK_VERTEX_PRE
 
 	void main(void){
 
@@ -49,16 +34,18 @@ export default function (_flags) {
 		vColor = aVertexColor;
 		#endif
 
-		#ifdef texture
-		vTextureCoord = aTextureCoord;
-		#endif
-
 		#ifdef uv
 		vUv = aUv;
 		#endif
 
+		#HOOK_VERTEX_MAIN
+
+		#ifdef normals
 		vNormal = uNormalMatrix * aVertexNormal;
+		#endif
+
 		gl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
+
+		#HOOK_VERTEX_END
 	}
-	`;
-}
+`;

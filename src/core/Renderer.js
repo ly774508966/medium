@@ -6,7 +6,10 @@ import PerspectiveCamera from 'core/PerspectiveCamera';
 import OrthographicCamera from 'core/OrthographicCamera';
 import {
 	warn,
-} from 'utils/console';
+} from 'utils/Console';
+import {
+	LINE_DEFAULT_WIDTH,
+} from 'core/Constants';
 
 export default class Renderer {
 	constructor(settings = {}) {
@@ -89,8 +92,14 @@ export default class Renderer {
 		this.modelViewMatrix = this.modelViewMatrixStack.pop();
 	}
 
+	_reset(gl) {
+		// Line width
+		gl.lineWidth(LINE_DEFAULT_WIDTH);
+	}
+
 	render(scene, camera) {
 		const gl = GL.get();
+		this._reset(gl);
 
 		gl.viewport(0.0, 0.0, gl.viewportWidth, gl.viewportHeight);
 
