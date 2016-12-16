@@ -66,17 +66,17 @@ export default class Axis extends Mesh {
 
 		this.shader.bindProgram();
 
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexPositionBuffer);
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.attributes.vertex.buffer);
 		gl.vertexAttribPointer(this.shader.vertexPositionAttribute,
-			this.geometry.vertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+			this.geometry.attributes.vertex.itemSize, gl.FLOAT, false, 0, 0);
 
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexColorBuffer);
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.attributes.color.buffer);
 		gl.vertexAttribPointer(this.shader.vertexColorAttribute,
-			this.geometry.vertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
+			this.geometry.attributes.color.itemSize, gl.FLOAT, false, 0, 0);
 
 		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
 
 		gl.lineWidth(this.lineWidth);
-		gl.drawArrays(gl.LINES, 0, this.geometry.vertexPositionBuffer.numItems);
+		gl.drawArrays(gl.LINES, 0, this.geometry.attributes.vertex.numItems);
 	}
 }

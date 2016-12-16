@@ -71,12 +71,12 @@ export default class Grid extends Mesh {
 
 		this.shader.bindProgram();
 
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexPositionBuffer);
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.attributes.vertex.buffer);
 		gl.vertexAttribPointer(this.shader.vertexPositionAttribute,
-			this.geometry.vertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+			this.geometry.attributes.vertex.itemSize, gl.FLOAT, false, 0, 0);
 
 		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
 
-		gl.drawArrays(gl.LINES, 0, this.geometry.vertexPositionBuffer.numItems);
+		gl.drawArrays(gl.LINES, 0, this.geometry.attributes.vertex.numItems);
 	}
 }

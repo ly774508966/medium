@@ -25,42 +25,41 @@ export default class Mesh {
 		this.shader.bindProgram();
 
 		if (this.geometry.vertices) {
-			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexPositionBuffer);
+			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.attributes.vertex.buffer);
 			gl.vertexAttribPointer(this.shader.vertexPositionAttribute,
-				this.geometry.vertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+				this.geometry.attributes.vertex.itemSize, gl.FLOAT, false, 0, 0);
 		}
 
 		if (this.geometry.uvs) {
-			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.uvBuffer);
+			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.attributes.uv.buffer);
 			gl.vertexAttribPointer(this.shader.vertexUvAttribute,
-				this.geometry.uvBuffer.itemSize, gl.FLOAT, false, 0, 0);
+				this.geometry.attributes.uv.itemSize, gl.FLOAT, false, 0, 0);
 		}
 
 		if (this.geometry.colors) {
-			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexColorBuffer);
+			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.attributes.color.buffer);
 			gl.vertexAttribPointer(this.shader.vertexColorAttribute,
-				this.geometry.vertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
+				this.geometry.attributes.color.itemSize, gl.FLOAT, false, 0, 0);
 		}
 
 		if (this.geometry.normals) {
-			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.vertexNormalBuffer);
+			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.attributes.normal.buffer);
 			gl.vertexAttribPointer(this.shader.vertexNormalAttribute,
-				this.geometry.vertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+				this.geometry.attributes.normal.itemSize, gl.FLOAT, false, 0, 0);
 		}
 
-		if (this.shader.uniformTextures.length > 0) {
-			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.textureCoordBuffer);
-			gl.vertexAttribPointer(this.shader.textureCoordAttribute,
-				this.geometry.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+		// if (this.shader.uniformTextures.length > 0) {
+		// 	gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.textureCoordBuffer);
+		// 	gl.vertexAttribPointer(this.shader.textureCoordAttribute,
+		// 		this.geometry.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+		// 	this.shader.uniformTextures.forEach((uniform, i) => {
+		// 		gl.activeTexture(gl[`TEXTURE${i}`]);
+		// 		gl.bindTexture(gl.TEXTURE_2D, uniform.value.texture);
+		// 		gl.uniform1i(uniform.location, i);
+		// 	});
+		// }
 
-			this.shader.uniformTextures.forEach((uniform, i) => {
-				gl.activeTexture(gl[`TEXTURE${i}`]);
-				gl.bindTexture(gl.TEXTURE_2D, uniform.value.texture);
-				gl.uniform1i(uniform.location, i);
-			});
-		}
-
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.geometry.vertexIndexBuffer);
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.geometry.attributes.index.buffer);
 
 		mat4.identity(this.modelMatrix);
 		mat4.translate(this.modelMatrix, this.modelMatrix, this.position.v);
@@ -77,7 +76,7 @@ export default class Mesh {
 		// gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.geometry.vertexPositionBuffer.numItems)
 
 		gl.drawElements(this.shader.drawType,
-			this.geometry.vertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+			this.geometry.attributes.index.numItems, gl.UNSIGNED_SHORT, 0);
 
 		// gl.disable(gl.CULL_FACE)
 	}
