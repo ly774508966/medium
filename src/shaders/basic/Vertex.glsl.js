@@ -18,6 +18,10 @@ export default `
 	attribute vec4 aVertexColor;
 	#endif
 
+	#ifdef lights
+	uniform vec3 uDirectionalLightPosition;
+	#endif
+
 	uniform mat4 uMVMatrix;
 	uniform mat4 uPMatrix;
 	uniform mat4 uModelMatrix;

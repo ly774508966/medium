@@ -23,6 +23,9 @@ import AxisHelper from 'helpers/AxisHelper';
 import GridHelper from 'helpers/GridHelper';
 import NormalsHelper from 'helpers/NormalsHelper';
 
+// Lights
+import DirectionalLight from 'lights/DirectionalLight';
+
 // Controls
 import OrbitControls from 'controls/OrbitControls';
 
@@ -47,6 +50,7 @@ export {
 	AxisHelper,
 	GridHelper,
 	NormalsHelper,
+	DirectionalLight,
 	OrbitControls,
 	ObjLoader,
 };

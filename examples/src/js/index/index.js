@@ -11,6 +11,7 @@ import {
 	AxisHelper,
 	Constants as CONSTANTS,
 	NormalsHelper,
+	DirectionalLight,
 } from 'index';
 import dat from 'dat-gui';
 
@@ -63,12 +64,18 @@ for (let i = 0; i < 6; i++) {
 	}
 }
 
+const light = new DirectionalLight();
+
 geometry = new BoxGeometry(1, 1, 1, colors);
 const material = new Shader({
+	lights: true,
+	uniforms: Object.assign({}, light.uniforms),
 });
 const box = new Mesh(geometry, material);
 
 scene.add(box);
+
+console.log(box.shader);
 
 box.position.x = 3;
 box.position.y = 3;

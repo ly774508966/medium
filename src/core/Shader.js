@@ -135,6 +135,10 @@ export default class Shader {
 			addDefine('normals');
 		}
 
+		if (this.lights) {
+			addDefine('lights');
+		}
+
 		shader = shader.replace(/#HOOK_DEFINES/g, defines);
 		shader = shader.replace(/#HOOK_VERTEX_PRE/g, '');
 		shader = shader.replace(/#HOOK_VERTEX_MAIN/g, '');
