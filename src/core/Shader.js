@@ -4,8 +4,8 @@ import {
 	mat3,
 	mat4,
 } from 'gl-matrix';
-import vertexShader from 'shaders/vertex.glsl';
-import fragmentShader from 'shaders/frag.glsl';
+import vertexShader from 'shaders/basic/vertex.glsl';
+import fragmentShader from 'shaders/basic/frag.glsl';
 import {
 	warn,
 } from 'utils/Console';

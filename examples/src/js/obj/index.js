@@ -2,13 +2,14 @@ import {
 	Renderer,
 	Scene,
 	PerspectiveCamera,
-	Axis,
-	Grid,
+	AxisHelper,
+	GridHelper,
 	OrbitControls,
 	ObjLoader,
 	Geometry,
 	Shader,
 	Mesh,
+	NormalsHelper,
 	Constants as CONSTANTS,
 } from 'index';
 
@@ -30,9 +31,9 @@ camera.lookAt();
 
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas);
-const grid = new Grid(10);
+const grid = new GridHelper(10);
 scene.add(grid);
-const axis = new Axis(1);
+const axis = new AxisHelper(1);
 scene.add(axis);
 controls.update();
 
@@ -50,6 +51,10 @@ new ObjLoader('assets/models/sphere.obj').then(objGeometry => {
 	mesh.scale.set(scale, scale, scale);
 
 	scene.add(mesh);
+
+	// const normalsHelper = new NormalsHelper(geometry);
+	// scene.add(normalsHelper);
+
 }).catch(error => {
 	console.log('error loading', error);
 });

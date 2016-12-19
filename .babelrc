@@ -3,10 +3,12 @@
     ["module-resolver", {
       "root": ["./src"],
       "alias": {
-							"core": "./core",
+								"controls": "./controls",
+								"core": "./core",
         "extras": "./extras",
         "geometry": "./geometry",
         "helpers": "./helpers",
+        "lights": "./lights",
 								"loaders": "./loaders",
         "materials": "./materials",
 								"math": "./math",

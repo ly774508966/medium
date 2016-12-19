@@ -1,88 +1,52 @@
 // Core
+import Capabilities from 'core/Capabilities';
 import * as Constants from 'core/Constants';
-export {
-	Constants,
-};
-
-import Renderer from 'core/Renderer';
-export {
-	Renderer,
-};
-
-import PerspectiveCamera from 'core/PerspectiveCamera';
-export {
-	PerspectiveCamera,
-};
-
-import OrthographicCamera from 'core/OrthographicCamera';
-export {
-	OrthographicCamera,
-};
-
-import Scene from 'core/Scene';
-export {
-	Scene,
-};
-
 import Mesh from 'core/Mesh';
-export {
-	Mesh,
-};
-
+import OrthographicCamera from 'core/OrthographicCamera';
+import PerspectiveCamera from 'core/PerspectiveCamera';
+import Renderer from 'core/Renderer';
+import Scene from 'core/Scene';
 import Shader from 'core/Shader';
-export {
-	Shader,
-};
-
 import Texture from 'core/Texture';
-export {
-	Texture,
-};
-
-// Materials
-// import ShaderMaterial from 'materials/Shader'
-// export {ShaderMaterial}
-
-// Objects
-import Geometry from 'geometry/Geometry';
-export {
-	Geometry,
-};
-
-import PlaneGeometry from 'geometry/Plane';
-export {
-	PlaneGeometry,
-};
-
-import BoxGeometry from 'geometry/Box';
-export {
-	BoxGeometry,
-};
-
-// Helpers
-import OrbitControls from 'helpers/OrbitControls';
-export {
-	OrbitControls,
-};
-
-import Grid from 'helpers/Grid';
-export {
-	Grid,
-};
-
-import Axis from 'helpers/Axis';
-export {
-	Axis,
-};
-
-// Loaders
-import ObjLoader from 'loaders/ObjLoader';
-export {
-	ObjLoader,
-};
 
 // Extras
 import Detect from 'extras/Detect';
+
+// Geometry
+import BoxGeometry from 'geometry/Box';
+import BufferAttribute from 'geometry/BufferAttribute';
+import Geometry from 'geometry/Geometry';
+import PlaneGeometry from 'geometry/Plane';
+
+// Helpers
+import AxisHelper from 'helpers/AxisHelper';
+import GridHelper from 'helpers/GridHelper';
+import NormalsHelper from 'helpers/NormalsHelper';
+
+// Controls
+import OrbitControls from 'controls/OrbitControls';
+
+// Loaders
+import ObjLoader from 'loaders/ObjLoader';
+
 export {
+	Capabilities,
+	Constants,
+	Mesh,
+	OrthographicCamera,
+	PerspectiveCamera,
+	Renderer,
+	Scene,
+	Shader,
+	Texture,
 	Detect,
+	BoxGeometry,
+	BufferAttribute,
+	Geometry,
+	PlaneGeometry,
+	AxisHelper,
+	GridHelper,
+	NormalsHelper,
+	OrbitControls,
+	ObjLoader,
 };

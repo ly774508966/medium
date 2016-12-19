@@ -6,10 +6,11 @@ import {
 	Shader,
 	PlaneGeometry,
 	BoxGeometry,
-	Grid,
+	GridHelper,
 	OrbitControls,
-	Axis,
+	AxisHelper,
 	Constants as CONSTANTS,
+	NormalsHelper,
 } from 'index';
 import dat from 'dat-gui';
 
@@ -38,18 +39,22 @@ colors = colors.concat([1, 1, 0, 1.0]);
 
 let geometry = new PlaneGeometry(1, 1, colors);
 const material1 = new Shader({
-	drawType: CONSTANTS.DRAW_LINES,
+	// drawType: CONSTANTS.DRAW_LINES,
 });
 
 const plane = new Mesh(geometry, material1);
-const material2 = new Shader();
-const plane2 = new Mesh(geometry, material2);
+// const material2 = new Shader();
+// const plane2 = new Mesh(geometry, material2);
 
-plane.position.x = 2;
-plane2.position.z = 1.1;
+plane.position.z = 2;
+// plane2.position.z = 1.1;
+
+const planeNormalsHelper = new NormalsHelper(plane);
+scene.add(planeNormalsHelper);
+
 
 scene.add(plane);
-scene.add(plane2);
+// scene.add(plane2);
 
 colors = [];
 for (let i = 0; i < 6; i++) {
@@ -68,6 +73,10 @@ scene.add(box);
 box.position.x = 3;
 box.position.y = 3;
 
+const boxNormalsHelper = new NormalsHelper(box);
+scene.add(boxNormalsHelper);
+
+
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas);
 const gui = new dat.GUI();
@@ -76,10 +85,10 @@ cameraGUI.open();
 const lightingGUI = gui.addFolder('lighting');
 lightingGUI.open();
 
-const grid = new Grid(10);
+const grid = new GridHelper(10);
 scene.add(grid);
 
-const axis = new Axis(1);
+const axis = new AxisHelper(1);
 scene.add(axis);
 
 controls.update();
