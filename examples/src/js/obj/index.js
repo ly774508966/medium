@@ -52,8 +52,8 @@ new ObjLoader('assets/models/sphere.obj').then(objGeometry => {
 
 	scene.add(mesh);
 
-	// const normalsHelper = new NormalsHelper(geometry);
-	// scene.add(normalsHelper);
+	const normalsHelper = new NormalsHelper(mesh);
+	scene.add(normalsHelper);
 
 }).catch(error => {
 	console.log('error loading', error);

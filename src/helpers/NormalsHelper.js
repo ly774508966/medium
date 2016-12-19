@@ -29,16 +29,19 @@ const fragmentShader = `
 `;
 
 class NormalsGeometry extends Geometry {
-	constructor(mesh, size = 1) {
+	constructor(mesh, size = 0.5) {
 		let vertices = [];
 		let normals = [];
 
+		const sx = mesh.scale.x;
+		const sy = mesh.scale.y;
+		const sz = mesh.scale.z;
 		const length = mesh.geometry.normals.length / 3;
 		for (let i = 0; i < length; i++) {
 			const i3 = i * 3;
-			const v0x = mesh.position.x + mesh.geometry.vertices[i3];
-			const v0y = mesh.position.y + mesh.geometry.vertices[i3 + 1];
-			const v0z = mesh.position.z + mesh.geometry.vertices[i3 + 2];
+			const v0x = sx * (mesh.position.x + mesh.geometry.vertices[i3]);
+			const v0y = sy * (mesh.position.y + mesh.geometry.vertices[i3 + 1]);
+			const v0z = sz * (mesh.position.z + mesh.geometry.vertices[i3 + 2]);
 			const nx = mesh.geometry.normals[i3];
 			const ny = mesh.geometry.normals[i3 + 1];
 			const nz = mesh.geometry.normals[i3 + 2];
@@ -54,8 +57,8 @@ class NormalsGeometry extends Geometry {
 }
 
 export default class Normals extends Mesh {
-	constructor(size = 1, lineWidth = 2) {
-		super(new NormalsGeometry(size), new Shader({
+	constructor(mesh, size = 1, lineWidth = 2) {
+		super(new NormalsGeometry(mesh, size), new Shader({
 			vertexShader,
 			fragmentShader,
 		}));
