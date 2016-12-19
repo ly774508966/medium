@@ -6,10 +6,12 @@ import PerspectiveCamera from 'core/PerspectiveCamera';
 import OrthographicCamera from 'core/OrthographicCamera';
 import {
 	warn,
+	log,
 } from 'utils/Console';
 import {
 	LINE_DEFAULT_WIDTH,
 } from 'core/Constants';
+import Capabilities from 'core/Capabilities';
 
 export default class Renderer {
 	constructor(settings = {}) {
@@ -53,6 +55,9 @@ export default class Renderer {
 		}
 
 		const gl = GL.get();
+
+		// Log Capabilities of gpu
+		log(Capabilities(gl));
 
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.enable(gl.DEPTH_TEST);

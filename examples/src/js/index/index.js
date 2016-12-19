@@ -58,8 +58,9 @@ for (let i = 0; i < 6; i++) {
 	}
 }
 
-geometry = new BoxGeometry(1, 1, 1);
-const material = new Shader();
+geometry = new BoxGeometry(1, 1, 1, colors);
+const material = new Shader({
+});
 const box = new Mesh(geometry, material);
 
 scene.add(box);

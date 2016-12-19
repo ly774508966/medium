@@ -70,14 +70,18 @@ export default class Mesh {
 
 		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
 
-		// gl.enable(gl.CULL_FACE)
-		// gl.cullFace(gl.BACK)
-
-		// gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.geometry.vertexPositionBuffer.numItems)
+		// Culling enable
+		if (this.shader.culling !== false) {
+			gl.enable(gl.CULL_FACE);
+			gl.cullFace(this.shader.culling);
+		}
 
 		gl.drawElements(this.shader.drawType,
 			this.geometry.attributes.index.numItems, gl.UNSIGNED_SHORT, 0);
 
-		// gl.disable(gl.CULL_FACE)
+		// Culling disable
+		if (this.shader.culling !== false) {
+			gl.disable(gl.CULL_FACE);
+		}
 	}
 }
