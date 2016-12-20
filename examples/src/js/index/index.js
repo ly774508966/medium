@@ -16,7 +16,9 @@ import {
 import dat from 'dat-gui';
 
 // Renderer
-const renderer = new Renderer();
+const renderer = new Renderer({
+	ratio: window.innerWidth / window.innerHeight,
+});
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
 
@@ -66,9 +68,9 @@ for (let i = 0; i < 6; i++) {
 
 const light = new DirectionalLight();
 
-geometry = new BoxGeometry(1, 1, 1, colors);
+geometry = new BoxGeometry(1, 1, 1);
 const material = new Shader({
-	lights: true,
+	directionalLights: true,
 	uniforms: Object.assign({}, light.uniforms),
 });
 const box = new Mesh(geometry, material);
@@ -101,7 +103,9 @@ scene.add(axis);
 controls.update();
 
 function resize() {
-	renderer.setSize(window.innerWidth, window.innerHeight);
+	const width = window.innerWidth;
+	const height = window.innerHeight;
+	renderer.setSize(width, height);
 }
 resize();
 
@@ -109,6 +113,8 @@ window.addEventListener('resize', resize);
 
 function update() {
 	requestAnimationFrame(update);
+	box.rotation.x += 0.01;
+	box.rotation.y += 0.01;
 	renderer.render(scene, camera);
 }
 update();

@@ -7,15 +7,15 @@ const vertexShader = `
 	attribute vec3 aVertexPosition;
 	attribute vec3 aVertexNormal;
 
-	uniform mat4 uMVMatrix;
-	uniform mat4 uPMatrix;
+	uniform mat4 uViewMatrix;
+	uniform mat4 uProjectionMatrix;
 	uniform mat4 uModelMatrix;
 
 	varying vec3 vColor;
 
 	void main(void){
 		vColor = abs(aVertexNormal);
-		gl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
+		gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
 	}
 `;
 

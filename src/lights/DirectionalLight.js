@@ -5,11 +5,11 @@ export default class DirectionalLight {
 		this.uniforms = {
 			uDirectionalLightColor: {
 				type: '3f',
-				value: new Vector3(1, 0, 0),
+				value: new Vector3(1, 1, 1).v,
 			},
 			uDirectionalLightPosition: {
 				type: '3f',
-				value: new Vector3(1, 1, 1),
+				value: new Vector3(1, 1, 1).v,
 			},
 		};
 		Object.assign(this.uniforms, options);

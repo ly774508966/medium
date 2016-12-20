@@ -25,6 +25,7 @@ import NormalsHelper from 'helpers/NormalsHelper';
 
 // Lights
 import DirectionalLight from 'lights/DirectionalLight';
+import PointLight from 'lights/PointLight';
 
 // Controls
 import OrbitControls from 'controls/OrbitControls';
@@ -51,6 +52,7 @@ export {
 	GridHelper,
 	NormalsHelper,
 	DirectionalLight,
+	PointLight,
 	OrbitControls,
 	ObjLoader,
 };

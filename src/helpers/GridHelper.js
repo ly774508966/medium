@@ -12,12 +12,12 @@ import Geometry from 'geometry/Geometry';
 const vertexShader = `
 	attribute vec3 aVertexPosition;
 
-	uniform mat4 uMVMatrix;
-	uniform mat4 uPMatrix;
+	uniform mat4 uViewMatrix;
+	uniform mat4 uProjectionMatrix;
 	uniform mat4 uModelMatrix;
 
 	void main(void){
-		gl_Position = uPMatrix * uMVMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
+		gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
 	}
 `;
 

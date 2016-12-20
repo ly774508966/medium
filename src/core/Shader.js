@@ -17,7 +17,8 @@ export default class Shader {
 			vertexShader: `${vertexShader}`,
 			fragmentShader: `${fragmentShader}`,
 			drawType: CONSTANTS.DRAW_TRIANGLES,
-			lights: false,
+			directionalLights: false,
+			pointLights: false,
 			culling: CONSTANTS.CULL_NONE,
 		};
 
@@ -89,24 +90,24 @@ export default class Shader {
 		// gl.useProgram(this.program);
 
 		this.uniforms = Object.assign({
-			uPMatrix: {
+			uProjectionMatrix: {
 				type: '4fv',
-				value: null,
+				value: mat4.create(),
 				location: null,
 			},
-			uMVMatrix: {
+			uViewMatrix: {
 				type: '4fv',
-				value: null,
+				value: mat4.create(),
 				location: null,
 			},
 			uModelMatrix: {
 				type: '4fv',
-				value: null,
+				value: mat4.create(),
 				location: null,
 			},
 			uNormalMatrix: {
 				type: '4fv',
-				value: null,
+				value: mat4.create(),
 				location: null,
 			},
 		}, this.customUniforms);
@@ -135,8 +136,12 @@ export default class Shader {
 			addDefine('normals');
 		}
 
-		if (this.lights) {
-			addDefine('lights');
+		if (this.directionalLights) {
+			addDefine('directionalLights');
+		}
+
+		if (this.pointLights) {
+			addDefine('pointLights');
 		}
 
 		shader = shader.replace(/#HOOK_DEFINES/g, defines);
@@ -157,8 +162,8 @@ export default class Shader {
 	setUniforms(modelViewMatrix, projectionMatrix, modelMatrix) {
 		const gl = GL.get();
 
-		gl.uniformMatrix4fv(this.uniforms.uPMatrix.location, false, projectionMatrix);
-		gl.uniformMatrix4fv(this.uniforms.uMVMatrix.location, false, modelViewMatrix);
+		gl.uniformMatrix4fv(this.uniforms.uProjectionMatrix.location, false, projectionMatrix);
+		gl.uniformMatrix4fv(this.uniforms.uViewMatrix.location, false, modelViewMatrix);
 		gl.uniformMatrix4fv(this.uniforms.uModelMatrix.location, false, modelMatrix);
 
 		const inversedModelViewMatrix = mat4.create();

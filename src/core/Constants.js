@@ -1,3 +1,8 @@
+// Default ratio
+export const RENDERER_DEFAULT_WIDTH = 1280;
+export const RENDERER_DEFAULT_HEIGHT = 720;
+export const RENDERER_DEFAULT_RATIO = RENDERER_DEFAULT_WIDTH / RENDERER_DEFAULT_HEIGHT;
+
 // Precision
 export const PRECISION = 'highp';
 
