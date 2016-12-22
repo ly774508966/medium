@@ -1,7 +1,9 @@
+import Light from './Light';
 import Vector3 from 'math/Vector3';
 
-export default class DirectionalLight {
+export default class DirectionalLight extends Light {
 	constructor(options = {}) {
+		super();
 		this.uniforms = {
 			uDirectionalLightColor: {
 				type: '3f',

@@ -1,6 +1,6 @@
 import {
 	clamp,
-} from 'math/utils';
+} from 'math/Utils';
 
 export default class OrbitControls {
 	constructor(camera, element) {
@@ -28,6 +28,7 @@ export default class OrbitControls {
 		this._element.addEventListener('touchstart', this._onTouchStart, false);
 		this._element.addEventListener('touchmove', this._onTouchMove, false);
 		this._element.addEventListener('touchend', this._onTouchEnd, false);
+		this._element.addEventListener('contextmenu', this._onContextMenu, false);
 		window.addEventListener('mousewheel', this._onMouseWheel, false);
 	}
 
@@ -57,9 +58,14 @@ export default class OrbitControls {
 		this.isDown = false;
 	}
 
+	_onContextMenu = (event) => {
+		event.preventDefault();
+	}
+
 	_zoomConstraint(delta) {
 		const value = delta / 1000;
-		this._radius += value;
+		const speed = 3;
+		this._radius += value * speed;
 		this._radius = clamp(this._radius, this._zoomMin, this._zoomMax);
 		this.update();
 	}
@@ -93,6 +99,7 @@ export default class OrbitControls {
 		this._element.removeEventListener('touchstart', this._onTouchStart);
 		this._element.removeEventListener('touchmove', this._onTouchMove);
 		this._element.removeEventListener('touchend', this._onTouchEnd);
+		this._element.removeEventListener('contextmenu', this._onContextMenu);
 		window.removeEventListener('mousewheel', this._onMouseWheel);
 		this._camera = null;
 		this._element = null;

@@ -13,10 +13,11 @@ import Texture from 'core/Texture';
 import Detect from 'extras/Detect';
 
 // Geometry
-import BoxGeometry from 'geometry/Box';
+import BoxGeometry from 'geometry/BoxGeometry';
 import BufferAttribute from 'geometry/BufferAttribute';
 import Geometry from 'geometry/Geometry';
-import PlaneGeometry from 'geometry/Plane';
+import PlaneGeometry from 'geometry/PlaneGeometry';
+import SphereGeometry from 'geometry/SphereGeometry';
 
 // Helpers
 import AxisHelper from 'helpers/AxisHelper';
@@ -26,6 +27,10 @@ import NormalsHelper from 'helpers/NormalsHelper';
 // Lights
 import DirectionalLight from 'lights/DirectionalLight';
 import PointLight from 'lights/PointLight';
+
+// Math
+import Color from 'math/Color';
+import Vector3 from 'math/Vector3';
 
 // Controls
 import OrbitControls from 'controls/OrbitControls';
@@ -48,11 +53,14 @@ export {
 	BufferAttribute,
 	Geometry,
 	PlaneGeometry,
+	SphereGeometry,
 	AxisHelper,
 	GridHelper,
 	NormalsHelper,
 	DirectionalLight,
 	PointLight,
+	Color,
+	Vector3,
 	OrbitControls,
 	ObjLoader,
 };

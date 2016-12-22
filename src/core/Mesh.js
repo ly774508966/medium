@@ -17,7 +17,7 @@ export default class Mesh {
 		this.visible = true;
 	}
 
-	draw(modelViewMatrix, projectionMatrix) {
+	draw(modelViewMatrix, projectionMatrix, camera) {
 		if (!this.visible) return;
 
 		const gl = GL.get();
@@ -68,7 +68,7 @@ export default class Mesh {
 		mat4.rotate(this.modelMatrix, this.modelMatrix, this.rotation.z, [0, 0, 1]);
 		mat4.scale(this.modelMatrix, this.modelMatrix, this.scale.v);
 
-		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
+		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix, camera);
 
 		// Culling enable
 		if (this.shader.culling !== false) {

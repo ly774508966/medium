@@ -33,7 +33,7 @@ export default class Geometry {
 
 		// Vertex colors
 		if (this.colors) {
-			this.attributes.color = new BufferAttribute(gl, gl.ARRAY_BUFFER, colors, 4);
+			this.attributes.color = new BufferAttribute(gl, gl.ARRAY_BUFFER, colors, 3);
 		}
 	}
 }

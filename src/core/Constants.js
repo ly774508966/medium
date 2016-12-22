@@ -18,3 +18,7 @@ export const LINE_DEFAULT_WIDTH = 1;
 // Draw style
 export const DRAW_LINES = 1;
 export const DRAW_TRIANGLES = 4;
+
+// Object types
+export const OBJECT_TYPE_MESH = 'OBJECT_TYPE_MESH';
+export const OBJECT_TYPE_LIGHT = 'OBJECT_TYPE_LIGHT';

@@ -1,15 +1,26 @@
+import Light from './Light';
 import Vector3 from 'math/Vector3';
+import Color from 'math/Color';
 
-export default class PointLight {
+export default class PointLight extends Light {
 	constructor(options = {}) {
+		super();
 		this.uniforms = {
 			uPointLightColor: {
 				type: '3f',
-				value: new Vector3(1, 0, 0).v,
+				value: new Color(0xFFFFFF).v,
+			},
+			uPointLightSpecularColor: {
+				type: '3f',
+				value: new Color(0xFFFFFF).v,
 			},
 			uPointLightPosition: {
 				type: '3f',
 				value: new Vector3(0, 0, 0).v,
+			},
+			uPointLightShininess: {
+				type: 'f',
+				value: 100,
 			},
 		};
 		Object.assign(this.uniforms, options);

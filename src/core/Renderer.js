@@ -14,6 +14,7 @@ import {
 	LINE_DEFAULT_WIDTH,
 } from 'core/Constants';
 import Capabilities from 'core/Capabilities';
+import RendererInfo from 'core/RendererInfo';
 
 export default class Renderer {
 	constructor(settings = {}) {
@@ -32,15 +33,6 @@ export default class Renderer {
 		this.canvas.width = this.width;
 		this.canvas.height = this.height;
 
-		// Setup matrices
-		this.modelViewMatrix = mat4.create();
-		this.projectionMatrix = mat4.create();
-
-		// Matrix stack for scene object translations
-		this.modelViewMatrixStack = [];
-
-		this.pixelRatio = 1;
-
 		// Try initialising gl
 		const attributes = {
 			preserveDrawingBuffer: this.preserveDrawingBuffer,
@@ -53,6 +45,19 @@ export default class Renderer {
 		} catch (error) {
 			warn('Webgl not supported');
 		}
+
+		// Setup matrices
+		this.modelViewMatrix = mat4.create();
+		this.projectionMatrix = mat4.create();
+
+		// Matrix stack for scene object translations
+		this.modelViewMatrixStack = [];
+
+		// Default pixel ratio
+		this.pixelRatio = 1;
+
+		// Renderer info
+		this.info = new RendererInfo();
 
 		const gl = GL.get();
 
@@ -127,11 +132,21 @@ export default class Renderer {
 
 		mat4.lookAt(this.modelViewMatrix, camera.position.v, camera.center.v, camera.up.v);
 
-		// Render the scene
-		scene.children.forEach(child => {
+		// Update the scene
+		scene.update();
+
+		this.info.vertices = 0;
+
+		// Render the scene objects
+		scene.objects.forEach(child => {
 			this.modelViewPushMatrix();
-			child.draw(this.modelViewMatrix, this.projectionMatrix);
+			child.draw(this.modelViewMatrix, this.projectionMatrix, camera);
+
+			this.info.vertices += child.geometry.vertices.length / 3;
+
 			this.modelViewPopMatrix();
 		});
+
+		console.log(this.info.vertices);
 	}
 }

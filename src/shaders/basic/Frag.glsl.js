@@ -1,9 +1,8 @@
 export default `
+	#HOOK_PRECISION
 	#HOOK_DEFINES
 
-	precision mediump float;
-
-	varying vec4 vColor;
+	varying vec3 vDiffuse;
 	varying vec3 vPosition;
 
 	#ifdef normals
@@ -21,15 +20,17 @@ export default `
 
 	#ifdef pointLights
 	uniform vec3 uPointLightColor;
+	uniform vec3 uPointLightSpecularColor;
 	varying vec3 vPointLightSurfaceToLightDirection;
 	varying vec3 vPointLightSurfaceToCameraDirection;
+	uniform float uPointLightShininess;
 	#endif
 
 	#HOOK_FRAGMENT_PRE
 
 	void main(void){
 
-		vec3 color = vColor.rgb;
+		vec3 color = vDiffuse;
 
 		#ifdef normals
 		vec3 normal = normalize(vNormal);
@@ -46,13 +47,11 @@ export default `
 		vec3 pointLightSurfaceToCameraDirection = normalize(vPointLightSurfaceToCameraDirection);
 		vec3 halfVector = normalize(pointLightSurfaceToLightDirection + pointLightSurfaceToCameraDirection);
 
-		float pointLight = dot(normal, pointLightSurfaceToLightDirection);
+		float pointLight = max(dot(normal, pointLightSurfaceToLightDirection), 0.0);
 		vec3 pointLightColor = uPointLightColor * pointLight;
-		color *= pointLightColor;
-
-		float specular = pow(dot(normal, halfVector), 50.0);
-
-		color += specular;
+		color += pointLight * pointLightColor;
+		float specular = pow(dot(normal, halfVector), uPointLightShininess);
+		color += specular * uPointLightSpecularColor;
 		#endif
 
 		#HOOK_VERTEX_MAIN

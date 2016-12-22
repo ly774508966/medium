@@ -9,7 +9,6 @@ import {
 	GridHelper,
 	OrbitControls,
 	AxisHelper,
-	Constants as CONSTANTS,
 	NormalsHelper,
 	DirectionalLight,
 } from 'index';
@@ -35,10 +34,10 @@ camera.lookAt();
 
 // Objects
 let colors = [];
-colors = colors.concat([1, 0, 0, 1.0]);
-colors = colors.concat([0, 1, 0, 1.0]);
-colors = colors.concat([0, 0, 1, 1.0]);
-colors = colors.concat([1, 1, 0, 1.0]);
+colors = colors.concat([1, 0, 0]);
+colors = colors.concat([0, 1, 0]);
+colors = colors.concat([0, 0, 1]);
+colors = colors.concat([1, 1, 0]);
 
 let geometry = new PlaneGeometry(1, 1, colors);
 const material1 = new Shader({
@@ -61,8 +60,8 @@ scene.add(plane);
 
 colors = [];
 for (let i = 0; i < 6; i++) {
-	for (let j = 0; j < 4; j++) {
-		colors = colors.concat([Math.random(), Math.random(), Math.random(), 1.0]);
+	for (let j = 0; j < 3; j++) {
+		colors = colors.concat([Math.random(), Math.random(), Math.random()]);
 	}
 }
 

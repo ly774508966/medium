@@ -4,11 +4,13 @@ import {
 	mat3,
 	mat4,
 } from 'gl-matrix';
-import vertexShader from 'shaders/basic/vertex.glsl';
-import fragmentShader from 'shaders/basic/frag.glsl';
+import vertexShader from 'shaders/basic/Vertex.glsl';
+import fragmentShader from 'shaders/basic/Frag.glsl';
 import {
 	warn,
 } from 'utils/Console';
+import Color from 'math/Color';
+import Capabilities from 'core/Capabilities';
 
 export default class Shader {
 	constructor(options) {
@@ -110,15 +112,24 @@ export default class Shader {
 				value: mat4.create(),
 				location: null,
 			},
+			uDiffuse: {
+				type: '3f',
+				value: new Color().v,
+				location: null,
+			},
 		}, this.customUniforms);
 
-		Object.keys(this.uniforms).forEach(uniform => {
-			this.uniforms[uniform].location = gl.getUniformLocation(this.program, uniform);
+		Object.keys(this.uniforms).forEach(uniformName => {
+			this.uniforms[uniformName].location = gl.getUniformLocation(this.program, uniformName);
 		});
 	}
 
 	_processShader(shader, geometry) {
+		const gl = GL.get();
 		let defines = '';
+
+		const precision =
+		`precision ${Capabilities(gl).precision} float;`;
 
 		function addDefine(define) {
 			defines += `#define ${define} \n`;
@@ -144,6 +155,7 @@ export default class Shader {
 			addDefine('pointLights');
 		}
 
+		shader = shader.replace(/#HOOK_PRECISION/g, precision);
 		shader = shader.replace(/#HOOK_DEFINES/g, defines);
 		shader = shader.replace(/#HOOK_VERTEX_PRE/g, '');
 		shader = shader.replace(/#HOOK_VERTEX_MAIN/g, '');
@@ -159,12 +171,21 @@ export default class Shader {
 		gl.useProgram(this.program);
 	}
 
-	setUniforms(modelViewMatrix, projectionMatrix, modelMatrix) {
+	setUniforms(modelViewMatrix, projectionMatrix, modelMatrix, camera) {
 		const gl = GL.get();
 
+		// Matrix
 		gl.uniformMatrix4fv(this.uniforms.uProjectionMatrix.location, false, projectionMatrix);
 		gl.uniformMatrix4fv(this.uniforms.uViewMatrix.location, false, modelViewMatrix);
 		gl.uniformMatrix4fv(this.uniforms.uModelMatrix.location, false, modelMatrix);
+
+		// Camera
+		if (this.uniforms.uCameraPosition) {
+			gl.uniform3f(this.uniforms.uCameraPosition.location,
+				camera.position.v[0],
+				camera.position.v[1],
+				camera.position.v[2]);
+		}
 
 		const inversedModelViewMatrix = mat4.create();
 		mat4.invert(inversedModelViewMatrix, modelMatrix);
@@ -177,49 +198,71 @@ export default class Shader {
 			gl.uniformMatrix3fv(this.uniforms.uNormalMatrix.location, false, normalMatrix);
 		}
 
-		// Update the other uniforms
-		Object.keys(this.customUniforms).forEach(uniform => {
-			const value = this.uniforms[uniform].value;
+		// Camera
 
-			switch (this.customUniforms[uniform].type) {
+		// Update the other uniforms
+		Object.keys(this.customUniforms).forEach(uniformName => {
+			const uniform = this.uniforms[uniformName];
+			switch (uniform.type) {
 				case 'i':
-					gl.uniform1i(this.uniforms[uniform].location, value);
+					gl.uniform1i(uniform.location,
+						uniform.value);
 					break;
 				case 'f':
-					gl.uniform1f(this.uniforms[uniform].location, value);
+					gl.uniform1f(uniform.location,
+						uniform.value);
 					break;
 				case '2f':
-					gl.uniform2f(this.uniforms[uniform].location, value[0], value[1]);
+					gl.uniform2f(uniform.location,
+						uniform.value[0],
+						uniform.value[1]);
 					break;
 				case '3f':
-					gl.uniform3f(this.uniforms[uniform].location, value[0], value[1], value[2]);
+					gl.uniform3f(uniform.location,
+						uniform.value[0],
+						uniform.value[1],
+						uniform.value[2]);
 					break;
 				case '4f':
-					gl.uniform4f(this.uniforms[uniform].location, value[0], value[1], value[2], value[3]);
+					gl.uniform4f(uniform.location,
+						uniform.value[0],
+						uniform.value[1],
+						uniform.value[2],
+						uniform.value[3]);
 					break;
 				case '1iv':
-					gl.uniform1iv(this.uniforms[uniform].location, value);
+					gl.uniform1iv(uniform.location,
+						uniform.value);
 					break;
 				case '2iv':
-					gl.uniform2iv(this.uniforms[uniform].location, value);
+					gl.uniform2iv(uniform.location,
+						uniform.value);
 					break;
 				case '1fv':
-					gl.uniform1fv(this.uniforms[uniform].location, value);
+					gl.uniform1fv(uniform.location,
+						uniform.value);
 					break;
 				case '2fv':
-					gl.uniform2fv(this.uniforms[uniform].location, value);
+					gl.uniform2fv(uniform.location,
+						uniform.value);
 					break;
 				case '3fv':
-					gl.uniform3fv(this.uniforms[uniform].location, value);
+					gl.uniform3fv(uniform.location,
+						uniform.value);
 					break;
 				case '4fv':
-					gl.uniform4fv(this.uniforms[uniform].location, value);
+					gl.uniform4fv(uniform.location,
+						uniform.value);
 					break;
 				case 'Matrix3fv':
-					gl.uniformMatrix3fv(this.uniforms[uniform].location, false, value);
+					gl.uniformMatrix3fv(uniform.location,
+						false,
+						uniform.value);
 					break;
 				case 'Matrix4fv':
-					gl.uniformMatrix4fv(this.uniforms[uniform].location, false, value);
+					gl.uniformMatrix4fv(uniform.location,
+						false,
+						uniform.value);
 					break;
 				default:
 			}
