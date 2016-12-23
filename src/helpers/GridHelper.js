@@ -3,7 +3,7 @@ import {
 } from 'gl-matrix';
 import {
 	lerp,
-} from 'math/utils';
+} from 'math/Utils';
 import Mesh from 'core/Mesh';
 import Shader from 'core/Shader';
 import * as GL from 'core/GL';

@@ -72,7 +72,7 @@ export default class Renderer {
 		const newWidth = width * this.pixelRatio;
 		const newHeight = height * this.pixelRatio;
 
-		if (newWidth !== this.width && newHeight !== this.height) {
+		if (newWidth !== this.width || newHeight !== this.height) {
 			this.width = width * this.pixelRatio;
 			this.height = height * this.pixelRatio;
 
@@ -147,6 +147,6 @@ export default class Renderer {
 			this.modelViewPopMatrix();
 		});
 
-		console.log(this.info.vertices);
+		// console.log(this.info.vertices);
 	}
 }

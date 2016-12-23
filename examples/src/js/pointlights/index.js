@@ -49,23 +49,42 @@ scene.add(axis);
 controls.update();
 
 const directionalLight = new DirectionalLight();
-const pointLight = new PointLight();
-scene.add(pointLight);
+const pointLight0 = new PointLight();
+const pointLight1 = new PointLight();
+const pointLight2 = new PointLight();
+scene.add(pointLight0);
+scene.add(pointLight1);
+scene.add(pointLight2);
 
-pointLight.position.set(10, 10, 10);
+const lights = [
+	pointLight0,
+	pointLight1,
+	pointLight2,
+];
 
-const range = 10;
-gui.add(pointLight.position, 'x', -range, range);
-gui.add(pointLight.position, 'y', -range, range);
-gui.add(pointLight.position, 'z', -range, range);
+pointLight0.uniforms.color.value[0] = 1;
+pointLight0.uniforms.color.value[1] = 0;
+pointLight0.uniforms.color.value[2] = 0;
 
-let mesh = undefined;
+pointLight1.uniforms.color.value[0] = 0;
+pointLight1.uniforms.color.value[1] = 1;
+pointLight1.uniforms.color.value[2] = 0;
+
+pointLight2.uniforms.color.value[0] = 0;
+pointLight2.uniforms.color.value[1] = 0;
+pointLight2.uniforms.color.value[2] = 1;
 
 
-// const geometry = new BoxGeometry(2, 2, 2);
+// pointLight0.position.set(10, 10, 10);
+// pointLight1.position.set(-10, -10, -10);
+
+// const range = 10;
+// gui.add(pointLight.position, 'x', -range, range);
+// gui.add(pointLight.position, 'y', -range, range);
+// gui.add(pointLight.position, 'z', -range, range);
 
 const material = new Shader({
-	pointLights: true,
+	pointLights: [pointLight0.uniforms, pointLight1.uniforms, pointLight2.uniforms],
 	uniforms: Object.assign({
 			uDiffuse: {
 				type: '3f',
@@ -77,12 +96,12 @@ const material = new Shader({
 			},
 		},
 		directionalLight.uniforms,
-		pointLight.uniforms,
 	),
 	// drawType: CONSTANTS.DRAW_LINES,
 });
 
-const geometry = new SphereGeometry(10, 32, 32);
+const geometry = new SphereGeometry(10, 64, 64);
+let mesh;
 mesh = new Mesh(geometry, material);
 
 const scale = 0.25;
@@ -106,6 +125,17 @@ window.addEventListener('resize', resize);
 
 function update(time) {
 	requestAnimationFrame(update);
+
+	const radius = 20;
+	const t = time * 0.0005;
+
+	lights.forEach((light, i) => {
+		const theta = (i / lights.length) * Math.PI * 2;
+		const x = Math.cos(t + theta) * radius;
+		const y = Math.cos(t + theta) * radius;
+		const z = Math.sin(t + theta) * radius;
+		light.position.set(x, y, z);
+	});
 
 	// if (mesh) {
 	// 	mesh.shader.uniforms.uCameraPosition.value[0] = camera.position.x;

@@ -20,7 +20,7 @@ export default class Shader {
 			fragmentShader: `${fragmentShader}`,
 			drawType: CONSTANTS.DRAW_TRIANGLES,
 			directionalLights: false,
-			pointLights: false,
+			pointLights: [],
 			culling: CONSTANTS.CULL_NONE,
 		};
 
@@ -89,7 +89,13 @@ export default class Shader {
 		// console.log(this.textureCoordAttribute);
 		// console.log(this.vertexUvAttribute);
 
-		// gl.useProgram(this.program);
+		// Generate uniforms for point lights
+		this.pointLights.forEach((pointLightUniforms, i) => {
+			Object.keys(pointLightUniforms).forEach(pointLightUniform => {
+				const uniform = pointLightUniforms[pointLightUniform];
+				this.customUniforms[`uPointLights[${i}].${pointLightUniform}`] = uniform;
+			});
+		});
 
 		this.uniforms = Object.assign({
 			uProjectionMatrix: {
@@ -122,6 +128,8 @@ export default class Shader {
 		Object.keys(this.uniforms).forEach(uniformName => {
 			this.uniforms[uniformName].location = gl.getUniformLocation(this.program, uniformName);
 		});
+
+		// console.log(this.uniforms);
 	}
 
 	_processShader(shader, geometry) {
@@ -151,7 +159,7 @@ export default class Shader {
 			addDefine('directionalLights');
 		}
 
-		if (this.pointLights) {
+		if (this.pointLights.length > 0) {
 			addDefine('pointLights');
 		}
 
@@ -163,6 +171,8 @@ export default class Shader {
 		shader = shader.replace(/#HOOK_FRAGMENT_PRE/g, '');
 		shader = shader.replace(/#HOOK_FRAGMENT_MAIN/g, '');
 		shader = shader.replace(/#HOOK_FRAGMENT_END/g, '');
+
+		shader = shader.replace(/#HOOK_POINT_LIGHTS/g, this.pointLights.length);
 		return shader;
 	}
 
@@ -273,7 +283,7 @@ export default class Shader {
 		const gl = GL.get();
 		let shader;
 
-		// console.log('source', source);
+		console.log('source', source);
 
 		switch (type) {
 			case 'vs':

@@ -18,12 +18,18 @@ export default `
 	uniform vec3 uDirectionalLightColor;
 	#endif
 
+	// Lighting
 	#ifdef pointLights
-	uniform vec3 uPointLightColor;
-	uniform vec3 uPointLightSpecularColor;
-	varying vec3 vPointLightSurfaceToLightDirection;
-	varying vec3 vPointLightSurfaceToCameraDirection;
-	uniform float uPointLightShininess;
+	struct PointLight {
+		vec3 position;
+		vec3 color;
+		vec3 specularColor;
+		float shininess;
+	};
+
+	uniform PointLight uPointLights[#HOOK_POINT_LIGHTS];
+	varying vec3 vPointLightSurfaceToLightDirection[#HOOK_POINT_LIGHTS];
+	varying vec3 vPointLightSurfaceToCameraDirection[#HOOK_POINT_LIGHTS];
 	#endif
 
 	#HOOK_FRAGMENT_PRE
@@ -43,15 +49,17 @@ export default `
 		#endif
 
 		#ifdef pointLights
-		vec3 pointLightSurfaceToLightDirection = normalize(vPointLightSurfaceToLightDirection);
-		vec3 pointLightSurfaceToCameraDirection = normalize(vPointLightSurfaceToCameraDirection);
-		vec3 halfVector = normalize(pointLightSurfaceToLightDirection + pointLightSurfaceToCameraDirection);
+		for (int i = 0; i < #HOOK_POINT_LIGHTS; i++) {
+			vec3 pointLightSurfaceToLightDirection = normalize(vPointLightSurfaceToLightDirection[i]);
+			vec3 pointLightSurfaceToCameraDirection = normalize(vPointLightSurfaceToCameraDirection[i]);
+			vec3 halfVector = normalize(pointLightSurfaceToLightDirection + pointLightSurfaceToCameraDirection);
 
-		float pointLight = max(dot(normal, pointLightSurfaceToLightDirection), 0.0);
-		vec3 pointLightColor = uPointLightColor * pointLight;
-		color += pointLight * pointLightColor;
-		float specular = pow(dot(normal, halfVector), uPointLightShininess);
-		color += specular * uPointLightSpecularColor;
+			float pointLight = max(dot(normal, pointLightSurfaceToLightDirection), 0.0);
+			vec3 pointLightColor = uPointLights[i].color * pointLight;
+			color += pointLight * pointLightColor;
+			float specular = pow(dot(normal, halfVector), uPointLights[i].shininess);
+			color += specular * uPointLights[i].specularColor;
+		}
 		#endif
 
 		#HOOK_VERTEX_MAIN

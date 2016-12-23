@@ -10,6 +10,9 @@ export default `
 	attribute vec3 aVertexPosition;
 	varying vec3 vPosition;
 
+	// Camera
+	uniform vec3 uCameraPosition;
+
 	#ifdef vertexColors
 	attribute vec3 aVertexColor;
 	#endif
@@ -32,10 +35,16 @@ export default `
 
 	// Lighting
 	#ifdef pointLights
-	uniform vec3 uPointLightPosition;
-	varying vec3 vPointLightSurfaceToLightDirection;
-	varying vec3 vPointLightSurfaceToCameraDirection;
-	uniform vec3 uCameraPosition;
+	struct PointLight {
+		vec3 position;
+		vec3 color;
+		vec3 specularColor;
+		float shininess;
+	};
+
+	uniform PointLight uPointLights[#HOOK_POINT_LIGHTS];
+	varying vec3 vPointLightSurfaceToLightDirection[#HOOK_POINT_LIGHTS];
+	varying vec3 vPointLightSurfaceToCameraDirection[#HOOK_POINT_LIGHTS];
 	#endif
 
 	#HOOK_VERTEX_PRE
@@ -59,12 +68,14 @@ export default `
 		#endif
 
 		#ifdef pointLights
-		// Calculate word position of vertex
-		vec3 surfaceWorldPosition = (uModelMatrix * vec4(aVertexPosition, 1.0)).xyz;
-		// Calculate directional vector of surface to the light
-		vPointLightSurfaceToLightDirection = uPointLightPosition - surfaceWorldPosition;
-		// Calculate directional vector of camera to the surface
-		vPointLightSurfaceToCameraDirection = uCameraPosition - surfaceWorldPosition;
+		for (int i = 0; i < #HOOK_POINT_LIGHTS; i++) {
+			// Calculate word position of vertex
+			vec3 surfaceWorldPosition = (uModelMatrix * vec4(aVertexPosition, 1.0)).xyz;
+			// Calculate directional vector of surface to the light
+			vPointLightSurfaceToLightDirection[i] = uPointLights[i].position - surfaceWorldPosition;
+			// Calculate directional vector of camera to the surface
+			vPointLightSurfaceToCameraDirection[i] = uCameraPosition - surfaceWorldPosition;
+		}
 		#endif
 
 		vPosition = aVertexPosition;

@@ -6,19 +6,19 @@ export default class PointLight extends Light {
 	constructor(options = {}) {
 		super();
 		this.uniforms = {
-			uPointLightColor: {
+			color: {
 				type: '3f',
 				value: new Color(0xFFFFFF).v,
 			},
-			uPointLightSpecularColor: {
+			specularColor: {
 				type: '3f',
 				value: new Color(0xFFFFFF).v,
 			},
-			uPointLightPosition: {
+			position: {
 				type: '3f',
 				value: new Vector3(0, 0, 0).v,
 			},
-			uPointLightShininess: {
+			shininess: {
 				type: 'f',
 				value: 100,
 			},
@@ -28,8 +28,8 @@ export default class PointLight extends Light {
 	}
 
 	update() {
-		this.uniforms.uPointLightPosition.value[0] = this.position.x;
-		this.uniforms.uPointLightPosition.value[1] = this.position.y;
-		this.uniforms.uPointLightPosition.value[2] = this.position.z;
+		this.uniforms.position.value[0] = this.position.x;
+		this.uniforms.position.value[1] = this.position.y;
+		this.uniforms.position.value[2] = this.position.z;
 	}
 }
