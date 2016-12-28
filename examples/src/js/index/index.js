@@ -66,17 +66,16 @@ for (let i = 0; i < 6; i++) {
 }
 
 const light = new DirectionalLight();
+light.position.set(1, 1, 1);
 
 geometry = new BoxGeometry(1, 1, 1);
 const material = new Shader({
-	directionalLights: true,
-	uniforms: Object.assign({}, light.uniforms),
+	directionalLights: [light.uniforms],
 });
 const box = new Mesh(geometry, material);
 
+scene.add(light);
 scene.add(box);
-
-console.log(box.shader);
 
 box.position.x = 3;
 box.position.y = 3;

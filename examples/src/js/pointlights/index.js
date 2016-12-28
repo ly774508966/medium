@@ -5,17 +5,12 @@ import {
 	AxisHelper,
 	GridHelper,
 	OrbitControls,
-	ObjLoader,
-	Geometry,
 	SphereGeometry,
 	Shader,
 	Mesh,
-	NormalsHelper,
-	// BoxGeometry,
-	Constants as CONSTANTS,
-	DirectionalLight,
 	PointLight,
 	Color,
+	DirectionalLight,
 } from 'index';
 import dat from 'dat-gui';
 
@@ -48,13 +43,34 @@ const axis = new AxisHelper(1);
 scene.add(axis);
 controls.update();
 
+const intensity = 0.7;
+
 const directionalLight = new DirectionalLight();
-const pointLight0 = new PointLight();
-const pointLight1 = new PointLight();
-const pointLight2 = new PointLight();
+const pointLight0 = new PointLight({
+	intensity: {
+		type: 'f',
+		value: intensity,
+	},
+});
+const pointLight1 = new PointLight({
+	intensity: {
+		type: 'f',
+		value: intensity,
+	},
+});
+const pointLight2 = new PointLight({
+	intensity: {
+		type: 'f',
+		value: intensity,
+	},
+});
+scene.add(directionalLight);
 scene.add(pointLight0);
 scene.add(pointLight1);
 scene.add(pointLight2);
+
+directionalLight.position.set(1, 1, 1);
+pointLight0.position.set(0, 0, 30);
 
 const lights = [
 	pointLight0,
@@ -62,17 +78,17 @@ const lights = [
 	pointLight2,
 ];
 
-pointLight0.uniforms.color.value[0] = 1;
-pointLight0.uniforms.color.value[1] = 0;
-pointLight0.uniforms.color.value[2] = 0;
-
-pointLight1.uniforms.color.value[0] = 0;
-pointLight1.uniforms.color.value[1] = 1;
-pointLight1.uniforms.color.value[2] = 0;
-
-pointLight2.uniforms.color.value[0] = 0;
-pointLight2.uniforms.color.value[1] = 0;
-pointLight2.uniforms.color.value[2] = 1;
+// pointLight0.uniforms.color.value[0] = 1;
+// pointLight0.uniforms.color.value[1] = 0;
+// pointLight0.uniforms.color.value[2] = 0;
+//
+// pointLight1.uniforms.color.value[0] = 0;
+// pointLight1.uniforms.color.value[1] = 0;
+// pointLight1.uniforms.color.value[2] = 0;
+//
+// pointLight2.uniforms.color.value[0] = 0;
+// pointLight2.uniforms.color.value[1] = 0;
+// pointLight2.uniforms.color.value[2] = 0;
 
 
 // pointLight0.position.set(10, 10, 10);
@@ -85,24 +101,18 @@ pointLight2.uniforms.color.value[2] = 1;
 
 const material = new Shader({
 	pointLights: [pointLight0.uniforms, pointLight1.uniforms, pointLight2.uniforms],
-	uniforms: Object.assign({
-			uDiffuse: {
-				type: '3f',
-				value: new Color(0x000000).v,
-			},
-			uCameraPosition: {
-				type: '3f',
-				value: camera.position.v,
-			},
+	// directionalLights: [directionalLight.uniforms],
+	uniforms: {
+		uDiffuse: {
+			type: '3f',
+			value: new Color(0x000000).v,
 		},
-		directionalLight.uniforms,
-	),
+	},
 	// drawType: CONSTANTS.DRAW_LINES,
 });
 
 const geometry = new SphereGeometry(10, 64, 64);
-let mesh;
-mesh = new Mesh(geometry, material);
+const mesh = new Mesh(geometry, material);
 
 const scale = 0.25;
 mesh.scale.set(scale, scale, scale);
@@ -136,12 +146,6 @@ function update(time) {
 		const z = Math.sin(t + theta) * radius;
 		light.position.set(x, y, z);
 	});
-
-	// if (mesh) {
-	// 	mesh.shader.uniforms.uCameraPosition.value[0] = camera.position.x;
-	// 	mesh.shader.uniforms.uCameraPosition.value[1] = camera.position.y;
-	// 	mesh.shader.uniforms.uCameraPosition.value[2] = camera.position.z;
-	// }
 
 	renderer.render(scene, camera);
 }

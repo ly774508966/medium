@@ -1,6 +1,7 @@
 import * as GL from './GL';
 import * as CONSTANTS from './Constants';
 import {
+	vec3,
 	mat3,
 	mat4,
 } from 'gl-matrix';
@@ -19,7 +20,7 @@ export default class Shader {
 			vertexShader: `${vertexShader}`,
 			fragmentShader: `${fragmentShader}`,
 			drawType: CONSTANTS.DRAW_TRIANGLES,
-			directionalLights: false,
+			directionalLights: [],
 			pointLights: [],
 			culling: CONSTANTS.CULL_NONE,
 		};
@@ -30,12 +31,12 @@ export default class Shader {
 	create(geometry) {
 		const gl = GL.get();
 
-		const vertexShader = this._processShader(this.vertexShader, geometry);
-		const fragmentShader = this._processShader(this.fragmentShader, geometry);
+		this.vertexShader = this._processShader(this.vertexShader, geometry);
+		this.fragmentShader = this._processShader(this.fragmentShader, geometry);
 
 		// Create program
-		this.compiledVertexShader = this._compile('vs', vertexShader);
-		this.compiledFragmentShader = this._compile('fs', fragmentShader);
+		this.compiledVertexShader = this._compile('vs', this.vertexShader);
+		this.compiledFragmentShader = this._compile('fs', this.fragmentShader);
 		this.customUniforms = this.uniforms || {};
 
 		this.program = gl.createProgram();
@@ -89,6 +90,14 @@ export default class Shader {
 		// console.log(this.textureCoordAttribute);
 		// console.log(this.vertexUvAttribute);
 
+		// Generate uniforms for directional lights
+		this.directionalLights.forEach((directionalLightUniforms, i) => {
+			Object.keys(directionalLightUniforms).forEach(directionalLightUniform => {
+				const uniform = directionalLightUniforms[directionalLightUniform];
+				this.customUniforms[`uDirectionalLights[${i}].${directionalLightUniform}`] = uniform;
+			});
+		});
+
 		// Generate uniforms for point lights
 		this.pointLights.forEach((pointLightUniforms, i) => {
 			Object.keys(pointLightUniforms).forEach(pointLightUniform => {
@@ -96,6 +105,14 @@ export default class Shader {
 				this.customUniforms[`uPointLights[${i}].${pointLightUniform}`] = uniform;
 			});
 		});
+
+		// Add Camera position uniform for point lights if it doesn't exist
+		if (this.uniforms.uCameraPosition === undefined && this.pointLights.length > 0) {
+			this.uniforms.uCameraPosition = {
+				type: '3f',
+				value: [20, 20, 20],
+			};
+		}
 
 		this.uniforms = Object.assign({
 			uProjectionMatrix: {
@@ -129,7 +146,7 @@ export default class Shader {
 			this.uniforms[uniformName].location = gl.getUniformLocation(this.program, uniformName);
 		});
 
-		// console.log(this.uniforms);
+		console.log(this.uniforms);
 	}
 
 	_processShader(shader, geometry) {
@@ -137,7 +154,7 @@ export default class Shader {
 		let defines = '';
 
 		const precision =
-		`precision ${Capabilities(gl).precision} float;`;
+			`precision ${Capabilities(gl).precision} float;`;
 
 		function addDefine(define) {
 			defines += `#define ${define} \n`;
@@ -155,7 +172,7 @@ export default class Shader {
 			addDefine('normals');
 		}
 
-		if (this.directionalLights) {
+		if (this.directionalLights.length > 0) {
 			addDefine('directionalLights');
 		}
 
@@ -173,6 +190,8 @@ export default class Shader {
 		shader = shader.replace(/#HOOK_FRAGMENT_END/g, '');
 
 		shader = shader.replace(/#HOOK_POINT_LIGHTS/g, this.pointLights.length);
+		shader = shader.replace(/#HOOK_DIRECTIONAL_LIGHTS/g, this.directionalLights.length);
+
 		return shader;
 	}
 
@@ -183,32 +202,6 @@ export default class Shader {
 
 	setUniforms(modelViewMatrix, projectionMatrix, modelMatrix, camera) {
 		const gl = GL.get();
-
-		// Matrix
-		gl.uniformMatrix4fv(this.uniforms.uProjectionMatrix.location, false, projectionMatrix);
-		gl.uniformMatrix4fv(this.uniforms.uViewMatrix.location, false, modelViewMatrix);
-		gl.uniformMatrix4fv(this.uniforms.uModelMatrix.location, false, modelMatrix);
-
-		// Camera
-		if (this.uniforms.uCameraPosition) {
-			gl.uniform3f(this.uniforms.uCameraPosition.location,
-				camera.position.v[0],
-				camera.position.v[1],
-				camera.position.v[2]);
-		}
-
-		const inversedModelViewMatrix = mat4.create();
-		mat4.invert(inversedModelViewMatrix, modelMatrix);
-
-		if (this.vertexNormals) {
-			// removes scale and translation
-			const normalMatrix = mat3.create();
-			mat3.fromMat4(normalMatrix, inversedModelViewMatrix);
-			mat3.transpose(normalMatrix, normalMatrix);
-			gl.uniformMatrix3fv(this.uniforms.uNormalMatrix.location, false, normalMatrix);
-		}
-
-		// Camera
 
 		// Update the other uniforms
 		Object.keys(this.customUniforms).forEach(uniformName => {
@@ -277,13 +270,37 @@ export default class Shader {
 				default:
 			}
 		});
+
+		// Matrix
+		gl.uniformMatrix4fv(this.uniforms.uProjectionMatrix.location, false, projectionMatrix);
+		gl.uniformMatrix4fv(this.uniforms.uViewMatrix.location, false, modelViewMatrix);
+		gl.uniformMatrix4fv(this.uniforms.uModelMatrix.location, false, modelMatrix);
+
+		const inversedModelViewMatrix = mat4.create();
+		mat4.invert(inversedModelViewMatrix, modelMatrix);
+
+		if (this.vertexNormals) {
+			// removes scale and translation
+			const normalMatrix = mat3.create();
+			mat3.fromMat4(normalMatrix, inversedModelViewMatrix);
+			mat3.transpose(normalMatrix, normalMatrix);
+			gl.uniformMatrix3fv(this.uniforms.uNormalMatrix.location, false, normalMatrix);
+		}
+
+		// Camera
+		if (this.uniforms.uCameraPosition) {
+			gl.uniform3f(this.uniforms.uCameraPosition.location,
+				camera.position.v[0],
+				camera.position.v[1],
+				camera.position.v[2]);
+		}
 	}
 
 	_compile(type, source) {
 		const gl = GL.get();
 		let shader;
 
-		console.log('source', source);
+		// console.log('source', source);
 
 		switch (type) {
 			case 'vs':

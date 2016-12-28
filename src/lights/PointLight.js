@@ -22,6 +22,10 @@ export default class PointLight extends Light {
 				type: 'f',
 				value: 100,
 			},
+			intensity: {
+				type: 'f',
+				value: 1,
+			},
 		};
 		Object.assign(this.uniforms, options);
 		this.position = new Vector3();

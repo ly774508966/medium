@@ -1,7 +1,4 @@
 import {
-	mat4,
-} from 'gl-matrix';
-import {
 	lerp,
 } from 'math/Utils';
 import Mesh from 'core/Mesh';
@@ -59,11 +56,12 @@ class GridGeometry extends Geometry {
 }
 
 export default class Grid extends Mesh {
-	constructor(size = 1, divisions = 10) {
+	constructor(size = 1, divisions = 10, lineWidth = 3) {
 		super(new GridGeometry(size, divisions), new Shader({
 			vertexShader,
 			fragmentShader,
 		}));
+		this.lineWidth = lineWidth;
 	}
 
 	draw(modelViewMatrix, projectionMatrix) {
@@ -77,6 +75,7 @@ export default class Grid extends Mesh {
 
 		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
 
+		gl.lineWidth(this.lineWidth);
 		gl.drawArrays(gl.LINES, 0, this.geometry.attributes.vertex.numItems);
 	}
 }

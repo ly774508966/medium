@@ -1,3 +1,5 @@
+import pointLights from 'shaders/chunks/PointLights.glsl';
+
 export default `
 
 	#HOOK_DEFINES
@@ -35,16 +37,7 @@ export default `
 
 	// Lighting
 	#ifdef pointLights
-	struct PointLight {
-		vec3 position;
-		vec3 color;
-		vec3 specularColor;
-		float shininess;
-	};
-
-	uniform PointLight uPointLights[#HOOK_POINT_LIGHTS];
-	varying vec3 vPointLightSurfaceToLightDirection[#HOOK_POINT_LIGHTS];
-	varying vec3 vPointLightSurfaceToCameraDirection[#HOOK_POINT_LIGHTS];
+	${pointLights}
 	#endif
 
 	#HOOK_VERTEX_PRE

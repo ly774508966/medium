@@ -1,3 +1,6 @@
+import pointLights from 'shaders/chunks/PointLights.glsl';
+import directionalLights from 'shaders/chunks/DirectionalLights.glsl';
+
 export default `
 	#HOOK_PRECISION
 	#HOOK_DEFINES
@@ -14,22 +17,12 @@ export default `
 	#endif
 
 	#ifdef directionalLights
-	uniform vec3 uDirectionalLightPosition;
-	uniform vec3 uDirectionalLightColor;
+	${directionalLights}
 	#endif
 
 	// Lighting
 	#ifdef pointLights
-	struct PointLight {
-		vec3 position;
-		vec3 color;
-		vec3 specularColor;
-		float shininess;
-	};
-
-	uniform PointLight uPointLights[#HOOK_POINT_LIGHTS];
-	varying vec3 vPointLightSurfaceToLightDirection[#HOOK_POINT_LIGHTS];
-	varying vec3 vPointLightSurfaceToCameraDirection[#HOOK_POINT_LIGHTS];
+	${pointLights}
 	#endif
 
 	#HOOK_FRAGMENT_PRE
@@ -43,9 +36,11 @@ export default `
 		#endif
 
 		#ifdef directionalLights
-		float directionalLight = dot(normal, normalize(uDirectionalLightPosition));
-		vec3 directionalColor = uDirectionalLightColor * directionalLight;
-		color *= directionalColor;
+		for (int i = 0; i < #HOOK_DIRECTIONAL_LIGHTS; i++) {
+			float directionalLight = dot(normal, normalize(uDirectionalLights[i].position));
+			vec3 directionalColor = uDirectionalLights[i].color * directionalLight;
+			color += directionalColor * uDirectionalLights[i].intensity;
+		}
 		#endif
 
 		#ifdef pointLights
