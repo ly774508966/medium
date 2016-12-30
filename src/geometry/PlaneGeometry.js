@@ -19,7 +19,7 @@ export default class Plane extends Geometry {
 
 		for (let i = 0; i < vertices.length; i += 3) {
 			vertices[i] *= width;
-			vertices[i + 2] *= height;
+			vertices[i + 1] *= height;
 		}
 
 		const indices = [

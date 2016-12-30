@@ -1,7 +1,6 @@
 import * as GL from './GL';
 import * as CONSTANTS from './Constants';
 import {
-	vec3,
 	mat3,
 	mat4,
 } from 'gl-matrix';
@@ -16,7 +15,14 @@ import Capabilities from 'core/Capabilities';
 export default class Shader {
 	constructor(options) {
 		const defaults = {
+			name: '',
 			uniforms: {},
+			hookVertexPre: '',
+			hookVertexMain: '',
+			hookVertexEnd: '',
+			hookFragmentPre: '',
+			hookFragmentMain: '',
+			hookFragmentEnd: '',
 			vertexShader: `${vertexShader}`,
 			fragmentShader: `${fragmentShader}`,
 			drawType: CONSTANTS.DRAW_TRIANGLES,
@@ -70,19 +76,14 @@ export default class Shader {
 			gl.enableVertexAttribArray(this.vertexColorAttribute);
 		}
 
-		this.uniformTextures = [];
-		Object.keys(this.customUniforms).forEach(key => {
-			const uniform = this.customUniforms[key];
-			if (uniform.type === 't') {
-				this.uniformTextures.push(uniform);
-				uniform.value.load();
-			}
-		});
-
-		if (this.uniformTextures.length > 0) {
-			this.textureCoordAttribute = gl.getAttribLocation(this.program, 'aTextureCoord');
-			gl.enableVertexAttribArray(this.textureCoordAttribute);
-		}
+		// this.uniformTextures = [];
+		// Object.keys(this.customUniforms).forEach(key => {
+		// 	const uniform = this.customUniforms[key];
+		// 	if (uniform.type === 't') {
+		// 		this.uniformTextures.push(uniform);
+		// 		uniform.value.load();
+		// 	}
+		// });
 
 		// console.log(this.vertexPositionAttribute);
 		// console.log(this.vertexNormalAttribute);
@@ -146,7 +147,7 @@ export default class Shader {
 			this.uniforms[uniformName].location = gl.getUniformLocation(this.program, uniformName);
 		});
 
-		console.log(this.uniforms);
+		console.log(this.name, this.uniforms);
 	}
 
 	_processShader(shader, geometry) {
@@ -182,12 +183,12 @@ export default class Shader {
 
 		shader = shader.replace(/#HOOK_PRECISION/g, precision);
 		shader = shader.replace(/#HOOK_DEFINES/g, defines);
-		shader = shader.replace(/#HOOK_VERTEX_PRE/g, '');
-		shader = shader.replace(/#HOOK_VERTEX_MAIN/g, '');
-		shader = shader.replace(/#HOOK_VERTEX_END/g, '');
-		shader = shader.replace(/#HOOK_FRAGMENT_PRE/g, '');
-		shader = shader.replace(/#HOOK_FRAGMENT_MAIN/g, '');
-		shader = shader.replace(/#HOOK_FRAGMENT_END/g, '');
+		shader = shader.replace(/#HOOK_VERTEX_PRE/g, this.hookVertexPre);
+		shader = shader.replace(/#HOOK_VERTEX_MAIN/g, this.hookVertexMain);
+		shader = shader.replace(/#HOOK_VERTEX_END/g, this.hookVertexEnd);
+		shader = shader.replace(/#HOOK_FRAGMENT_PRE/g, this.hookFragmentPre);
+		shader = shader.replace(/#HOOK_FRAGMENT_MAIN/g, this.hookFragmentMain);
+		shader = shader.replace(/#HOOK_FRAGMENT_END/g, this.hookFragmentEnd);
 
 		shader = shader.replace(/#HOOK_POINT_LIGHTS/g, this.pointLights.length);
 		shader = shader.replace(/#HOOK_DIRECTIONAL_LIGHTS/g, this.directionalLights.length);
@@ -207,69 +208,105 @@ export default class Shader {
 		Object.keys(this.customUniforms).forEach(uniformName => {
 			const uniform = this.uniforms[uniformName];
 			switch (uniform.type) {
+				case 't':
+					{
+						const textureIndex =
+							parseInt(uniformName.substring(uniformName.length - 1, uniformName.length), 10);
+						gl.activeTexture(gl.TEXTURE0 + textureIndex);
+						gl.bindTexture(gl.TEXTURE_2D, uniform.value);
+						gl.uniform1i(uniform.location, 0);
+						break;
+					}
 				case 'i':
-					gl.uniform1i(uniform.location,
-						uniform.value);
-					break;
+					{
+						gl.uniform1i(uniform.location,
+							uniform.value);
+						break;
+					}
 				case 'f':
-					gl.uniform1f(uniform.location,
-						uniform.value);
-					break;
+					{
+						gl.uniform1f(uniform.location,
+							uniform.value);
+						break;
+					}
 				case '2f':
-					gl.uniform2f(uniform.location,
-						uniform.value[0],
-						uniform.value[1]);
-					break;
+					{
+						gl.uniform2f(uniform.location,
+							uniform.value[0],
+							uniform.value[1]);
+						break;
+					}
 				case '3f':
-					gl.uniform3f(uniform.location,
-						uniform.value[0],
-						uniform.value[1],
-						uniform.value[2]);
-					break;
+					{
+						gl.uniform3f(uniform.location,
+							uniform.value[0],
+							uniform.value[1],
+							uniform.value[2]);
+						break;
+					}
 				case '4f':
-					gl.uniform4f(uniform.location,
-						uniform.value[0],
-						uniform.value[1],
-						uniform.value[2],
-						uniform.value[3]);
-					break;
+					{
+						gl.uniform4f(uniform.location,
+							uniform.value[0],
+							uniform.value[1],
+							uniform.value[2],
+							uniform.value[3]);
+						break;
+					}
 				case '1iv':
-					gl.uniform1iv(uniform.location,
-						uniform.value);
-					break;
+					{
+						gl.uniform1iv(uniform.location,
+							uniform.value);
+						break;
+					}
 				case '2iv':
-					gl.uniform2iv(uniform.location,
-						uniform.value);
-					break;
+					{
+						gl.uniform2iv(uniform.location,
+							uniform.value);
+						break;
+					}
 				case '1fv':
-					gl.uniform1fv(uniform.location,
-						uniform.value);
-					break;
+					{
+						gl.uniform1fv(uniform.location,
+							uniform.value);
+						break;
+					}
 				case '2fv':
-					gl.uniform2fv(uniform.location,
-						uniform.value);
-					break;
+					{
+						gl.uniform2fv(uniform.location,
+							uniform.value);
+						break;
+					}
 				case '3fv':
-					gl.uniform3fv(uniform.location,
-						uniform.value);
-					break;
+					{
+						gl.uniform3fv(uniform.location,
+							uniform.value);
+						break;
+					}
 				case '4fv':
-					gl.uniform4fv(uniform.location,
-						uniform.value);
-					break;
+					{
+						gl.uniform4fv(uniform.location,
+							uniform.value);
+						break;
+					}
 				case 'Matrix3fv':
-					gl.uniformMatrix3fv(uniform.location,
-						false,
-						uniform.value);
-					break;
+					{
+						gl.uniformMatrix3fv(uniform.location,
+							false,
+							uniform.value);
+						break;
+					}
 				case 'Matrix4fv':
-					gl.uniformMatrix4fv(uniform.location,
-						false,
-						uniform.value);
-					break;
+					{
+						gl.uniformMatrix4fv(uniform.location,
+							false,
+							uniform.value);
+						break;
+					}
 				default:
 			}
 		});
+
 
 		// Matrix
 		gl.uniformMatrix4fv(this.uniforms.uProjectionMatrix.location, false, projectionMatrix);

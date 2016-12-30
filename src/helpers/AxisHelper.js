@@ -55,6 +55,7 @@ class AxisGeometry extends Geometry {
 export default class Axis extends Mesh {
 	constructor(size = 1, lineWidth = 3) {
 		super(new AxisGeometry(size), new Shader({
+			name: 'AxisHelper',
 			vertexShader,
 			fragmentShader,
 		}));

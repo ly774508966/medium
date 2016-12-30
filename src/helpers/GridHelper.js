@@ -58,6 +58,7 @@ class GridGeometry extends Geometry {
 export default class Grid extends Mesh {
 	constructor(size = 1, divisions = 10, lineWidth = 3) {
 		super(new GridGeometry(size, divisions), new Shader({
+			name: 'GridHelper',
 			vertexShader,
 			fragmentShader,
 		}));

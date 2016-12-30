@@ -57,10 +57,10 @@ export default `
 		}
 		#endif
 
-		#HOOK_VERTEX_MAIN
+		#HOOK_FRAGMENT_MAIN
 
 		gl_FragColor = vec4(color.rgb, 1.0);
 
-		#HOOK_VERTEX_END
+		#HOOK_FRAGMENT_END
 	}
 `;

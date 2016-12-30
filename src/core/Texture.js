@@ -9,20 +9,18 @@ export default class Texture {
 		this.size = null;
 
 		Object.assign(this, options);
-	}
 
-	load() {
 		const gl = GL.get();
 
 		this.texture = gl.createTexture();
 		this.image = new Image();
-		this.image.onload = this.onTextureLoaded.bind(this);
+		this.image.onload = this.onTextureLoaded;
 		this.image.src = this.src;
 
 		this.updateTexture(this.placeholder());
 	}
 
-	onTextureLoaded() {
+	onTextureLoaded = () => {
 		this.updateTexture(this.image);
 		this.emit('loaded');
 	}

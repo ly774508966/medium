@@ -34,7 +34,7 @@ const camera = new PerspectiveCamera({
 	fov: 45,
 });
 
-camera.position.set(10, 5, 10);
+camera.position.set(2, 2, 2);
 camera.lookAt();
 
 // Helpers

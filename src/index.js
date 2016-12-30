@@ -5,6 +5,7 @@ import Mesh from 'core/Mesh';
 import OrthographicCamera from 'core/OrthographicCamera';
 import PerspectiveCamera from 'core/PerspectiveCamera';
 import Renderer from 'core/Renderer';
+import RenderTarget from 'core/RenderTarget';
 import Scene from 'core/Scene';
 import Shader from 'core/Shader';
 import Texture from 'core/Texture';
@@ -45,6 +46,7 @@ export {
 	OrthographicCamera,
 	PerspectiveCamera,
 	Renderer,
+	RenderTarget,
 	Scene,
 	Shader,
 	Texture,

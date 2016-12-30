@@ -3,11 +3,11 @@ body {
 	overflow: hidden;
 }
 
-#ivxvixviii {
+#ixviii {
 	width: 60px;
 	height: 60px;
 	background-size: 100%;
-	background-image: url("assets/ivxvixviii.svg");
+	background-image: url("assets/ixviii.svg");
 	background-repeat: no-repeat;
 	display: block;
 	position: absolute;
@@ -17,7 +17,7 @@ body {
 	transition: opacity 0.3s ease;
 }
 
-#ivxvixviii:hover{
+#ixviii:hover{
 	opacity: 1;
 }
 

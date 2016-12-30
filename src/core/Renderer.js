@@ -135,14 +135,14 @@ export default class Renderer {
 		// Update the scene
 		scene.update();
 
-		this.info.vertices = 0;
+		// this.info.vertices = 0;
 
 		// Render the scene objects
 		scene.objects.forEach(child => {
 			this.modelViewPushMatrix();
 			child.draw(this.modelViewMatrix, this.projectionMatrix, camera);
 
-			this.info.vertices += child.geometry.vertices.length / 3;
+			// this.info.vertices += child.geometry.vertices.length / 3;
 
 			this.modelViewPopMatrix();
 		});

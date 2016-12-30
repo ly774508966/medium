@@ -59,6 +59,7 @@ class NormalsGeometry extends Geometry {
 export default class Normals extends Mesh {
 	constructor(mesh, size = 1, lineWidth = 2) {
 		super(new NormalsGeometry(mesh, size), new Shader({
+			name: 'NormalsHelper',
 			vertexShader,
 			fragmentShader,
 		}));
