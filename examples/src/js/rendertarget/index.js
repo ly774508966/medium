@@ -9,7 +9,7 @@ import {
 	Shader,
 	Mesh,
 	PlaneGeometry,
-	BoxGeometry,
+	OrthographicCamera,
 } from 'index';
 import {
 	fragmentShader,
@@ -32,22 +32,25 @@ const renderTarget = new RenderTarget({
 const scene = new Scene();
 const scene2 = new Scene();
 
-const boxGeometry = new BoxGeometry(1, 1, 1);
-const boxMaterial = new Shader({
-});
-const box = new Mesh(boxGeometry, boxMaterial);
-scene2.add(box);
 
 // Camera
-const camera = new PerspectiveCamera({
-	fov: 45,
-});
+const cameras = {
+	dev: new PerspectiveCamera({
+		fov: 45,
+	}),
+	main: new OrthographicCamera({
+		fov: 45,
+	}),
+};
 
-camera.position.set(10, 5, 10);
-camera.lookAt();
+cameras.dev.position.set(10, 5, 10);
+cameras.dev.lookAt();
+
+cameras.main.position.set(0, 0, 1);
+cameras.main.lookAt(0, 0, 0);
 
 // Helpers
-const controls = new OrbitControls(camera, renderer.canvas);
+const controls = new OrbitControls(cameras.dev, renderer.canvas);
 
 const grid = new GridHelper(10);
 scene.add(grid);
@@ -59,18 +62,20 @@ controls.update();
 
 const material = new Shader({
 	uniforms: {
-		texture0: {
+		uTexture0: {
 			type: 't',
 			value: renderTarget.texture,
+		},
+		uTime: {
+			type: 'f',
+			value: 0,
 		},
 	},
 	fragmentShader,
 });
 
-const plane = new Mesh(new PlaneGeometry(2, 2), material);
-scene.add(plane);
-
-plane.position.y = 3;
+const plane = new Mesh(new PlaneGeometry(1, 1), material);
+scene2.add(plane);
 
 function resize() {
 	const width = window.innerWidth;
@@ -81,11 +86,15 @@ resize();
 
 window.addEventListener('resize', resize);
 
-function update() {
+function update(time) {
 	requestAnimationFrame(update);
 
-	renderTarget.render(scene, camera);
+	const t = time * 0.2;
 
-	renderer.render(scene, camera);
+	plane.shader.uniforms.uTime.value = t * 0.01;
+
+	renderTarget.render(scene, cameras.dev);
+
+	renderer.render(scene2, cameras.main);
 }
 update();
