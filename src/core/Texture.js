@@ -4,13 +4,16 @@ import EventDispatcher from 'happens';
 export default class Texture {
 	constructor(options) {
 		EventDispatcher(this);
+		const gl = GL.get();
 
 		this.src = '';
 		this.size = null;
+		this.magFilter = gl.NEAREST;
+		this.minFilter = gl.NEAREST;
+		this.wrapS = gl.MIRRORED_REPEAT;
+		this.wrapT = gl.MIRRORED_REPEAT;
 
 		Object.assign(this, options);
-
-		const gl = GL.get();
 
 		this.texture = gl.createTexture();
 		this.image = new Image();
@@ -25,14 +28,16 @@ export default class Texture {
 		this.emit('loaded');
 	}
 
-	updateTexture(map) {
+	updateTexture(image) {
 		const gl = GL.get();
 
 		gl.bindTexture(gl.TEXTURE_2D, this.texture);
 		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this._resizeImage(map));
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this._resizeImage(image));
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, this.magFilter);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, this.minFilter);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, this.wrapS);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, this.wrapT);
 		gl.bindTexture(gl.TEXTURE_2D, null);
 	}
 

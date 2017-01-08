@@ -5,15 +5,12 @@ import {
 	GridHelper,
 	OrbitControls,
 	AxisHelper,
-	RenderTarget,
+	OrthographicCamera,
+	TextureCube,
+	BoxGeometry,
 	Shader,
 	Mesh,
-	PlaneGeometry,
-	OrthographicCamera,
 } from 'index';
-import {
-	fragmentShader,
-} from './shader.glsl';
 
 // Renderer
 const renderer = new Renderer({
@@ -22,16 +19,8 @@ const renderer = new Renderer({
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
 
-// Render target
-const renderTarget = new RenderTarget({
-	width: window.innerWidth,
-	height: window.innerHeight,
-});
-
 // Scene
 const scene = new Scene();
-const scene2 = new Scene();
-
 
 // Camera
 const cameras = {
@@ -60,35 +49,36 @@ scene.add(axis);
 
 controls.update();
 
+
+const texture = new TextureCube({
+	src: [
+		'/assets/textures/cube/px.jpg',
+		'/assets/textures/cube/nx.jpg',
+		'/assets/textures/cube/py.jpg',
+		'/assets/textures/cube/ny.jpg',
+		'/assets/textures/cube/pz.jpg',
+		'/assets/textures/cube/nz.jpg',
+	],
+});
+const geometry = new BoxGeometry(1, 1, 1);
 const material = new Shader({
+	name: 'Box',
+	hookFragmentPre: `
+		uniform samplerCube uTexture0;
+	`,
+	hookFragmentMain: `
+		color = textureCube(uTexture0, vPosition).rgb;
+	`,
 	uniforms: {
 		uTexture0: {
-			type: 't',
-			value: renderTarget.texture,
-		},
-		uTime: {
-			type: 'f',
-			value: 0,
+			type: 'tc',
+			value: texture.texture,
 		},
 	},
-	fragmentShader: `
-		#HOOK_PRECISION
-		varying vec2 vUv;
-		uniform sampler2D uTexture0;
-		uniform float uTime;
-
-		void main(void) {
-			vec3 color = texture2D(uTexture0, vUv).rgb;
-			float r = sin(color.r + uTime) * 0.5 + 0.5;
-			float g = cos(color.g + uTime) * 0.5 + 0.5;
-			float b = sin(color.b + uTime) * 0.5 + 0.5;
-			gl_FragColor = vec4(r, g, b, 1.0);
-		}
-	`,
 });
+const box = new Mesh(geometry, material);
 
-const plane = new Mesh(new PlaneGeometry(1, 1), material);
-scene2.add(plane);
+scene.add(box);
 
 function resize() {
 	const width = window.innerWidth;
@@ -99,15 +89,9 @@ resize();
 
 window.addEventListener('resize', resize);
 
-function update(time) {
+function update() {
 	requestAnimationFrame(update);
 
-	const t = time * 0.2;
-
-	plane.shader.uniforms.uTime.value = t * 0.01;
-
-	renderTarget.render(scene, cameras.dev);
-
-	renderer.render(scene2, cameras.main);
+	renderer.render(scene, cameras.dev);
 }
 update();

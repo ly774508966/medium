@@ -217,6 +217,15 @@ export default class Shader {
 						gl.uniform1i(uniform.location, 0);
 						break;
 					}
+				case 'tc':
+					{
+						const textureIndex =
+							parseInt(uniformName.substring(uniformName.length - 1, uniformName.length), 10);
+						gl.activeTexture(gl.TEXTURE0 + textureIndex);
+						gl.bindTexture(gl.TEXTURE_CUBE_MAP, uniform.value);
+						gl.uniform1i(uniform.location, 0);
+						break;
+					}
 				case 'i':
 					{
 						gl.uniform1i(uniform.location,

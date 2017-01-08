@@ -9,6 +9,7 @@ import RenderTarget from 'core/RenderTarget';
 import Scene from 'core/Scene';
 import Shader from 'core/Shader';
 import Texture from 'core/Texture';
+import TextureCube from 'core/TextureCube';
 
 // Extras
 import Detect from 'extras/Detect';
@@ -50,6 +51,7 @@ export {
 	Scene,
 	Shader,
 	Texture,
+	TextureCube,
 	Detect,
 	BoxGeometry,
 	BufferAttribute,
