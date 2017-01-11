@@ -1,4 +1,7 @@
 import {
+	mat4,
+} from 'gl-matrix';
+import {
 	RENDERER_DEFAULT_RATIO,
 } from 'core/Constants';
 import Vector3 from 'math/Vector3';
@@ -13,6 +16,9 @@ export default class PerspectiveCamera {
 			position: new Vector3(),
 			center: new Vector3(),
 			up: new Vector3(0, 1, 0),
+			modelViewMatrix: mat4.create(),
+			projectionMatrix: mat4.create(),
+			isPespectiveCamera: true,
 		};
 		Object.assign(this, defaults, options);
 	}

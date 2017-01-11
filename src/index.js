@@ -4,6 +4,7 @@ import * as Constants from 'core/Constants';
 import Mesh from 'core/Mesh';
 import OrthographicCamera from 'core/OrthographicCamera';
 import PerspectiveCamera from 'core/PerspectiveCamera';
+import RayCaster from 'core/Raycaster';
 import Renderer from 'core/Renderer';
 import RenderTarget from 'core/RenderTarget';
 import Scene from 'core/Scene';
@@ -33,6 +34,8 @@ import PointLight from 'lights/PointLight';
 // Math
 import Color from 'math/Color';
 import Vector3 from 'math/Vector3';
+import Vector2 from 'math/Vector2';
+import Ray from 'math/Ray';
 
 // Controls
 import OrbitControls from 'controls/OrbitControls';
@@ -46,6 +49,7 @@ export {
 	Mesh,
 	OrthographicCamera,
 	PerspectiveCamera,
+	RayCaster,
 	Renderer,
 	RenderTarget,
 	Scene,
@@ -65,6 +69,8 @@ export {
 	PointLight,
 	Color,
 	Vector3,
+	Vector2,
+	Ray,
 	OrbitControls,
 	ObjLoader,
 };

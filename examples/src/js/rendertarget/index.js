@@ -11,9 +11,6 @@ import {
 	PlaneGeometry,
 	OrthographicCamera,
 } from 'index';
-import {
-	fragmentShader,
-} from './shader.glsl';
 
 // Renderer
 const renderer = new Renderer({

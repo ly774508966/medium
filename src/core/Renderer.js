@@ -2,8 +2,6 @@ import * as GL from './GL';
 import {
 	mat4,
 } from 'gl-matrix';
-import PerspectiveCamera from 'core/PerspectiveCamera';
-import OrthographicCamera from 'core/OrthographicCamera';
 import {
 	warn,
 	log,
@@ -46,10 +44,6 @@ export default class Renderer {
 			warn('Webgl not supported');
 		}
 
-		// Setup matrices
-		this.modelViewMatrix = mat4.create();
-		this.projectionMatrix = mat4.create();
-
 		// Matrix stack for scene object translations
 		this.modelViewMatrixStack = [];
 
@@ -89,19 +83,6 @@ export default class Renderer {
 		this.setSize(this.width, this.height);
 	}
 
-	modelViewPushMatrix() {
-		const copy = mat4.create();
-		mat4.copy(copy, this.modelViewMatrix);
-		this.modelViewMatrixStack.push(copy);
-	}
-
-	modelViewPopMatrix() {
-		if (this.modelViewMatrixStack.length === 0) {
-			throw new Error('Invalid modelViewPopMatrix');
-		}
-		this.modelViewMatrix = this.modelViewMatrixStack.pop();
-	}
-
 	_reset(gl) {
 		// Line width
 		gl.lineWidth(LINE_DEFAULT_WIDTH);
@@ -119,18 +100,18 @@ export default class Renderer {
 		// gl.blendEquation(gl.FUNC_ADD);
 		// gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-		if (camera instanceof PerspectiveCamera) {
+		if (camera.isPespectiveCamera) {
 			const ratio = this.width / this.height;
-			mat4.perspective(this.projectionMatrix, camera.fov, ratio, camera.near, camera.far);
-		} else if (camera instanceof OrthographicCamera) {
-			mat4.ortho(this.projectionMatrix, -1.0, 1.0, -1.0, 1.0, camera.near, camera.far);
+			mat4.perspective(camera.projectionMatrix, camera.fov, ratio, camera.near, camera.far);
+		} else if (camera.isOrthographicCamera) {
+			mat4.ortho(camera.projectionMatrix, -1.0, 1.0, -1.0, 1.0, camera.near, camera.far);
 		} else {
 			throw new Error('Camera type not supported');
 		}
 
-		mat4.identity(this.modelViewMatrix);
+		mat4.identity(camera.modelViewMatrix);
 
-		mat4.lookAt(this.modelViewMatrix, camera.position.v, camera.center.v, camera.up.v);
+		mat4.lookAt(camera.modelViewMatrix, camera.position.v, camera.center.v, camera.up.v);
 
 		// Update the scene
 		scene.update();
@@ -139,12 +120,8 @@ export default class Renderer {
 
 		// Render the scene objects
 		scene.objects.forEach(child => {
-			this.modelViewPushMatrix();
-			child.draw(this.modelViewMatrix, this.projectionMatrix, camera);
-
+			child.draw(camera.modelViewMatrix, camera.projectionMatrix, camera);
 			// this.info.vertices += child.geometry.vertices.length / 3;
-
-			this.modelViewPopMatrix();
 		});
 
 		// console.log(this.info.vertices);

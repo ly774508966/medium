@@ -45,6 +45,11 @@ export default class Vector3 {
 		vec3.subtract(this.v, this.v, vector3.v);
 		return this;
 	}
+	subtractVectors(vector0, vector1) {
+		const out = vec3.create();
+		vec3.subtract(out, vector0.v, vector1.v);
+		return this;
+	}
 	scale(value) {
 		vec3.scale(this.v, this.v, value);
 		return this;
@@ -64,11 +69,15 @@ export default class Vector3 {
 		return this;
 	}
 	dot(vector3) {
-		vec3.dot(this.v, vector3.v);
-		return this;
+		return vec3.dot(this.v, vector3.v);
 	}
 	cross(vector3) {
 		vec3.cross(this.v, this.v, vector3.v);
+		return this;
+	}
+	crossVectors(vector0, vector1) {
+		const out = vec3.create();
+		vec3.cross(out, vector0.v, vector1.v);
 		return this;
 	}
 	lerp(vector3, value) {
