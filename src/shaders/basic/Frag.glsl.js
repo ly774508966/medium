@@ -35,6 +35,8 @@ export default `
 		vec3 normal = normalize(vNormal);
 		#endif
 
+		#HOOK_FRAGMENT_MAIN
+
 		#ifdef directionalLights
 		for (int i = 0; i < #HOOK_DIRECTIONAL_LIGHTS; i++) {
 			float directionalLight = dot(normal, normalize(uDirectionalLights[i].position));
@@ -56,8 +58,6 @@ export default `
 			color += specular * uPointLights[i].specularColor;
 		}
 		#endif
-
-		#HOOK_FRAGMENT_MAIN
 
 		gl_FragColor = vec4(color.rgb, 1.0);
 

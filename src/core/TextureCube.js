@@ -9,8 +9,8 @@ export default class Texture {
 		this.src = Array(6).fill('');
 		this.images = [];
 		this.size = null;
-		this.magFilter = gl.NEAREST;
-		this.minFilter = gl.NEAREST;
+		this.magFilter = gl.LINEAR;
+		this.minFilter = gl.LINEAR;
 		this.wrapS = gl.CLAMP_TO_EDGE;
 		this.wrapT = gl.CLAMP_TO_EDGE;
 		this._loaded = 0;
