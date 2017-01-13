@@ -5,6 +5,7 @@
     "pointlights",
     "raycast",
     "rendertarget",
+    "sandbox",
     "texturecube"
   ]
 }

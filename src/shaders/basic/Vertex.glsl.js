@@ -1,7 +1,10 @@
 import pointLights from 'shaders/chunks/PointLights.glsl';
+import { definePI, definePITwo } from 'shaders/chunks/Math.glsl';
 
 export default `
 
+	${definePI}
+	${definePITwo}
 	#HOOK_DEFINES
 
 	// Position
