@@ -37,6 +37,9 @@ import Vector3 from 'math/Vector3';
 import Vector2 from 'math/Vector2';
 import Ray from 'math/Ray';
 
+// Shaders
+import ShaderChunks from 'shaders/chunks/index';
+
 // Controls
 import OrbitControls from 'controls/OrbitControls';
 
@@ -71,6 +74,7 @@ export {
 	Vector3,
 	Vector2,
 	Ray,
+	ShaderChunks,
 	OrbitControls,
 	ObjLoader,
 };

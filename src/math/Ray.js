@@ -19,10 +19,6 @@ export default class Ray {
 		this.direction.copy(direction);
 	}
 
-	lookAt(position) {
-		this.direction.copy(position).subtract(this.origin).normalize();
-	}
-
 	intersectTriangle(a, b, c, culling = true) {
 		vec3.sub(edge1, b.v, a.v);
 		vec3.sub(edge2, c.v, a.v);
@@ -33,6 +29,8 @@ export default class Ray {
 		//   |Dot(D,N)|*b1 = sign(Dot(D,N))*Dot(D,Cross(Q,E2))
 		//   |Dot(D,N)|*b2 = sign(Dot(D,N))*Dot(D,Cross(E1,Q))
 		//   |Dot(D,N)|*t = -sign(Dot(D,N))*Dot(Q,N)
+
+		// console.log('normal', normal);
 		let DdN = vec3.dot(this.direction.v, normal);
 		let sign;
 
@@ -47,8 +45,6 @@ export default class Ray {
 		} else {
 			return null;
 		}
-
-		// console.log('xx');
 
 		vec3.sub(diff, this.origin.v, a.v);
 		vec3.cross(edge2, diff, edge2);

@@ -48,17 +48,6 @@ export default class Mesh {
 				this.geometry.attributes.normal.itemSize, gl.FLOAT, false, 0, 0);
 		}
 
-		// if (this.shader.uniformTextures.length > 0) {
-		// 	gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.textureCoordBuffer);
-		// 	gl.vertexAttribPointer(this.shader.textureCoordAttribute,
-		// 		this.geometry.textureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
-		// 	this.shader.uniformTextures.forEach((uniform, i) => {
-		// 		gl.activeTexture(gl[`TEXTURE${i}`]);
-		// 		gl.bindTexture(gl.TEXTURE_2D, uniform.value.texture);
-		// 		gl.uniform1i(uniform.location, i);
-		// 	});
-		// }
-
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.geometry.attributes.index.buffer);
 
 		mat4.identity(this.modelMatrix);

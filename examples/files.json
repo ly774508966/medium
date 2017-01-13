@@ -1,0 +1,10 @@
+{
+  "demos": [
+    "fullscreen",
+    "obj",
+    "pointlights",
+    "raycast",
+    "rendertarget",
+    "texturecube"
+  ]
+}

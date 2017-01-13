@@ -1,10 +1,12 @@
 import * as GL from './GL';
 import EventDispatcher from 'happens';
 
-export default class Texture {
+let gl;
+
+export default class TextureCube {
 	constructor(options) {
 		EventDispatcher(this);
-		const gl = GL.get();
+		gl = GL.get();
 
 		this.src = Array(6).fill('');
 		this.images = [];
@@ -42,7 +44,7 @@ export default class Texture {
 	}
 
 	updateTexture(images) {
-		const gl = GL.get();
+		gl = GL.get();
 
 		gl.bindTexture(gl.TEXTURE_CUBE_MAP, this.texture);
 

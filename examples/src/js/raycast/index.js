@@ -4,7 +4,6 @@ import {
 	PerspectiveCamera,
 	Mesh,
 	Shader,
-	BoxGeometry,
 	GridHelper,
 	OrbitControls,
 	AxisHelper,
@@ -13,7 +12,9 @@ import {
 	RayCaster,
 	Vector2,
 	SphereGeometry,
+	BoxGeometry,
 } from 'index';
+import { vec2 } from 'gl-matrix';
 
 // Renderer
 const renderer = new Renderer({
@@ -36,36 +37,59 @@ camera.lookAt();
 const light = new DirectionalLight();
 light.position.set(0.75, 1, 0.75);
 
-const geometry = new BoxGeometry(1, 1, 1);
+const geometry = new BoxGeometry(2, 2, 2);
 const material = new Shader({
 	name: 'Box',
+	hookFragmentPre: `
+		uniform vec2 uIntersect;
+		// varying vec2 vUv;
+	`,
+	hookFragmentEnd: `
+		float circleRadius = 0.25;
+		vec2 circleCenter = uIntersect;
+		vec2 uvP = vec2(vUv.x, vUv.y);
+
+		uvP -= circleCenter;
+
+		float dist = sqrt(dot(uvP, uvP));
+
+		color *= 0.5;
+
+		if (dist < circleRadius) {
+			color = vec3(1.0);
+		}
+		gl_FragColor = vec4(color, 1.0);
+	`,
 	uniforms: {
 		uDiffuse: {
 			type: '3f',
-			value: new Color(0xFF0000).v,
+			value: new Color(0xff2a9d).v,
+		},
+		uIntersect: {
+			type: '2f',
+			value: new Vector2().v,
 		},
 	},
 	directionalLights: [light.uniforms],
 });
 const box = new Mesh(geometry, material);
 
-// box.position.z = 2;
-
-const sphere = new Mesh(new SphereGeometry(0.2), new Shader({
+const intersectHelper = new Mesh(new SphereGeometry(0.2), new Shader({
 	uniforms: {
 		uDiffuse: {
 			type: '3f',
-			value: new Color(0x00FF00).v,
+			value: new Color(0x000000).v,
 		},
 	},
 }));
 
-sphere.position.y = 2;
+box.position.y = 3;
 
 scene.add(light);
 scene.add(box);
-scene.add(sphere);
+scene.add(intersectHelper);
 
+// Ray in model space
 const raycaster = new RayCaster();
 
 // Helpers
@@ -90,7 +114,7 @@ const mouse = new Vector2();
 
 function onMouseMove(event) {
 	mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-	mouse.y = (event.pageY / window.innerHeight) * 2 - 1;
+	mouse.y = -((event.pageY / window.innerHeight) * 2 - 1);
 }
 
 window.addEventListener('resize', resize);
@@ -103,8 +127,17 @@ function update() {
 	const intersect = raycaster.intersectObject(box);
 
 	if (intersect) {
-		sphere.position.copy(intersect);
+		// console.log(intersect.uv.v);
+		intersectHelper.position.copy(intersect.point);
+		intersectHelper.visible = true;
+		vec2.copy(box.shader.uniforms.uIntersect.value, intersect.uv.v);
+	} else {
+		intersectHelper.visible = false;
 	}
+
+	box.rotation.x += 0.01;
+	box.rotation.y += 0.01;
+	box.rotation.z += 0.01;
 
 	renderer.render(scene, camera);
 }

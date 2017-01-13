@@ -6,4 +6,4 @@ export default `
 	};
 
 	uniform DirectionalLight uDirectionalLights[#HOOK_DIRECTIONAL_LIGHTS];
-`
+`;

@@ -3,6 +3,7 @@ import * as CONSTANTS from './Constants';
 import {
 	mat3,
 	mat4,
+	vec3,
 } from 'gl-matrix';
 import vertexShader from 'shaders/basic/Vertex.glsl';
 import fragmentShader from 'shaders/basic/Frag.glsl';
@@ -11,6 +12,9 @@ import {
 } from 'utils/Console';
 import Color from 'math/Color';
 import Capabilities from 'core/Capabilities';
+
+const normalMatrix = mat3.create();
+const inversedModelViewMatrix = mat4.create();
 
 export default class Shader {
 	constructor(options) {
@@ -75,15 +79,6 @@ export default class Shader {
 			this.vertexColorAttribute = gl.getAttribLocation(this.program, 'aVertexColor');
 			gl.enableVertexAttribArray(this.vertexColorAttribute);
 		}
-
-		// this.uniformTextures = [];
-		// Object.keys(this.customUniforms).forEach(key => {
-		// 	const uniform = this.customUniforms[key];
-		// 	if (uniform.type === 't') {
-		// 		this.uniformTextures.push(uniform);
-		// 		uniform.value.load();
-		// 	}
-		// });
 
 		// console.log(this.vertexPositionAttribute);
 		// console.log(this.vertexNormalAttribute);
@@ -322,12 +317,12 @@ export default class Shader {
 		gl.uniformMatrix4fv(this.uniforms.uViewMatrix.location, false, modelViewMatrix);
 		gl.uniformMatrix4fv(this.uniforms.uModelMatrix.location, false, modelMatrix);
 
-		const inversedModelViewMatrix = mat4.create();
+		mat4.identity(inversedModelViewMatrix);
 		mat4.invert(inversedModelViewMatrix, modelMatrix);
 
 		if (this.vertexNormals) {
 			// removes scale and translation
-			const normalMatrix = mat3.create();
+			vec3.set(normalMatrix, 0, 0, 0);
 			mat3.fromMat4(normalMatrix, inversedModelViewMatrix);
 			mat3.transpose(normalMatrix, normalMatrix);
 			gl.uniformMatrix3fv(this.uniforms.uNormalMatrix.location, false, normalMatrix);

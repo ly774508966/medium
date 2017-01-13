@@ -2,6 +2,7 @@ import * as GL from 'core/GL';
 import BufferAttribute from './BufferAttribute';
 import Face from './Face';
 import Vector3 from 'math/Vector3';
+import Vector2 from 'math/Vector2';
 
 export default class Geometry {
 	constructor(vertices, indices, normals, uvs, colors) {
@@ -33,6 +34,7 @@ export default class Geometry {
 		// uvs
 		if (this.uvs) {
 			this.attributes.uv = new BufferAttribute(gl, gl.ARRAY_BUFFER, uvs, 2);
+			this.generateUvs();
 		}
 
 		// Vertex colors
@@ -53,7 +55,7 @@ export default class Geometry {
 	}
 
 	generateFaces() {
-		this.faces = [];
+		this.face = [];
 		for (let i = 0; i < this.indices.length; i += 3) {
 			const ia = this.indices[i];
 			const ib = this.indices[i + 1];
@@ -63,7 +65,18 @@ export default class Geometry {
 			const c = this.vertex[ic];
 
 			const face = new Face(ia, ib, ic, a, b, c);
-			this.faces.push(face);
+			this.face.push(face);
+		}
+	}
+
+	generateUvs() {
+		this.uv = [];
+		for (let i = 0; i < this.uvs.length; i += 2) {
+			const a = this.uvs[i];
+			const b = this.uvs[i + 1];
+
+			const uv = new Vector2(a, b);
+			this.uv.push(uv);
 		}
 	}
 }

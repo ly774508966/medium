@@ -1,4 +1,12 @@
 extends includes/_layout
 
+block content
+	header
+		h1 x
+		nav
+			ul.demos
+				for demo in locals.demos
+					li: a(href=`/${demo}.html`) #{demo}
+
 block script
 	script(src='js/index.js')

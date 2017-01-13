@@ -7,7 +7,8 @@
     "start": "concurrently 'npm run server' 'npm run examples:js' 'npm run examples:html'",
     "server": "live-server ./examples --port 3000 --quiet --watch ./examples --watch ./src --wait 0",
     "examples:js": "webpack --colors --watch",
-    "examples:html": "pug --watch ./examples/src/templates/*.pug --out ./examples",
+    "examples:html": "npm run examples:files; pug --obj ./examples/files.json --watch ./examples/src/templates/*.pug --out ./examples",
+    "examples:files": "node ./examples/files",
     "build": "npm run lint; babel src --out-dir lib",
     "lint": "eslint --fix --ext .js ./src --cache"
   },

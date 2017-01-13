@@ -14,6 +14,8 @@ import {
 import Capabilities from 'core/Capabilities';
 import RendererInfo from 'core/RendererInfo';
 
+let gl;
+
 export default class Renderer {
 	constructor(settings = {}) {
 		// Default renderer settings
@@ -53,7 +55,7 @@ export default class Renderer {
 		// Renderer info
 		this.info = new RendererInfo();
 
-		const gl = GL.get();
+		gl = GL.get();
 
 		// Log Capabilities of gpu
 		log(Capabilities(gl));
@@ -89,7 +91,7 @@ export default class Renderer {
 	}
 
 	render(scene, camera) {
-		const gl = GL.get();
+		gl = GL.get();
 		this._reset(gl);
 
 		gl.viewport(0.0, 0.0, gl.drawingBufferWidth, gl.drawingBufferHeight);

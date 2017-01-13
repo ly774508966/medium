@@ -20,12 +20,6 @@ export default class Vector2 {
 	get y() {
 		return this.v[1];
 	}
-	set z(value) {
-		this.v[2] = value;
-	}
-	get z() {
-		return this.v[2];
-	}
 	set(x, y) {
 		vec2.set(this.v, x, y);
 		return this;

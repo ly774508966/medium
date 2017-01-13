@@ -1,6 +1,7 @@
 export default class Face {
-	constructor(ia, ib, ic, a, b, c) {
-		this.indices = [ia, ib, ic];
-		this.vertices = [a, b, c];
+	constructor(iA, iB, iC, vA, vB, vC) {
+		this.indices = [iA, iB, iC];
+		this.vertices = [vA, vB, vC];
+		this.uvs = [iA, iB, iC];
 	}
 }

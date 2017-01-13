@@ -1,10 +1,12 @@
 import * as GL from './GL';
 import EventDispatcher from 'happens';
 
+let gl;
+
 export default class Texture {
 	constructor(options) {
 		EventDispatcher(this);
-		const gl = GL.get();
+		gl = GL.get();
 
 		this.src = '';
 		this.size = null;
@@ -29,7 +31,7 @@ export default class Texture {
 	}
 
 	updateTexture(image) {
-		const gl = GL.get();
+		gl = GL.get();
 
 		gl.bindTexture(gl.TEXTURE_2D, this.texture);
 		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
