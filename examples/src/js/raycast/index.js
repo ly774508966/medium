@@ -123,7 +123,7 @@ window.addEventListener('mousemove', onMouseMove);
 function update() {
 	requestAnimationFrame(update);
 
-	raycaster.setFromCamera(mouse, camera);
+	raycaster.setFromCamera(mouse, scene, camera);
 	const intersect = raycaster.intersectObject(box);
 
 	if (intersect) {

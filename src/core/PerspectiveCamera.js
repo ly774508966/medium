@@ -16,7 +16,6 @@ export default class PerspectiveCamera {
 			position: new Vector3(),
 			center: new Vector3(),
 			up: new Vector3(0, 1, 0),
-			modelViewMatrix: mat4.create(),
 			projectionMatrix: mat4.create(),
 			isPespectiveCamera: true,
 		};

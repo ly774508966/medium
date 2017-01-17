@@ -23,6 +23,7 @@ export default class Renderer {
 			width: RENDERER_DEFAULT_WIDTH,
 			height: RENDERER_DEFAULT_HEIGHT,
 			preserveDrawingBuffer: false,
+			pixelRatio: 1,
 		};
 
 		// Apply defaults
@@ -45,12 +46,6 @@ export default class Renderer {
 		} catch (error) {
 			warn('Webgl not supported');
 		}
-
-		// Matrix stack for scene object translations
-		this.modelViewMatrixStack = [];
-
-		// Default pixel ratio
-		this.pixelRatio = 1;
 
 		// Renderer info
 		this.info = new RendererInfo();
@@ -111,9 +106,9 @@ export default class Renderer {
 			throw new Error('Camera type not supported');
 		}
 
-		mat4.identity(camera.modelViewMatrix);
+		mat4.identity(scene.modelViewMatrix);
 
-		mat4.lookAt(camera.modelViewMatrix, camera.position.v, camera.center.v, camera.up.v);
+		mat4.lookAt(scene.modelViewMatrix, camera.position.v, camera.center.v, camera.up.v);
 
 		// Update the scene
 		scene.update();
@@ -122,7 +117,8 @@ export default class Renderer {
 
 		// Render the scene objects
 		scene.objects.forEach(child => {
-			child.draw(camera.modelViewMatrix, camera.projectionMatrix, camera);
+			// child.updateBefore();
+			child.draw(scene.modelViewMatrix, camera.projectionMatrix, camera);
 			// this.info.vertices += child.geometry.vertices.length / 3;
 		});
 

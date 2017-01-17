@@ -23,13 +23,13 @@ export default class RayCaster {
 		this.far = far || Infinity;
 	}
 
-	setFromCamera(coords, camera) {
+	setFromCamera(coords, scene, camera) {
 		if (camera && camera.isPespectiveCamera) {
 			this.ray.origin.copy(camera.position);
 
 			vec3.copy(cameraDirection, [coords.x, coords.y, 0.5]);
 
-			mat4.multiply(inversedProjectionMatrix, camera.projectionMatrix, camera.modelViewMatrix);
+			mat4.multiply(inversedProjectionMatrix, camera.projectionMatrix, scene.modelViewMatrix);
 			mat4.invert(inversedProjectionMatrix, inversedProjectionMatrix);
 
 			vec3.transformMat4(cameraDirection, cameraDirection, inversedProjectionMatrix);

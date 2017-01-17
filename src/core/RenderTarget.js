@@ -48,16 +48,16 @@ export default class RenderTarget {
 			throw new Error('Camera type not supported');
 		}
 
-		mat4.identity(camera.modelViewMatrix);
+		mat4.identity(scene.modelViewMatrix);
 
-		mat4.lookAt(camera.modelViewMatrix, camera.position.v, camera.center.v, camera.up.v);
+		mat4.lookAt(scene.modelViewMatrix, camera.position.v, camera.center.v, camera.up.v);
 
 		// Update the scene
 		scene.update();
 
 		// Render the scene objects
 		scene.objects.forEach(child => {
-			child.draw(camera.modelViewMatrix, camera.projectionMatrix, camera);
+			child.draw(scene.modelViewMatrix, camera.projectionMatrix, camera);
 		});
 
 		gl.bindTexture(gl.TEXTURE_2D, this.texture);

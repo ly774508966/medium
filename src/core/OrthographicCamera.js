@@ -6,7 +6,6 @@ import Vector3 from 'math/Vector3';
 export default class OrthographicCamera {
 	constructor(options = {}) {
 		const defaults = {
-			modelViewMatrix: mat4.create(),
 			projectionMatrix: mat4.create(),
 			near: 0.1,
 			far: 100,

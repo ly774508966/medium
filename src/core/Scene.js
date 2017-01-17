@@ -1,4 +1,7 @@
 import {
+	mat4,
+} from 'gl-matrix';
+import {
 	OBJECT_TYPE_LIGHT,
 } from 'core/Constants';
 
@@ -7,6 +10,7 @@ export default class Scene {
 	constructor() {
 		this.lights = [];
 		this.objects = [];
+		this.modelViewMatrix = mat4.create();
 	}
 
 	add(object) {

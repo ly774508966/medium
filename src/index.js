@@ -2,6 +2,7 @@
 import Capabilities from 'core/Capabilities';
 import * as Constants from 'core/Constants';
 import Mesh from 'core/Mesh';
+import Object3D from 'core/Object3D';
 import OrthographicCamera from 'core/OrthographicCamera';
 import PerspectiveCamera from 'core/PerspectiveCamera';
 import RayCaster from 'core/Raycaster';
@@ -50,6 +51,7 @@ export {
 	Capabilities,
 	Constants,
 	Mesh,
+	Object3D,
 	OrthographicCamera,
 	PerspectiveCamera,
 	RayCaster,
