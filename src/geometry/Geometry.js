@@ -1,5 +1,5 @@
 import * as GL from 'core/GL';
-import Capabilities from 'core/Capabilities';
+import { extensions } from 'core/Capabilities';
 import BufferAttribute from './BufferAttribute';
 import Face from './Face';
 import Vector3 from 'math/Vector3';
@@ -56,7 +56,7 @@ export default class Geometry {
 
 	addInstancedBufferAttribute(name, value, count) {
 		gl = GL.get();
-		if (!Capabilities(gl).extensions.angleInstanceArraysSupported) {
+		if (extensions.angleInstanceArraysSupported) {
 			warn(ERROR_EXTENSION_ANGLE_INSTANCE_ARRAYS);
 		}
 		this.attributesInstanced[name] = new BufferAttribute(gl, gl.ARRAY_BUFFER, value, count);

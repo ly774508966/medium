@@ -27,7 +27,7 @@ function getMaxPrecision(gl, precision) {
 	return 'lowp';
 }
 
-export default function (gl) {
+function Capabilities(gl) {
 	let precision = PRECISION;
 	const maxPrecision = getMaxPrecision(gl, precision);
 
@@ -46,14 +46,6 @@ export default function (gl) {
 	const maxVaryings = gl.getParameter(gl.MAX_VARYING_VECTORS);
 	const maxFragmentUniforms = gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS);
 
-	const angleInstanceArrays = gl.getExtension('ANGLE_instanced_arrays');
-	const angleInstanceArraysSupported = angleInstanceArrays !== undefined;
-
-	const extensions = {
-		angleInstanceArrays,
-		angleInstanceArraysSupported,
-	};
-
 	return {
 		precision,
 		maxTextures,
@@ -65,6 +57,34 @@ export default function (gl) {
 		maxVertexUniforms,
 		maxVaryings,
 		maxFragmentUniforms,
-		extensions,
 	};
 }
+
+function Extensions(gl) {
+	const angleInstanceArrays = gl.getExtension('ANGLE_instanced_arrays');
+	const angleInstanceArraysSupported = angleInstanceArrays !== undefined;
+
+	return {
+		angleInstanceArrays,
+		angleInstanceArraysSupported,
+	};
+}
+
+let capabilities = {};
+let extensions = {};
+
+/*
+	Set the capabilities once
+*/
+export function set(gl) {
+	capabilities = Capabilities(gl);
+	extensions = Extensions(gl);
+}
+
+/*
+	Get capabilities
+*/
+export {
+	capabilities,
+	extensions,
+};

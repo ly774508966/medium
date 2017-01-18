@@ -27,7 +27,7 @@ const camera = new PerspectiveCamera({
 	fov: 45,
 });
 
-camera.position.set(10, 5, 10);
+camera.position.set(20, 5, 20);
 camera.lookAt();
 
 // Helpers
@@ -74,9 +74,6 @@ const mesh = new Mesh(geometry, new Shader({
 }));
 
 mesh.setInstanceCount(totalInstances);
-
-console.log('mesh', mesh);
-
 
 scene.add(mesh);
 

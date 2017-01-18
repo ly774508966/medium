@@ -11,7 +11,7 @@ import {
 	RENDERER_DEFAULT_HEIGHT,
 	LINE_DEFAULT_WIDTH,
 } from 'core/Constants';
-import Capabilities from 'core/Capabilities';
+import * as Capabilities from 'core/Capabilities';
 import RendererInfo from 'core/RendererInfo';
 
 let gl;
@@ -25,6 +25,8 @@ export default class Renderer {
 			preserveDrawingBuffer: false,
 			pixelRatio: 1,
 		};
+
+		window.Capabilities = Capabilities;
 
 		// Apply defaults
 		Object.assign(this, defaults, settings);
@@ -53,7 +55,10 @@ export default class Renderer {
 		gl = GL.get();
 
 		// Log Capabilities of gpu
-		log(Capabilities(gl));
+		Capabilities.set(gl);
+
+		log('capabilities', Capabilities.capabilities);
+		log('extensions', Capabilities.extensions);
 
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.enable(gl.DEPTH_TEST);

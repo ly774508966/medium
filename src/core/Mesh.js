@@ -2,7 +2,7 @@ import {
 	mat4,
 } from 'gl-matrix';
 import * as GL from '../core/GL';
-import Capabilities from 'core/Capabilities';
+import { extensions } from 'core/Capabilities';
 import Object3D from 'core/Object3D';
 import { ERROR_EXTENSION_ANGLE_INSTANCE_ARRAYS } from 'core/Messages';
 import { warn } from 'utils/Console';
@@ -22,7 +22,7 @@ export default class Mesh extends Object3D {
 
 	setInstanceCount(value) {
 		gl = GL.get();
-		if (!Capabilities(gl).extensions.angleInstanceArraysSupported) {
+		if (!extensions.angleInstanceArraysSupported) {
 			warn(ERROR_EXTENSION_ANGLE_INSTANCE_ARRAYS);
 		}
 		this.isInstanced = true;
@@ -89,8 +89,6 @@ export default class Mesh extends Object3D {
 
 		this.shader.bindProgram();
 
-		const ext = Capabilities(gl).extensions.angleInstanceArrays;
-
 		if (this.geometry.vertices) {
 			gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.attributes.vertex.buffer);
 			gl.vertexAttribPointer(this.shader.attributeLocations.aVertexPosition,
@@ -119,7 +117,8 @@ export default class Mesh extends Object3D {
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.attributesInstanced.offset.buffer);
 		gl.vertexAttribPointer(this.shader.attributeLocations.aOffset,
 				this.geometry.attributesInstanced.offset.itemSize, gl.FLOAT, false, 0, 0);
-		ext.vertexAttribDivisorANGLE(this.shader.attributeLocations.aOffset, 1);
+		extensions.angleInstanceArrays
+			.vertexAttribDivisorANGLE(this.shader.attributeLocations.aOffset, 1);
 
 		// Update modelMatrix
 		this.updateMatrix();
@@ -132,11 +131,12 @@ export default class Mesh extends Object3D {
 			gl.cullFace(this.shader.culling);
 		}
 
-		ext.drawElementsInstancedANGLE(gl.TRIANGLES,
+		extensions.angleInstanceArrays.drawElementsInstancedANGLE(gl.TRIANGLES,
 			this.geometry.attributes.index.numItems, gl.UNSIGNED_SHORT, 0, this.instanceCount);
 
 		// Reset
-		ext.vertexAttribDivisorANGLE(this.shader.attributeLocations.aOffset, 0);
+		extensions.angleInstanceArrays
+			.vertexAttribDivisorANGLE(this.shader.attributeLocations.aOffset, 0);
 
 		// Culling disable
 		if (this.shader.culling !== false) {

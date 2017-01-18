@@ -11,7 +11,7 @@ import {
 	warn,
 } from 'utils/Console';
 import Color from 'math/Color';
-import Capabilities from 'core/Capabilities';
+import { capabilities, extensions } from 'core/Capabilities';
 
 let gl;
 const normalMatrix = mat3.create();
@@ -87,7 +87,7 @@ export default class Shader {
 		}
 
 		// Custom attributes
-		if (Capabilities(gl).extensions.angleInstanceArraysSupported) {
+		if (extensions.angleInstanceArraysSupported) {
 			Object.keys(geometry.attributesInstanced).forEach(key => {
 				// console.debug(key, geometry.attributesInstanced[key]);
 				this.setAttributeLocation('aOffset');
@@ -164,7 +164,7 @@ export default class Shader {
 		let defines = '';
 
 		const precision =
-			`precision ${Capabilities(gl).precision} float;`;
+			`precision ${capabilities.precision} float;`;
 
 		function addDefine(define) {
 			defines += `#define ${define} \n`;
