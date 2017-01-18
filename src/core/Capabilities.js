@@ -46,6 +46,14 @@ export default function (gl) {
 	const maxVaryings = gl.getParameter(gl.MAX_VARYING_VECTORS);
 	const maxFragmentUniforms = gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS);
 
+	const angleInstanceArrays = gl.getExtension('ANGLE_instanced_arrays');
+	const angleInstanceArraysSupported = angleInstanceArrays !== undefined;
+
+	const extensions = {
+		angleInstanceArrays,
+		angleInstanceArraysSupported,
+	};
+
 	return {
 		precision,
 		maxTextures,
@@ -57,5 +65,6 @@ export default function (gl) {
 		maxVertexUniforms,
 		maxVaryings,
 		maxFragmentUniforms,
+		extensions,
 	};
 }

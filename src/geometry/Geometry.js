@@ -1,46 +1,65 @@
 import * as GL from 'core/GL';
+import Capabilities from 'core/Capabilities';
 import BufferAttribute from './BufferAttribute';
 import Face from './Face';
 import Vector3 from 'math/Vector3';
 import Vector2 from 'math/Vector2';
+import { ERROR_EXTENSION_ANGLE_INSTANCE_ARRAYS } from 'core/Messages';
+import { warn } from 'utils/Console';
+
+let gl;
 
 export default class Geometry {
 	constructor(vertices, indices, normals, uvs, colors) {
-		const gl = GL.get();
+		gl = GL.get();
 		this.vertices = vertices;
 		this.indices = indices;
 		this.normals = normals;
 		this.uvs = uvs;
 		this.colors = colors;
 		this.attributes = {};
+		this.attributesInstanced = {};
 
 		// Vertex positions
 		if (this.vertices) {
-			this.attributes.vertex = new BufferAttribute(gl, gl.ARRAY_BUFFER, vertices, 3);
+			this.addAttribute('vertex', gl.ARRAY_BUFFER, vertices, 3);
 			this.generateVertices();
 		}
 
 		// Vertex indices
 		if (this.indices) {
-			this.attributes.index = new BufferAttribute(gl, gl.ELEMENT_ARRAY_BUFFER, indices, 1);
+			this.addAttribute('index', gl.ELEMENT_ARRAY_BUFFER, indices, 1);
 			this.generateFaces();
 		}
 
 		// Vertex normals
 		if (this.normals) {
-			this.attributes.normal = new BufferAttribute(gl, gl.ARRAY_BUFFER, normals, 3);
+			this.addAttribute('normal', gl.ARRAY_BUFFER, normals, 3);
 		}
 
 		// uvs
 		if (this.uvs) {
-			this.attributes.uv = new BufferAttribute(gl, gl.ARRAY_BUFFER, uvs, 2);
+			this.addAttribute('uv', gl.ARRAY_BUFFER, uvs, 2);
 			this.generateUvs();
 		}
 
 		// Vertex colors
 		if (this.colors) {
-			this.attributes.color = new BufferAttribute(gl, gl.ARRAY_BUFFER, colors, 3);
+			this.addAttribute('color', gl.ARRAY_BUFFER, colors, 3);
 		}
+	}
+
+	addAttribute(name, type, data, count) {
+		gl = GL.get();
+		this.attributes[name] = new BufferAttribute(gl, type, data, count);
+	}
+
+	addInstancedBufferAttribute(name, value, count) {
+		gl = GL.get();
+		if (!Capabilities(gl).extensions.angleInstanceArraysSupported) {
+			warn(ERROR_EXTENSION_ANGLE_INSTANCE_ARRAYS);
+		}
+		this.attributesInstanced[name] = new BufferAttribute(gl, gl.ARRAY_BUFFER, value, count);
 	}
 
 	generateVertices() {

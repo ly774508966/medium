@@ -13,6 +13,7 @@ import {
 import Color from 'math/Color';
 import Capabilities from 'core/Capabilities';
 
+let gl;
 const normalMatrix = mat3.create();
 const inversedModelViewMatrix = mat4.create();
 
@@ -38,8 +39,14 @@ export default class Shader {
 		Object.assign(this, defaults, options);
 	}
 
+	setAttributeLocation(attributeName) {
+		gl = GL.get();
+		this.attributeLocations[attributeName] = gl.getAttribLocation(this.program, attributeName);
+		gl.enableVertexAttribArray(this.attributeLocations[attributeName]);
+	}
+
 	create(geometry) {
-		const gl = GL.get();
+		gl = GL.get();
 
 		this.vertexShader = this._processShader(this.vertexShader, geometry);
 		this.fragmentShader = this._processShader(this.fragmentShader, geometry);
@@ -59,25 +66,32 @@ export default class Shader {
 			warn('Failed to initialise shaders');
 		}
 
+		// Cache all attribute locations
+		this.attributeLocations = {};
+
 		if (geometry.vertices) {
-			this.vertexPositionAttribute = gl.getAttribLocation(this.program, 'aVertexPosition');
-			gl.enableVertexAttribArray(this.vertexPositionAttribute);
+			this.setAttributeLocation('aVertexPosition');
 		}
 
 		if (geometry.uvs) {
-			this.vertexUvAttribute = gl.getAttribLocation(this.program, 'aUv');
-			gl.enableVertexAttribArray(this.vertexUvAttribute);
+			this.setAttributeLocation('aUv');
 		}
 
 		if (geometry.normals) {
 			this.vertexNormals = true;
-			this.vertexNormalAttribute = gl.getAttribLocation(this.program, 'aVertexNormal');
-			gl.enableVertexAttribArray(this.vertexNormalAttribute);
+			this.setAttributeLocation('aVertexNormal');
 		}
 
 		if (geometry.colors) {
-			this.vertexColorAttribute = gl.getAttribLocation(this.program, 'aVertexColor');
-			gl.enableVertexAttribArray(this.vertexColorAttribute);
+			this.setAttributeLocation('aVertexColor');
+		}
+
+		// Custom attributes
+		if (Capabilities(gl).extensions.angleInstanceArraysSupported) {
+			Object.keys(geometry.attributesInstanced).forEach(key => {
+				// console.debug(key, geometry.attributesInstanced[key]);
+				this.setAttributeLocation('aOffset');
+			});
 		}
 
 		// console.log(this.vertexPositionAttribute);

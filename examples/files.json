@@ -1,6 +1,7 @@
 {
   "demos": [
     "fullscreen",
+    "instancing",
     "obj",
     "pointlights",
     "raycast",

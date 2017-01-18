@@ -118,7 +118,11 @@ export default class Renderer {
 		// Render the scene objects
 		scene.objects.forEach(child => {
 			// child.updateBefore();
-			child.draw(scene.modelViewMatrix, camera.projectionMatrix, camera);
+			if (child.isInstanced) {
+				child.drawInstance(scene.modelViewMatrix, camera.projectionMatrix, camera);
+			} else {
+				child.draw(scene.modelViewMatrix, camera.projectionMatrix, camera);
+			}
 			// this.info.vertices += child.geometry.vertices.length / 3;
 		});
 

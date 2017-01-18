@@ -49,6 +49,9 @@ export default `
 
 		vDiffuse = uDiffuse;
 
+		// Override for custom positioning
+		vec3 transformed = vec3(0.0);
+
 		#ifdef vertexColors
 		vDiffuse = aVertexColor;
 		#endif
@@ -75,7 +78,7 @@ export default `
 		#endif
 
 		vPosition = aVertexPosition;
-		gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
+		gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition + transformed, 1.0);
 
 		#HOOK_VERTEX_END
 	}
