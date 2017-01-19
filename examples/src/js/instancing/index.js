@@ -55,7 +55,7 @@ for (let i = 0; i < totalInstances; i++) {
 	data[i3 + 2] = Math.random() * range;
 }
 
-geometry.addInstancedBufferAttribute('offset', data, 3);
+geometry.addInstancedBufferAttribute('aOffset', data, 3);
 
 const mesh = new Mesh(geometry, new Shader({
 	uniforms: {

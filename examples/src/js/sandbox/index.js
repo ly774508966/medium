@@ -47,18 +47,15 @@ const material1 = new Shader({
 });
 
 const plane = new Mesh(geometry, material1);
-// const material2 = new Shader();
-// const plane2 = new Mesh(geometry, material2);
-
 plane.position.z = 2;
-// plane2.position.z = 1.1;
 
 const planeNormalsHelper = new NormalsHelper(plane);
 scene.add(planeNormalsHelper);
 
+planeNormalsHelper.setParent(plane);
 
 scene.add(plane);
-// scene.add(plane2);
+
 
 colors = [];
 for (let i = 0; i < 6; i++) {
@@ -101,6 +98,7 @@ box.position.y = 3;
 const boxNormalsHelper = new NormalsHelper(box);
 scene.add(boxNormalsHelper);
 
+boxNormalsHelper.setParent(box);
 
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas);
@@ -109,6 +107,11 @@ const cameraGUI = gui.addFolder('camera');
 cameraGUI.open();
 const lightingGUI = gui.addFolder('lighting');
 lightingGUI.open();
+
+const range = 10;
+gui.add(box.position, 'x', -range, range);
+gui.add(box.position, 'y', -range, range);
+gui.add(box.position, 'z', -range, range);
 
 const grid = new GridHelper(10);
 scene.add(grid);
@@ -131,6 +134,8 @@ function update() {
 	requestAnimationFrame(update);
 	box.rotation.x += 0.01;
 	box.rotation.y += 0.01;
+	// plane.rotation.x += 0.01;
+	// plane.rotation.y += 0.01;
 	renderer.render(scene, camera);
 }
 update();

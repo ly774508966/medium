@@ -22,42 +22,43 @@ export default class Geometry {
 
 		// Vertex positions
 		if (this.vertices) {
-			this.addAttribute('vertex', gl.ARRAY_BUFFER, vertices, 3);
+			this.addAttribute('aVertexPosition', gl.ARRAY_BUFFER, vertices, 3);
 			this.generateVertices();
 		}
 
 		// Vertex indices
 		if (this.indices) {
-			this.addAttribute('index', gl.ELEMENT_ARRAY_BUFFER, indices, 1);
+			this.addAttribute('aIndex', gl.ELEMENT_ARRAY_BUFFER, indices, 1, false);
 			this.generateFaces();
 		}
 
 		// Vertex normals
 		if (this.normals) {
-			this.addAttribute('normal', gl.ARRAY_BUFFER, normals, 3);
+			this.addAttribute('aVertexNormal', gl.ARRAY_BUFFER, normals, 3);
 		}
 
 		// uvs
 		if (this.uvs) {
-			this.addAttribute('uv', gl.ARRAY_BUFFER, uvs, 2);
+			this.addAttribute('aUv', gl.ARRAY_BUFFER, uvs, 2);
 			this.generateUvs();
 		}
 
 		// Vertex colors
 		if (this.colors) {
-			this.addAttribute('color', gl.ARRAY_BUFFER, colors, 3);
+			this.addAttribute('aVertexColor', gl.ARRAY_BUFFER, colors, 3);
 		}
 	}
 
-	addAttribute(name, type, data, count) {
+	addAttribute(name, type, data, count, shaderAttribute) {
 		gl = GL.get();
-		this.attributes[name] = new BufferAttribute(gl, type, data, count);
+		this.attributes[name] = new BufferAttribute(gl, type, data, count, shaderAttribute);
 	}
 
 	addInstancedBufferAttribute(name, value, count) {
 		gl = GL.get();
-		if (extensions.angleInstanceArraysSupported) {
+		if (!extensions.angleInstanceArraysSupported) {
 			warn(ERROR_EXTENSION_ANGLE_INSTANCE_ARRAYS);
+			return;
 		}
 		this.attributesInstanced[name] = new BufferAttribute(gl, gl.ARRAY_BUFFER, value, count);
 	}

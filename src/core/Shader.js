@@ -45,6 +45,11 @@ export default class Shader {
 		gl.enableVertexAttribArray(this.attributeLocations[attributeName]);
 	}
 
+	setUniformLocation(uniformName) {
+		gl = GL.get();
+		this.uniforms[uniformName].location = gl.getUniformLocation(this.program, uniformName);
+	}
+
 	create(geometry) {
 		gl = GL.get();
 
@@ -69,29 +74,25 @@ export default class Shader {
 		// Cache all attribute locations
 		this.attributeLocations = {};
 
-		if (geometry.vertices) {
-			this.setAttributeLocation('aVertexPosition');
-		}
+		// Cache attribute locations
+		let attribute;
 
-		if (geometry.uvs) {
-			this.setAttributeLocation('aUv');
+		Object.keys(geometry.attributes).forEach(attributeName => {
+			attribute = geometry.attributes[attributeName];
+			if (attribute.shaderAttribute) {
+				this.setAttributeLocation(attributeName);
+			}
+		});
+
+		// Cache instanced attribute locations
+		if (extensions.angleInstanceArraysSupported) {
+			Object.keys(geometry.attributesInstanced).forEach(attributeName => {
+				this.setAttributeLocation(attributeName);
+			});
 		}
 
 		if (geometry.normals) {
 			this.vertexNormals = true;
-			this.setAttributeLocation('aVertexNormal');
-		}
-
-		if (geometry.colors) {
-			this.setAttributeLocation('aVertexColor');
-		}
-
-		// Custom attributes
-		if (extensions.angleInstanceArraysSupported) {
-			Object.keys(geometry.attributesInstanced).forEach(key => {
-				// console.debug(key, geometry.attributesInstanced[key]);
-				this.setAttributeLocation('aOffset');
-			});
 		}
 
 		// console.log(this.vertexPositionAttribute);
@@ -124,6 +125,7 @@ export default class Shader {
 			};
 		}
 
+		// Default uniforms
 		this.uniforms = Object.assign({
 			uProjectionMatrix: {
 				type: '4fv',
@@ -153,7 +155,7 @@ export default class Shader {
 		}, this.customUniforms);
 
 		Object.keys(this.uniforms).forEach(uniformName => {
-			this.uniforms[uniformName].location = gl.getUniformLocation(this.program, uniformName);
+			this.setUniformLocation(uniformName);
 		});
 
 		console.log(this.name, this.uniforms);

@@ -4,6 +4,7 @@ import {
 import Mesh from 'core/Mesh';
 import Shader from 'core/Shader';
 import * as GL from 'core/GL';
+import { capabilities } from 'core/Capabilities';
 import Geometry from 'geometry/Geometry';
 
 const vertexShader = `
@@ -18,13 +19,16 @@ const vertexShader = `
 	}
 `;
 
-const fragmentShader = `
-	precision mediump float;
+function fragmentShader() {
+	return `
+	precision ${capabilities.precision} float;
 
 	void main(void){
 		gl_FragColor = vec4(vec3(0.5), 1.0);
 	}
-`;
+	`;
+}
+
 
 class GridGeometry extends Geometry {
 	constructor(size, divisions) {
@@ -60,7 +64,7 @@ export default class Grid extends Mesh {
 		super(new GridGeometry(size, divisions), new Shader({
 			name: 'GridHelper',
 			vertexShader,
-			fragmentShader,
+			fragmentShader: fragmentShader(),
 		}));
 		this.lineWidth = lineWidth;
 	}
@@ -70,13 +74,16 @@ export default class Grid extends Mesh {
 
 		this.shader.bindProgram();
 
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.attributes.vertex.buffer);
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.attributes.aVertexPosition.buffer);
 		gl.vertexAttribPointer(this.shader.attributeLocations.aVertexPosition,
-			this.geometry.attributes.vertex.itemSize, gl.FLOAT, false, 0, 0);
+			this.geometry.attributes.aVertexPosition.itemSize, gl.FLOAT, false, 0, 0);
+
+		// Update modelMatrix
+		this.updateMatrix();
 
 		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
 
 		gl.lineWidth(this.lineWidth);
-		gl.drawArrays(gl.LINES, 0, this.geometry.attributes.vertex.numItems);
+		gl.drawArrays(gl.LINES, 0, this.geometry.attributes.aVertexPosition.numItems);
 	}
 }

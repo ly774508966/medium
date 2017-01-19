@@ -1,6 +1,7 @@
 import Mesh from 'core/Mesh';
 import Shader from 'core/Shader';
 import * as GL from 'core/GL';
+import { capabilities } from 'core/Capabilities';
 import Geometry from 'geometry/Geometry';
 
 const vertexShader = `
@@ -19,14 +20,16 @@ const vertexShader = `
 	}
 `;
 
-const fragmentShader = `
-	precision mediump float;
+function fragmentShader() {
+	return `
+	precision ${capabilities.precision} float;
 	varying vec3 vColor;
 
 	void main(void){
 		gl_FragColor = vec4(vColor, 1.0);
 	}
-`;
+	`;
+}
 
 class AxisGeometry extends Geometry {
 	constructor(size) {
@@ -57,7 +60,7 @@ export default class Axis extends Mesh {
 		super(new AxisGeometry(size), new Shader({
 			name: 'AxisHelper',
 			vertexShader,
-			fragmentShader,
+			fragmentShader: fragmentShader(),
 		}));
 		this.lineWidth = lineWidth;
 	}
@@ -67,17 +70,20 @@ export default class Axis extends Mesh {
 
 		this.shader.bindProgram();
 
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.attributes.vertex.buffer);
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.attributes.aVertexPosition.buffer);
 		gl.vertexAttribPointer(this.shader.attributeLocations.aVertexPosition,
-			this.geometry.attributes.vertex.itemSize, gl.FLOAT, false, 0, 0);
+			this.geometry.attributes.aVertexPosition.itemSize, gl.FLOAT, false, 0, 0);
 
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.attributes.color.buffer);
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.attributes.aVertexColor.buffer);
 		gl.vertexAttribPointer(this.shader.attributeLocations.aVertexColor,
-			this.geometry.attributes.color.itemSize, gl.FLOAT, false, 0, 0);
+			this.geometry.attributes.aVertexColor.itemSize, gl.FLOAT, false, 0, 0);
+
+		// Update modelMatrix
+		this.updateMatrix();
 
 		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
 
 		gl.lineWidth(this.lineWidth);
-		gl.drawArrays(gl.LINES, 0, this.geometry.attributes.vertex.numItems);
+		gl.drawArrays(gl.LINES, 0, this.geometry.attributes.aVertexPosition.numItems);
 	}
 }
