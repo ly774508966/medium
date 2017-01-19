@@ -57,7 +57,11 @@ export default class RenderTarget {
 
 		// Render the scene objects
 		scene.objects.forEach(child => {
-			child.draw(scene.modelViewMatrix, camera.projectionMatrix, camera);
+			if (child.isInstanced) {
+				child.drawInstance(scene.modelViewMatrix, camera.projectionMatrix, camera);
+			} else {
+				child.draw(scene.modelViewMatrix, camera.projectionMatrix, camera);
+			}
 		});
 
 		gl.bindTexture(gl.TEXTURE_2D, this.texture);

@@ -98,10 +98,6 @@ export default class Renderer {
 
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-		// gl.enable(gl.BLEND);
-		// gl.blendEquation(gl.FUNC_ADD);
-		// gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-
 		if (camera.isPespectiveCamera) {
 			const ratio = this.width / this.height;
 			mat4.perspective(camera.projectionMatrix, camera.fov, ratio, camera.near, camera.far);
@@ -122,7 +118,6 @@ export default class Renderer {
 
 		// Render the scene objects
 		scene.objects.forEach(child => {
-			// child.updateBefore();
 			if (child.isInstanced) {
 				child.drawInstance(scene.modelViewMatrix, camera.projectionMatrix, camera);
 			} else {
