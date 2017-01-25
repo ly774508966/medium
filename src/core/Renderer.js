@@ -42,7 +42,7 @@ export default class Renderer {
 		};
 
 		try {
-			const gl = this.canvas.getContext('webgl', attributes) ||
+			gl = this.canvas.getContext('webgl', attributes) ||
 				this.canvas.getContext('experimental-webgl', attributes);
 			GL.set(gl);
 		} catch (error) {
@@ -57,8 +57,8 @@ export default class Renderer {
 		// Log Capabilities of gpu
 		Capabilities.set(gl);
 
-		log('capabilities', Capabilities.capabilities);
-		log('extensions', Capabilities.extensions);
+		// log('capabilities', Capabilities.capabilities);
+		// log('extensions', Capabilities.extensions);
 
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.enable(gl.DEPTH_TEST);
@@ -90,6 +90,17 @@ export default class Renderer {
 		gl.lineWidth(LINE_DEFAULT_WIDTH);
 	}
 
+	_drawObjects(scene, projectionMatrix, modelViewMatrix, camera) {
+		// Render the scene objects
+		scene.objects.forEach(child => {
+			if (child.isInstanced) {
+				child.drawInstance(scene.modelViewMatrix, camera.projectionMatrix, camera);
+			} else {
+				child.draw(scene.modelViewMatrix, camera.projectionMatrix, camera);
+			}
+		});
+	}
+
 	render(scene, camera) {
 		gl = GL.get();
 		this._reset(gl);
@@ -114,18 +125,28 @@ export default class Renderer {
 		// Update the scene
 		scene.update();
 
-		// this.info.vertices = 0;
+		// Draw the scene objects
+		this._drawObjects(scene, scene.projectionMatrix, scene.modelViewMatrix, camera);
+	}
 
-		// Render the scene objects
-		scene.objects.forEach(child => {
-			if (child.isInstanced) {
-				child.drawInstance(scene.modelViewMatrix, camera.projectionMatrix, camera);
-			} else {
-				child.draw(scene.modelViewMatrix, camera.projectionMatrix, camera);
-			}
-			// this.info.vertices += child.geometry.vertices.length / 3;
-		});
+	renderVive(scene, frameData) {
+		gl = GL.get();
+		this._reset(gl);
 
-		// console.log(this.info.vertices);
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+		// Update the scene
+		scene.update();
+
+		// Draw both eyes
+
+		// Left
+		gl.viewport(0.0, 0.0, gl.drawingBufferWidth * 0.5, gl.drawingBufferHeight);
+		this._drawObjects(scene, frameData.leftProjectionMatrix, frameData.leftViewMatrix);
+
+		// Right
+		gl.viewport(gl.drawingBufferWidth * 0.5, 0,
+			gl.drawingBufferWidth * 0.5, gl.drawingBufferHeight);
+		this._drawObjects(scene, frameData.rightProjectionMatrix, frameData.rightViewMatrix);
 	}
 }

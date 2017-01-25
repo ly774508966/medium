@@ -107,7 +107,7 @@ export default class Mesh extends Object3D {
 			gl.cullFace(this.shader.culling);
 		}
 
-		extensions.angleInstanceArrays.drawElementsInstancedANGLE(gl.TRIANGLES,
+		extensions.angleInstanceArrays.drawElementsInstancedANGLE(this.shader.drawType,
 			this.geometry.attributes.aIndex.numItems, gl.UNSIGNED_SHORT, 0, this.instanceCount);
 
 		// Unbind instanced buffers

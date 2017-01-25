@@ -158,7 +158,7 @@ export default class Shader {
 			this.setUniformLocation(uniformName);
 		});
 
-		console.log(this.name, this.uniforms);
+		// console.log(this.name, this.uniforms);
 	}
 
 	_processShader(shader, geometry) {
@@ -327,7 +327,6 @@ export default class Shader {
 			}
 		});
 
-
 		// Matrix
 		gl.uniformMatrix4fv(this.uniforms.uProjectionMatrix.location, false, projectionMatrix);
 		gl.uniformMatrix4fv(this.uniforms.uViewMatrix.location, false, modelViewMatrix);
@@ -345,7 +344,7 @@ export default class Shader {
 		}
 
 		// Camera
-		if (this.uniforms.uCameraPosition) {
+		if (camera && this.uniforms.uCameraPosition) {
 			gl.uniform3f(this.uniforms.uCameraPosition.location,
 				camera.position.v[0],
 				camera.position.v[1],

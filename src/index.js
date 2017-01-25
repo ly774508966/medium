@@ -15,6 +15,7 @@ import TextureCube from 'core/TextureCube';
 
 // Extras
 import Detect from 'extras/Detect';
+import WebVRVive from 'extras/WebVRVive';
 
 // Geometry
 import BoxGeometry from 'geometry/BoxGeometry';
@@ -37,6 +38,7 @@ import Color from 'math/Color';
 import Vector3 from 'math/Vector3';
 import Vector2 from 'math/Vector2';
 import Ray from 'math/Ray';
+import * as MathUtils from 'math/Utils';
 
 // Shaders
 import ShaderChunks from 'shaders/chunks/index';
@@ -62,6 +64,7 @@ export {
 	Texture,
 	TextureCube,
 	Detect,
+	WebVRVive,
 	BoxGeometry,
 	BufferAttribute,
 	Geometry,
@@ -76,6 +79,7 @@ export {
 	Vector3,
 	Vector2,
 	Ray,
+	MathUtils,
 	ShaderChunks,
 	OrbitControls,
 	ObjLoader,

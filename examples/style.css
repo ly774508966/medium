@@ -1,9 +1,13 @@
+html {
+	font-size: 15px;
+}
+
 body {
 	margin: 0;
 	overflow: hidden;
-	font-size: 15px;
 	background-color: black;
 	color: white;
+	font-size: 1rem;
 }
 
 a {
@@ -44,4 +48,36 @@ header {
 
 #ixviii:hover{
 	opacity: 1;
+}
+
+.status {
+	position: absolute;
+	top: 1.5rem;
+	left: 50%;
+	transform: translateX(-50%);
+	padding: 1rem;
+	background: rgba(255, 255, 255, 0.1);
+	border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+.btns-container {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	bottom: 1.5rem;
+	z-index: 2;
+}
+
+.btn {
+	padding: 1rem;
+	margin: 0.5rem;
+	color: white;
+	background: rgba(255, 255, 255, 0.1);
+	border: 1px solid rgba(255, 255, 255, 0.9);
+	outline: none;
+	transition: background 0.3s ease;
+}
+
+.btn:hover {
+	background: rgba(255, 255, 255, 0.3);
 }
