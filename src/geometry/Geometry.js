@@ -12,39 +12,39 @@ let gl;
 export default class Geometry {
 	constructor(vertices, indices, normals, uvs, colors) {
 		gl = GL.get();
-		this.vertices = vertices;
-		this.indices = indices;
-		this.normals = normals;
-		this.uvs = uvs;
-		this.colors = colors;
+		this.bufferVertices = vertices;
+		this.bufferIndices = indices;
+		this.bufferNormals = normals;
+		this.bufferUvs = uvs;
+		this.bufferColors = colors;
 		this.attributes = {};
 		this.attributesInstanced = {};
 
 		// Vertex positions
-		if (this.vertices) {
+		if (this.bufferVertices) {
 			this.addAttribute('aVertexPosition', gl.ARRAY_BUFFER, vertices, 3);
 			this.generateVertices();
 		}
 
 		// Vertex indices
-		if (this.indices) {
+		if (this.bufferIndices) {
 			this.addAttribute('aIndex', gl.ELEMENT_ARRAY_BUFFER, indices, 1, false);
 			this.generateFaces();
 		}
 
 		// Vertex normals
-		if (this.normals) {
+		if (this.bufferNormals) {
 			this.addAttribute('aVertexNormal', gl.ARRAY_BUFFER, normals, 3);
 		}
 
 		// uvs
-		if (this.uvs) {
+		if (this.bufferUvs) {
 			this.addAttribute('aUv', gl.ARRAY_BUFFER, uvs, 2);
 			this.generateUvs();
 		}
 
 		// Vertex colors
-		if (this.colors) {
+		if (this.bufferColors) {
 			this.addAttribute('aVertexColor', gl.ARRAY_BUFFER, colors, 3);
 		}
 	}
@@ -64,39 +64,39 @@ export default class Geometry {
 	}
 
 	generateVertices() {
-		this.vertex = [];
-		for (let i = 0; i < this.vertices.length; i += 3) {
-			const a = this.vertices[i];
-			const b = this.vertices[i + 1];
-			const c = this.vertices[i + 2];
+		this.vertices = [];
+		for (let i = 0; i < this.bufferVertices.length; i += 3) {
+			const a = this.bufferVertices[i];
+			const b = this.bufferVertices[i + 1];
+			const c = this.bufferVertices[i + 2];
 			const vertex = new Vector3(a, b, c);
-			this.vertex.push(vertex);
+			this.vertices.push(vertex);
 		}
 	}
 
 	generateFaces() {
-		this.face = [];
-		for (let i = 0; i < this.indices.length; i += 3) {
-			const ia = this.indices[i];
-			const ib = this.indices[i + 1];
-			const ic = this.indices[i + 2];
-			const a = this.vertex[ia];
-			const b = this.vertex[ib];
-			const c = this.vertex[ic];
+		this.faces = [];
+		for (let i = 0; i < this.bufferIndices.length; i += 3) {
+			const ia = this.bufferIndices[i];
+			const ib = this.bufferIndices[i + 1];
+			const ic = this.bufferIndices[i + 2];
+			const a = this.vertices[ia];
+			const b = this.vertices[ib];
+			const c = this.vertices[ic];
 
 			const face = new Face(ia, ib, ic, a, b, c);
-			this.face.push(face);
+			this.faces.push(face);
 		}
 	}
 
 	generateUvs() {
-		this.uv = [];
-		for (let i = 0; i < this.uvs.length; i += 2) {
-			const a = this.uvs[i];
-			const b = this.uvs[i + 1];
+		this.uvs = [];
+		for (let i = 0; i < this.bufferUvs.length; i += 2) {
+			const a = this.bufferUvs[i];
+			const b = this.bufferUvs[i + 1];
 
 			const uv = new Vector2(a, b);
-			this.uv.push(uv);
+			this.uvs.push(uv);
 		}
 	}
 }

@@ -9,11 +9,13 @@ import {
 	GridHelper,
 	OrbitControls,
 	AxisHelper,
-	NormalsHelper,
 	DirectionalLight,
-	Texture,
+	Color,
+	ShaderChunks,
 } from 'index';
-import dat from 'dat-gui';
+import {
+	Sierpinski,
+} from '../fractal';
 
 // Renderer
 const renderer = new Renderer({
@@ -30,41 +32,84 @@ const camera = new PerspectiveCamera({
 	fov: 45,
 });
 
-camera.position.set(10, 5, 10);
+const z = 6;
+camera.position.set(10 * z, 5 * z, 10 * z);
 camera.lookAt();
 
 const light = new DirectionalLight();
 light.position.set(1, 1, 1);
 
-const texture = new Texture({
-	src: '/assets/textures/texture.jpg',
-});
-const geometry = new BoxGeometry(1, 1, 1);
-const material = new Shader({
-	name: 'Box',
-	hookFragmentPre: `
-		uniform sampler2D uTexture0;
-	`,
-	hookFragmentMain: `
-		color = texture2D(uTexture0, vUv).rgb;
-	`,
+const sierpinski = new Sierpinski();
+
+const holes = [7, 11, 12, 13, 17, 27, 32, 35, 36, 37, 38, 39, 42, 47, 51, 52, 53, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 71, 72, 73, 77, 81, 82, 83, 85, 86, 87, 88, 89, 91, 92, 93, 97, 107, 111, 112, 113, 117];
+
+const positions = sierpinski.generate(40, 2, 5, holes);
+
+const totalInstances = positions.length;
+const data = new Float32Array(totalInstances * 3);
+let i3 = 0;
+for (let i = 0; i < totalInstances; i++) {
+	i3 = i * 3;
+	data[i3] = positions[i][0];
+	data[i3 + 1] = positions[i][1];
+	data[i3 + 2] = positions[i][2];
+}
+
+const size = sierpinski.logarithmicScale() / 2;
+const geometry = new BoxGeometry(size, size, size);
+geometry.addInstancedBufferAttribute('aOffset', data, 3);
+
+const mesh = new Mesh(geometry, new Shader({
 	uniforms: {
-		uTexture0: {
-			type: 't',
-			value: texture.texture,
+		uDiffuse: {
+			type: '3f',
+			value: new Color(0xFFFFFF).v,
+		},
+		uFogStart: {
+			type: 'f',
+			value: 0.0,
+		},
+		uFogEnd: {
+			type: 'f',
+			value: 50.0,
+		},
+		uFogDensity: {
+			type: 'f',
+			// value: 0.054,
+			value: 0.027,
 		},
 	},
+	hookVertexPre: `
+		attribute vec3 aOffset;
+		uniform float uFogStart;
+		uniform float uFogEnd;
+		uniform float uFogDensity;
+		varying float vFogAmount;
+		${ShaderChunks.Fog.exp2}
+	`,
+	hookVertexMain: `
+		transformed = aOffset;
+	`,
+	hookVertexEnd: `
+		float fogDistance = length(gl_Position.xyz);
+		vFogAmount = fogExp2(fogDistance, uFogDensity);
+	`,
+	hookFragmentPre: `
+		varying float vFogAmount;
+	`,
+	hookFragmentEnd: `
+		vec3 fogColor = vec3(0.0);
+		gl_FragColor = vec4(mix(color, fogColor, vFogAmount), 1.0);
+	`,
 	directionalLights: [light.uniforms],
-});
-const box = new Mesh(geometry, material);
+}));
+
+
+mesh.setInstanceCount(totalInstances);
 
 scene.add(light);
-scene.add(box);
+scene.add(mesh);
 
-const boxNormalsHelper = new NormalsHelper(box);
-scene.add(boxNormalsHelper);
-
-boxNormalsHelper.setParent(box);
 
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas);
@@ -126,12 +171,15 @@ window.addEventListener('resize', resize);
 
 function update() {
 	if (WebVRVive.ready && WebVRVive.vrDisplay.isPresenting) {
-
 		WebVRVive.vrDisplay.requestAnimationFrame(update);
 
 		WebVRVive.getFrameData();
 
-		renderer.renderVive(scene, WebVRVive.frameData);
+		renderer.renderWebVR(scene,
+			WebVRVive.frameData.leftProjectionMatrix,
+			WebVRVive.frameData.leftViewMatrix,
+			WebVRVive.frameData.rightProjectionMatrix,
+			WebVRVive.frameData.rightViewMatrix);
 		WebVRVive.vrDisplay.submitFrame();
 	} else {
 		requestAnimationFrame(update);

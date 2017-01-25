@@ -60,6 +60,10 @@ header {
 	border: 1px solid rgba(255, 255, 255, 0.9);
 }
 
+.status.error {
+	background: rgba(255, 0, 0, 0.75);
+}
+
 .btns-container {
 	position: absolute;
 	left: 50%;

@@ -22,6 +22,7 @@ export default class Renderer {
 		const defaults = {
 			width: RENDERER_DEFAULT_WIDTH,
 			height: RENDERER_DEFAULT_HEIGHT,
+			ratio: RENDERER_DEFAULT_WIDTH / RENDERER_DEFAULT_HEIGHT,
 			preserveDrawingBuffer: false,
 			pixelRatio: 1,
 		};
@@ -71,6 +72,7 @@ export default class Renderer {
 		if (newWidth !== this.width || newHeight !== this.height) {
 			this.width = width * this.pixelRatio;
 			this.height = height * this.pixelRatio;
+			this.ratio = this.width / this.height;
 
 			this.canvas.width = this.width;
 			this.canvas.height = this.height;
@@ -94,9 +96,9 @@ export default class Renderer {
 		// Render the scene objects
 		scene.objects.forEach(child => {
 			if (child.isInstanced) {
-				child.drawInstance(scene.modelViewMatrix, camera.projectionMatrix, camera);
+				child.drawInstance(modelViewMatrix, projectionMatrix, camera);
 			} else {
-				child.draw(scene.modelViewMatrix, camera.projectionMatrix, camera);
+				child.draw(modelViewMatrix, projectionMatrix, camera);
 			}
 		});
 	}
@@ -110,8 +112,7 @@ export default class Renderer {
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 		if (camera.isPespectiveCamera) {
-			const ratio = this.width / this.height;
-			mat4.perspective(camera.projectionMatrix, camera.fov, ratio, camera.near, camera.far);
+			mat4.perspective(camera.projectionMatrix, camera.fov, this.ratio, camera.near, camera.far);
 		} else if (camera.isOrthographicCamera) {
 			mat4.ortho(camera.projectionMatrix, -1.0, 1.0, -1.0, 1.0, camera.near, camera.far);
 		} else {
@@ -126,27 +127,73 @@ export default class Renderer {
 		scene.update();
 
 		// Draw the scene objects
-		this._drawObjects(scene, scene.projectionMatrix, scene.modelViewMatrix, camera);
+		this._drawObjects(scene, camera.projectionMatrix, scene.modelViewMatrix, camera);
 	}
 
-	renderVive(scene, frameData) {
+	// For debug atm
+	renderStereo(scene,
+		leftProjectionMatrix,
+		leftViewMatrix,
+		rightProjectionMatrix,
+		rightViewMatrix,
+		cameraL,
+		cameraR,
+	) {
 		gl = GL.get();
 		this._reset(gl);
 
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+		// Draw both eyes
+
+		mat4.identity(scene.modelViewMatrix);
+
 		// Update the scene
 		scene.update();
 
+		// Left
+		gl.viewport(0.0, 0.0, gl.drawingBufferWidth * 0.5, gl.drawingBufferHeight);
+
+		mat4.perspective(leftProjectionMatrix, cameraL.fov, this.ratio, cameraL.near, cameraL.far);
+		mat4.lookAt(leftViewMatrix, cameraL.position.v, cameraL.center.v, cameraL.up.v);
+
+		this._drawObjects(scene, leftProjectionMatrix, leftViewMatrix);
+
+		// Right
+		gl.viewport(gl.drawingBufferWidth * 0.5,
+			0, gl.drawingBufferWidth * 0.5, gl.drawingBufferHeight);
+
+		mat4.perspective(rightProjectionMatrix, cameraR.fov, this.ratio, cameraR.near, cameraR.far);
+		mat4.lookAt(rightViewMatrix, cameraR.position.v, cameraR.center.v, cameraR.up.v);
+
+		this._drawObjects(scene, rightProjectionMatrix, rightViewMatrix);
+	}
+
+	renderWebVR(scene,
+		leftProjectionMatrix,
+		leftViewMatrix,
+		rightProjectionMatrix,
+		rightViewMatrix,
+	) {
+		gl = GL.get();
+		this._reset(gl);
+
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
 		// Draw both eyes
+
+		mat4.identity(scene.modelViewMatrix);
+
+		// Update the scene
+		scene.update();
 
 		// Left
 		gl.viewport(0.0, 0.0, gl.drawingBufferWidth * 0.5, gl.drawingBufferHeight);
-		this._drawObjects(scene, frameData.leftProjectionMatrix, frameData.leftViewMatrix);
+		this._drawObjects(scene, leftProjectionMatrix, leftViewMatrix);
 
 		// Right
-		gl.viewport(gl.drawingBufferWidth * 0.5, 0,
-			gl.drawingBufferWidth * 0.5, gl.drawingBufferHeight);
-		this._drawObjects(scene, frameData.rightProjectionMatrix, frameData.rightViewMatrix);
+		gl.viewport(gl.drawingBufferWidth * 0.5,
+			0, gl.drawingBufferWidth * 0.5, gl.drawingBufferHeight);
+		this._drawObjects(scene, rightProjectionMatrix, rightViewMatrix);
 	}
 }

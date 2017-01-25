@@ -107,8 +107,6 @@ const geometry0 = new BoxGeometry(2, 2, 2);
 const mesh0 = new Mesh(geometry0, material);
 mesh0.setParent(container);
 
-container.xx = true;
-
 const geometry1 = new SphereGeometry(2, 32, 32);
 const mesh1 = new Mesh(geometry1, material2);
 mesh1.isSphere = true;

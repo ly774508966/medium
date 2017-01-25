@@ -91,10 +91,6 @@ export default class Shader {
 			});
 		}
 
-		if (geometry.normals) {
-			this.vertexNormals = true;
-		}
-
 		// console.log(this.vertexPositionAttribute);
 		// console.log(this.vertexNormalAttribute);
 		// console.log(this.vertexColorAttribute);
@@ -162,7 +158,7 @@ export default class Shader {
 	}
 
 	_processShader(shader, geometry) {
-		const gl = GL.get();
+		gl = GL.get();
 		let defines = '';
 
 		const precision =
@@ -172,15 +168,15 @@ export default class Shader {
 			defines += `#define ${define} \n`;
 		}
 
-		if (geometry.uvs) {
+		if (geometry.bufferUvs) {
 			addDefine('uv');
 		}
 
-		if (geometry.colors) {
+		if (geometry.bufferColors) {
 			addDefine('vertexColors');
 		}
 
-		if (geometry.normals) {
+		if (geometry.bufferNormals) {
 			addDefine('normals');
 		}
 
@@ -335,13 +331,12 @@ export default class Shader {
 		mat4.identity(inversedModelViewMatrix);
 		mat4.invert(inversedModelViewMatrix, modelMatrix);
 
-		if (this.vertexNormals) {
-			// removes scale and translation
-			vec3.set(normalMatrix, 0, 0, 0);
-			mat3.fromMat4(normalMatrix, inversedModelViewMatrix);
-			mat3.transpose(normalMatrix, normalMatrix);
-			gl.uniformMatrix3fv(this.uniforms.uNormalMatrix.location, false, normalMatrix);
-		}
+		// Create normal normalMatrix
+		// Removes scale and translation
+		vec3.set(normalMatrix, 0, 0, 0);
+		mat3.fromMat4(normalMatrix, inversedModelViewMatrix);
+		mat3.transpose(normalMatrix, normalMatrix);
+		gl.uniformMatrix3fv(this.uniforms.uNormalMatrix.location, false, normalMatrix);
 
 		// Camera
 		if (camera && this.uniforms.uCameraPosition) {

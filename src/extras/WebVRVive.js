@@ -15,10 +15,10 @@ class WebVRVive {
 		this._createUI();
 
 		if (navigator.getVRDevices) {
-			this.uiUpdateStatus(ERROR_WEBVR_DEVICE_NOT_LATEST);
+			this.uiUpdateStatus(ERROR_WEBVR_DEVICE_NOT_LATEST, 'error');
 			warn(ERROR_WEBVR_DEVICE_NOT_LATEST);
 		} else {
-			this.uiUpdateStatus(ERROR_WEBVR_DEVICE_NOT_SUPPORTED);
+			this.uiUpdateStatus(ERROR_WEBVR_DEVICE_NOT_SUPPORTED, 'error');
 			warn(ERROR_WEBVR_DEVICE_NOT_SUPPORTED);
 		}
 	}
@@ -80,8 +80,10 @@ class WebVRVive {
 		}
 	}
 
-	uiUpdateStatus(text) {
+	uiUpdateStatus(text = '', state = '') {
 		this.ui.status.innerHTML = text;
+		this.ui.status.className = 'status';
+		this.ui.status.classList.add(state);
 	}
 
 	_createUI() {
@@ -124,7 +126,7 @@ class WebVRVive {
 		this.vrDisplay.requestPresent([{ source: this.renderer.canvas }]).then(() => {
 			// Nothing to do because we're handling things in onVRPresentChange.
 		}, () => {
-			this.uiUpdateStatus('requestPresent failed');
+			this.uiUpdateStatus('requestPresent failed', 'error');
 		});
 	}
 
@@ -137,7 +139,7 @@ class WebVRVive {
 		this.vrDisplay.exitPresent().then(() => {
 			// Nothing to do because we're handling things in onVRPresentChange.
 		}, () => {
-			this.uiUpdateStatus.addError('exitPresent failed');
+			this.uiUpdateStatus('exitPresent failed', 'error');
 		});
 	}
 
@@ -161,7 +163,7 @@ class WebVRVive {
 			// If we have an external display take down the presenting message and
 			// change the button back to "Enter VR".
 			if (this.vrDisplay.capabilities.hasExternalDisplay) {
-				this.uiUpdateStatus('');
+				this.uiUpdateStatus();
 				this.uiToggleButton(this.ui.enter, true);
 				this.uiToggleButton(this.ui.exit, false);
 			}
