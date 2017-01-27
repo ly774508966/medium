@@ -133,7 +133,7 @@ scene.add(axis);
 controls.update();
 
 // WebVR
-if (!WebVRVive.avialable) {
+if (WebVRVive.avialable) {
 	const btnsContainer = document.createElement('div');
 	btnsContainer.classList.add('btns-container');
 	btnsContainer.appendChild(WebVRVive.ui.enter);
@@ -142,7 +142,7 @@ if (!WebVRVive.avialable) {
 	document.body.appendChild(btnsContainer);
 	document.body.appendChild(WebVRVive.ui.status);
 
-	// WebVRVive.setup();
+	WebVRVive.setup();
 
 } else {
 	console.log('no supported');
@@ -152,7 +152,8 @@ function resize() {
 	let width = window.innerWidth;
 	let height = window.innerHeight;
 
-	if (WebVRVive.available && WebVRVive.vrDisplay.isPresenting) {
+	// if (WebVRVive.available && WebVRVive.vrDisplay.isPresenting) {
+	if (WebVRVive.available && WebVRVive.vrDisplay) {
 		const leftEye = WebVRVive.getEyeParameters('left');
 		const rightEye = WebVRVive.getEyeParameters('right');
 		// For simplicity we're going to render both eyes at the same size,

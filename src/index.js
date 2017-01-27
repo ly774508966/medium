@@ -12,6 +12,7 @@ import Scene from 'core/Scene';
 import Shader from 'core/Shader';
 import Texture from 'core/Texture';
 import TextureCube from 'core/TextureCube';
+import TextureVideo from 'core/TextureVideo';
 
 // Extras
 import Detect from 'extras/Detect';
@@ -63,6 +64,7 @@ export {
 	Shader,
 	Texture,
 	TextureCube,
+	TextureVideo,
 	Detect,
 	WebVRVive,
 	BoxGeometry,

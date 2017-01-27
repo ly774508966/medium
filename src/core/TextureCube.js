@@ -22,7 +22,7 @@ export default class TextureCube {
 		this.texture = gl.createTexture();
 		this.images = [];
 
-		this.updateTexture(this.placeholder());
+		this.update(this.placeholder());
 
 		this.src.forEach((src, i) => {
 			this.images[i] = new Image();
@@ -43,7 +43,7 @@ export default class TextureCube {
 		this.emit('loaded');
 	}
 
-	updateTexture(images) {
+	update(images) {
 		gl = GL.get();
 
 		gl.bindTexture(gl.TEXTURE_CUBE_MAP, this.texture);
@@ -97,13 +97,9 @@ export default class TextureCube {
 
 		const imageSize = Math.max(image.width, image.height);
 
-		let size = sizes.reduce((prev, curr) => {
+		const size = sizes.reduce((prev, curr) => {
 			return (Math.abs(curr - imageSize) < Math.abs(prev - imageSize) ? curr : prev);
 		});
-
-		if (this.size) {
-			size = this.size;
-		}
 
 		// Draw canvas with texture cropped inside
 		const canvas = document.createElement('canvas');

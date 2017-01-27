@@ -7,39 +7,47 @@ export default class Texture {
 	constructor(options) {
 		EventDispatcher(this);
 		gl = GL.get();
+		const defaults = {
+			src: '',
+			magFilter: gl.NEAREST,
+			minFilter: gl.NEAREST,
+			wrapS: gl.CLAMP_TO_EDGE,
+			wrapT: gl.CLAMP_TO_EDGE,
+		};
 
-		this.src = '';
-		this.size = null;
-		this.magFilter = gl.NEAREST;
-		this.minFilter = gl.NEAREST;
-		this.wrapS = gl.MIRRORED_REPEAT;
-		this.wrapT = gl.MIRRORED_REPEAT;
-
-		Object.assign(this, options);
+		Object.assign(this, defaults, options);
 
 		this.texture = gl.createTexture();
+		gl.bindTexture(gl.TEXTURE_2D, this.texture);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.placeholder());
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, this.magFilter);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, this.minFilter);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, this.wrapS);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, this.wrapT);
+		gl.bindTexture(gl.TEXTURE_2D, null);
+
 		this.image = new Image();
 		this.image.onload = this.onTextureLoaded;
-		this.image.src = this.src;
 
-		this.updateTexture(this.placeholder());
+		this.updateImage();
 	}
 
 	onTextureLoaded = () => {
-		this.updateTexture(this.image);
+		this.update(this.image);
 		this.emit('loaded');
 	}
 
-	updateTexture(image) {
+	updateImage(src) {
+		this.src = src || this.src;
+		this.image.src = this.src;
+	}
+
+	update(image) {
 		gl = GL.get();
 
 		gl.bindTexture(gl.TEXTURE_2D, this.texture);
 		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this._resizeImage(image));
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, this.magFilter);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, this.minFilter);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, this.wrapS);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, this.wrapT);
 		gl.bindTexture(gl.TEXTURE_2D, null);
 	}
 
@@ -66,13 +74,9 @@ export default class Texture {
 
 		const imageSize = Math.max(this.image.width, this.image.height);
 
-		let size = sizes.reduce((prev, curr) => {
+		const size = sizes.reduce((prev, curr) => {
 			return (Math.abs(curr - imageSize) < Math.abs(prev - imageSize) ? curr : prev);
 		});
-
-		if (this.size) {
-			size = this.size;
-		}
 
 		// Draw canvas with texture cropped inside
 		const canvas = document.createElement('canvas');
