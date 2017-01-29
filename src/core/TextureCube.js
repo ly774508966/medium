@@ -39,7 +39,7 @@ export default class TextureCube {
 	}
 
 	onTextureLoaded = () => {
-		this.updateTexture(this.images);
+		this.update(this.images);
 		this.emit('loaded');
 	}
 

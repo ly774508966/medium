@@ -124,17 +124,17 @@ new ObjLoader('assets/models/mass.obj').then(objGeometry => {
 
 	const material = new Shader({
 		hookVertexPre: `
-			varying vec3 vTexturePosition;
+			out vec3 vTexturePosition;
 		`,
 		hookVertexEnd: `
 			vTexturePosition = (uModelMatrix * vec4(aVertexPosition, 1.0)).xyz;
 		`,
 		hookFragmentPre: `
 			uniform samplerCube uTexture0;
-			varying vec3 vTexturePosition;
+			in vec3 vTexturePosition;
 		`,
 		hookFragmentMain: `
-			color = textureCube(uTexture0, vTexturePosition).rgb;
+			color = texture(uTexture0, vTexturePosition).rgb;
 		`,
 		pointLights: [pointLight0.uniforms, pointLight1.uniforms, pointLight2.uniforms],
 		uniforms: {

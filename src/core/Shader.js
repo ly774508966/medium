@@ -88,11 +88,9 @@ export default class Shader {
 		});
 
 		// Cache instanced attribute locations
-		if (extensions.angleInstanceArraysSupported) {
-			Object.keys(geometry.attributesInstanced).forEach(attributeName => {
-				this.setAttributeLocation(attributeName);
-			});
-		}
+		Object.keys(geometry.attributesInstanced).forEach(attributeName => {
+			this.setAttributeLocation(attributeName);
+		});
 
 		// console.log(this.vertexPositionAttribute);
 		// console.log(this.vertexNormalAttribute);

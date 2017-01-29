@@ -3,9 +3,10 @@ import Shader from 'core/Shader';
 import * as GL from 'core/GL';
 import { capabilities } from 'core/Capabilities';
 import Geometry from 'geometry/Geometry';
+import shaderVersion from 'shaders/chunks/Version.glsl';
 
-const vertexShader = `
-	attribute vec3 aVertexPosition;
+const vertexShader = `${shaderVersion}
+	in vec3 aVertexPosition;
 
 	uniform mat4 uViewMatrix;
 	uniform mat4 uProjectionMatrix;
@@ -18,11 +19,12 @@ const vertexShader = `
 `;
 
 function fragmentShader() {
-	return `
+	return `${shaderVersion}
 	precision ${capabilities.precision} float;
+	out vec4 outputColor;
 
 	void main(void){
-		gl_FragColor = vec4(1.0);
+		outputColor = vec4(1.0);
 	}
 	`;
 }

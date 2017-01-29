@@ -24,9 +24,9 @@ camera.position.set(0, 0, 1);
 const geometry = new PlaneGeometry(1, 1);
 const material = new Shader({
 	name: 'Plane',
-    hookFragmentEnd: `
-        gl_FragColor = vec4(vUv, 1.0, 1.0);
-    `,
+	hookFragmentEnd: `
+		outputColor = vec4(vUv, 1.0, 1.0);
+ `,
 });
 
 const plane = new Mesh(geometry, material);

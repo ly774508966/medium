@@ -113,11 +113,11 @@ const mesh = new Mesh(geometry, new Shader({
 		},
 	},
 	hookVertexPre: `
-		attribute vec3 aOffset;
+		in vec3 aOffset;
 		uniform float uFogStart;
 		uniform float uFogEnd;
 		uniform float uFogDensity;
-		varying float vFogAmount;
+		out float vFogAmount;
 		${ShaderChunks.Fog.exp2}
 	`,
 	hookVertexMain: `
@@ -128,11 +128,11 @@ const mesh = new Mesh(geometry, new Shader({
 		vFogAmount = fogExp2(fogDistance, uFogDensity);
 	`,
 	hookFragmentPre: `
-		varying float vFogAmount;
+		in float vFogAmount;
 	`,
 	hookFragmentEnd: `
 		vec3 fogColor = vec3(0.0);
-		gl_FragColor = vec4(mix(color, fogColor, vFogAmount), 1.0);
+		outputColor = vec4(mix(color, fogColor, vFogAmount), 1.0);
 	`,
 	directionalLights: [light.uniforms],
 }));

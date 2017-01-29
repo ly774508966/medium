@@ -1,8 +1,8 @@
-import pointLights from 'shaders/chunks/PointLights.glsl';
+import shaderVersion from 'shaders/chunks/Version.glsl';
+import { pointLightsOut as pointLights } from 'shaders/chunks/PointLights.glsl';
 import { definePI, definePITwo } from 'shaders/chunks/Math.glsl';
 
-export default `
-
+export default `${shaderVersion}
 	${definePI}
 	${definePITwo}
 	#HOOK_DEFINES
@@ -12,30 +12,30 @@ export default `
 	uniform mat4 uViewMatrix;
 	uniform mat4 uModelMatrix;
 	uniform mat3 uNormalMatrix;
-	attribute vec3 aVertexPosition;
-	varying vec3 vPosition;
+	in vec3 aVertexPosition;
+	out vec3 vPosition;
 
 	// Camera
 	uniform vec3 uCameraPosition;
 
 	#ifdef vertexColors
-	attribute vec3 aVertexColor;
+	in vec3 aVertexColor;
 	#endif
 
 	// Color
 	uniform vec3 uDiffuse;
-	varying vec3 vDiffuse;
+	out vec3 vDiffuse;
 
 	// Normal
 	#ifdef normals
-	attribute vec3 aVertexNormal;
-	varying vec3 vNormal;
+	in vec3 aVertexNormal;
+	out vec3 vNormal;
 	#endif
 
 	// Uv
 	#ifdef uv
-	attribute vec2 aUv;
-	varying vec2 vUv;
+	in vec2 aUv;
+	out vec2 vUv;
 	#endif
 
 	// Lighting

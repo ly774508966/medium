@@ -60,15 +60,7 @@ function Capabilities(gl) {
 	};
 }
 
-function Extensions(gl) {
-	const angleInstanceArrays = gl.getExtension('ANGLE_instanced_arrays');
-	const angleInstanceArraysSupported = angleInstanceArrays !== undefined;
-
-	return {
-		angleInstanceArrays,
-		angleInstanceArraysSupported,
-	};
-}
+function Extensions(/* gl */) {}
 
 let capabilities = {};
 let extensions = {};

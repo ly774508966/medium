@@ -4,7 +4,6 @@ import {
 } from 'gl-matrix';
 import {
 	warn,
-	log,
 } from 'utils/Console';
 import {
 	RENDERER_DEFAULT_WIDTH,
@@ -43,8 +42,7 @@ export default class Renderer {
 		};
 
 		try {
-			gl = this.canvas.getContext('webgl', attributes) ||
-				this.canvas.getContext('experimental-webgl', attributes);
+			gl = this.canvas.getContext('webgl2', attributes);
 			GL.set(gl);
 		} catch (error) {
 			warn('Webgl not supported');

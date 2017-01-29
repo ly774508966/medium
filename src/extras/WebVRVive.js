@@ -13,7 +13,9 @@ class WebVRVive {
 		this.ready = false;
 		this.available = navigator.getVRDisplays !== undefined;
 		this._createUI();
+	}
 
+	setup() {
 		if (navigator.getVRDevices) {
 			this.uiUpdateStatus(ERROR_WEBVR_DEVICE_NOT_LATEST, 'error');
 			warn(ERROR_WEBVR_DEVICE_NOT_LATEST);
@@ -21,9 +23,6 @@ class WebVRVive {
 			this.uiUpdateStatus(ERROR_WEBVR_DEVICE_NOT_SUPPORTED, 'error');
 			warn(ERROR_WEBVR_DEVICE_NOT_SUPPORTED);
 		}
-	}
-
-	setup() {
 		if (!this.available) return;
 
 		this.frameData = new window.VRFrameData();

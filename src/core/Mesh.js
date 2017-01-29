@@ -2,10 +2,7 @@ import {
 	mat4,
 } from 'gl-matrix';
 import * as GL from '../core/GL';
-import { extensions } from 'core/Capabilities';
 import Object3D from 'core/Object3D';
-import { ERROR_EXTENSION_ANGLE_INSTANCE_ARRAYS } from 'core/Messages';
-import { warn } from 'utils/Console';
 
 let gl;
 let attribute;
@@ -23,9 +20,6 @@ export default class Mesh extends Object3D {
 
 	setInstanceCount(value) {
 		gl = GL.get();
-		if (!extensions.angleInstanceArraysSupported) {
-			warn(ERROR_EXTENSION_ANGLE_INSTANCE_ARRAYS);
-		}
 		this.isInstanced = true;
 		this.instanceCount = value;
 	}
@@ -101,8 +95,7 @@ export default class Mesh extends Object3D {
 			gl.bindBuffer(gl.ARRAY_BUFFER, attribute.buffer);
 			gl.vertexAttribPointer(this.shader.attributeLocations[attributeName],
 				attribute.itemSize, gl.FLOAT, false, 0, 0);
-			extensions.angleInstanceArrays
-				.vertexAttribDivisorANGLE(this.shader.attributeLocations[attributeName], 1);
+			gl.vertexAttribDivisor(this.shader.attributeLocations[attributeName], 1);
 		});
 
 		// Update modelMatrix
@@ -116,13 +109,12 @@ export default class Mesh extends Object3D {
 			gl.cullFace(this.shader.culling);
 		}
 
-		extensions.angleInstanceArrays.drawElementsInstancedANGLE(this.shader.drawType,
+		gl.drawArraysInstanced(this.shader.drawType,
 			this.geometry.attributes.aIndex.numItems, gl.UNSIGNED_SHORT, 0, this.instanceCount);
 
 		// Unbind instanced buffers
 		Object.keys(this.geometry.attributesInstanced).forEach(attributeName => {
-			extensions.angleInstanceArrays
-				.vertexAttribDivisorANGLE(this.shader.attributeLocations[attributeName], 0);
+			gl.vertexAttribDivisor(this.shader.attributeLocations[attributeName], 0);
 		});
 
 		// Culling disable

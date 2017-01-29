@@ -56,10 +56,6 @@ export default class Geometry {
 
 	addInstancedBufferAttribute(name, value, count) {
 		gl = GL.get();
-		if (!extensions.angleInstanceArraysSupported) {
-			warn(ERROR_EXTENSION_ANGLE_INSTANCE_ARRAYS);
-			return;
-		}
 		this.attributesInstanced[name] = new BufferAttribute(gl, gl.ARRAY_BUFFER, value, count);
 	}
 

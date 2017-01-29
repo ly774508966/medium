@@ -58,7 +58,7 @@ const material = new Shader({
 		if (dist < circleRadius) {
 			color = vec3(1.0);
 		}
-		gl_FragColor = vec4(color, 1.0);
+		outputColor = vec4(color, 1.0);
 	`,
 	uniforms: {
 		uDiffuse: {

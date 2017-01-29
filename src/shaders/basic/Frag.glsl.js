@@ -1,19 +1,20 @@
-import pointLights from 'shaders/chunks/PointLights.glsl';
+import shaderVersion from 'shaders/chunks/Version.glsl';
+import { pointLightsIn as pointLights } from 'shaders/chunks/PointLights.glsl';
 import directionalLights from 'shaders/chunks/DirectionalLights.glsl';
 
-export default `
+export default `${shaderVersion}
 	#HOOK_PRECISION
 	#HOOK_DEFINES
 
-	varying vec3 vDiffuse;
-	varying vec3 vPosition;
+	in vec3 vDiffuse;
+	in vec3 vPosition;
 
 	#ifdef normals
-	varying vec3 vNormal;
+	in vec3 vNormal;
 	#endif
 
 	#ifdef uv
-	varying vec2 vUv;
+	in vec2 vUv;
 	#endif
 
 	#ifdef directionalLights
@@ -24,6 +25,8 @@ export default `
 	#ifdef pointLights
 	${pointLights}
 	#endif
+
+	out vec4 outputColor;
 
 	#HOOK_FRAGMENT_PRE
 
@@ -59,7 +62,7 @@ export default `
 		}
 		#endif
 
-		gl_FragColor = vec4(color.rgb, 1.0);
+		outputColor = vec4(color.rgb, 1.0);
 
 		#HOOK_FRAGMENT_END
 	}

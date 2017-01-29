@@ -51,7 +51,7 @@ const material = new Shader({
 		uniform sampler2D uTexture0;
 	`,
 	hookFragmentMain: `
-		color = texture2D(uTexture0, vUv).rgb;
+		color = texture(uTexture0, vUv).rgb;
 	`,
 	uniforms: {
 		uTexture0: {
