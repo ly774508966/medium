@@ -37,7 +37,8 @@
   },
   "dependencies": {
     "gl-matrix": "^2.3.2",
-    "happens": "^0.6.0"
+    "happens": "^0.6.0",
+    "uuid": "^3.0.1"
   },
   "eslintConfig": {
     "parser": "babel-eslint",

@@ -99,4 +99,20 @@ export default class Geometry {
 			this.uvs.push(uv);
 		}
 	}
+
+	dispose() {
+		gl = GL.get();
+		// Dispose attributes and buffers
+		Object.keys(this.attributes).forEach(attributeName => {
+			console.log('attributeName', attributeName);
+			this.attributes[attributeName].dispose(gl);
+			delete this.attributes[attributeName];
+		});
+		Object.keys(this.attributesInstanced).forEach(attributeName => {
+			this.attributesInstanced[attributeName].dispose(gl);
+			delete this.attributesInstanced[attributeName];
+		});
+		delete this.attributes;
+		delete this.attributesInstanced;
+	}
 }

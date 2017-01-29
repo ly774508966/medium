@@ -2,6 +2,7 @@
   "demos": [
     "fullscreen",
     "instancing",
+    "memory",
     "obj",
     "pointlights",
     "raycast",

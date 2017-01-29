@@ -66,9 +66,12 @@ export default class Shader {
 		gl.attachShader(this.program, this.compiledVertexShader);
 		gl.attachShader(this.program, this.compiledFragmentShader);
 		gl.linkProgram(this.program);
+		gl.validateProgram(this.program);
 
 		if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
-			warn('Failed to initialise shaders');
+			const info = gl.getProgramInfoLog(this.program);
+			warn('Failed to initialise shaders', info);
+			return;
 		}
 
 		// Cache all attribute locations
@@ -348,7 +351,7 @@ export default class Shader {
 	}
 
 	_compile(type, source) {
-		const gl = GL.get();
+		gl = GL.get();
 		let shader;
 
 		// console.log('source', source);
@@ -370,5 +373,18 @@ export default class Shader {
 		}
 
 		return shader;
+	}
+
+	dispose() {
+		gl = GL.get();
+		// let attributeLocation;
+		// Object.keys(this.attributeLocations).forEach(attributeName => {
+		// 	attributeLocation = this.attributeLocations[attributeName];
+		// 	gl.disableVertexAttribArray(attributeLocation);
+		// });
+
+		gl.detachShader(this.program, this.compiledVertexShader);
+		gl.detachShader(this.program, this.compiledFragmentShader);
+		gl.deleteProgram(this.program);
 	}
 }

@@ -85,5 +85,7 @@ export default class Grid extends Mesh {
 
 		gl.lineWidth(this.lineWidth);
 		gl.drawArrays(gl.LINES, 0, this.geometry.attributes.aVertexPosition.numItems);
+
+		gl.bindBuffer(gl.ARRAY_BUFFER, null);
 	}
 }

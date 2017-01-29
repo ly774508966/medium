@@ -63,6 +63,15 @@ export default class Mesh extends Object3D {
 		gl.drawElements(this.shader.drawType,
 			this.geometry.attributes.aIndex.numItems, gl.UNSIGNED_SHORT, 0);
 
+		// Object.keys(this.geometry.attributes).forEach(attributeName => {
+		// 	if (attributeName !== 'aIndex') {
+		// 		attribute = this.geometry.attributes[attributeName];
+		// 		gl.bindBuffer(gl.ARRAY_BUFFER, null);
+		// 	}
+		// });
+
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+
 		// Culling disable
 		if (this.shader.culling !== false) {
 			gl.disable(gl.CULL_FACE);
@@ -120,5 +129,11 @@ export default class Mesh extends Object3D {
 		if (this.shader.culling !== false) {
 			gl.disable(gl.CULL_FACE);
 		}
+	}
+
+	dispose() {
+		this.shader.dispose();
+		this.geometry.dispose();
+		super.dispose();
 	}
 }

@@ -83,7 +83,11 @@ export default class Axis extends Mesh {
 
 		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
 
+		// console.log(this.geometry.attributes);
+
 		gl.lineWidth(this.lineWidth);
 		gl.drawArrays(gl.LINES, 0, this.geometry.attributes.aVertexPosition.numItems);
+
+		gl.bindBuffer(gl.ARRAY_BUFFER, null);
 	}
 }

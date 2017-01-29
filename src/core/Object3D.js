@@ -43,9 +43,23 @@ export default class Object3D {
 	}
 
 	setParent(parent) {
+		this.unParent();
 		if (parent.isObject3D) {
 			parent.children.push(this);
 			this.parent = parent;
 		}
+	}
+
+	unParent() {
+		if (this.parent === undefined) return;
+		const objectIndex = this.parent.children.indexOf(this);
+		if (objectIndex !== -1) {
+			this.parent.children.splice(objectIndex, 1);
+			this.parent = null;
+		}
+	}
+
+	dispose() {
+		this.unParent();
 	}
 }
