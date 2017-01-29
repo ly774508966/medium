@@ -18,3 +18,11 @@ Then add the following to your atom config:
 "file-types":
   "glsl.js": "source.glsl"
 ```
+
+# Todo
+
+[ ] VAO
+
+[ ] Fix instancing
+
+[ ] POW images
