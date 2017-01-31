@@ -94,7 +94,7 @@ holes = shuffle(holes);
 // holes = holes.splice(0, 10);
 holes = [7, 11, 12, 13, 17, 27, 32, 35, 36, 37, 38, 39, 42, 47, 51, 52, 53, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 71, 72, 73, 77, 81, 82, 83, 85, 86, 87, 88, 89, 91, 92, 93, 97, 107, 111, 112, 113, 117];
 
-const positions = sierpinski.generate(40, 1, 5, holes);
+const positions = sierpinski.generate(40, 2, 5, holes);
 
 const totalInstances = positions.length;
 const data = new Float32Array(totalInstances * 3);
@@ -154,8 +154,7 @@ const mesh = new Mesh(geometry, new Shader({
 	`,
 	hookFragmentEnd: `
 		vec3 fogColor = vec3(0.0);
-		// outputColor = vec4(mix(color, fogColor, vFogAmount), 1.0);
-		outputColor = vec4(color, 1.0);
+		outputColor = vec4(mix(color, fogColor, vFogAmount), 1.0);
 	`,
 	// drawType: Constants.DRAW_LINES,
 	directionalLights: [light.uniforms],

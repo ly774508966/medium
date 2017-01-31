@@ -18,6 +18,7 @@ export default class Mesh extends Object3D {
 		this.visible = true;
 		this.instanceCount = 0;
 		this.shader.create(this.geometry);
+		this.isInstanced = false;
 
 		gl = GL.get();
 
@@ -59,8 +60,8 @@ export default class Mesh extends Object3D {
 
 	setInstanceCount(value) {
 		gl = GL.get();
-		this.isInstanced = true;
 		this.instanceCount = value;
+		this.isInstanced = true;
 	}
 
 	draw(modelViewMatrix, projectionMatrix, camera) {
@@ -98,15 +99,6 @@ export default class Mesh extends Object3D {
 
 		gl = GL.get();
 
-		// // Bind instanced buffers
-		// Object.keys(this.geometry.attributesInstanced).forEach(attributeName => {
-		// 	attribute = this.geometry.attributesInstanced[attributeName];
-		// 	gl.bindBuffer(gl.ARRAY_BUFFER, attribute.buffer);
-		// 	gl.vertexAttribPointer(this.shader.attributeLocations[attributeName],
-		// 		attribute.itemSize, gl.FLOAT, false, 0, 0);
-		// 	gl.vertexAttribDivisor(this.shader.attributeLocations[attributeName], 1);
-		// });
-
 		// Update modelMatrix
 		this.updateMatrix();
 
@@ -121,17 +113,10 @@ export default class Mesh extends Object3D {
 
 		this.vao.bind();
 
-		console.log(this.geometry.attributes.aIndex.numItems);
-
-		gl.drawArraysInstanced(this.shader.drawType,
+		gl.drawElementsInstanced(this.shader.drawType,
 			this.geometry.attributes.aIndex.numItems, gl.UNSIGNED_SHORT, 0, this.instanceCount);
 
 		this.vao.unbind();
-
-		// Unbind instanced buffers
-		// Object.keys(this.geometry.attributesInstanced).forEach(attributeName => {
-		// 	gl.vertexAttribDivisor(this.shader.attributeLocations[attributeName], 0);
-		// });
 
 		// Culling disable
 		if (this.shader.culling !== false) {

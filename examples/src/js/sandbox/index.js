@@ -60,41 +60,41 @@ for (let i = 0; i < 6; i++) {
 	}
 }
 
-// const light = new DirectionalLight();
-// light.position.set(1, 1, 1);
-//
-// const texture = new Texture({
-// 	src: '/assets/textures/texture.jpg',
-// });
-// const geometry = new BoxGeometry(1, 1, 1);
-// const material = new Shader({
-// 	name: 'Box',
-// 	hookFragmentPre: `
-// 		uniform sampler2D uTexture0;
-// 	`,
-// 	hookFragmentMain: `
-// 		color = texture(uTexture0, vUv).rgb;
-// 	`,
-// 	uniforms: {
-// 		uTexture0: {
-// 			type: 't',
-// 			value: texture.texture,
-// 		},
-// 	},
-// 	directionalLights: [light.uniforms],
-// });
-// const box = new Mesh(geometry, material);
-//
-// scene.add(light);
-// scene.add(box);
+const light = new DirectionalLight();
+light.position.set(1, 1, 1);
 
-// box.position.x = 3;
-// box.position.y = 3;
+const texture = new Texture({
+	src: '/assets/textures/texture.jpg',
+});
+geometry = new BoxGeometry(1, 1, 1);
+const material = new Shader({
+	name: 'Box',
+	hookFragmentPre: `
+		uniform sampler2D uTexture0;
+	`,
+	hookFragmentMain: `
+		color = texture(uTexture0, vUv).rgb;
+	`,
+	uniforms: {
+		uTexture0: {
+			type: 't',
+			value: texture.texture,
+		},
+	},
+	directionalLights: [light.uniforms],
+});
+const box = new Mesh(geometry, material);
 
-// const boxNormalsHelper = new NormalsHelper(box);
-// scene.add(boxNormalsHelper);
+scene.add(light);
+scene.add(box);
 
-// boxNormalsHelper.setParent(box);
+box.position.x = 3;
+box.position.y = 3;
+
+const boxNormalsHelper = new NormalsHelper(box);
+scene.add(boxNormalsHelper);
+
+boxNormalsHelper.setParent(box);
 
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas);
@@ -128,10 +128,10 @@ window.addEventListener('resize', resize);
 
 function update() {
 	requestAnimationFrame(update);
-	// box.rotation.x += 0.01;
-	// box.rotation.y += 0.01;
-	// plane.rotation.x += 0.01;
-	// plane.rotation.y += 0.01;
+	box.rotation.x += 0.01;
+	box.rotation.y += 0.01;
+	plane.rotation.x += 0.01;
+	plane.rotation.y += 0.01;
 	renderer.render(scene, camera);
 }
 update();
