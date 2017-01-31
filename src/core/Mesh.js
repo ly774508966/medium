@@ -3,6 +3,7 @@ import {
 } from 'gl-matrix';
 import * as GL from '../core/GL';
 import Object3D from 'core/Object3D';
+import Vao from 'core/Vao';
 
 let gl;
 let attribute;
@@ -12,10 +13,48 @@ export default class Mesh extends Object3D {
 		super();
 		this.geometry = geometry;
 		this.shader = shader;
-		this.shader.create(this.geometry);
+		this.vao = new Vao();
 		this.modelMatrix = mat4.create();
 		this.visible = true;
 		this.instanceCount = 0;
+		this.shader.create(this.geometry);
+
+		gl = GL.get();
+
+		// Setup vao
+		this.vao.bind();
+
+		// Attributes
+		Object.keys(this.geometry.attributes).forEach(attributeName => {
+			if (attributeName !== 'aIndex') {
+				// enableVertexAttribArray
+				this.shader.setAttributeLocation(attributeName);
+				// Bind buffer
+				this.geometry.attributes[attributeName].bind();
+				// vertexAttribPointer
+				this.shader.setAttributePointer(attributeName);
+			}
+		});
+
+		// Instanced Attributes
+		Object.keys(this.geometry.attributesInstanced).forEach(attributeName => {
+			if (attributeName !== 'aIndex') {
+				// enableVertexAttribArray
+				this.shader.setAttributeLocation(attributeName);
+				// Bind buffer
+				this.geometry.attributesInstanced[attributeName].bind();
+				// vertexAttribPointer
+				this.shader.setAttributeInstancedPointer(attributeName);
+				gl.vertexAttribDivisor(this.shader.attributeLocations[attributeName], 1);
+			}
+		});
+
+		// Bind index buffer
+		if (this.geometry.bufferIndices) {
+			this.geometry.attributes.aIndex.bind();
+		}
+
+		this.vao.unbind();
 	}
 
 	setInstanceCount(value) {
@@ -29,23 +68,10 @@ export default class Mesh extends Object3D {
 
 		gl = GL.get();
 
-		this.shader.bindProgram();
-
-		// Bind buffers
-		Object.keys(this.geometry.attributes).forEach(attributeName => {
-			if (attributeName !== 'aIndex') {
-				attribute = this.geometry.attributes[attributeName];
-				gl.bindBuffer(gl.ARRAY_BUFFER, attribute.buffer);
-				gl.vertexAttribPointer(this.shader.attributeLocations[attributeName],
-					attribute.itemSize, gl.FLOAT, false, 0, 0);
-			}
-		});
-
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.geometry.attributes.aIndex.buffer);
-
 		// Update modelMatrix
 		this.updateMatrix();
 
+		this.shader.bindProgram();
 		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix, camera);
 
 		// Culling enable
@@ -54,17 +80,12 @@ export default class Mesh extends Object3D {
 			gl.cullFace(this.shader.culling);
 		}
 
+		this.vao.bind();
+
 		gl.drawElements(this.shader.drawType,
 			this.geometry.attributes.aIndex.numItems, gl.UNSIGNED_SHORT, 0);
 
-		// Object.keys(this.geometry.attributes).forEach(attributeName => {
-		// 	if (attributeName !== 'aIndex') {
-		// 		attribute = this.geometry.attributes[attributeName];
-		// 		gl.bindBuffer(gl.ARRAY_BUFFER, null);
-		// 	}
-		// });
-
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+		this.vao.unbind();
 
 		// Culling disable
 		if (this.shader.culling !== false) {
@@ -77,30 +98,19 @@ export default class Mesh extends Object3D {
 
 		gl = GL.get();
 
-		this.shader.bindProgram();
-
-		// Bind buffers
-		Object.keys(this.geometry.attributes).forEach(attributeName => {
-			if (attributeName !== 'aIndex') {
-				attribute = this.geometry.attributes[attributeName];
-				gl.bindBuffer(gl.ARRAY_BUFFER, attribute.buffer);
-				gl.vertexAttribPointer(this.shader.attributeLocations[attributeName],
-					attribute.itemSize, gl.FLOAT, false, 0, 0);
-			}
-		});
-
-		// Bind instanced buffers
-		Object.keys(this.geometry.attributesInstanced).forEach(attributeName => {
-			attribute = this.geometry.attributesInstanced[attributeName];
-			gl.bindBuffer(gl.ARRAY_BUFFER, attribute.buffer);
-			gl.vertexAttribPointer(this.shader.attributeLocations[attributeName],
-				attribute.itemSize, gl.FLOAT, false, 0, 0);
-			gl.vertexAttribDivisor(this.shader.attributeLocations[attributeName], 1);
-		});
+		// // Bind instanced buffers
+		// Object.keys(this.geometry.attributesInstanced).forEach(attributeName => {
+		// 	attribute = this.geometry.attributesInstanced[attributeName];
+		// 	gl.bindBuffer(gl.ARRAY_BUFFER, attribute.buffer);
+		// 	gl.vertexAttribPointer(this.shader.attributeLocations[attributeName],
+		// 		attribute.itemSize, gl.FLOAT, false, 0, 0);
+		// 	gl.vertexAttribDivisor(this.shader.attributeLocations[attributeName], 1);
+		// });
 
 		// Update modelMatrix
 		this.updateMatrix();
 
+		this.shader.bindProgram();
 		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix, camera);
 
 		// Culling enable
@@ -109,13 +119,19 @@ export default class Mesh extends Object3D {
 			gl.cullFace(this.shader.culling);
 		}
 
+		this.vao.bind();
+
+		console.log(this.geometry.attributes.aIndex.numItems);
+
 		gl.drawArraysInstanced(this.shader.drawType,
 			this.geometry.attributes.aIndex.numItems, gl.UNSIGNED_SHORT, 0, this.instanceCount);
 
+		this.vao.unbind();
+
 		// Unbind instanced buffers
-		Object.keys(this.geometry.attributesInstanced).forEach(attributeName => {
-			gl.vertexAttribDivisor(this.shader.attributeLocations[attributeName], 0);
-		});
+		// Object.keys(this.geometry.attributesInstanced).forEach(attributeName => {
+		// 	gl.vertexAttribDivisor(this.shader.attributeLocations[attributeName], 0);
+		// });
 
 		// Culling disable
 		if (this.shader.culling !== false) {

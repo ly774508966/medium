@@ -68,18 +68,16 @@ export default class Normals extends Mesh {
 	draw(modelViewMatrix, projectionMatrix) {
 		const gl = GL.get();
 
-		this.shader.bindProgram();
-
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.attributes.aVertexPosition.buffer);
-		gl.vertexAttribPointer(this.shader.attributeLocations.aVertexPosition,
-			this.geometry.attributes.aVertexPosition.itemSize, gl.FLOAT, false, 0, 0);
-
 		// Update modelMatrix
 		this.updateMatrix();
 
+		this.shader.bindProgram();
 		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
 
 		gl.lineWidth(this.lineWidth);
+
+		this.vao.bind();
 		gl.drawArrays(gl.LINES, 0, this.geometry.attributes.aVertexPosition.numItems);
+		this.vao.unbind();
 	}
 }

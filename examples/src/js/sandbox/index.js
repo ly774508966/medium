@@ -43,17 +43,13 @@ colors = colors.concat([1, 1, 0]);
 let geometry = new PlaneGeometry(1, 1, colors);
 const material1 = new Shader({
 	name: 'Plane',
-	// drawType: CONSTANTS.DRAW_LINES,
 });
 
 const plane = new Mesh(geometry, material1);
 plane.position.z = 2;
-
 const planeNormalsHelper = new NormalsHelper(plane);
 scene.add(planeNormalsHelper);
-
 planeNormalsHelper.setParent(plane);
-
 scene.add(plane);
 
 
@@ -64,41 +60,41 @@ for (let i = 0; i < 6; i++) {
 	}
 }
 
-const light = new DirectionalLight();
-light.position.set(1, 1, 1);
+// const light = new DirectionalLight();
+// light.position.set(1, 1, 1);
+//
+// const texture = new Texture({
+// 	src: '/assets/textures/texture.jpg',
+// });
+// const geometry = new BoxGeometry(1, 1, 1);
+// const material = new Shader({
+// 	name: 'Box',
+// 	hookFragmentPre: `
+// 		uniform sampler2D uTexture0;
+// 	`,
+// 	hookFragmentMain: `
+// 		color = texture(uTexture0, vUv).rgb;
+// 	`,
+// 	uniforms: {
+// 		uTexture0: {
+// 			type: 't',
+// 			value: texture.texture,
+// 		},
+// 	},
+// 	directionalLights: [light.uniforms],
+// });
+// const box = new Mesh(geometry, material);
+//
+// scene.add(light);
+// scene.add(box);
 
-const texture = new Texture({
-	src: '/assets/textures/texture.jpg',
-});
-geometry = new BoxGeometry(1, 1, 1);
-const material = new Shader({
-	name: 'Box',
-	hookFragmentPre: `
-		uniform sampler2D uTexture0;
-	`,
-	hookFragmentMain: `
-		color = texture(uTexture0, vUv).rgb;
-	`,
-	uniforms: {
-		uTexture0: {
-			type: 't',
-			value: texture.texture,
-		},
-	},
-	directionalLights: [light.uniforms],
-});
-const box = new Mesh(geometry, material);
+// box.position.x = 3;
+// box.position.y = 3;
 
-scene.add(light);
-scene.add(box);
+// const boxNormalsHelper = new NormalsHelper(box);
+// scene.add(boxNormalsHelper);
 
-box.position.x = 3;
-box.position.y = 3;
-
-const boxNormalsHelper = new NormalsHelper(box);
-scene.add(boxNormalsHelper);
-
-boxNormalsHelper.setParent(box);
+// boxNormalsHelper.setParent(box);
 
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas);
@@ -108,14 +104,14 @@ cameraGUI.open();
 const lightingGUI = gui.addFolder('lighting');
 lightingGUI.open();
 
-const range = 10;
-gui.add(box.position, 'x', -range, range);
-gui.add(box.position, 'y', -range, range);
-gui.add(box.position, 'z', -range, range);
+// const range = 10;
+// gui.add(box.position, 'x', -range, range);
+// gui.add(box.position, 'y', -range, range);
+// gui.add(box.position, 'z', -range, range);
 
 const grid = new GridHelper(10);
 scene.add(grid);
-
+//
 const axis = new AxisHelper(1);
 scene.add(axis);
 
@@ -132,8 +128,8 @@ window.addEventListener('resize', resize);
 
 function update() {
 	requestAnimationFrame(update);
-	box.rotation.x += 0.01;
-	box.rotation.y += 0.01;
+	// box.rotation.x += 0.01;
+	// box.rotation.y += 0.01;
 	// plane.rotation.x += 0.01;
 	// plane.rotation.y += 0.01;
 	renderer.render(scene, camera);

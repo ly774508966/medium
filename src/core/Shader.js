@@ -45,6 +45,18 @@ export default class Shader {
 		gl.enableVertexAttribArray(this.attributeLocations[attributeName]);
 	}
 
+	setAttributePointer(attributeName) {
+		gl = GL.get();
+		gl.vertexAttribPointer(this.attributeLocations[attributeName],
+			this.geometry.attributes[attributeName].itemSize, gl.FLOAT, false, 0, 0);
+	}
+
+	setAttributeInstancedPointer(attributeName) {
+		gl = GL.get();
+		gl.vertexAttribPointer(this.attributeLocations[attributeName],
+			this.geometry.attributesInstanced[attributeName].itemSize, gl.FLOAT, false, 0, 0);
+	}
+
 	setUniformLocation(uniformName) {
 		gl = GL.get();
 		this.uniforms[uniformName].location = gl.getUniformLocation(this.program, uniformName);
@@ -52,6 +64,7 @@ export default class Shader {
 
 	create(geometry) {
 		gl = GL.get();
+		this.geometry = geometry;
 
 		this.vertexShader = this._processShader(this.vertexShader, geometry);
 		this.fragmentShader = this._processShader(this.fragmentShader, geometry);
@@ -76,27 +89,6 @@ export default class Shader {
 
 		// Cache all attribute locations
 		this.attributeLocations = {};
-
-		// Cache attribute locations
-		let attribute;
-
-		Object.keys(geometry.attributes).forEach(attributeName => {
-			attribute = geometry.attributes[attributeName];
-			if (attribute.shaderAttribute) {
-				this.setAttributeLocation(attributeName);
-			}
-		});
-
-		// Cache instanced attribute locations
-		Object.keys(geometry.attributesInstanced).forEach(attributeName => {
-			this.setAttributeLocation(attributeName);
-		});
-
-		// console.log(this.vertexPositionAttribute);
-		// console.log(this.vertexNormalAttribute);
-		// console.log(this.vertexColorAttribute);
-		// console.log(this.textureCoordAttribute);
-		// console.log(this.vertexUvAttribute);
 
 		// Generate uniforms for directional lights
 		this.directionalLights.forEach((directionalLightUniforms, i) => {

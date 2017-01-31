@@ -21,10 +21,11 @@ export function get() {
  * https://github.com/frenchtoast747/webgl-obj-loader/blob/master/webgl-obj-loader.js
  * @return {Buffer}
  */
-export function createBuffer(gl, type, data) {
+export function createBuffer(type, data) {
 	const buffer = gl.createBuffer();
 	const ArrayView = type === gl.ARRAY_BUFFER ? Float32Array : Uint16Array;
 	gl.bindBuffer(type, buffer);
 	gl.bufferData(type, new ArrayView(data), gl.STATIC_DRAW);
+	gl.bindBuffer(type, null);
 	return buffer;
 }

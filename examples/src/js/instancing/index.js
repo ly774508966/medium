@@ -171,6 +171,12 @@ gui.open();
 
 gui.add(mesh.shader.uniforms.uFogDensity, 'value', 0, 0.1);
 
+const grid = new GridHelper(10);
+scene.add(grid);
+
+const axis = new AxisHelper(1);
+scene.add(axis);
+
 function resize() {
 	const width = window.innerWidth;
 	const height = window.innerHeight;

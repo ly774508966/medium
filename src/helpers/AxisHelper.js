@@ -3,16 +3,17 @@ import Shader from 'core/Shader';
 import * as GL from 'core/GL';
 import { capabilities } from 'core/Capabilities';
 import Geometry from 'geometry/Geometry';
+import shaderVersion from 'shaders/chunks/Version.glsl';
 
-const vertexShader = `
-	attribute vec3 aVertexPosition;
-	attribute vec3 aVertexColor;
+const vertexShader = `${shaderVersion}
+	layout (location = 0) in vec3 aVertexPosition;
+	layout (location = 1) in vec3 aVertexColor;
 
 	uniform mat4 uViewMatrix;
 	uniform mat4 uProjectionMatrix;
 	uniform mat4 uModelMatrix;
 
-	varying vec3 vColor;
+	out vec3 vColor;
 
 	void main(void){
 		vColor = aVertexColor;
@@ -21,12 +22,13 @@ const vertexShader = `
 `;
 
 function fragmentShader() {
-	return `
+	return `${shaderVersion}
 	precision ${capabilities.precision} float;
-	varying vec3 vColor;
+	in vec3 vColor;
+	out vec4 outputColor;
 
 	void main(void){
-		gl_FragColor = vec4(vColor, 1.0);
+		outputColor = vec4(vColor, 1.0);
 	}
 	`;
 }
@@ -68,26 +70,16 @@ export default class Axis extends Mesh {
 	draw(modelViewMatrix, projectionMatrix) {
 		const gl = GL.get();
 
-		this.shader.bindProgram();
-
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.attributes.aVertexPosition.buffer);
-		gl.vertexAttribPointer(this.shader.attributeLocations.aVertexPosition,
-			this.geometry.attributes.aVertexPosition.itemSize, gl.FLOAT, false, 0, 0);
-
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.geometry.attributes.aVertexColor.buffer);
-		gl.vertexAttribPointer(this.shader.attributeLocations.aVertexColor,
-			this.geometry.attributes.aVertexColor.itemSize, gl.FLOAT, false, 0, 0);
-
 		// Update modelMatrix
 		this.updateMatrix();
 
+		this.shader.bindProgram();
 		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
 
-		// console.log(this.geometry.attributes);
-
 		gl.lineWidth(this.lineWidth);
-		gl.drawArrays(gl.LINES, 0, this.geometry.attributes.aVertexPosition.numItems);
 
-		gl.bindBuffer(gl.ARRAY_BUFFER, null);
+		this.vao.bind();
+		gl.drawArrays(gl.LINES, 0, this.geometry.attributes.aVertexPosition.numItems);
+		this.vao.unbind();
 	}
 }
