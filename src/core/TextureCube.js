@@ -7,20 +7,20 @@ export default class TextureCube {
 	constructor(options) {
 		EventDispatcher(this);
 		gl = GL.get();
+		const defaults = {
+			src: Array(6).fill(''),
+			magFilter: gl.LINEAR,
+			minFilter: gl.LINEAR,
+			wrapS: gl.CLAMP_TO_EDGE,
+			wrapT: gl.CLAMP_TO_EDGE,
+			resizeToPow2: false,
+		};
 
-		this.src = Array(6).fill('');
-		this.images = [];
-		this.size = null;
-		this.magFilter = gl.LINEAR;
-		this.minFilter = gl.LINEAR;
-		this.wrapS = gl.CLAMP_TO_EDGE;
-		this.wrapT = gl.CLAMP_TO_EDGE;
-		this._loaded = 0;
-
-		Object.assign(this, options);
+		Object.assign(this, defaults, options);
 
 		this.texture = gl.createTexture();
 		this.images = [];
+		this._loaded = 0;
 
 		this.update(this.placeholder());
 
@@ -82,6 +82,8 @@ export default class TextureCube {
 	}
 
 	_resizeImage(image) {
+		if (!this.resizeToPow2) return image;
+
 		// 2, 4, 8, 16... 4096
 		const sizes = Array(12).fill(0).map((i, j) => {
 			return Math.pow(2, j + 1);

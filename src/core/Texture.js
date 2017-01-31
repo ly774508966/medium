@@ -13,6 +13,7 @@ export default class Texture {
 			minFilter: gl.NEAREST,
 			wrapS: gl.CLAMP_TO_EDGE,
 			wrapT: gl.CLAMP_TO_EDGE,
+			resizeToPow2: false,
 		};
 
 		Object.assign(this, defaults, options);
@@ -59,6 +60,8 @@ export default class Texture {
 	}
 
 	_resizeImage() {
+		if (!this.resizeToPow2) return this.image;
+
 		// 2, 4, 8, 16... 4096
 		const sizes = Array(12).fill(0).map((i, j) => {
 			return Math.pow(2, j + 1);
