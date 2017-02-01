@@ -127,6 +127,9 @@ export default class Mesh extends Object3D {
 	dispose() {
 		this.shader.dispose();
 		this.geometry.dispose();
+		this.vao.dispose();
+		this.geometry = null;
+		this.shader = null;
 		super.dispose();
 	}
 }

@@ -17,4 +17,9 @@ export default class Vao {
 		gl.bindVertexArray(null);
 		// console.log('vao unbind');
 	}
+
+	dispose() {
+		gl.deleteVertexArray(this.vao);
+		this.vao = null;
+	}
 }

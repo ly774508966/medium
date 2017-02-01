@@ -90,4 +90,10 @@ export default class Texture {
 
 		return canvas;
 	}
+
+	dispose() {
+		gl = GL.get();
+		gl.deleteTexture(this.texture);
+		this.texture = null;
+	}
 }

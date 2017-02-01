@@ -34,45 +34,67 @@ camera.lookAt();
 const light = new DirectionalLight();
 light.position.set(1, 1, 1);
 
-// const texture = new Texture({
-// 	src: '/assets/textures/texture.jpg',
-// });
-const geometry = new BoxGeometry(1, 1, 1);
-const material = new Shader({
-	name: 'Box',
-	// hookFragmentPre: `
-	// 	uniform sampler2D uTexture0;
-	// `,
-	// hookFragmentMain: `
-	// 	color = texture2D(uTexture0, vUv).rgb;
-	// `,
-	uniforms: {
-		// uTexture0: {
-		// 	type: 't',
-		// 	value: texture.texture,
-		// },
-	},
-	directionalLights: [light.uniforms],
-});
-const box = new Mesh(geometry, material);
-
 scene.add(light);
-scene.add(box);
 
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas);
 
-const grid = new GridHelper(10);
-const axis = new AxisHelper(1);
+// const grid = new GridHelper(10);
+// const axis = new AxisHelper(1);
 
-scene.add(grid);
-scene.add(axis);
+// scene.add(grid);
+// scene.add(axis);
 
 controls.update();
 
-setTimeout(() => {
-	scene.remove(box, true);
+let boxes = [];
+
+function removeBox() {
+	scene.remove(boxes[0], true);
+	boxes = [];
+}
+
+let count = 0;
+
+function addBox() {
+	const texture = new Texture({
+		src: '/assets/textures/texture-nopow2.jpg',
+	});
+	const geometry = new BoxGeometry(1, 1, 1);
+	const material = new Shader({
+		name: 'Box',
+		hookFragmentPre: `
+			uniform sampler2D uTexture0;
+		`,
+		hookFragmentMain: `
+			color = texture(uTexture0, vUv).rgb;
+		`,
+		uniforms: {
+			uTexture0: {
+				type: 't',
+				value: texture.texture,
+			},
+		},
+		directionalLights: [light.uniforms],
+	});
+	const box = new Mesh(geometry, material);
+	box.rotation.x = Math.random();
+	box.rotation.y = Math.random();
+	box.rotation.z = Math.random();
+	scene.add(box);
+	boxes.push(box);
+
+	count++;
+
+	console.log('boxes', count);
+}
+
+setInterval(() => {
+	removeBox();
+	addBox();
 }, 1000);
+
+addBox();
 
 // setTimeout(() => {
 //

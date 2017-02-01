@@ -21,5 +21,6 @@ export default class BufferAttribute {
 	dispose() {
 		gl = GL.get();
 		gl.deleteBuffer(this.buffer);
+		this.buffer = null;
 	}
 }

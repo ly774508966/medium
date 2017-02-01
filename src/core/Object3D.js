@@ -61,5 +61,13 @@ export default class Object3D {
 
 	dispose() {
 		this.unParent();
+		this.children = [];
+		this.localMatrix = null;
+		this.modelMatrix = null;
+		this.position = null;
+		this.rotation = null;
+		this.scale = null;
+		this._quaternion = null;
+		this.isObject3D = null;
 	}
 }

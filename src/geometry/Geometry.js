@@ -104,7 +104,6 @@ export default class Geometry {
 		gl = GL.get();
 		// Dispose attributes and buffers
 		Object.keys(this.attributes).forEach(attributeName => {
-			console.log('attributeName', attributeName);
 			this.attributes[attributeName].dispose(gl);
 			delete this.attributes[attributeName];
 		});
@@ -114,5 +113,10 @@ export default class Geometry {
 		});
 		delete this.attributes;
 		delete this.attributesInstanced;
+		this.bufferVertices = null;
+		this.bufferIndices = null;
+		this.bufferNormals = null;
+		this.bufferUvs = null;
+		this.bufferColors = null;
 	}
 }

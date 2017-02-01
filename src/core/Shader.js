@@ -11,7 +11,10 @@ import {
 	warn,
 } from 'utils/Console';
 import Color from 'math/Color';
-import { capabilities, extensions } from 'core/Capabilities';
+import {
+	capabilities,
+	extensions
+} from 'core/Capabilities';
 
 let gl;
 const normalMatrix = mat3.create();
@@ -367,11 +370,27 @@ export default class Shader {
 
 	dispose() {
 		gl = GL.get();
-		// let attributeLocation;
-		// Object.keys(this.attributeLocations).forEach(attributeName => {
-		// 	attributeLocation = this.attributeLocations[attributeName];
-		// 	gl.disableVertexAttribArray(attributeLocation);
-		// });
+		let attributeLocation;
+
+		// Cleanup attribute locations
+		Object.keys(this.attributeLocations).forEach(attributeName => {
+			attributeLocation = this.attributeLocations[attributeName];
+			gl.disableVertexAttribArray(attributeLocation);
+		});
+
+		// Dispose textures
+		Object.keys(this.customUniforms).forEach(uniformName => {
+			const uniform = this.uniforms[uniformName];
+			switch (uniform.type) {
+				case 't':
+				case 'tc':
+					{
+						gl.deleteTexture(uniform.value);
+						break;
+					}
+				default:
+			}
+		});
 
 		gl.detachShader(this.program, this.compiledVertexShader);
 		gl.detachShader(this.program, this.compiledFragmentShader);
