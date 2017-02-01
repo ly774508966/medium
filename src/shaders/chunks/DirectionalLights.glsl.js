@@ -1,9 +1,7 @@
 export default `
-	struct DirectionalLight {
-		vec3 position;
-		vec3 color;
-		float intensity;
-	};
-
-	uniform DirectionalLight uDirectionalLights[#HOOK_DIRECTIONAL_LIGHTS];
+	// uniform DirectionalLight {
+	// 	vec4 position;
+	// 	vec4 color;
+	// 	vec4 intensity;
+	// } uDirectionalLights[#HOOK_DIRECTIONAL_LIGHTS];
 `;

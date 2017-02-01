@@ -6,6 +6,8 @@ export default `${shaderVersion}
 	#HOOK_PRECISION
 	#HOOK_DEFINES
 
+	layout(std140) uniform;
+
 	in vec3 vDiffuse;
 	in vec3 vPosition;
 
@@ -19,6 +21,10 @@ export default `${shaderVersion}
 
 	#ifdef directionalLights
 	${directionalLights}
+	uniform PerPass
+	{
+		vec4 color;
+	} u_perPass;
 	#endif
 
 	// Lighting
@@ -41,11 +47,7 @@ export default `${shaderVersion}
 		#HOOK_FRAGMENT_MAIN
 
 		#ifdef directionalLights
-		for (int i = 0; i < #HOOK_DIRECTIONAL_LIGHTS; i++) {
-			float directionalLight = dot(normal, normalize(uDirectionalLights[i].position));
-			vec3 directionalColor = uDirectionalLights[i].color * directionalLight;
-			color += directionalColor * uDirectionalLights[i].intensity;
-		}
+		color = u_perPass.color.rgb;
 		#endif
 
 		#ifdef pointLights
@@ -67,3 +69,12 @@ export default `${shaderVersion}
 		#HOOK_FRAGMENT_END
 	}
 `;
+
+
+// #ifdef directionalLights
+// for (int i = 0; i < #HOOK_DIRECTIONAL_LIGHTS; i++) {
+// 	float directionalLight = dot(normal, normalize(uDirectionalLights[i].position));
+// 	vec3 directionalColor = uDirectionalLights[i].color * directionalLight;
+// 	color += directionalColor * uDirectionalLights[i].intensity;
+// }
+// #endif

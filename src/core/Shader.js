@@ -65,6 +65,15 @@ export default class Shader {
 		this.uniforms[uniformName].location = gl.getUniformLocation(this.program, uniformName);
 	}
 
+	setUniformBlockLocation(uniformName, uniformBuffer, i) {
+		gl = GL.get();
+		this.uniformBlocks[uniformName] = gl.getUniformBlockIndex(this.program, uniformName);
+		console.log('blockindex->', this.uniformBlocks[uniformName]);
+		console.log('uniformName', uniformName);
+		gl.uniformBlockBinding(this.program, this.uniformBlocks[uniformName], 0);
+		gl.bindBufferBase(gl.UNIFORM_BUFFER, 0, uniformBuffer);
+	}
+
 	create(geometry) {
 		gl = GL.get();
 		this.geometry = geometry;
@@ -90,16 +99,32 @@ export default class Shader {
 			return;
 		}
 
+		// Uniform blocks
+		this.uniformBlocks = {};
+
 		// Cache all attribute locations
 		this.attributeLocations = {};
 
 		// Generate uniforms for directional lights
-		this.directionalLights.forEach((directionalLightUniforms, i) => {
-			Object.keys(directionalLightUniforms).forEach(directionalLightUniform => {
-				const uniform = directionalLightUniforms[directionalLightUniform];
-				this.customUniforms[`uDirectionalLights[${i}].${directionalLightUniform}`] = uniform;
-			});
-		});
+		// this.directionalLights.forEach((uniformBuffer, i) => {
+		// 	this.setUniformBlockLocation(`uDirectionalLights[${i}]`, uniformBuffer);
+		// });
+
+		if (this.directionalLights.length > 0) {
+			this.uniformPerPassLocation = gl.getUniformBlockIndex(this.program, 'PerPass');
+			console.log(this.uniformPerPassLocation);
+			gl.uniformBlockBinding(this.program, this.uniformPerPassLocation, 0);
+
+			this.lightPos = new Float32Array([
+				1.0, 1.0, 1.0, 0.0,
+			]);
+			this.uniformPerPassBuffer = gl.createBuffer();
+			gl.bindBuffer(gl.UNIFORM_BUFFER, this.uniformPerPassBuffer);
+			gl.bufferData(gl.UNIFORM_BUFFER, this.lightPos, gl.DYNAMIC_DRAW);
+
+			gl.bufferSubData(gl.UNIFORM_BUFFER, 0, this.lightPos);
+			gl.bindBuffer(gl.UNIFORM_BUFFER, null);
+		}
 
 		// Generate uniforms for point lights
 		this.pointLights.forEach((pointLightUniforms, i) => {

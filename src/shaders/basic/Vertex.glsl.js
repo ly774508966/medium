@@ -7,6 +7,8 @@ export default `${shaderVersion}
 	${definePITwo}
 	#HOOK_DEFINES
 
+	layout(std140) uniform;
+
 	// Position
 	uniform mat4 uProjectionMatrix;
 	uniform mat4 uViewMatrix;

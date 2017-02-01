@@ -17,8 +17,6 @@ export function get() {
 
 /**
  * createBuffer
- * Utility to create buffers
- * https://github.com/frenchtoast747/webgl-obj-loader/blob/master/webgl-obj-loader.js
  * @return {Buffer}
  */
 export function createBuffer(type, data) {
@@ -27,5 +25,17 @@ export function createBuffer(type, data) {
 	gl.bindBuffer(type, buffer);
 	gl.bufferData(type, new ArrayView(data), gl.STATIC_DRAW);
 	gl.bindBuffer(type, null);
+	return buffer;
+}
+
+/**
+ * createUniformBuffer
+ * @return {Buffer}
+ */
+export function createUniformBuffer(data) {
+	const buffer = gl.createBuffer();
+	gl.bindBuffer(gl.UNIFORM_BUFFER, buffer);
+	gl.bufferData(gl.UNIFORM_BUFFER, new Float32Array(data), gl.DYNAMIC_DRAW);
+	gl.bindBuffer(gl.UNIFORM_BUFFER, null);
 	return buffer;
 }

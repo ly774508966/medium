@@ -81,7 +81,7 @@ const material = new Shader({
 			value: texture.texture,
 		},
 	},
-	directionalLights: [light.uniforms],
+	directionalLights: [light.uniformBuffer],
 });
 const box = new Mesh(geometry, material);
 
@@ -127,7 +127,7 @@ resize();
 window.addEventListener('resize', resize);
 
 function update() {
-	requestAnimationFrame(update);
+	// requestAnimationFrame(update);
 	box.rotation.x += 0.01;
 	box.rotation.y += 0.01;
 	plane.rotation.x += 0.01;

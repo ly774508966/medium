@@ -73,13 +73,22 @@ export default class Mesh extends Object3D {
 		this.updateMatrix();
 
 		this.shader.bindProgram();
-		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix, camera);
 
 		// Culling enable
 		if (this.shader.culling !== false) {
 			gl.enable(gl.CULL_FACE);
 			gl.cullFace(this.shader.culling);
 		}
+
+		if (this.shader.directionalLights.length > 0) {
+			gl.bindBufferBase(gl.UNIFORM_BUFFER, 0, this.shader.uniformPerPassBuffer);
+			gl.bindBuffer(gl.UNIFORM_BUFFER, this.shader.uniformPerPassBuffer);
+			this.shader.lightPos[0] = 0;
+			gl.bufferSubData(gl.UNIFORM_BUFFER, 0, this.shader.lightPos);
+			gl.bindBuffer(gl.UNIFORM_BUFFER, null);
+		}
+
+		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix, camera);
 
 		this.vao.bind();
 
