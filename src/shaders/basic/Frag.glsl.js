@@ -1,8 +1,8 @@
-import shaderVersion from 'shaders/chunks/Version.glsl';
+import EsVersion from 'shaders/chunks/EsVersion.glsl';
 import { pointLightsIn as pointLights } from 'shaders/chunks/PointLights.glsl';
 import directionalLights from 'shaders/chunks/DirectionalLights.glsl';
 
-export default `${shaderVersion}
+export default `${EsVersion}
 	#HOOK_PRECISION
 	#HOOK_DEFINES
 
@@ -21,10 +21,6 @@ export default `${shaderVersion}
 
 	#ifdef directionalLights
 	${directionalLights}
-	uniform PerPass
-	{
-		vec4 color;
-	} u_perPass;
 	#endif
 
 	// Lighting
@@ -47,7 +43,11 @@ export default `${shaderVersion}
 		#HOOK_FRAGMENT_MAIN
 
 		#ifdef directionalLights
-		color = u_perPass.color.rgb;
+		for (int i = 0; i < #HOOK_DIRECTIONAL_LIGHTS; i++) {
+			float directionalLight = dot(normal, normalize(uDirectionalLights[i].position.xyz));
+			vec3 directionalColor = uDirectionalLights[i].color.rgb * directionalLight;
+			color += directionalColor * uDirectionalLights[i].intensity.x;
+		}
 		#endif
 
 		#ifdef pointLights
@@ -72,9 +72,5 @@ export default `${shaderVersion}
 
 
 // #ifdef directionalLights
-// for (int i = 0; i < #HOOK_DIRECTIONAL_LIGHTS; i++) {
-// 	float directionalLight = dot(normal, normalize(uDirectionalLights[i].position));
-// 	vec3 directionalColor = uDirectionalLights[i].color * directionalLight;
-// 	color += directionalColor * uDirectionalLights[i].intensity;
-// }
+//
 // #endif

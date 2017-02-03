@@ -12,6 +12,7 @@ import {
 } from 'core/Constants';
 import * as Capabilities from 'core/Capabilities';
 import RendererInfo from 'core/RendererInfo';
+import * as UniformBuffers from 'core/UniformBuffers';
 
 let gl;
 
@@ -55,6 +56,9 @@ export default class Renderer {
 
 		// Log Capabilities of gpu
 		Capabilities.set(gl);
+
+		// Setup global uniform buffers
+		UniformBuffers.setup();
 
 		// log('capabilities', Capabilities.capabilities);
 		// log('extensions', Capabilities.extensions);
@@ -120,6 +124,9 @@ export default class Renderer {
 		mat4.identity(scene.modelViewMatrix);
 
 		mat4.lookAt(scene.modelViewMatrix, camera.position.v, camera.center.v, camera.up.v);
+
+		// Update global uniform buffers
+		UniformBuffers.updateProjectionView(gl, camera.projectionMatrix, scene.modelViewMatrix);
 
 		// Update the scene
 		scene.update();

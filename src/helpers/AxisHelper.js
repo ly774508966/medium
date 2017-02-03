@@ -3,11 +3,14 @@ import Shader from 'core/Shader';
 import * as GL from 'core/GL';
 import { capabilities } from 'core/Capabilities';
 import Geometry from 'geometry/Geometry';
-import shaderVersion from 'shaders/chunks/Version.glsl';
+import EsVersion from 'shaders/chunks/EsVersion.glsl';
+import ProjectionView from 'shaders/chunks/ProjectionView.glsl';
 
-const vertexShader = `${shaderVersion}
+const vertexShader = `${EsVersion}
 	layout (location = 0) in vec3 aVertexPosition;
 	layout (location = 1) in vec3 aVertexColor;
+
+	${ProjectionView}
 
 	uniform mat4 uViewMatrix;
 	uniform mat4 uProjectionMatrix;
@@ -17,12 +20,12 @@ const vertexShader = `${shaderVersion}
 
 	void main(void){
 		vColor = aVertexColor;
-		gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
+		gl_Position = uProjectionView.projectionMatrix * uProjectionView.viewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
 	}
 `;
 
 function fragmentShader() {
-	return `${shaderVersion}
+	return `${EsVersion}
 	precision ${capabilities.precision} float;
 	in vec3 vColor;
 	out vec4 outputColor;

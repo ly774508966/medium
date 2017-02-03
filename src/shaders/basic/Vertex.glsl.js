@@ -1,19 +1,22 @@
-import shaderVersion from 'shaders/chunks/Version.glsl';
+import EsVersion from 'shaders/chunks/EsVersion.glsl';
 import { pointLightsOut as pointLights } from 'shaders/chunks/PointLights.glsl';
 import { definePI, definePITwo } from 'shaders/chunks/Math.glsl';
+import ProjectionView from 'shaders/chunks/ProjectionView.glsl';
 
-export default `${shaderVersion}
+export default `${EsVersion}
 	${definePI}
 	${definePITwo}
 	#HOOK_DEFINES
 
 	layout(std140) uniform;
 
-	// Position
+	${ProjectionView}
+
 	uniform mat4 uProjectionMatrix;
 	uniform mat4 uViewMatrix;
 	uniform mat4 uModelMatrix;
 	uniform mat3 uNormalMatrix;
+
 	in vec3 aVertexPosition;
 	out vec3 vPosition;
 
@@ -80,7 +83,7 @@ export default `${shaderVersion}
 		#endif
 
 		vPosition = aVertexPosition;
-		gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition + transformed, 1.0);
+		gl_Position = uProjectionView.projectionMatrix * uProjectionView.viewMatrix * uModelMatrix * vec4(aVertexPosition + transformed, 1.0);
 
 		#HOOK_VERTEX_END
 	}

@@ -13,8 +13,8 @@ import {
 import Color from 'math/Color';
 import {
 	capabilities,
-	extensions
 } from 'core/Capabilities';
+import UniformBuffers from 'core/UniformBuffers';
 
 let gl;
 const normalMatrix = mat3.create();
@@ -66,12 +66,13 @@ export default class Shader {
 	}
 
 	setUniformBlockLocation(uniformName, uniformBuffer, i) {
+		console.log('uniformName', uniformName);
 		gl = GL.get();
 		this.uniformBlocks[uniformName] = gl.getUniformBlockIndex(this.program, uniformName);
-		console.log('blockindex->', this.uniformBlocks[uniformName]);
-		console.log('uniformName', uniformName);
-		gl.uniformBlockBinding(this.program, this.uniformBlocks[uniformName], 0);
-		gl.bindBufferBase(gl.UNIFORM_BUFFER, 0, uniformBuffer);
+		console.log('location', this.uniformBlocks[uniformName]);
+		gl.uniformBlockBinding(this.program,
+			this.uniformBlocks[uniformName], this.uniformBlocks[uniformName]);
+		gl.bindBufferBase(gl.UNIFORM_BUFFER, i, uniformBuffer);
 	}
 
 	create(geometry) {
@@ -105,26 +106,16 @@ export default class Shader {
 		// Cache all attribute locations
 		this.attributeLocations = {};
 
+		// Uniforms for ProjectionView uniform block
+
+		this.setUniformBlockLocation('ProjectionView',
+				UniformBuffers.projectionView.buffer, 0);
+
 		// Generate uniforms for directional lights
-		// this.directionalLights.forEach((uniformBuffer, i) => {
-		// 	this.setUniformBlockLocation(`uDirectionalLights[${i}]`, uniformBuffer);
-		// });
-
-		if (this.directionalLights.length > 0) {
-			this.uniformPerPassLocation = gl.getUniformBlockIndex(this.program, 'PerPass');
-			console.log(this.uniformPerPassLocation);
-			gl.uniformBlockBinding(this.program, this.uniformPerPassLocation, 0);
-
-			this.lightPos = new Float32Array([
-				1.0, 1.0, 1.0, 0.0,
-			]);
-			this.uniformPerPassBuffer = gl.createBuffer();
-			gl.bindBuffer(gl.UNIFORM_BUFFER, this.uniformPerPassBuffer);
-			gl.bufferData(gl.UNIFORM_BUFFER, this.lightPos, gl.DYNAMIC_DRAW);
-
-			gl.bufferSubData(gl.UNIFORM_BUFFER, 0, this.lightPos);
-			gl.bindBuffer(gl.UNIFORM_BUFFER, null);
-		}
+		this.directionalLights.forEach((directionalLight, i) => {
+			this.setUniformBlockLocation('DirectionalLights',
+					directionalLight.bufferUniform, 1 + i);
+		});
 
 		// Generate uniforms for point lights
 		this.pointLights.forEach((pointLightUniforms, i) => {
@@ -144,16 +135,6 @@ export default class Shader {
 
 		// Default uniforms
 		this.uniforms = Object.assign({
-			uProjectionMatrix: {
-				type: '4fv',
-				value: mat4.create(),
-				location: null,
-			},
-			uViewMatrix: {
-				type: '4fv',
-				value: mat4.create(),
-				location: null,
-			},
 			uModelMatrix: {
 				type: '4fv',
 				value: mat4.create(),
@@ -345,8 +326,6 @@ export default class Shader {
 		});
 
 		// Matrix
-		gl.uniformMatrix4fv(this.uniforms.uProjectionMatrix.location, false, projectionMatrix);
-		gl.uniformMatrix4fv(this.uniforms.uViewMatrix.location, false, modelViewMatrix);
 		gl.uniformMatrix4fv(this.uniforms.uModelMatrix.location, false, modelMatrix);
 
 		mat4.identity(inversedModelViewMatrix);

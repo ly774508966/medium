@@ -52,7 +52,6 @@ scene.add(planeNormalsHelper);
 planeNormalsHelper.setParent(plane);
 scene.add(plane);
 
-
 colors = [];
 for (let i = 0; i < 6; i++) {
 	for (let j = 0; j < 3; j++) {
@@ -81,7 +80,7 @@ const material = new Shader({
 			value: texture.texture,
 		},
 	},
-	directionalLights: [light.uniformBuffer],
+	directionalLights: [light],
 });
 const box = new Mesh(geometry, material);
 
@@ -104,14 +103,14 @@ cameraGUI.open();
 const lightingGUI = gui.addFolder('lighting');
 lightingGUI.open();
 
-// const range = 10;
-// gui.add(box.position, 'x', -range, range);
-// gui.add(box.position, 'y', -range, range);
-// gui.add(box.position, 'z', -range, range);
+const range = 10;
+lightingGUI.add(light.position, 'x', -range, range);
+lightingGUI.add(light.position, 'y', -range, range);
+lightingGUI.add(light.position, 'z', -range, range);
 
 const grid = new GridHelper(10);
 scene.add(grid);
-//
+
 const axis = new AxisHelper(1);
 scene.add(axis);
 
@@ -127,7 +126,7 @@ resize();
 window.addEventListener('resize', resize);
 
 function update() {
-	// requestAnimationFrame(update);
+	requestAnimationFrame(update);
 	box.rotation.x += 0.01;
 	box.rotation.y += 0.01;
 	plane.rotation.x += 0.01;

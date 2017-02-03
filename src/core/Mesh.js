@@ -81,10 +81,11 @@ export default class Mesh extends Object3D {
 		}
 
 		if (this.shader.directionalLights.length > 0) {
-			gl.bindBufferBase(gl.UNIFORM_BUFFER, 0, this.shader.uniformPerPassBuffer);
-			gl.bindBuffer(gl.UNIFORM_BUFFER, this.shader.uniformPerPassBuffer);
-			this.shader.lightPos[0] = 0;
-			gl.bufferSubData(gl.UNIFORM_BUFFER, 0, this.shader.lightPos);
+			gl.bindBufferBase(gl.UNIFORM_BUFFER, 1, this.shader.directionalLights[0].bufferUniform);
+			gl.bindBuffer(gl.UNIFORM_BUFFER, this.shader.directionalLights[0].bufferUniform);
+
+			// Should check if data changes
+			gl.bufferSubData(gl.UNIFORM_BUFFER, 0, this.shader.directionalLights[0].bufferData);
 			gl.bindBuffer(gl.UNIFORM_BUFFER, null);
 		}
 
