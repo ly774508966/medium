@@ -80,12 +80,21 @@ export default class Mesh extends Object3D {
 			gl.cullFace(this.shader.culling);
 		}
 
+		// Loop through blocks here
 		if (this.shader.directionalLights.length > 0) {
-			gl.bindBufferBase(gl.UNIFORM_BUFFER, 1, this.shader.directionalLights[0].bufferUniform);
-			gl.bindBuffer(gl.UNIFORM_BUFFER, this.shader.directionalLights[0].bufferUniform);
+			gl.bindBufferBase(gl.UNIFORM_BUFFER, 2,
+				this.shader.directionalLights[0].uniformBuffer.buffer);
+			gl.bindBuffer(gl.UNIFORM_BUFFER, this.shader.directionalLights[0].uniformBuffer.buffer);
 
-			// Should check if data changes
-			gl.bufferSubData(gl.UNIFORM_BUFFER, 0, this.shader.directionalLights[0].bufferData);
+			gl.bufferSubData(gl.UNIFORM_BUFFER, 0, this.shader.directionalLights[0].uniformBuffer.data);
+			gl.bindBuffer(gl.UNIFORM_BUFFER, null);
+		}
+
+		if (this.shader.pointLights.length > 0) {
+			gl.bindBufferBase(gl.UNIFORM_BUFFER, 1, this.shader.pointLights[0].uniformBuffer.buffer);
+			gl.bindBuffer(gl.UNIFORM_BUFFER, this.shader.pointLights[0].uniformBuffer.buffer);
+
+			gl.bufferSubData(gl.UNIFORM_BUFFER, 0, this.shader.pointLights[0].uniformBuffer.data);
 			gl.bindBuffer(gl.UNIFORM_BUFFER, null);
 		}
 

@@ -7,4 +7,13 @@ export default class UniformBuffer {
 		this.data = data;
 		this.buffer = createUniformBuffer(data);
 	}
+
+	/**
+	 * Set values for the indices in data
+	 */
+	setValues(indices, values) {
+		indices.forEach((index, i) => {
+			this.data[index] = values[i];
+		});
+	}
 }

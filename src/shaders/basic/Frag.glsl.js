@@ -57,10 +57,10 @@ export default `${EsVersion}
 			vec3 halfVector = normalize(pointLightSurfaceToLightDirection + pointLightSurfaceToCameraDirection);
 
 			float pointLight = max(dot(normal, pointLightSurfaceToLightDirection), 0.0);
-			vec3 pointLightColor = uPointLights[i].color * pointLight;
+			vec3 pointLightColor = uPointLights[i].color.rgb * pointLight;
 			color += pointLight * pointLightColor;
-			float specular = pow(dot(normal, halfVector), uPointLights[i].shininess);
-			color += specular * uPointLights[i].specularColor;
+			float specular = pow(dot(normal, halfVector), uPointLights[i].shininess.x);
+			color += specular * uPointLights[i].specularColor.rgb;
 		}
 		#endif
 

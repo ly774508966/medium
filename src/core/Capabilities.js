@@ -46,6 +46,8 @@ function Capabilities(gl) {
 	const maxVaryings = gl.getParameter(gl.MAX_VARYING_VECTORS);
 	const maxFragmentUniforms = gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS);
 
+	// console.log('xxxx', gl.getParameter(gl.UNIFORM_BUFFER_OFFSET_ALIGNMENT));
+
 	return {
 		precision,
 		maxTextures,

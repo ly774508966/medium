@@ -66,10 +66,11 @@ export default class Shader {
 	}
 
 	setUniformBlockLocation(uniformName, uniformBuffer, i) {
-		console.log('uniformName', uniformName);
+		// console.log('------- setUniformBlockLocation -------');
+		// console.log('uniformName', uniformName);
 		gl = GL.get();
 		this.uniformBlocks[uniformName] = gl.getUniformBlockIndex(this.program, uniformName);
-		console.log('location', this.uniformBlocks[uniformName]);
+		// console.log('location', this.uniformBlocks[uniformName]);
 		gl.uniformBlockBinding(this.program,
 			this.uniformBlocks[uniformName], this.uniformBlocks[uniformName]);
 		gl.bindBufferBase(gl.UNIFORM_BUFFER, i, uniformBuffer);
@@ -107,22 +108,23 @@ export default class Shader {
 		this.attributeLocations = {};
 
 		// Uniforms for ProjectionView uniform block
-
 		this.setUniformBlockLocation('ProjectionView',
 				UniformBuffers.projectionView.buffer, 0);
 
 		// Generate uniforms for directional lights
 		this.directionalLights.forEach((directionalLight, i) => {
-			this.setUniformBlockLocation('DirectionalLights',
-					directionalLight.bufferUniform, 1 + i);
+			if (i === 0) {
+				this.setUniformBlockLocation('DirectionalLights',
+						directionalLight.bufferUniform, 1 + i);
+			}
 		});
 
 		// Generate uniforms for point lights
-		this.pointLights.forEach((pointLightUniforms, i) => {
-			Object.keys(pointLightUniforms).forEach(pointLightUniform => {
-				const uniform = pointLightUniforms[pointLightUniform];
-				this.customUniforms[`uPointLights[${i}].${pointLightUniform}`] = uniform;
-			});
+		this.pointLights.forEach((pointLight, i) => {
+			if (i === 0) {
+				this.setUniformBlockLocation('PointLights',
+						pointLight.bufferUniform, 2 + i);
+			}
 		});
 
 		// Add Camera position uniform for point lights if it doesn't exist
@@ -199,7 +201,7 @@ export default class Shader {
 		shader = shader.replace(/#HOOK_FRAGMENT_MAIN/g, this.hookFragmentMain);
 		shader = shader.replace(/#HOOK_FRAGMENT_END/g, this.hookFragmentEnd);
 
-		shader = shader.replace(/#HOOK_POINT_LIGHTS/g, this.pointLights.length);
+		shader = shader.replace(/#HOOK_POINT_LIGHTS/g, 2);
 		shader = shader.replace(/#HOOK_DIRECTIONAL_LIGHTS/g, this.directionalLights.length);
 
 		return shader;
@@ -351,7 +353,7 @@ export default class Shader {
 		gl = GL.get();
 		let shader;
 
-		// console.log('source', source);
+		console.log('source', source);
 
 		switch (type) {
 			case 'vs':

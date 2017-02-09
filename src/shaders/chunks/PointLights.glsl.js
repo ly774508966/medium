@@ -1,23 +1,24 @@
 const struct = `
 	struct PointLight {
-		vec3 position;
-		vec3 color;
-		vec3 specularColor;
-		float shininess;
-		float intensity;
+		vec4 position;
+		vec4 color;
+		vec4 specularColor;
+		vec4 shininess;
+		vec4 intensity;
+	};
+	uniform PointLights {
+		PointLight uPointLights[#HOOK_POINT_LIGHTS];
 	};
 `;
 
 const pointLightsOut = `
 	${struct}
-	uniform PointLight uPointLights[#HOOK_POINT_LIGHTS];
 	out vec3 vPointLightSurfaceToLightDirection[#HOOK_POINT_LIGHTS];
 	out vec3 vPointLightSurfaceToCameraDirection[#HOOK_POINT_LIGHTS];
 `;
 
 const pointLightsIn = `
 	${struct}
-	uniform PointLight uPointLights[#HOOK_POINT_LIGHTS];
 	in vec3 vPointLightSurfaceToLightDirection[#HOOK_POINT_LIGHTS];
 	in vec3 vPointLightSurfaceToCameraDirection[#HOOK_POINT_LIGHTS];
 `;

@@ -76,7 +76,7 @@ export default `${EsVersion}
 			// Calculate word position of vertex
 			vec3 surfaceWorldPosition = (uModelMatrix * vec4(aVertexPosition, 1.0)).xyz;
 			// Calculate directional vector of surface to the light
-			vPointLightSurfaceToLightDirection[i] = uPointLights[i].position - surfaceWorldPosition;
+			vPointLightSurfaceToLightDirection[i] = uPointLights[i].position.xyz - surfaceWorldPosition;
 			// Calculate directional vector of camera to the surface
 			vPointLightSurfaceToCameraDirection[i] = uCameraPosition - surfaceWorldPosition;
 		}
