@@ -8,11 +8,11 @@ import {
 	SphereGeometry,
 	Shader,
 	Mesh,
-	PointLight,
 	Color,
 	DirectionalLight,
 	Object3D,
 	BoxGeometry,
+	Lights,
 	Constants,
 } from 'index';
 import dat from 'dat-gui';
@@ -46,54 +46,33 @@ const axis = new AxisHelper(1);
 scene.add(axis);
 controls.update();
 
-const intensity = 0.7;
+const directionalLights = new Lights([
+	new DirectionalLight({
+		intensity: {
+			type: 'f',
+			value: 0.7,
+		},
+	}),
+]);
 
-const directionalLight = new DirectionalLight();
-const pointLight0 = new PointLight({
-	intensity: {
-		type: 'f',
-		value: intensity,
-	},
-});
-const pointLight1 = new PointLight({
-	intensity: {
-		type: 'f',
-		value: intensity,
-	},
-});
-const pointLight2 = new PointLight({
-	intensity: {
-		type: 'f',
-		value: intensity,
-	},
-});
-scene.add(directionalLight);
-scene.add(pointLight0);
-scene.add(pointLight1);
-scene.add(pointLight2);
+directionalLights.get()[0].position.set(1, 1, 1);
 
-directionalLight.position.set(1, 1, 1);
-pointLight0.position.set(0, 0, 30);
-
-const lights = [
-	pointLight0,
-	pointLight1,
-	pointLight2,
-];
+scene.directionalLights = directionalLights;
 
 const container = new Object3D();
 
 const material = new Shader({
-	pointLights: [pointLight0.uniforms, pointLight1.uniforms, pointLight2.uniforms],
+	directionalLights,
 	uniforms: {
 		uDiffuse: {
 			type: '3f',
-			value: new Color(0x000000).v,
+			value: new Color(0x666666).v,
 		},
 	},
 });
 
 const material2 = new Shader({
+	directionalLights,
 	drawType: Constants.DRAW_LINES,
 	uniforms: {
 		uDiffuse: {
@@ -132,11 +111,8 @@ resize();
 
 window.addEventListener('resize', resize);
 
-function update(time) {
+function update() {
 	requestAnimationFrame(update);
-
-	const radius = 20;
-	const t = time * 0.0005;
 
 	container.rotation.x += 0.01;
 	container.rotation.y += 0.01;
@@ -148,15 +124,6 @@ function update(time) {
 	// Container doesn't get drawn so updateMatrix() needs
 	// to be called manually
 	container.updateMatrix();
-
-	lights.forEach((light, i) => {
-		const theta = (i / lights.length) * Math.PI * 2;
-		const x = Math.cos(t + theta) * radius;
-		const y = Math.cos(t + theta) * radius;
-		const z = Math.sin(t + theta) * radius;
-		light.position.set(x, y, z);
-	});
-
 	renderer.render(scene, camera);
 }
 update();

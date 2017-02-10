@@ -23,6 +23,8 @@ export default class VideoTexture {
 		this.video.src = this.src;
 		this.video.loop = this.loop;
 		this.video.autoplay = this.autoplay;
+		this.video.setAttribute('webkitplaysinline', 'webkitplaysinline');
+		this.video.setAttribute('playsinline', 'playsinline');
 		this.video.addEventListener('canplaythrough', this._onCanPlayThrough, true);
 		this.video.addEventListener('ended', this._onEnded, true);
 		this._currentTime = 0;

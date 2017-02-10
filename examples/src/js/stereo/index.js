@@ -11,6 +11,7 @@ import {
 	Color,
 	DirectionalLight,
 	ShaderChunks,
+	Lights,
 } from 'index';
 import {
 	Sierpinski,
@@ -59,18 +60,22 @@ controlsR.update();
 
 // Content
 
-const light = new DirectionalLight({
-	intensity: {
-		type: 'f',
-		value: 1,
-	},
-	color: {
-		type: '3f',
-		value: new Color(0xcccccc).v,
-	},
-});
-light.position.set(0.1, 1, 0.1);
-scene.add(light);
+const directionalLights = new Lights([
+	new DirectionalLight({
+		intensity: {
+			type: 'f',
+			value: 1,
+		},
+		color: {
+			type: '3f',
+			value: new Color(0xcccccc).v,
+		},
+	}),
+]);
+
+directionalLights.get()[0].position.set(0.1, 1, 0.1);
+
+scene.directionalLights = directionalLights;
 
 const sierpinski = new Sierpinski();
 
@@ -134,7 +139,7 @@ const mesh = new Mesh(geometry, new Shader({
 		vec3 fogColor = vec3(0.0);
 		outputColor = vec4(mix(color, fogColor, vFogAmount), 1.0);
 	`,
-	directionalLights: [light.uniforms],
+	directionalLights,
 }));
 
 

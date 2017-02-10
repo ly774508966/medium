@@ -1,10 +1,9 @@
-import {
-	ERROR_WEBVR_DEVICE_NOT_LATEST,
-	ERROR_WEBVR_DEVICE_NOT_SUPPORTED,
-} from 'core/Messages';
 import { warn, log } from 'utils/Console';
 
 // https://github.com/toji/webvr-samples/blob/master/03-vr-presentation.html
+
+const ERROR_WEBVR_DEVICE_NOT_LATEST = 'Your browser supports WebVR but not the latest version';
+const ERROR_WEBVR_DEVICE_NOT_SUPPORTED = 'Your browser does not support WebVR';
 
 class WebVRVive {
 	constructor() {

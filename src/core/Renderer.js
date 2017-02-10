@@ -95,6 +95,9 @@ export default class Renderer {
 	}
 
 	_drawObjects(scene, projectionMatrix, modelViewMatrix, camera) {
+		// Update global uniform buffers
+		UniformBuffers.updateProjectionView(gl, projectionMatrix, modelViewMatrix);
+
 		// Render the scene objects
 		scene.objects.forEach(child => {
 			if (child.isInstanced) {
@@ -124,9 +127,6 @@ export default class Renderer {
 		mat4.identity(scene.modelViewMatrix);
 
 		mat4.lookAt(scene.modelViewMatrix, camera.position.v, camera.center.v, camera.up.v);
-
-		// Update global uniform buffers
-		UniformBuffers.updateProjectionView(gl, camera.projectionMatrix, scene.modelViewMatrix);
 
 		// Update the scene
 		scene.update();
@@ -199,6 +199,7 @@ export default class Renderer {
 		// Right
 		gl.viewport(gl.drawingBufferWidth * 0.5,
 			0, gl.drawingBufferWidth * 0.5, gl.drawingBufferHeight);
+
 		this._drawObjects(scene, rightProjectionMatrix, rightViewMatrix);
 	}
 }

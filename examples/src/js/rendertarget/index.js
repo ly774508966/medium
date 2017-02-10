@@ -30,7 +30,6 @@ const renderTarget = new RenderTarget({
 const scene = new Scene();
 const scene2 = new Scene();
 
-
 // Camera
 const cameras = {
 	dev: new PerspectiveCamera({
@@ -69,7 +68,7 @@ const material = new Shader({
 			value: 0,
 		},
 	},
-	fragmentShader: `${ShaderChunks.ShaderVersion}
+	fragmentShader: `${ShaderChunks.EsVersion}
 		#HOOK_PRECISION
 		in vec2 vUv;
 		uniform sampler2D uTexture0;

@@ -8,7 +8,6 @@ import {
 	GridHelper,
 	OrbitControls,
 	AxisHelper,
-	DirectionalLight,
 	TextureVideo,
 } from 'index';
 import dat from 'dat-gui';
@@ -32,18 +31,9 @@ camera.position.set(10, 5, 10);
 camera.lookAt();
 
 // Objects
-let colors = [];
-colors = colors.concat([1, 0, 0]);
-colors = colors.concat([0, 1, 0]);
-colors = colors.concat([0, 0, 1]);
-colors = colors.concat([1, 1, 0]);
-
-const light = new DirectionalLight();
-light.position.set(1, 1, 1);
-
 const textureVideo = new TextureVideo({
 	src: '/assets/textures/texture.mp4',
-	loop: false,
+	loop: true,
 });
 
 textureVideo.once('canplaythrough', () => {
@@ -69,11 +59,9 @@ const material = new Shader({
 			value: textureVideo.texture,
 		},
 	},
-	directionalLights: [light.uniforms],
 });
 const box = new Mesh(geometry, material);
 
-scene.add(light);
 scene.add(box);
 
 // setTimeout(() => {

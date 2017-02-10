@@ -7,14 +7,11 @@ import {
 	AxisHelper,
 	OrthographicCamera,
 	TextureCube,
-	BoxGeometry,
+	// BoxGeometry,
 	Shader,
 	Mesh,
 	ObjLoader,
 	Geometry,
-	Color,
-	PointLight,
-	DirectionalLight,
 } from 'index';
 
 // Renderer
@@ -84,38 +81,6 @@ const texture = new TextureCube({
 // const box = new Mesh(geometry, material);
 // scene.add(box);
 
-
-const directionalLight = new DirectionalLight();
-
-directionalLight.position.set(1, 1, 1);
-
-scene.add(directionalLight);
-
-const pointLight0 = new PointLight();
-const pointLight1 = new PointLight();
-const pointLight2 = new PointLight();
-scene.add(pointLight0);
-scene.add(pointLight1);
-scene.add(pointLight2);
-
-const lights = [
-	pointLight0,
-	pointLight1,
-	pointLight2,
-];
-
-pointLight0.uniforms.color.value[0] = Math.random();
-pointLight0.uniforms.color.value[1] = Math.random();
-pointLight0.uniforms.color.value[2] = Math.random();
-
-pointLight1.uniforms.color.value[0] = Math.random();
-pointLight1.uniforms.color.value[1] = Math.random();
-pointLight1.uniforms.color.value[2] = Math.random();
-
-pointLight2.uniforms.color.value[0] = Math.random();
-pointLight2.uniforms.color.value[1] = Math.random();
-pointLight2.uniforms.color.value[2] = Math.random();
-
 let mesh;
 
 new ObjLoader('assets/models/mass.obj').then(objGeometry => {
@@ -136,7 +101,6 @@ new ObjLoader('assets/models/mass.obj').then(objGeometry => {
 		hookFragmentMain: `
 			color = texture(uTexture0, vTexturePosition).rgb;
 		`,
-		pointLights: [pointLight0.uniforms, pointLight1.uniforms, pointLight2.uniforms],
 		uniforms: {
 			uTexture0: {
 				type: 'tc',
@@ -168,23 +132,12 @@ resize();
 
 window.addEventListener('resize', resize);
 
-function update(time) {
+function update() {
 	requestAnimationFrame(update);
 
 	if (mesh) {
 		mesh.rotation.y += 0.003;
 	}
-
-	const radius = 20;
-	const t = time * 0.0005;
-
-	lights.forEach((light, i) => {
-		const theta = (i / lights.length) * Math.PI * 2;
-		const x = Math.cos(t + theta) * radius;
-		const y = Math.cos(t + theta) * radius;
-		const z = Math.sin(t + theta) * radius;
-		light.position.set(x, y, z);
-	});
 
 	renderer.render(scene, cameras.dev);
 }

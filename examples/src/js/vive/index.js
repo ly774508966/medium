@@ -10,6 +10,7 @@ import {
 	OrbitControls,
 	AxisHelper,
 	DirectionalLight,
+	Lights,
 	Color,
 	ShaderChunks,
 } from 'index';
@@ -36,8 +37,22 @@ const z = 6;
 camera.position.set(10 * z, 5 * z, 10 * z);
 camera.lookAt();
 
-const light = new DirectionalLight();
-light.position.set(1, 1, 1);
+const directionalLights = new Lights([
+	new DirectionalLight({
+		intensity: {
+			type: 'f',
+			value: 1,
+		},
+		color: {
+			type: '3f',
+			value: new Color(0xcccccc).v,
+		},
+	}),
+]);
+
+directionalLights.get()[0].position.set(0.1, 1, 0.1);
+
+scene.directionalLights = directionalLights;
 
 const sierpinski = new Sierpinski();
 
@@ -101,13 +116,12 @@ const mesh = new Mesh(geometry, new Shader({
 		vec3 fogColor = vec3(0.0);
 		outputColor = vec4(mix(color, fogColor, vFogAmount), 1.0);
 	`,
-	directionalLights: [light.uniforms],
+	directionalLights,
 }));
 
 
 mesh.setInstanceCount(totalInstances);
 
-scene.add(light);
 scene.add(mesh);
 
 

@@ -9,10 +9,9 @@ import {
 	OrbitControls,
 	AxisHelper,
 	Color,
-	Constants,
 	DirectionalLight,
 	ShaderChunks,
-	MathUtils,
+	Lights,
 } from 'index';
 import { Sierpinski } from '../fractal';
 import dat from 'dat-gui';
@@ -35,7 +34,6 @@ const camera = new PerspectiveCamera({
 
 const s = 2;
 camera.position.set(20 * s, 5 * s, 20 * s);
-// camera.position.set(0.1, 0.1, 0.1);
 camera.lookAt();
 
 // Helpers
@@ -51,18 +49,22 @@ controls.update();
 
 // Content
 
-const light = new DirectionalLight({
-	intensity: {
-		type: 'f',
-		value: 1,
-	},
-	color: {
-		type: '3f',
-		value: new Color(0xcccccc).v,
-	},
-});
-light.position.set(0.1, 1, 0.1);
-scene.add(light);
+const directionalLights = new Lights([
+	new DirectionalLight({
+		intensity: {
+			type: 'f',
+			value: 1,
+		},
+		color: {
+			type: '3f',
+			value: new Color(0xcccccc).v,
+		},
+	}),
+]);
+
+directionalLights.get()[0].position.set(0.1, 1, 0.1);
+
+scene.directionalLights = directionalLights;
 
 const sierpinski = new Sierpinski();
 
@@ -157,7 +159,7 @@ const mesh = new Mesh(geometry, new Shader({
 		outputColor = vec4(mix(color, fogColor, vFogAmount), 1.0);
 	`,
 	// drawType: Constants.DRAW_LINES,
-	directionalLights: [light.uniforms],
+	directionalLights,
 }));
 
 
@@ -185,9 +187,9 @@ resize();
 
 window.addEventListener('resize', resize);
 
-let t = 0;
-const range = Math.PI * 0.5;
-const radius = 2;
+// let t = 0;
+// const range = Math.PI * 0.5;
+// const radius = 2;
 function update(time) {
 	requestAnimationFrame(update);
 	// t = time * 0.0002;

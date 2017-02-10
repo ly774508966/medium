@@ -1,17 +1,8 @@
 import * as GL from 'core/GL';
-import {
-	extensions
-} from 'core/Capabilities';
 import BufferAttribute from './BufferAttribute';
 import Face from './Face';
 import Vector3 from 'math/Vector3';
 import Vector2 from 'math/Vector2';
-import {
-	ERROR_EXTENSION_ANGLE_INSTANCE_ARRAYS
-} from 'core/Messages';
-import {
-	warn
-} from 'utils/Console';
 
 let gl;
 

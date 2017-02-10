@@ -5,10 +5,7 @@ import {
 	Mesh,
 	Shader,
 	BoxGeometry,
-	GridHelper,
 	OrbitControls,
-	AxisHelper,
-	DirectionalLight,
 	Texture,
 } from 'index';
 
@@ -30,20 +27,8 @@ const camera = new PerspectiveCamera({
 camera.position.set(10, 5, 10);
 camera.lookAt();
 
-// Objects
-const light = new DirectionalLight();
-light.position.set(1, 1, 1);
-
-scene.add(light);
-
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas);
-
-// const grid = new GridHelper(10);
-// const axis = new AxisHelper(1);
-
-// scene.add(grid);
-// scene.add(axis);
 
 controls.update();
 
@@ -75,7 +60,6 @@ function addBox() {
 				value: texture.texture,
 			},
 		},
-		directionalLights: [light.uniforms],
 	});
 	const box = new Mesh(geometry, material);
 	box.rotation.x = Math.random();
@@ -95,10 +79,6 @@ setInterval(() => {
 }, 1000);
 
 addBox();
-
-// setTimeout(() => {
-//
-// }, 1200);
 
 function resize() {
 	const width = window.innerWidth;

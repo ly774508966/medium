@@ -2,6 +2,7 @@ import * as GL from '../core/GL';
 import {
 	mat4,
 } from 'gl-matrix';
+import * as UniformBuffers from 'core/UniformBuffers';
 
 let gl;
 
@@ -51,6 +52,9 @@ export default class RenderTarget {
 		mat4.identity(scene.modelViewMatrix);
 
 		mat4.lookAt(scene.modelViewMatrix, camera.position.v, camera.center.v, camera.up.v);
+
+		// Update global uniform buffers
+		UniformBuffers.updateProjectionView(gl, camera.projectionMatrix, scene.modelViewMatrix);
 
 		// Update the scene
 		scene.update();

@@ -65,15 +65,15 @@ export default class Shader {
 		this.uniforms[uniformName].location = gl.getUniformLocation(this.program, uniformName);
 	}
 
-	setUniformBlockLocation(uniformName, uniformBuffer, i) {
-		console.log('------- setUniformBlockLocation -------');
-		console.log('uniformName', uniformName);
+	setUniformBlockLocation(uniformName, uniformBuffer, index) {
+		// console.log('------- setUniformBlockLocation -------');
+		// console.log('uniformName', uniformName);
 		gl = GL.get();
 		this.uniformBlocks[uniformName] = gl.getUniformBlockIndex(this.program, uniformName);
-		console.log('location', this.uniformBlocks[uniformName]);
+		// console.log('location', this.uniformBlocks[uniformName]);
 		gl.uniformBlockBinding(this.program,
 			this.uniformBlocks[uniformName], this.uniformBlocks[uniformName]);
-		gl.bindBufferBase(gl.UNIFORM_BUFFER, i, uniformBuffer);
+		gl.bindBufferBase(gl.UNIFORM_BUFFER, index, uniformBuffer);
 	}
 
 	create(geometry) {
@@ -109,18 +109,19 @@ export default class Shader {
 
 		// Uniforms for ProjectionView uniform block
 		this.setUniformBlockLocation('ProjectionView',
-				UniformBuffers.projectionView.buffer, 0);
+				UniformBuffers.projectionView.buffer, CONSTANTS.UNIFORM_PROJECTION_VIEW_LOCATION);
 
 		// Setup uniform block for directional lights
 		if (this.directionalLights) {
 			this.setUniformBlockLocation('DirectionalLights',
-					this.directionalLights.uniformBuffer.buffer, 1);
+					this.directionalLights.uniformBuffer.buffer,
+					CONSTANTS.UNIFORM_DIRECTIONAL_LIGHTS_LOCATION);
 		}
 
 		// Setup uniform block for point lights
 		if (this.pointLights) {
 			this.setUniformBlockLocation('PointLights',
-					this.pointLights.uniformBuffer.buffer, 2);
+					this.pointLights.uniformBuffer.buffer, CONSTANTS.UNIFORM_SPOT_LIGHTS_LOCATION);
 		}
 
 		// Add Camera position uniform for point lights if it doesn't exist

@@ -5,12 +5,12 @@ import {
 	Mesh,
 	Shader,
 	PlaneGeometry,
-	// BoxGeometry,
+	BoxGeometry,
 	SphereGeometry,
 	GridHelper,
 	OrbitControls,
 	AxisHelper,
-	// NormalsHelper,
+	NormalsHelper,
 	DirectionalLight,
 	PointLight,
 	Texture,
@@ -38,30 +38,30 @@ camera.position.set(10, 5, 10);
 camera.lookAt();
 
 // Objects
-// let colors = [];
-// colors = colors.concat([1, 0, 0]);
-// colors = colors.concat([0, 1, 0]);
-// colors = colors.concat([0, 0, 1]);
-// colors = colors.concat([1, 1, 0]);
+let colors = [];
+colors = colors.concat([1, 0, 0]);
+colors = colors.concat([0, 1, 0]);
+colors = colors.concat([0, 0, 1]);
+colors = colors.concat([1, 1, 0]);
 
-// let geometry = new PlaneGeometry(1, 1, colors);
-// const material1 = new Shader({
-// 	name: 'Plane',
-// });
+let geometry = new PlaneGeometry(1, 1, colors);
+const material1 = new Shader({
+	name: 'Plane',
+});
 
-// const plane = new Mesh(geometry, material1);
-// plane.position.z = 2;
-// const planeNormalsHelper = new NormalsHelper(plane);
-// scene.add(planeNormalsHelper);
-// planeNormalsHelper.setParent(plane);
-// scene.add(plane);
+const plane = new Mesh(geometry, material1);
+plane.position.z = 2;
+const planeNormalsHelper = new NormalsHelper(plane);
+scene.add(planeNormalsHelper);
+planeNormalsHelper.setParent(plane);
+scene.add(plane);
 
-// colors = [];
-// for (let i = 0; i < 6; i++) {
-// 	for (let j = 0; j < 3; j++) {
-// 		colors = colors.concat([Math.random(), Math.random(), Math.random()]);
-// 	}
-// }
+colors = [];
+for (let i = 0; i < 6; i++) {
+	for (let j = 0; j < 3; j++) {
+		colors = colors.concat([Math.random(), Math.random(), Math.random()]);
+	}
+}
 
 const pointLights = new Lights([
 	new PointLight({
@@ -115,23 +115,23 @@ directionalLights.get()[1].position.set(0, -1, 0);
 scene.pointLights = pointLights;
 scene.directionalLights = directionalLights;
 
-// const texture = new Texture({
-// 	src: '/assets/textures/texture.jpg',
-// });
-const geometry = new SphereGeometry(3, 32, 32);
+const texture = new Texture({
+	src: '/assets/textures/texture.jpg',
+});
+geometry = new BoxGeometry();
 const material = new Shader({
 	name: 'Box',
-	// hookFragmentPre: `
-	// 	uniform sampler2D uTexture0;
-	// `,
-	// hookFragmentMain: `
-	// 	color = texture(uTexture0, vUv).rgb;
-	// `,
+	hookFragmentPre: `
+		uniform sampler2D uTexture0;
+	`,
+	hookFragmentMain: `
+		color = texture(uTexture0, vUv).rgb;
+	`,
 	uniforms: {
-		// uTexture0: {
-		// 	type: 't',
-		// 	value: texture.texture,
-		// },
+		uTexture0: {
+			type: 't',
+			value: texture.texture,
+		},
 	},
 	directionalLights,
 	pointLights,
@@ -140,17 +140,13 @@ const box = new Mesh(geometry, material);
 
 scene.add(box);
 
-box.position.x = 1;
-box.position.y = 1;
+box.position.x = 3;
+box.position.y = 3;
 
-// const boxNormalsHelper = new NormalsHelper(box);
-// scene.add(boxNormalsHelper);
+const boxNormalsHelper = new NormalsHelper(box);
+scene.add(boxNormalsHelper);
 
-// boxNormalsHelper.setParent(box);
-
-// directionalLights.forEach(light => {
-// 	scene.add(light);
-// });
+boxNormalsHelper.setParent(box);
 
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas);
@@ -186,8 +182,8 @@ function update(time) {
 	requestAnimationFrame(update);
 	box.rotation.x += 0.01;
 	box.rotation.y += 0.01;
-	// plane.rotation.x += 0.01;
-	// plane.rotation.y += 0.01;
+	plane.rotation.x += 0.01;
+	plane.rotation.y += 0.01;
 
 	const radius = 30;
 	const t = time * 0.0005;

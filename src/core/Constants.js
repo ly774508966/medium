@@ -22,3 +22,8 @@ export const DRAW_TRIANGLES = 4;
 // Object types
 export const OBJECT_TYPE_MESH = 'OBJECT_TYPE_MESH';
 export const OBJECT_TYPE_LIGHT = 'OBJECT_TYPE_LIGHT';
+
+// Uniform location indices
+export const UNIFORM_PROJECTION_VIEW_LOCATION = 0;
+export const UNIFORM_DIRECTIONAL_LIGHTS_LOCATION = 1;
+export const UNIFORM_SPOT_LIGHTS_LOCATION = 2;

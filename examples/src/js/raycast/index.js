@@ -13,6 +13,7 @@ import {
 	Vector2,
 	SphereGeometry,
 	BoxGeometry,
+	Lights,
 } from 'index';
 import { vec2 } from 'gl-matrix';
 
@@ -34,8 +35,18 @@ const camera = new PerspectiveCamera({
 camera.position.set(10, 5, 10);
 camera.lookAt();
 
-const light = new DirectionalLight();
-light.position.set(0.75, 1, 0.75);
+const directionalLights = new Lights([
+	new DirectionalLight({
+		intensity: {
+			type: 'f',
+			value: 0.7,
+		},
+	}),
+]);
+
+directionalLights.get()[0].position.set(0.75, 1, 0.75);
+
+scene.directionalLights = directionalLights;
 
 const geometry = new BoxGeometry(2, 2, 2);
 const material = new Shader({
@@ -70,7 +81,7 @@ const material = new Shader({
 			value: new Vector2().v,
 		},
 	},
-	directionalLights: [light.uniforms],
+	directionalLights,
 });
 const box = new Mesh(geometry, material);
 
@@ -85,7 +96,6 @@ const intersectHelper = new Mesh(new SphereGeometry(0.2), new Shader({
 
 box.position.y = 3;
 
-scene.add(light);
 scene.add(box);
 scene.add(intersectHelper);
 

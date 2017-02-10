@@ -10,7 +10,7 @@ import {
 	Mesh,
 	PointLight,
 	Color,
-	DirectionalLight,
+	Lights,
 } from 'index';
 import dat from 'dat-gui';
 
@@ -43,72 +43,39 @@ const axis = new AxisHelper(1);
 scene.add(axis);
 controls.update();
 
-const intensity = 0.7;
+const pointLights = new Lights([
+	new PointLight({
+		intensity: {
+			type: 'f',
+			value: 0.7,
+		},
+		color: {
+			type: '3f',
+			value: new Color(0xFF0000).v,
+		},
+	}),
+	new PointLight({
+		intensity: {
+			type: 'f',
+			value: 0.7,
+		},
+		color: {
+			type: '3f',
+			value: new Color(0x0000FF).v,
+		},
+	}),
+]);
 
-const directionalLight = new DirectionalLight();
-const pointLight0 = new PointLight({
-	intensity: {
-		type: 'f',
-		value: intensity,
-	},
-});
-const pointLight1 = new PointLight({
-	intensity: {
-		type: 'f',
-		value: intensity,
-	},
-});
-const pointLight2 = new PointLight({
-	intensity: {
-		type: 'f',
-		value: intensity,
-	},
-});
-scene.add(directionalLight);
-scene.add(pointLight0);
-scene.add(pointLight1);
-scene.add(pointLight2);
-
-directionalLight.position.set(1, 1, 1);
-pointLight0.position.set(0, 0, 30);
-
-const lights = [
-	pointLight0,
-	pointLight1,
-	pointLight2,
-];
-
-// pointLight0.uniforms.color.value[0] = 1;
-// pointLight0.uniforms.color.value[1] = 0;
-// pointLight0.uniforms.color.value[2] = 0;
-//
-// pointLight1.uniforms.color.value[0] = 0;
-// pointLight1.uniforms.color.value[1] = 0;
-// pointLight1.uniforms.color.value[2] = 0;
-//
-// pointLight2.uniforms.color.value[0] = 0;
-// pointLight2.uniforms.color.value[1] = 0;
-// pointLight2.uniforms.color.value[2] = 0;
-
-
-// pointLight0.position.set(10, 10, 10);
-// pointLight1.position.set(-10, -10, -10);
-
-// const range = 10;
-// gui.add(pointLight.position, 'x', -range, range);
-// gui.add(pointLight.position, 'y', -range, range);
-// gui.add(pointLight.position, 'z', -range, range);
+scene.pointLights = pointLights;
 
 const material = new Shader({
-	pointLights: [pointLight0.uniforms, pointLight1.uniforms, pointLight2.uniforms],
-	// directionalLights: [directionalLight.uniforms],
+	pointLights,
 	uniforms: {
 		uDiffuse: {
 			type: '3f',
 			value: new Color(0x000000).v,
 		},
 	},
-	// drawType: CONSTANTS.DRAW_LINES,
 });
 
 const geometry = new SphereGeometry(10, 64, 64);
@@ -139,8 +106,8 @@ function update(time) {
 	const radius = 20;
 	const t = time * 0.0005;
 
-	lights.forEach((light, i) => {
-		const theta = (i / lights.length) * Math.PI * 2;
+	pointLights.get().forEach((light, i) => {
+		const theta = (i / pointLights.length) * Math.PI * 2;
 		const x = Math.cos(t + theta) * radius;
 		const y = Math.cos(t + theta) * radius;
 		const z = Math.sin(t + theta) * radius;
