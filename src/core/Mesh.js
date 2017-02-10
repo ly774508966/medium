@@ -6,7 +6,6 @@ import Object3D from 'core/Object3D';
 import Vao from 'core/Vao';
 
 let gl;
-let attribute;
 
 export default class Mesh extends Object3D {
 	constructor(geometry, shader) {
@@ -78,24 +77,6 @@ export default class Mesh extends Object3D {
 		if (this.shader.culling !== false) {
 			gl.enable(gl.CULL_FACE);
 			gl.cullFace(this.shader.culling);
-		}
-
-		// Loop through blocks here
-		if (this.shader.directionalLights.length > 0) {
-			gl.bindBufferBase(gl.UNIFORM_BUFFER, 2,
-				this.shader.directionalLights[0].uniformBuffer.buffer);
-			gl.bindBuffer(gl.UNIFORM_BUFFER, this.shader.directionalLights[0].uniformBuffer.buffer);
-
-			gl.bufferSubData(gl.UNIFORM_BUFFER, 0, this.shader.directionalLights[0].uniformBuffer.data);
-			gl.bindBuffer(gl.UNIFORM_BUFFER, null);
-		}
-
-		if (this.shader.pointLights.length > 0) {
-			gl.bindBufferBase(gl.UNIFORM_BUFFER, 1, this.shader.pointLights[0].uniformBuffer.buffer);
-			gl.bindBuffer(gl.UNIFORM_BUFFER, this.shader.pointLights[0].uniformBuffer.buffer);
-
-			gl.bufferSubData(gl.UNIFORM_BUFFER, 0, this.shader.pointLights[0].uniformBuffer.data);
-			gl.bindBuffer(gl.UNIFORM_BUFFER, null);
 		}
 
 		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix, camera);

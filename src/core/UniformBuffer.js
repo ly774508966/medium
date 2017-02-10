@@ -8,12 +8,8 @@ export default class UniformBuffer {
 		this.buffer = createUniformBuffer(data);
 	}
 
-	/**
-	 * Set values for the indices in data
-	 */
-	setValues(indices, values) {
-		indices.forEach((index, i) => {
-			this.data[index] = values[i];
-		});
+	setValues(values, offset = 0) {
+		// TypedArray.prototype.set
+		this.data.set(values, offset);
 	}
 }

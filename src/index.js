@@ -31,6 +31,7 @@ import GridHelper from 'helpers/GridHelper';
 import NormalsHelper from 'helpers/NormalsHelper';
 
 // Lights
+import Lights from 'lights/Lights';
 import DirectionalLight from 'lights/DirectionalLight';
 import PointLight from 'lights/PointLight';
 
@@ -75,6 +76,7 @@ export {
 	AxisHelper,
 	GridHelper,
 	NormalsHelper,
+	Lights,
 	DirectionalLight,
 	PointLight,
 	Color,

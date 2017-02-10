@@ -1,6 +1,7 @@
 import EsVersion from 'shaders/chunks/EsVersion.glsl';
 import { pointLightsIn as pointLights } from 'shaders/chunks/PointLights.glsl';
 import directionalLights from 'shaders/chunks/DirectionalLights.glsl';
+import { whenGreaterThan } from 'shaders/chunks/Conditionals.glsl';
 
 export default `${EsVersion}
 	#HOOK_PRECISION
@@ -30,6 +31,8 @@ export default `${EsVersion}
 
 	out vec4 outputColor;
 
+	${whenGreaterThan}
+
 	#HOOK_FRAGMENT_PRE
 
 	void main(void){
@@ -46,7 +49,7 @@ export default `${EsVersion}
 		for (int i = 0; i < #HOOK_DIRECTIONAL_LIGHTS; i++) {
 			float directionalLight = dot(normal, normalize(uDirectionalLights[i].position.xyz));
 			vec3 directionalColor = uDirectionalLights[i].color.rgb * directionalLight;
-			color += directionalColor * uDirectionalLights[i].intensity.x;
+			color += whenGreaterThan(directionalLight, 0.0) * (directionalColor * uDirectionalLights[i].intensity.x);
 		}
 		#endif
 
@@ -59,7 +62,7 @@ export default `${EsVersion}
 			float pointLight = max(dot(normal, pointLightSurfaceToLightDirection), 0.0);
 			vec3 pointLightColor = uPointLights[i].color.rgb * pointLight;
 			color += pointLight * pointLightColor;
-			float specular = pow(dot(normal, halfVector), uPointLights[i].shininess.x);
+			float specular = max(pow(dot(normal, halfVector), uPointLights[i].shininess.x), 0.0);
 			color += specular * uPointLights[i].specularColor.rgb;
 		}
 		#endif
@@ -69,8 +72,3 @@ export default `${EsVersion}
 		#HOOK_FRAGMENT_END
 	}
 `;
-
-
-// #ifdef directionalLights
-//
-// #endif

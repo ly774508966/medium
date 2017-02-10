@@ -18,18 +18,17 @@ export function setup() {
 }
 
 // Update projectionView buffer data
+let projectionViewData;
 export function updateProjectionView(gl, projectionMatrix, modelViewMatrix) {
 	gl.bindBufferBase(gl.UNIFORM_BUFFER, 0, uniformBuffers.projectionView.buffer);
 	gl.bindBuffer(gl.UNIFORM_BUFFER, uniformBuffers.projectionView.buffer);
 
-	const data = [
+	projectionViewData = [
 		...projectionMatrix,
 		...modelViewMatrix,
 	];
 
-	for (let i = 0; i < 32; i++) {
-		uniformBuffers.projectionView.data[i] = data[i];
-	}
+	uniformBuffers.projectionView.data.set(projectionViewData, 0);
 
 	gl.bufferSubData(gl.UNIFORM_BUFFER, 0, uniformBuffers.projectionView.data);
 	gl.bindBuffer(gl.UNIFORM_BUFFER, null);
