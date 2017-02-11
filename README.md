@@ -2,7 +2,7 @@
 
 [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 
-Modular webgl toolkit.
+WebGL2 toolkit.
 
 # Shaders
 
@@ -18,11 +18,3 @@ Then add the following to your atom config:
 "file-types":
   "glsl.js": "source.glsl"
 ```
-
-# Todo
-
-[ ] VAO
-
-[ ] Fix instancing
-
-[ ] POW images

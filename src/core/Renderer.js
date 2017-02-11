@@ -11,7 +11,6 @@ import {
 	LINE_DEFAULT_WIDTH,
 } from 'core/Constants';
 import * as Capabilities from 'core/Capabilities';
-import RendererInfo from 'core/RendererInfo';
 import * as UniformBuffers from 'core/UniformBuffers';
 
 let gl;
@@ -48,9 +47,6 @@ export default class Renderer {
 		} catch (error) {
 			warn('Webgl not supported');
 		}
-
-		// Renderer info
-		this.info = new RendererInfo();
 
 		gl = GL.get();
 

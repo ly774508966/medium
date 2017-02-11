@@ -9,13 +9,11 @@ export default class Vao {
 	}
 
 	bind() {
-		// console.log('vao bind');
 		gl.bindVertexArray(this.vao);
 	}
 
 	unbind() {
 		gl.bindVertexArray(null);
-		// console.log('vao unbind');
 	}
 
 	dispose() {
