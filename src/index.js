@@ -15,7 +15,6 @@ import TextureCube from 'core/TextureCube';
 import TextureVideo from 'core/TextureVideo';
 
 // Extras
-import Detect from 'extras/Detect';
 import WebVRVive from 'extras/WebVRVive';
 
 // Geometry
@@ -44,6 +43,9 @@ import * as MathUtils from 'math/Utils';
 
 // Shaders
 import ShaderChunks from 'shaders/chunks/index';
+
+// Utils
+import Detect from 'utils/Detect';
 
 // Controls
 import OrbitControls from 'controls/OrbitControls';

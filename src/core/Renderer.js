@@ -3,6 +3,7 @@ import {
 	mat4,
 } from 'gl-matrix';
 import {
+	log,
 	warn,
 } from 'utils/Console';
 import {
@@ -12,6 +13,8 @@ import {
 } from 'core/Constants';
 import * as Capabilities from 'core/Capabilities';
 import * as UniformBuffers from 'core/UniformBuffers';
+import Detect from 'utils/Detect';
+const config = require('../../package.json');
 
 let gl;
 
@@ -41,12 +44,21 @@ export default class Renderer {
 			preserveDrawingBuffer: this.preserveDrawingBuffer,
 		};
 
-		try {
-			gl = this.canvas.getContext('webgl2', attributes);
+		const detect = Detect();
+
+		if (detect) {
+			if (detect.webgl2) {
+				gl = this.canvas.getContext('webgl2', attributes);
+			} else {
+				gl = this.canvas.getContext('webgl', attributes);
+			}
 			GL.set(gl);
-		} catch (error) {
+		} else {
 			warn('Webgl not supported');
+			return;
 		}
+
+		log(`%c${config.name} ${config.version} webgl${detect.webgl2 ? 2 : 1}`, 'padding: 1rem; background: #222; color: #ff00ff');
 
 		gl = GL.get();
 

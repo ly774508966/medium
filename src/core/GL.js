@@ -1,4 +1,6 @@
+import Detect from 'utils/Detect';
 let gl = undefined;
+let version = Detect();
 
 /*
 	Set the gl instance
@@ -14,6 +16,9 @@ export function set(_gl) {
 export function get() {
 	return gl;
 }
+
+// WebGL2 supported?
+export const webgl2 = version.webgl2;
 
 /**
  * createBuffer
