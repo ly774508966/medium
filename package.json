@@ -10,7 +10,7 @@
     "examples:html": "npm run examples:files; pug --obj ./examples/files.json --watch ./examples/src/templates/*.pug --out ./examples",
     "examples:files": "pug --obj ./examples/files.json ./examples/src/templates/*.pug --out ./examples; node ./examples/files",
     "build": "npm run lint; babel src --out-dir lib",
-    "lint": "eslint --fix --ext .js ./src --cache"
+    "lint": "eslint --ext .js ./src --cache"
   },
   "author": "Amelie Rosser <mail@ixviii.co.uk> (https://www.ixviii.io)",
   "license": "MIT",
@@ -55,6 +55,7 @@
     "rules": {
       "global-require": 0,
       "arrow-body-style": 0,
+      "class-methods-use-this": 0,
       "comma-dangle": 0,
       "indent": [
         1,
