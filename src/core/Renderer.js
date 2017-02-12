@@ -7,6 +7,9 @@ import {
 	warn,
 } from 'utils/Console';
 import {
+	WEBGL_CONTEXT,
+	WEBGL2_CONTEXT,
+	RENDERER_DEFAULT_CONTEXT,
 	RENDERER_DEFAULT_WIDTH,
 	RENDERER_DEFAULT_HEIGHT,
 	LINE_DEFAULT_WIDTH,
@@ -27,6 +30,7 @@ export default class Renderer {
 			ratio: RENDERER_DEFAULT_WIDTH / RENDERER_DEFAULT_HEIGHT,
 			preserveDrawingBuffer: false,
 			pixelRatio: 1,
+			prefferedContext: RENDERER_DEFAULT_CONTEXT,
 		};
 
 		window.Capabilities = Capabilities;
@@ -47,18 +51,18 @@ export default class Renderer {
 		const detect = Detect();
 
 		if (detect) {
-			if (detect.webgl2) {
+			if (detect.webgl2 && this.prefferedContext === WEBGL2_CONTEXT) {
 				gl = this.canvas.getContext('webgl2', attributes);
 			} else {
 				gl = this.canvas.getContext('webgl', attributes);
 			}
-			GL.set(gl);
+			GL.set(gl, this.prefferedContext);
 		} else {
 			warn('Webgl not supported');
 			return;
 		}
 
-		log(`%c${config.name} ${config.version} webgl${detect.webgl2 ? 2 : 1}`, 'padding: 1rem; background: #222; color: #ff00ff');
+		log(`%c${config.name} ${config.version} webgl${GL.webgl2 ? 2 : 1}`, 'padding: 1px; background: #222; color: #ff00ff');
 
 		gl = GL.get();
 
@@ -66,10 +70,12 @@ export default class Renderer {
 		Capabilities.set(gl);
 
 		// Setup global uniform buffers
-		UniformBuffers.setup();
+		if (GL.webgl2) {
+			UniformBuffers.setup();
+		}
 
 		// log('capabilities', Capabilities.capabilities);
-		// log('extensions', Capabilities.extensions);
+		log('extensions', Capabilities.extensions);
 
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.enable(gl.DEPTH_TEST);
@@ -103,8 +109,10 @@ export default class Renderer {
 	}
 
 	_drawObjects(scene, projectionMatrix, modelViewMatrix, camera) {
-		// Update global uniform buffers
-		UniformBuffers.updateProjectionView(gl, projectionMatrix, modelViewMatrix);
+		if (GL.webgl2) {
+			// Update global uniform buffers
+			UniformBuffers.updateProjectionView(gl, projectionMatrix, modelViewMatrix);
+		}
 
 		// Render the scene objects
 		scene.objects.forEach(child => {

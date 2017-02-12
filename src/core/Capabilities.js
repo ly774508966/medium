@@ -60,7 +60,12 @@ function Capabilities(gl) {
 	};
 }
 
-function Extensions(/* gl */) {}
+function Extensions(gl) {
+	const vertexArrayObject = gl.getExtension('OES_vertex_array_object');
+	return {
+		vertexArrayObject,
+	}
+}
 
 let capabilities = {};
 let extensions = {};

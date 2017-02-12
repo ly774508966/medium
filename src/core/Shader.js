@@ -5,8 +5,8 @@ import {
 	mat4,
 	vec3,
 } from 'gl-matrix';
-import vertexShader from 'shaders/basic/Vertex.glsl';
-import fragmentShader from 'shaders/basic/Frag.glsl';
+import { vertexShaderEs300, vertexShaderEs100 } from 'shaders/basic/Vertex.glsl';
+import { fragmentShaderEs300, fragmentShaderEs100 } from 'shaders/basic/Frag.glsl';
 import {
 	warn,
 } from 'utils/Console';
@@ -22,6 +22,8 @@ const inversedModelViewMatrix = mat4.create();
 
 export default class Shader {
 	constructor(options) {
+		const vertexShader = GL.webgl2 ? vertexShaderEs300 : vertexShaderEs100;
+		const fragmentShader = GL.webgl2 ? fragmentShaderEs300 : fragmentShaderEs100;
 		const defaults = {
 			name: '',
 			uniforms: {},
@@ -31,8 +33,8 @@ export default class Shader {
 			hookFragmentPre: '',
 			hookFragmentMain: '',
 			hookFragmentEnd: '',
-			vertexShader: `${vertexShader}`,
-			fragmentShader: `${fragmentShader}`,
+			vertexShader,
+			fragmentShader,
 			drawType: CONSTANTS.DRAW_TRIANGLES,
 			directionalLights: false,
 			pointLights: false,
@@ -108,20 +110,42 @@ export default class Shader {
 		this.attributeLocations = {};
 
 		// Uniforms for ProjectionView uniform block
-		this.setUniformBlockLocation('ProjectionView',
-				UniformBuffers.projectionView.buffer, CONSTANTS.UNIFORM_PROJECTION_VIEW_LOCATION);
-
-		// Setup uniform block for directional lights
-		if (this.directionalLights) {
-			this.setUniformBlockLocation('DirectionalLights',
-					this.directionalLights.uniformBuffer.buffer,
-					CONSTANTS.UNIFORM_DIRECTIONAL_LIGHTS_LOCATION);
+		if (GL.webgl2) {
+			this.setUniformBlockLocation('ProjectionView',
+					UniformBuffers.projectionView.buffer, CONSTANTS.UNIFORM_PROJECTION_VIEW_LOCATION);
 		}
 
-		// Setup uniform block for point lights
+		if (this.directionalLights) {
+			if (GL.webgl2) {
+				// Setup uniform block for directional lights
+				this.setUniformBlockLocation('DirectionalLights',
+						this.directionalLights.uniformBuffer.buffer,
+						CONSTANTS.UNIFORM_DIRECTIONAL_LIGHTS_LOCATION);
+			} else {
+				// Generate uniforms for directional lights
+				this.directionalLights.forEach((directionalLightUniforms, i) => {
+					Object.keys(directionalLightUniforms).forEach(directionalLightUniform => {
+						const uniform = directionalLightUniforms[directionalLightUniform];
+						this.customUniforms[`uDirectionalLights[${i}].${directionalLightUniform}`] = uniform;
+					});
+				});
+			}
+		}
+
 		if (this.pointLights) {
-			this.setUniformBlockLocation('PointLights',
-					this.pointLights.uniformBuffer.buffer, CONSTANTS.UNIFORM_SPOT_LIGHTS_LOCATION);
+			if (GL.webgl2) {
+				// Setup uniform block for point lights
+				this.setUniformBlockLocation('PointLights',
+						this.pointLights.uniformBuffer.buffer, CONSTANTS.UNIFORM_SPOT_LIGHTS_LOCATION);
+				} else{
+					// Generate uniforms for point lights
+					this.pointLights.forEach((pointLightUniforms, i) => {
+						Object.keys(pointLightUniforms).forEach(pointLightUniform => {
+							const uniform = pointLightUniforms[pointLightUniform];
+							this.customUniforms[`uPointLights[${i}].${pointLightUniform}`] = uniform;
+						});
+					});
+				}
 		}
 
 		// Add Camera position uniform for point lights if it doesn't exist
@@ -131,6 +155,20 @@ export default class Shader {
 				value: [20, 20, 20],
 			};
 		}
+
+		// Only for webgl1
+		const projectionViewUniforms = GL.webgl2 ? {} : {
+			uProjectionMatrix: {
+				type: '4fv',
+				value: mat4.create(),
+				location: null,
+			},
+			uViewMatrix: {
+				type: '4fv',
+				value: mat4.create(),
+				location: null,
+			},
+		};
 
 		// Default uniforms
 		this.uniforms = Object.assign({
@@ -149,7 +187,7 @@ export default class Shader {
 				value: new Color().v,
 				location: null,
 			},
-		}, this.customUniforms);
+		}, this.customUniforms, projectionViewUniforms);
 
 		Object.keys(this.uniforms).forEach(uniformName => {
 			this.setUniformLocation(uniformName);
@@ -328,6 +366,12 @@ export default class Shader {
 				default:
 			}
 		});
+
+		if (!GL.webgl2) {
+			// Matrix
+			gl.uniformMatrix4fv(this.uniforms.uProjectionMatrix.location, false, projectionMatrix);
+			gl.uniformMatrix4fv(this.uniforms.uViewMatrix.location, false, modelViewMatrix);
+		}
 
 		// Matrix
 		gl.uniformMatrix4fv(this.uniforms.uModelMatrix.location, false, modelMatrix);

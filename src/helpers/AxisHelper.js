@@ -6,14 +6,12 @@ import Geometry from 'geometry/Geometry';
 import EsVersion from 'shaders/chunks/EsVersion.glsl';
 import ProjectionView from 'shaders/chunks/ProjectionView.glsl';
 
-const vertexShader = `${EsVersion}
+const vertexShaderEs300 = `${EsVersion}
 	layout (location = 0) in vec3 aVertexPosition;
 	layout (location = 1) in vec3 aVertexColor;
 
 	${ProjectionView}
 
-	uniform mat4 uViewMatrix;
-	uniform mat4 uProjectionMatrix;
 	uniform mat4 uModelMatrix;
 
 	out vec3 vColor;
@@ -24,7 +22,23 @@ const vertexShader = `${EsVersion}
 	}
 `;
 
-function fragmentShader() {
+const vertexShaderEs100 = `
+	attribute vec3 aVertexPosition;
+	attribute vec3 aVertexColor;
+
+	uniform mat4 uProjectionMatrix;
+	uniform mat4 uViewMatrix;
+	uniform mat4 uModelMatrix;
+
+	varying vec3 vColor;
+
+	void main(void){
+		vColor = aVertexColor;
+		gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
+	}
+`;
+
+function fragmentShaderEs300() {
 	return `${EsVersion}
 	precision ${capabilities.precision} float;
 	in vec3 vColor;
@@ -32,6 +46,17 @@ function fragmentShader() {
 
 	void main(void){
 		outputColor = vec4(vColor, 1.0);
+	}
+	`;
+}
+
+function fragmentShaderEs100() {
+	return `
+	precision ${capabilities.precision} float;
+	varying vec3 vColor;
+
+	void main(void){
+		gl_FragColor = vec4(vColor, 1.0);
 	}
 	`;
 }
@@ -62,10 +87,12 @@ class AxisGeometry extends Geometry {
 
 export default class Axis extends Mesh {
 	constructor(size = 1, lineWidth = 3) {
+		const vertexShader = GL.webgl2 ? vertexShaderEs300 : vertexShaderEs100;
+		const fragmentShader = GL.webgl2 ? fragmentShaderEs300() : fragmentShaderEs100();
 		super(new AxisGeometry(size), new Shader({
 			name: 'AxisHelper',
 			vertexShader,
-			fragmentShader: fragmentShader(),
+			fragmentShader,
 		}));
 		this.lineWidth = lineWidth;
 	}

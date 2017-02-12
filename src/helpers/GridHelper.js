@@ -9,13 +9,11 @@ import Geometry from 'geometry/Geometry';
 import EsVersion from 'shaders/chunks/EsVersion.glsl';
 import ProjectionView from 'shaders/chunks/ProjectionView.glsl';
 
-const vertexShader = `${EsVersion}
+const vertexShaderEs300 = `${EsVersion}
 	${ProjectionView}
 
 	in vec3 aVertexPosition;
 
-	uniform mat4 uViewMatrix;
-	uniform mat4 uProjectionMatrix;
 	uniform mat4 uModelMatrix;
 
 	void main(void){
@@ -23,7 +21,19 @@ const vertexShader = `${EsVersion}
 	}
 `;
 
-function fragmentShader() {
+const vertexShaderEs100 = `
+	attribute vec3 aVertexPosition;
+
+	uniform mat4 uProjectionMatrix;
+	uniform mat4 uViewMatrix;
+	uniform mat4 uModelMatrix;
+
+	void main(void){
+		gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
+	}
+`;
+
+function fragmentShaderEs300() {
 	return `${EsVersion}
 	precision ${capabilities.precision} float;
 	out vec4 outputColor;
@@ -34,6 +44,15 @@ function fragmentShader() {
 	`;
 }
 
+function fragmentShaderEs100() {
+	return `
+	precision ${capabilities.precision} float;
+
+	void main(void){
+		gl_FragColor = vec4(vec3(0.5), 1.0);
+	}
+	`;
+}
 
 class GridGeometry extends Geometry {
 	constructor(size, divisions) {
@@ -66,10 +85,12 @@ class GridGeometry extends Geometry {
 
 export default class Grid extends Mesh {
 	constructor(size = 1, divisions = 10, lineWidth = 3) {
+		const vertexShader = GL.webgl2 ? vertexShaderEs300 : vertexShaderEs100;
+		const fragmentShader = GL.webgl2 ? fragmentShaderEs300() : fragmentShaderEs100();
 		super(new GridGeometry(size, divisions), new Shader({
 			name: 'GridHelper',
 			vertexShader,
-			fragmentShader: fragmentShader(),
+			fragmentShader,
 		}));
 		this.lineWidth = lineWidth;
 	}
