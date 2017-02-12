@@ -126,7 +126,7 @@ const material = new Shader({
 		uniform sampler2D uTexture0;
 	`,
 	hookFragmentMain: `
-		color = texture(uTexture0, vUv).rgb;
+		color = texture2D(uTexture0, vUv).rgb;
 	`,
 	uniforms: {
 		uTexture0: {
@@ -189,13 +189,13 @@ function update(time) {
 	const radius = 30;
 	const t = time * 0.0005;
 
-	pointLights.get().forEach((light, i) => {
-		const theta = (i / pointLights.length) * Math.PI * 2;
-		const x = Math.cos(t + theta) * radius;
-		const y = Math.cos(t + theta) * radius;
-		const z = Math.sin(t + theta) * radius;
-		light.position.set(x, y, z);
-	});
+	// pointLights.get().forEach((light, i) => {
+	// 	const theta = (i / pointLights.length) * Math.PI * 2;
+	// 	const x = Math.cos(t + theta) * radius;
+	// 	const y = Math.cos(t + theta) * radius;
+	// 	const z = Math.sin(t + theta) * radius;
+	// 	light.position.set(x, y, z);
+	// });
 
 	renderer.render(scene, camera);
 }

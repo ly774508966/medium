@@ -1,3 +1,4 @@
+import * as GL from 'core/GL';
 import Light from './Light';
 import Vector3 from 'math/Vector3';
 import Color from 'math/Color';
@@ -23,15 +24,22 @@ export default class DirectionalLight extends Light {
 
 		this.position = new Vector3();
 
-		// Buffer data
-		this.data = new Float32Array([
-			...this.uniforms.position.value, 0.0,
-			...this.uniforms.color.value, 0.0,
-			this.uniforms.intensity.value, 0.0, 0.0, 0.0,
-		]);
+		if (GL.webgl2) {
+			// Buffer data
+			this.data = new Float32Array([
+				...this.uniforms.position.value, 0.0,
+				...this.uniforms.color.value, 0.0,
+				this.uniforms.intensity.value, 0.0, 0.0, 0.0,
+			]);
+		}
 	}
 
 	update() {
-		this.setValues(this.position.v);
+		if (GL.webgl2) {
+			// Set values for buffer data
+			this.setValues(this.position.v);
+		} else {
+			this.uniforms.position.value.set(this.position.v);
+		}
 	}
 }

@@ -1,5 +1,5 @@
 import EsVersion from 'shaders/chunks/EsVersion.glsl';
-import { pointLightsInEs300, pointLightsInEs100 } from 'shaders/chunks/PointLights.glsl';
+import { pointLightsInEs300, pointLightsEs100 } from 'shaders/chunks/PointLights.glsl';
 import { directionalLightsEs300, directionalLightsEs100 } from 'shaders/chunks/DirectionalLights.glsl';
 import { whenGreaterThan } from 'shaders/chunks/Conditionals.glsl';
 
@@ -77,15 +77,15 @@ const fragmentShaderEs100 = `
 	#HOOK_PRECISION
 	#HOOK_DEFINES
 
-	attribute vec3 vDiffuse;
-	attribute vec3 vPosition;
+	varying vec3 vDiffuse;
+	varying vec3 vPosition;
 
 	#ifdef normals
-	attribute vec3 vNormal;
+	varying vec3 vNormal;
 	#endif
 
 	#ifdef uv
-	attribute vec2 vUv;
+	varying vec2 vUv;
 	#endif
 
 	#ifdef directionalLights
@@ -94,7 +94,7 @@ const fragmentShaderEs100 = `
 
 	// Lighting
 	#ifdef pointLights
-	${pointLightsInEs100}
+	${pointLightsEs100}
 	#endif
 
 	${whenGreaterThan}

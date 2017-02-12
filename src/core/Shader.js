@@ -123,9 +123,9 @@ export default class Shader {
 						CONSTANTS.UNIFORM_DIRECTIONAL_LIGHTS_LOCATION);
 			} else {
 				// Generate uniforms for directional lights
-				this.directionalLights.forEach((directionalLightUniforms, i) => {
-					Object.keys(directionalLightUniforms).forEach(directionalLightUniform => {
-						const uniform = directionalLightUniforms[directionalLightUniform];
+				this.directionalLights.get().forEach((directionalLight, i) => {
+					Object.keys(directionalLight.uniforms).forEach(directionalLightUniform => {
+						const uniform = directionalLight.uniforms[directionalLightUniform];
 						this.customUniforms[`uDirectionalLights[${i}].${directionalLightUniform}`] = uniform;
 					});
 				});
@@ -139,9 +139,9 @@ export default class Shader {
 						this.pointLights.uniformBuffer.buffer, CONSTANTS.UNIFORM_SPOT_LIGHTS_LOCATION);
 				} else{
 					// Generate uniforms for point lights
-					this.pointLights.forEach((pointLightUniforms, i) => {
-						Object.keys(pointLightUniforms).forEach(pointLightUniform => {
-							const uniform = pointLightUniforms[pointLightUniform];
+					this.pointLights.get().forEach((pointLight, i) => {
+						Object.keys(pointLight.uniforms).forEach(pointLightUniform => {
+							const uniform = pointLight.uniforms[pointLightUniform];
 							this.customUniforms[`uPointLights[${i}].${pointLightUniform}`] = uniform;
 						});
 					});
@@ -237,6 +237,7 @@ export default class Shader {
 		shader = shader.replace(/#HOOK_FRAGMENT_END/g, this.hookFragmentEnd);
 
 		if (this.pointLights) {
+			console.log(this.pointLights.length);
 			shader = shader.replace(/#HOOK_POINT_LIGHTS/g, this.pointLights.length);
 		}
 
@@ -399,7 +400,7 @@ export default class Shader {
 		gl = GL.get();
 		let shader;
 
-		// console.log('source', source);
+		console.log('source', source);
 
 		switch (type) {
 			case 'vs':

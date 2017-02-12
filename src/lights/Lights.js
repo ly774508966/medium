@@ -12,18 +12,20 @@ export default class Lights {
 	constructor(lights) {
 		this.lights = lights;
 
-		const dataLength = this.lights[0].data.length;
+		if (GL.webgl2) {
+			const dataLength = this.lights[0].data.length;
 
-		// Setup data
-		const values = Array(lights.length * dataLength);
-		const data = new Float32Array(values);
+			// Setup data
+			const values = Array(lights.length * dataLength);
+			const data = new Float32Array(values);
 
-		// Create uniform buffer to store all point lights data
-		// The uniform block is an array of lights
-		this.uniformBuffer = new UniformBuffer(data);
+			// Create uniform buffer to store all point lights data
+			// The uniform block is an array of lights
+			this.uniformBuffer = new UniformBuffer(data);
 
-		// Tmp array for updating the lights data buffer
-		this._lightsData = [];
+			// Tmp array for updating the lights data buffer
+			this._lightsData = [];
+		}
 	}
 
 	get length() {
@@ -35,22 +37,31 @@ export default class Lights {
 	}
 
 	update() {
-		// Get data from lights and update the uniform buffer
-		this._lightsData = [];
-		this.lights.forEach(light => {
-			light.update();
-			this._lightsData.push(...light.data);
-		});
-		this.uniformBuffer.setValues(this._lightsData, 0);
+
+		if (GL.webgl2) {
+			// Get data from lights and update the uniform buffer
+			this._lightsData = [];
+			this.lights.forEach(light => {
+				light.update();
+				this._lightsData.push(...light.data);
+			});
+			this.uniformBuffer.setValues(this._lightsData, 0);
+		} else {
+			this.lights.forEach(light => {
+				light.update();
+			});
+		}
 	}
 
 	bind() {
-		gl = GL.get();
+		if (GL.webgl2) {
+			gl = GL.get();
 
-		gl.bindBufferBase(gl.UNIFORM_BUFFER, 1, this.uniformBuffer.buffer);
-		gl.bindBuffer(gl.UNIFORM_BUFFER, this.uniformBuffer.buffer);
+			gl.bindBufferBase(gl.UNIFORM_BUFFER, 1, this.uniformBuffer.buffer);
+			gl.bindBuffer(gl.UNIFORM_BUFFER, this.uniformBuffer.buffer);
 
-		gl.bufferSubData(gl.UNIFORM_BUFFER, 0, this.uniformBuffer.data);
-		gl.bindBuffer(gl.UNIFORM_BUFFER, null);
+			gl.bufferSubData(gl.UNIFORM_BUFFER, 0, this.uniformBuffer.data);
+			gl.bindBuffer(gl.UNIFORM_BUFFER, null);
+		}
 	}
 }
