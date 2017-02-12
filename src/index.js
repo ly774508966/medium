@@ -1,6 +1,7 @@
 // Core
 import Capabilities from 'core/Capabilities';
 import * as Constants from 'core/Constants';
+import * as GL from 'core/GL';
 import Mesh from 'core/Mesh';
 import Object3D from 'core/Object3D';
 import OrthographicCamera from 'core/OrthographicCamera';
@@ -56,6 +57,7 @@ import ObjLoader from 'loaders/ObjLoader';
 export {
 	Capabilities,
 	Constants,
+	GL,
 	Mesh,
 	Object3D,
 	OrthographicCamera,

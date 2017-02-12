@@ -13,8 +13,6 @@ const OBJ = {};
  * @param {String} objectData a string representation of an OBJ file with newlines preserved.
  */
 OBJ.Mesh = function (objectData) {
-
-	console.log('start');
 	/*
 	 The OBJ file format does a sort of compression when saving a model in a
 	 program like Blender. There are at least 3 sections (4 including textures)
@@ -202,7 +200,6 @@ OBJ.Mesh = function (objectData) {
 		}
 	}
 
-	console.log('end');
 	this.vertices = unpacked.verts;
 	this.vertexNormals = unpacked.norms;
 	this.textures = unpacked.textures;

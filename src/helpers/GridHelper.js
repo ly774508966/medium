@@ -4,7 +4,7 @@ import {
 import Mesh from 'core/Mesh';
 import Shader from 'core/Shader';
 import * as GL from 'core/GL';
-import { capabilities } from 'core/Capabilities';
+import { capabilities, extensions } from 'core/Capabilities';
 import Geometry from 'geometry/Geometry';
 import EsVersion from 'shaders/chunks/EsVersion.glsl';
 import ProjectionView from 'shaders/chunks/ProjectionView.glsl';
@@ -106,10 +106,18 @@ export default class Grid extends Mesh {
 
 		gl.lineWidth(this.lineWidth);
 
-		this.vao.bind();
+		if (extensions.vertexArrayObject) {
+			this.vao.bind();
+		} else {
+			this.bindAttributes();
+			this.bindAttributesInstanced();
+			this.bindIndexBuffer();
+		}
 
 		gl.drawArrays(gl.LINES, 0, this.geometry.attributes.aVertexPosition.numItems);
 
-		this.vao.unbind();
+		if (extensions.vertexArrayObject) {
+			this.vao.unbind();
+		}
 	}
 }

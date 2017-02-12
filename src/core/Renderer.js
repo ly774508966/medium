@@ -62,7 +62,7 @@ export default class Renderer {
 			return;
 		}
 
-		log(`%c${config.name} ${config.version} webgl${GL.webgl2 ? 2 : 1}`, 'padding: 1px; background: #222; color: #ff00ff');
+		log(`%c${config.name} ${config.version} webgl${GL.webgl2 ? 2 : ''}`, 'padding: 1px; background: #222; color: #ff00ff');
 
 		gl = GL.get();
 
@@ -75,7 +75,7 @@ export default class Renderer {
 		}
 
 		// log('capabilities', Capabilities.capabilities);
-		log('extensions', Capabilities.extensions);
+		// log('extensions', Capabilities.extensions);
 
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.enable(gl.DEPTH_TEST);

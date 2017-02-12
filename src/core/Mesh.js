@@ -4,6 +4,7 @@ import {
 import * as GL from '../core/GL';
 import Object3D from 'core/Object3D';
 import Vao from 'core/Vao';
+import { extensions } from 'core/Capabilities';
 
 let gl;
 
@@ -23,7 +24,19 @@ export default class Mesh extends Object3D {
 
 		// Setup vao
 		this.vao.bind();
+		this.bindAttributes();
+		this.bindAttributesInstanced();
+		this.bindIndexBuffer();
+		this.vao.unbind();
+	}
 
+	setInstanceCount(value) {
+		gl = GL.get();
+		this.instanceCount = value;
+		this.isInstanced = true;
+	}
+
+	bindAttributes() {
 		// Attributes
 		Object.keys(this.geometry.attributes).forEach(attributeName => {
 			if (attributeName !== 'aIndex') {
@@ -35,7 +48,9 @@ export default class Mesh extends Object3D {
 				this.shader.setAttributePointer(attributeName);
 			}
 		});
+	}
 
+	bindAttributesInstanced() {
 		// Instanced Attributes
 		Object.keys(this.geometry.attributesInstanced).forEach(attributeName => {
 			if (attributeName !== 'aIndex') {
@@ -48,19 +63,13 @@ export default class Mesh extends Object3D {
 				gl.vertexAttribDivisor(this.shader.attributeLocations[attributeName], 1);
 			}
 		});
+	}
 
+	bindIndexBuffer() {
 		// Bind index buffer
 		if (this.geometry.bufferIndices) {
 			this.geometry.attributes.aIndex.bind();
 		}
-
-		this.vao.unbind();
-	}
-
-	setInstanceCount(value) {
-		gl = GL.get();
-		this.instanceCount = value;
-		this.isInstanced = true;
 	}
 
 	draw(modelViewMatrix, projectionMatrix, camera) {
@@ -81,12 +90,20 @@ export default class Mesh extends Object3D {
 
 		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix, camera);
 
-		this.vao.bind();
+		if (extensions.vertexArrayObject) {
+			this.vao.bind();
+		} else {
+			this.bindAttributes();
+			this.bindAttributesInstanced();
+			this.bindIndexBuffer();
+		}
 
 		gl.drawElements(this.shader.drawType,
 			this.geometry.attributes.aIndex.numItems, gl.UNSIGNED_SHORT, 0);
 
-		this.vao.unbind();
+		if (extensions.vertexArrayObject) {
+			this.vao.unbind();
+		}
 
 		// Culling disable
 		if (this.shader.culling !== false) {
@@ -111,12 +128,20 @@ export default class Mesh extends Object3D {
 			gl.cullFace(this.shader.culling);
 		}
 
-		this.vao.bind();
+		if (extensions.vertexArrayObject) {
+			this.vao.bind();
+		} else {
+			this.bindAttributes();
+			this.bindAttributesInstanced();
+			this.bindIndexBuffer();
+		}
 
 		gl.drawElementsInstanced(this.shader.drawType,
 			this.geometry.attributes.aIndex.numItems, gl.UNSIGNED_SHORT, 0, this.instanceCount);
 
-		this.vao.unbind();
+		if (extensions.vertexArrayObject) {
+			this.vao.unbind();
+		}
 
 		// Culling disable
 		if (this.shader.culling !== false) {

@@ -1,4 +1,5 @@
 import {
+	GL,
 	Renderer,
 	Scene,
 	PerspectiveCamera,
@@ -18,11 +19,26 @@ import {
 	Lights,
 } from 'index';
 import dat from 'dat-gui';
+import queryString from 'query-string';
+
+const gui = new dat.GUI();
+
+const options = ['webgl2', 'webgl'];
+
+const queries = queryString.parse(location.search);
+
+const controller = {
+	context: queries.context || options[0],
+};
+
+gui.add(controller, 'context', options).onChange(val => {
+	window.location.href = `webglcontext.html?context=${val}`
+});
 
 // Renderer
 const renderer = new Renderer({
 	ratio: window.innerWidth / window.innerHeight,
-	prefferedContext: 'webgl',
+	prefferedContext: controller.context,
 });
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
@@ -125,9 +141,10 @@ const material = new Shader({
 	hookFragmentPre: `
 		uniform sampler2D uTexture0;
 	`,
-	hookFragmentMain: `
-		color = texture2D(uTexture0, vUv).rgb;
-	`,
+	hookFragmentMain: GL.webgl2 ?
+	`color = texture(uTexture0, vUv).rgb;` :
+	`color = texture2D(uTexture0, vUv).rgb;`
+	,
 	uniforms: {
 		uTexture0: {
 			type: 't',
@@ -151,16 +168,6 @@ boxNormalsHelper.setParent(box);
 
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas);
-const gui = new dat.GUI();
-const cameraGUI = gui.addFolder('camera');
-cameraGUI.open();
-const lightingGUI = gui.addFolder('lighting');
-lightingGUI.open();
-
-// const range = 10;
-// lightingGUI.add(light.position, 'x', -range, range);
-// lightingGUI.add(light.position, 'y', -range, range);
-// lightingGUI.add(light.position, 'z', -range, range);
 
 const grid = new GridHelper(10);
 scene.add(grid);
@@ -189,13 +196,13 @@ function update(time) {
 	const radius = 30;
 	const t = time * 0.0005;
 
-	// pointLights.get().forEach((light, i) => {
-	// 	const theta = (i / pointLights.length) * Math.PI * 2;
-	// 	const x = Math.cos(t + theta) * radius;
-	// 	const y = Math.cos(t + theta) * radius;
-	// 	const z = Math.sin(t + theta) * radius;
-	// 	light.position.set(x, y, z);
-	// });
+	pointLights.get().forEach((light, i) => {
+		const theta = (i / pointLights.length) * Math.PI * 2;
+		const x = Math.cos(t + theta) * radius;
+		const y = Math.cos(t + theta) * radius;
+		const z = Math.sin(t + theta) * radius;
+		light.position.set(x, y, z);
+	});
 
 	renderer.render(scene, camera);
 }

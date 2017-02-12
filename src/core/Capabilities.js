@@ -1,3 +1,4 @@
+import * as GL from 'core/GL';
 import {
 	PRECISION,
 } from 'core/Constants';
@@ -61,7 +62,7 @@ function Capabilities(gl) {
 }
 
 function Extensions(gl) {
-	const vertexArrayObject = gl.getExtension('OES_vertex_array_object');
+	const vertexArrayObject = GL.webgl2 || gl.getExtension('OES_vertex_array_object') || false;
 	return {
 		vertexArrayObject,
 	}

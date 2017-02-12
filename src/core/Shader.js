@@ -68,11 +68,8 @@ export default class Shader {
 	}
 
 	setUniformBlockLocation(uniformName, uniformBuffer, index) {
-		// console.log('------- setUniformBlockLocation -------');
-		// console.log('uniformName', uniformName);
 		gl = GL.get();
 		this.uniformBlocks[uniformName] = gl.getUniformBlockIndex(this.program, uniformName);
-		// console.log('location', this.uniformBlocks[uniformName]);
 		gl.uniformBlockBinding(this.program,
 			this.uniformBlocks[uniformName], this.uniformBlocks[uniformName]);
 		gl.bindBufferBase(gl.UNIFORM_BUFFER, index, uniformBuffer);
@@ -237,7 +234,6 @@ export default class Shader {
 		shader = shader.replace(/#HOOK_FRAGMENT_END/g, this.hookFragmentEnd);
 
 		if (this.pointLights) {
-			console.log(this.pointLights.length);
 			shader = shader.replace(/#HOOK_POINT_LIGHTS/g, this.pointLights.length);
 		}
 
@@ -400,7 +396,7 @@ export default class Shader {
 		gl = GL.get();
 		let shader;
 
-		console.log('source', source);
+		// console.log(source);
 
 		switch (type) {
 			case 'vs':

@@ -108,7 +108,7 @@ for (let i = 0; i < totalInstances; i++) {
 	data[i3 + 2] = positions[i][2];
 }
 
-console.log('data', data.length / 3);
+console.log('instances', data.length / 3);
 
 const size = sierpinski.logarithmicScale() / 2;
 const geometry = new BoxGeometry(size, size, size);
