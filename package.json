@@ -23,13 +23,10 @@
     "babel-preset-stage-0": "^6.16.0",
     "concurrently": "^3.1.0",
     "dat-gui": "^0.5.0",
-    "eslint": "3.14.1",
-    "eslint-config-airbnb": "14.0.0",
-    "eslint-import-resolver-babel-module": "^2.2.1",
-    "eslint-import-resolver-webpack": "0.8.1",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "3.0.2",
-    "eslint-plugin-react": "6.9.0",
+    "eslint": "3.15.0",
+    "eslint-config-airbnb-base": "11.1.0",
+    "eslint-import-resolver-babel-module": "3.0.0",
+    "eslint-plugin-import": "2.2.0",
     "live-server": "^1.2.0",
     "pug-cli": "^1.0.0-alpha6",
     "query-string": "^4.3.1",
@@ -41,7 +38,7 @@
   },
   "eslintConfig": {
     "parser": "babel-eslint",
-    "extends": "airbnb",
+    "extends": "airbnb-base/legacy",
     "settings": {
       "import/resolver": {
         "babel-module": {}
@@ -51,16 +48,9 @@
       "browser": true,
       "es6": true
     },
-    "plugins": [
-      "react",
-      "jsx-a11y"
-    ],
     "parserOptions": {
       "ecmaVersion": 6,
-      "sourceType": "module",
-      "ecmaFeatures": {
-        "jsx": true
-      }
+      "sourceType": "module"
     },
     "rules": {
       "global-require": 0,
@@ -81,15 +71,7 @@
       ],
       "no-param-reassign": 0,
       "no-shadow": 0,
-      "no-underscore-dangle": 0,
-      "react/jsx-indent-props": [
-        1,
-        "tab"
-      ],
-      "react/jsx-indent": [
-        1,
-        "tab"
-      ]
+      "no-underscore-dangle": 0
     }
   }
 }
