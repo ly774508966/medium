@@ -16,7 +16,7 @@ import {
 // Renderer
 const renderer = new Renderer({
 	ratio: window.innerWidth / window.innerHeight,
-	prefferedContext: 'webgl1',
+	// prefferedContext: 'webgl',
 });
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
