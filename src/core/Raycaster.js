@@ -55,7 +55,7 @@ export default class RayCaster {
 	intersectObject(object) {
 		let intersect;
 		let uv;
-		for (let i = 0; i < object.geometry.faces.length; i++) {
+		for (let i = 0; i < object.geometry.faces.length; i += 1) {
 			face = object.geometry.faces[i];
 			vec3.copy(fvA.v, face.vertices[0].v);
 			vec3.copy(fvB.v, face.vertices[1].v);

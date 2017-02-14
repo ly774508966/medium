@@ -32,7 +32,7 @@ export default class TextureCube {
 	}
 
 	onImageLoaded = () => {
-		this._loaded++;
+		this._loaded += 1;
 		if (this._loaded === 6) {
 			this.onTextureLoaded();
 		}
@@ -57,7 +57,7 @@ export default class TextureCube {
 			gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
 		];
 
-		for (let i = 0; i < 6; i++) {
+		for (let i = 0; i < 6; i += 1) {
 			const image = this._resizeImage(images[i]);
 			gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
 			gl.texImage2D(targets[i], 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
@@ -72,7 +72,7 @@ export default class TextureCube {
 
 	placeholder() {
 		const canvases = [];
-		for (let i = 0; i < 6; i++) {
+		for (let i = 0; i < 6; i += 1) {
 			const canvas = document.createElement('canvas');
 			canvas.width = 128;
 			canvas.height = 128;

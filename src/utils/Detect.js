@@ -5,7 +5,7 @@ export default function () {
 		const canvasWebg2 = document.createElement('canvas');
 		const webgl2Context = canvasWebg2.getContext('webgl2');
 		const webglContext = canvasWebgl.getContext('webgl') || canvasWebgl.getContext('experimental-webgl');
-		if (renderingContext == undefined) {
+		if (renderingContext === undefined) {
 			return false;
 		}
 		return {

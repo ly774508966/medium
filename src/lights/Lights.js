@@ -37,7 +37,6 @@ export default class Lights {
 	}
 
 	update() {
-
 		if (GL.webgl2) {
 			// Get data from lights and update the uniform buffer
 			this._lightsData = [];

@@ -74,7 +74,9 @@
       "no-param-reassign": 0,
       "no-shadow": 0,
       "no-tabs": 0,
-      "no-underscore-dangle": 0
+      "no-underscore-dangle": 0,
+      "no-mixed-operators": 0,
+      "no-bitwise": 0
     }
   }
 }

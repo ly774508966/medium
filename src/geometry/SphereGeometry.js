@@ -7,11 +7,11 @@ export default class SphereGeometry extends Geometry {
 		const vertices = [];
 		const normals = [];
 		const uvs = [];
-		for (let axisNumber = 0; axisNumber <= axisDivisions; axisNumber++) {
+		for (let axisNumber = 0; axisNumber <= axisDivisions; axisNumber += 1) {
 			const theta = axisNumber * Math.PI / axisDivisions;
 			const sinTheta = Math.sin(theta);
 			const cosTheta = Math.cos(theta);
-			for (let heightNumber = 0; heightNumber <= heightDivisons; heightNumber++) {
+			for (let heightNumber = 0; heightNumber <= heightDivisons; heightNumber += 1) {
 				const phi = heightNumber * 2 * Math.PI / heightDivisons;
 				const sinPhi = Math.sin(phi);
 				const cosPhi = Math.cos(phi);
@@ -32,8 +32,8 @@ export default class SphereGeometry extends Geometry {
 		}
 
 		const indices = [];
-		for (let axisNumber = 0; axisNumber < axisDivisions; axisNumber++) {
-			for (let heightNumber = 0; heightNumber < heightDivisons; heightNumber++) {
+		for (let axisNumber = 0; axisNumber < axisDivisions; axisNumber += 1) {
+			for (let heightNumber = 0; heightNumber < heightDivisons; heightNumber += 1) {
 				const first = (axisNumber * (heightDivisons + 1)) + heightNumber;
 				const second = first + heightDivisons + 1;
 				indices.push(first);

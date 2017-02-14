@@ -157,14 +157,12 @@ class WebVRVive {
 				this.uiToggleButton(this.ui.enter, false);
 				this.uiToggleButton(this.ui.exit, true);
 			}
-		} else {
+		} else if (this.vrDisplay.capabilities.hasExternalDisplay) {
 			// If we have an external display take down the presenting message and
 			// change the button back to "Enter VR".
-			if (this.vrDisplay.capabilities.hasExternalDisplay) {
-				this.uiUpdateStatus();
-				this.uiToggleButton(this.ui.enter, true);
-				this.uiToggleButton(this.ui.exit, false);
-			}
+			this.uiUpdateStatus();
+			this.uiToggleButton(this.ui.enter, true);
+			this.uiToggleButton(this.ui.exit, false);
 		}
 	}
 

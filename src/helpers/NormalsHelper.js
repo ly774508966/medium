@@ -61,7 +61,7 @@ class NormalsGeometry extends Geometry {
 		const sy = mesh.scale.y;
 		const sz = mesh.scale.z;
 		const length = mesh.geometry.bufferNormals.length / 3;
-		for (let i = 0; i < length; i++) {
+		for (let i = 0; i < length; i += 1) {
 			const i3 = i * 3;
 			const v0x = sx * mesh.geometry.bufferVertices[i3];
 			const v0y = sy * mesh.geometry.bufferVertices[i3 + 1];
