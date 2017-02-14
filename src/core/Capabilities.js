@@ -65,7 +65,7 @@ function Extensions(gl) {
 	const vertexArrayObject = GL.webgl2 || gl.getExtension('OES_vertex_array_object') || false;
 	return {
 		vertexArrayObject,
-	}
+	};
 }
 
 let capabilities = {};

@@ -98,8 +98,12 @@ export default class Mesh extends Object3D {
 			this.bindIndexBuffer();
 		}
 
-		gl.drawElements(this.shader.drawType,
-			this.geometry.attributes.aIndex.numItems, gl.UNSIGNED_SHORT, 0);
+		if (this.geometry.attributes.aIndex) {
+			gl.drawElements(this.shader.drawType,
+				this.geometry.attributes.aIndex.numItems, gl.UNSIGNED_SHORT, 0);
+		} else {
+			gl.drawArrays(this.shader.drawType, 0, this.geometry.attributes.aVertexPosition.numItems);
+		}
 
 		if (extensions.vertexArrayObject) {
 			this.vao.unbind();

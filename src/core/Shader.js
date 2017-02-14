@@ -134,15 +134,15 @@ export default class Shader {
 				// Setup uniform block for point lights
 				this.setUniformBlockLocation('PointLights',
 						this.pointLights.uniformBuffer.buffer, CONSTANTS.UNIFORM_SPOT_LIGHTS_LOCATION);
-				} else{
-					// Generate uniforms for point lights
-					this.pointLights.get().forEach((pointLight, i) => {
-						Object.keys(pointLight.uniforms).forEach(pointLightUniform => {
-							const uniform = pointLight.uniforms[pointLightUniform];
-							this.customUniforms[`uPointLights[${i}].${pointLightUniform}`] = uniform;
-						});
+			} else {
+				// Generate uniforms for point lights
+				this.pointLights.get().forEach((pointLight, i) => {
+					Object.keys(pointLight.uniforms).forEach(pointLightUniform => {
+						const uniform = pointLight.uniforms[pointLightUniform];
+						this.customUniforms[`uPointLights[${i}].${pointLightUniform}`] = uniform;
 					});
-				}
+				});
+			}
 		}
 
 		// Add Camera position uniform for point lights if it doesn't exist

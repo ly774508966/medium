@@ -8,7 +8,7 @@ export default class Vao {
 		gl = GL.get();
 		if (GL.webgl2) {
 			this.vao = gl.createVertexArray();
-		} else if(extensions.vertexArrayObject) {
+		} else if (extensions.vertexArrayObject) {
 			this.vao = extensions.vertexArrayObject.createVertexArrayOES();
 		}
 	}
@@ -16,7 +16,7 @@ export default class Vao {
 	bind() {
 		if (GL.webgl2) {
 			gl.bindVertexArray(this.vao);
-		} else if(extensions.vertexArrayObject) {
+		} else if (extensions.vertexArrayObject) {
 			extensions.vertexArrayObject.bindVertexArrayOES(this.vao);
 		}
 	}
@@ -24,7 +24,7 @@ export default class Vao {
 	unbind() {
 		if (GL.webgl2) {
 			gl.bindVertexArray(null);
-		} else if(extensions.vertexArrayObject) {
+		} else if (extensions.vertexArrayObject) {
 			extensions.vertexArrayObject.bindVertexArrayOES(null);
 		}
 	}
@@ -32,7 +32,7 @@ export default class Vao {
 	dispose() {
 		if (GL.webgl2) {
 			gl.deleteVertexArray(this.vao);
-		} else if(extensions.vertexArrayObject) {
+		} else if (extensions.vertexArrayObject) {
 			extensions.vertexArrayObject.deleteVertexArrayOES(this.vao);
 		}
 		this.vao = null;
