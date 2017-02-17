@@ -1,4 +1,5 @@
 import {
+	GL,
 	Renderer,
 	Scene,
 	PerspectiveCamera,
@@ -124,9 +125,9 @@ const material = new Shader({
 	hookFragmentPre: `
 		uniform sampler2D uTexture0;
 	`,
-	hookFragmentMain: `
-		color = texture(uTexture0, vUv).rgb;
-	`,
+	hookFragmentMain: GL.webgl2 ?
+	'color = texture(uTexture0, vUv).rgb;' :
+	'color = texture2D(uTexture0, vUv).rgb;',
 	uniforms: {
 		uTexture0: {
 			type: 't',
@@ -151,6 +152,7 @@ boxNormalsHelper.setParent(box);
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas);
 const gui = new dat.GUI();
+dat.GUI.toggleHide();
 const cameraGUI = gui.addFolder('camera');
 cameraGUI.open();
 const lightingGUI = gui.addFolder('lighting');
