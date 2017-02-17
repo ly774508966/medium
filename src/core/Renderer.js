@@ -51,15 +51,15 @@ export default class Renderer {
 		const detect = Detect();
 
 		if (detect) {
+			let contextType;
 			if (detect.webgl2 && this.prefferedContext === WEBGL2_CONTEXT) {
+				contextType = WEBGL2_CONTEXT;
 				gl = this.canvas.getContext('webgl2', attributes);
-			} else if (this.prefferedContext === WEBGL_CONTEXT) {
-				gl = this.canvas.getContext('webgl', attributes) || this.canvas.getContext('experimental-webgl');
 			} else {
-				warn(`${this.prefferedContext} not supported`);
-				return;
+				contextType = WEBGL_CONTEXT;
+				gl = this.canvas.getContext('webgl', attributes) || this.canvas.getContext('experimental-webgl');
 			}
-			GL.set(gl, this.prefferedContext);
+			GL.set(gl, contextType);
 		} else {
 			warn('Webgl not supported');
 			return;
