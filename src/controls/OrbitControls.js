@@ -5,6 +5,8 @@ import Vector3 from 'math/Vector3';
 
 const MODE_DRAG = 'MODE_DRAG';
 const MODE_PAN = 'MODE_PAN';
+const MODE_ZOOM = 'MODE_ZOOM';
+const UP = new Vector3(0, 1, 0);
 
 export default class OrbitControls {
 	constructor(camera, element) {
@@ -15,6 +17,7 @@ export default class OrbitControls {
 		this._zoomMin = 0.1;
 		this._zoomMax = Infinity;
 		this._radius = Math.max(camera.position.x, camera.position.z);
+		this._radiusOffset = 0;
 		this._defaultRadius = Math.max(camera.position.x, camera.position.z);
 		this._rotationX = Math.atan2(camera.position.y - 0, this._radius - 0);
 		this._rotationY = Math.atan2(camera.position.z - 0, camera.position.x - 0);
@@ -27,7 +30,7 @@ export default class OrbitControls {
 		this._target = new Vector3();
 		this._targetOffset = new Vector3();
 		this._direction = new Vector3();
-		this._up = new Vector3(0, 1, 0);
+		this._lastZoomDistance = 0;
 		this._width = window.innerWidth;
 		this._height = window.innerHeight;
 
@@ -45,22 +48,45 @@ export default class OrbitControls {
 	_onTouchStart = (event) => {
 		event.preventDefault();
 
-		switch (event.which) {
-			case 3:
-				this._mode = MODE_PAN;
-				this._offsetY = this._target.y;
-				this._offsetX = this._target.x;
-				break;
-			default: {
-				this._mode = MODE_DRAG;
-				this._offsetY = this._rotationY;
-				this._offsetX = this._rotationX;
+		if (event.touches) {
+			// Device
+			switch (event.touches.length) {
+				case 1:
+					this._mode = MODE_DRAG;
+					this._offsetY = this._rotationY;
+					this._offsetX = this._rotationX;
+					break;
+				case 2: {
+					this._mode = MODE_ZOOM;
+					this._radiusOffset = this._radius;
+					break;
+				}
+				default: {
+					this._mode = MODE_PAN;
+					this._offsetY = this._target.y;
+					this._offsetX = this._target.x;
+				}
+			}
+		} else {
+			// Desktop
+			switch (event.which) {
+				case 3:
+					this._mode = MODE_PAN;
+					this._offsetY = this._target.y;
+					this._offsetX = this._target.x;
+					break;
+				default: {
+					this._mode = MODE_DRAG;
+					this._offsetY = this._rotationY;
+					this._offsetX = this._rotationX;
+				}
 			}
 		}
 
 		this._startY = event.pageX / this._width;
 		this._startX = event.pageY / this._height;
 		this._targetOffset.copy(this._target);
+		this._radiusOffset = this._radius;
 		this.isDown = true;
 	}
 
@@ -72,14 +98,25 @@ export default class OrbitControls {
 			switch (this._mode) {
 				case MODE_PAN: {
 					this._direction.copy(this._camera.position).subtract(this._target).normalize();
-					const cross = this._direction.cross(this._up);
-					const tx = this._targetOffset.x + (this._startY - y) * this.panSpeed * cross.x;
+					const cross = this._direction.cross(UP);
+					const tx = this._targetOffset.x + -(this._startY - y) * this.panSpeed * cross.x;
 					const ty = this._targetOffset.y + -(this._startX - x) * this.panSpeed;
-					const tz = this._targetOffset.z + (this._startY - y) * this.panSpeed * cross.z;
+					const tz = this._targetOffset.z + -(this._startY - y) * this.panSpeed * cross.z;
 					this._target.set(tx, ty, tz);
 					break;
 				}
+				case MODE_ZOOM: {
+					const dx = event.touches[0].pageX - event.touches[1].pageX;
+					const dy = event.touches[0].pageY - event.touches[1].pageY;
+					const distance = Math.sqrt(dx * dx + dy * dy) / 100;
+					const sign = this._lastZoomDistance > distance ? 1 : -1;
+					// Simulate the same data as the scroll
+					this._zoomConstraint(sign * 100);
+					this._lastZoomDistance = distance;
+					break;
+				}
 				default: {
+					// Drag
 					this._rotationX = this._offsetX + -(this._startX - x) * this.rotationSpeed;
 					this._rotationY = this._offsetY + (this._startY - y) * this.rotationSpeed;
 					this._rotationX = clamp(this._rotationX, -Math.PI / 2, Math.PI / 2);
