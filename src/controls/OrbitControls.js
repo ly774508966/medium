@@ -108,7 +108,7 @@ export default class OrbitControls {
 				case MODE_ZOOM: {
 					const dx = event.touches[0].pageX - event.touches[1].pageX;
 					const dy = event.touches[0].pageY - event.touches[1].pageY;
-					const distance = Math.sqrt(dx * dx + dy * dy) / 100;
+					const distance = Math.sqrt(dx * dx + dy * dy);
 					const sign = this._lastZoomDistance > distance ? 1 : -1;
 					// Simulate the same data as the scroll
 					this._zoomConstraint(sign * 100);
