@@ -1,6 +1,6 @@
 {
   "name": "ixviii.medium",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Personal webgl toolkit.",
   "main": "lib/index.js",
   "scripts": {
@@ -16,7 +16,7 @@
   "pre-push": [
     "lint"
   ],
-  "author": "Amelie Rosser <mail@ixviii.co.uk> (https://www.ixviii.io)",
+  "author": "Amelie Rosser <amelierosser1986@gmail.com> (https://www.ixviii.io)",
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.6.5",
