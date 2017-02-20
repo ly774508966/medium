@@ -1,4 +1,5 @@
 import {
+	GL,
 	Renderer,
 	Scene,
 	PerspectiveCamera,
@@ -10,10 +11,14 @@ import {
 	AxisHelper,
 	Texture,
 } from 'index';
+import {
+	guiController
+} from '../gui';
 
 // Renderer
 const renderer = new Renderer({
 	ratio: window.innerWidth / window.innerHeight,
+	prefferedContext: guiController.context,
 });
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
@@ -46,9 +51,9 @@ const material1 = new Shader({
 	hookFragmentPre: `
 		uniform sampler2D uTexture0;
 	`,
-	hookFragmentMain: `
-		color = texture(uTexture0, vUv).rgb;
-	`,
+	hookFragmentMain: GL.webgl2 ?
+	'color = texture(uTexture0, vUv).rgb;' :
+	'color = texture2D(uTexture0, vUv).rgb;',
 	uniforms: {
 		uTexture0: {
 			type: 't',

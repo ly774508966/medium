@@ -1,4 +1,5 @@
 import {
+	GL,
 	Renderer,
 	Scene,
 	PerspectiveCamera,
@@ -7,16 +8,19 @@ import {
 	AxisHelper,
 	OrthographicCamera,
 	TextureCube,
-	// BoxGeometry,
 	Shader,
 	Mesh,
 	ObjLoader,
 	Geometry,
 } from 'index';
+import {
+	guiController,
+} from '../gui';
 
 // Renderer
 const renderer = new Renderer({
 	ratio: window.innerWidth / window.innerHeight,
+	prefferedContext: guiController.context,
 });
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
@@ -62,25 +66,6 @@ const texture = new TextureCube({
 	],
 });
 
-// const geometry = new BoxGeometry(1, 1, 1);
-// const material = new Shader({
-// 	name: 'Box',
-// 	hookFragmentPre: `
-// 		uniform samplerCube uTexture0;
-// 	`,
-// 	hookFragmentMain: `
-// 		color = textureCube(uTexture0, vPosition).rgb;
-// 	`,
-// 	uniforms: {
-// 		uTexture0: {
-// 			type: 'tc',
-// 			value: texture.texture,
-// 		},
-// 	},
-// });
-// const box = new Mesh(geometry, material);
-// scene.add(box);
-
 let mesh;
 
 new ObjLoader('assets/models/mass.obj').then(objGeometry => {
@@ -88,19 +73,22 @@ new ObjLoader('assets/models/mass.obj').then(objGeometry => {
 		objGeometry.indices, objGeometry.vertexNormals);
 
 	const material = new Shader({
-		hookVertexPre: `
-			out vec3 vTexturePosition;
-		`,
+		hookVertexPre: GL.webgl2 ?
+		'out vec3 vTexturePosition;' :
+		'varying vec3 vTexturePosition;',
 		hookVertexEnd: `
 			vTexturePosition = (uModelMatrix * vec4(aVertexPosition, 1.0)).xyz;
 		`,
-		hookFragmentPre: `
+		hookFragmentPre: GL.webgl2 ? `
 			uniform samplerCube uTexture0;
 			in vec3 vTexturePosition;
+		` : `
+			uniform samplerCube uTexture0;
+			varying vec3 vTexturePosition;
 		`,
-		hookFragmentMain: `
-			color = texture(uTexture0, vTexturePosition).rgb;
-		`,
+		hookFragmentMain: GL.webgl2 ?
+		'color = texture(uTexture0, vTexturePosition).rgb;' :
+		'color = textureCube(uTexture0, vTexturePosition).rgb;',
 		uniforms: {
 			uTexture0: {
 				type: 'tc',
@@ -114,11 +102,6 @@ new ObjLoader('assets/models/mass.obj').then(objGeometry => {
 	const scale = 0.25;
 	mesh.scale.set(scale, scale, scale);
 	scene.add(mesh);
-
-	// gui.add(mesh.position, 'y', -10, 10);
-
-	// const normalsHelper = new NormalsHelper(mesh);
-	// scene.add(normalsHelper);
 }).catch(error => {
 	console.log('error loading', error);
 });

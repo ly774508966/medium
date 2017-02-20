@@ -1,4 +1,5 @@
 import {
+	GL,
 	Renderer,
 	Scene,
 	PerspectiveCamera,
@@ -10,11 +11,14 @@ import {
 	AxisHelper,
 	TextureVideo,
 } from 'index';
-import dat from 'dat-gui';
+import {
+	guiController,
+} from '../gui';
 
 // Renderer
 const renderer = new Renderer({
 	ratio: window.innerWidth / window.innerHeight,
+	prefferedContext: guiController.context,
 });
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
@@ -50,9 +54,9 @@ const material = new Shader({
 	hookFragmentPre: `
 		uniform sampler2D uTexture0;
 	`,
-	hookFragmentMain: `
-		color = texture(uTexture0, vUv).rgb;
-	`,
+	hookFragmentMain: GL.webgl2 ?
+		'color = texture(uTexture0, vUv).rgb;' :
+		'color = texture2D(uTexture0, vUv).rgb;',
 	uniforms: {
 		uTexture0: {
 			type: 't',
@@ -64,22 +68,8 @@ const box = new Mesh(geometry, material);
 
 scene.add(box);
 
-// setTimeout(() => {
-// 	texture.updateImage('/assets/textures/texture2.jpg');
-// }, 1500);
-
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas);
-const gui = new dat.GUI();
-const cameraGUI = gui.addFolder('camera');
-cameraGUI.open();
-const lightingGUI = gui.addFolder('lighting');
-lightingGUI.open();
-
-const range = 10;
-gui.add(box.position, 'x', -range, range);
-gui.add(box.position, 'y', -range, range);
-gui.add(box.position, 'z', -range, range);
 
 const grid = new GridHelper(10);
 scene.add(grid);
@@ -102,9 +92,6 @@ function update() {
 	requestAnimationFrame(update);
 	box.rotation.x += 0.01;
 	box.rotation.y += 0.01;
-	// plane.rotation.x += 0.01;
-	// plane.rotation.y += 0.01;
-
 	textureVideo.update();
 	renderer.render(scene, camera);
 }

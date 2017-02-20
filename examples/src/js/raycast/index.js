@@ -1,4 +1,5 @@
 import {
+	GL,
 	Renderer,
 	Scene,
 	PerspectiveCamera,
@@ -15,11 +16,17 @@ import {
 	BoxGeometry,
 	Lights,
 } from 'index';
-import { vec2 } from 'gl-matrix';
+import {
+	vec2,
+} from 'gl-matrix';
+import {
+	guiController,
+} from '../gui';
 
 // Renderer
 const renderer = new Renderer({
 	ratio: window.innerWidth / window.innerHeight,
+	prefferedContext: guiController.context,
 });
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
@@ -53,9 +60,8 @@ const material = new Shader({
 	name: 'Box',
 	hookFragmentPre: `
 		uniform vec2 uIntersect;
-		// varying vec2 vUv;
 	`,
-	hookFragmentEnd: `
+	hookFragmentMain: `
 		float circleRadius = 0.25;
 		vec2 circleCenter = uIntersect;
 		vec2 uvP = vec2(vUv.x, vUv.y);
@@ -69,8 +75,10 @@ const material = new Shader({
 		if (dist < circleRadius) {
 			color = vec3(1.0);
 		}
-		outputColor = vec4(color, 1.0);
 	`,
+	hookFragmentEnd: GL.webgl2 ?
+	'outputColor = vec4(color, 1.0);' :
+	'gl_FragColor = vec4(color, 1.0);',
 	uniforms: {
 		uDiffuse: {
 			type: '3f',

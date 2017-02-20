@@ -1,4 +1,5 @@
 import {
+	GL,
 	Renderer,
 	Scene,
 	PerspectiveCamera,
@@ -15,12 +16,16 @@ import {
 } from 'index';
 import {
 	Sierpinski,
+	jerusalem,
 } from '../fractal';
-import dat from 'dat-gui';
+import gui, {
+	guiController,
+} from '../gui';
 
 // Renderer
 const renderer = new Renderer({
 	ratio: window.innerWidth / window.innerHeight,
+	prefferedContext: guiController.context,
 });
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
@@ -79,14 +84,12 @@ scene.directionalLights = directionalLights;
 
 const sierpinski = new Sierpinski();
 
-const holes = [7, 11, 12, 13, 17, 27, 32, 35, 36, 37, 38, 39, 42, 47, 51, 52, 53, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 71, 72, 73, 77, 81, 82, 83, 85, 86, 87, 88, 89, 91, 92, 93, 97, 107, 111, 112, 113, 117];
-
-const positions = sierpinski.generate(40, 2, 5, holes);
+const positions = sierpinski.generate(40, 2, 5, jerusalem);
 
 const totalInstances = positions.length;
 const data = new Float32Array(totalInstances * 3);
 let i3 = 0;
-for (let i = 0; i < totalInstances; i++) {
+for (let i = 0; i < totalInstances; i += 1) {
 	i3 = i * 3;
 	data[i3] = positions[i][0];
 	data[i3 + 1] = positions[i][1];
@@ -117,12 +120,19 @@ const mesh = new Mesh(geometry, new Shader({
 			value: 0.027,
 		},
 	},
-	hookVertexPre: `
+	hookVertexPre: GL.webgl2 ? `
 		in vec3 aOffset;
 		uniform float uFogStart;
 		uniform float uFogEnd;
 		uniform float uFogDensity;
 		out float vFogAmount;
+		${ShaderChunks.Fog.exp2}
+	` : `
+		attribute vec3 aOffset;
+		uniform float uFogStart;
+		uniform float uFogEnd;
+		uniform float uFogDensity;
+		varying float vFogAmount;
 		${ShaderChunks.Fog.exp2}
 	`,
 	hookVertexMain: `
@@ -132,12 +142,15 @@ const mesh = new Mesh(geometry, new Shader({
 		float fogDistance = length(gl_Position.xyz);
 		vFogAmount = fogExp2(fogDistance, uFogDensity);
 	`,
-	hookFragmentPre: `
-		in float vFogAmount;
-	`,
-	hookFragmentEnd: `
+	hookFragmentPre: GL.webgl2 ?
+		'in float vFogAmount;' :
+		'varying float vFogAmount;',
+	hookFragmentEnd: GL.webgl2 ? `
 		vec3 fogColor = vec3(0.0);
 		outputColor = vec4(mix(color, fogColor, vFogAmount), 1.0);
+	` : `
+		vec3 fogColor = vec3(0.0);
+		gl_FragColor = vec4(mix(color, fogColor, vFogAmount), 1.0);
 	`,
 	directionalLights,
 }));
@@ -146,9 +159,6 @@ const mesh = new Mesh(geometry, new Shader({
 mesh.setInstanceCount(totalInstances);
 
 scene.add(mesh);
-
-const gui = new dat.GUI();
-gui.open();
 
 const controller = {
 	fov: cameraL.fov,

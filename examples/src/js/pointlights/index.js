@@ -12,14 +12,14 @@ import {
 	Color,
 	Lights,
 } from 'index';
-import dat from 'dat-gui';
-
-const gui = new dat.GUI();
-gui.open();
+import {
+	guiController
+} from '../gui';
 
 // Renderer
 const renderer = new Renderer({
 	ratio: window.innerWidth / window.innerHeight,
+	prefferedContext: guiController.context,
 });
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
@@ -85,11 +85,6 @@ const scale = 0.25;
 mesh.scale.set(scale, scale, scale);
 
 scene.add(mesh);
-
-gui.add(mesh.position, 'y', -10, 10);
-
-// const normalsHelper = new NormalsHelper(mesh);
-// scene.add(normalsHelper);
 
 function resize() {
 	const width = window.innerWidth;

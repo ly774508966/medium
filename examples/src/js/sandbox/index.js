@@ -7,7 +7,6 @@ import {
 	Shader,
 	PlaneGeometry,
 	BoxGeometry,
-	SphereGeometry,
 	GridHelper,
 	OrbitControls,
 	AxisHelper,
@@ -18,11 +17,12 @@ import {
 	Color,
 	Lights,
 } from 'index';
-import dat from 'dat-gui';
+import { guiController } from '../gui';
 
 // Renderer
 const renderer = new Renderer({
 	ratio: window.innerWidth / window.innerHeight,
+	prefferedContext: guiController.context,
 });
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
@@ -58,8 +58,8 @@ planeNormalsHelper.setParent(plane);
 scene.add(plane);
 
 colors = [];
-for (let i = 0; i < 6; i++) {
-	for (let j = 0; j < 3; j++) {
+for (let i = 0; i < 6; i += 1) {
+	for (let j = 0; j < 3; j += 1) {
 		colors = colors.concat([Math.random(), Math.random(), Math.random()]);
 	}
 }
@@ -151,17 +151,6 @@ boxNormalsHelper.setParent(box);
 
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas);
-const gui = new dat.GUI();
-dat.GUI.toggleHide();
-const cameraGUI = gui.addFolder('camera');
-cameraGUI.open();
-const lightingGUI = gui.addFolder('lighting');
-lightingGUI.open();
-
-// const range = 10;
-// lightingGUI.add(light.position, 'x', -range, range);
-// lightingGUI.add(light.position, 'y', -range, range);
-// lightingGUI.add(light.position, 'z', -range, range);
 
 const grid = new GridHelper(10);
 scene.add(grid);

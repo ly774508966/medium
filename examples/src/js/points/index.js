@@ -12,11 +12,14 @@ import {
 	Shader,
 	Constants,
 } from 'index';
+import {
+	guiController
+} from '../gui';
 
 // Renderer
 const renderer = new Renderer({
 	ratio: window.innerWidth / window.innerHeight,
-	// prefferedContext: 'webgl',
+	prefferedContext: guiController.context,
 });
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);

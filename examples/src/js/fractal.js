@@ -13,10 +13,10 @@ export class Sierpinski {
 		let positions = [vec3.create()];
 
 		let tmp;
-		for (let i = 0; i < this.iterations; i++) {
+		for (let i = 0; i < this.iterations; i += 1) {
 			tmp = [];
 
-			for (let j = 0; j < positions.length; j++) {
+			for (let j = 0; j < positions.length; j += 1) {
 				const position = positions[j];
 				tmp = tmp.concat(this._sponge(position, cubeSize, this.grid, this.holes));
 			}
@@ -41,9 +41,9 @@ export class Sierpinski {
 		let i = 0;
 		const positions = [];
 
-		for (let levels = 0; levels < grid; levels++) {
-			for (let rows = 0; rows < grid; rows++) {
-				for (let columns = 0; columns < grid; columns++) {
+		for (let levels = 0; levels < grid; levels += 1) {
+			for (let rows = 0; rows < grid; rows += 1) {
+				for (let columns = 0; columns < grid; columns += 1) {
 					if (!this._inList(i, holes)) {
 						const positionNew = vec3.create();
 						positionNew[0] = position[0] + (rows * cubeSize);
@@ -51,7 +51,7 @@ export class Sierpinski {
 						positionNew[2] = position[2] + (columns * cubeSize);
 						positions.push(positionNew);
 					}
-					i++;
+					i += 1;
 				}
 			}
 		}
@@ -63,7 +63,7 @@ export class Sierpinski {
 		let result = false;
 		let item;
 
-		for (let i = 0; i < list.length; i++) {
+		for (let i = 0; i < list.length; i += 1) {
 			item = list[i];
 			if (item === val) {
 				result = true;
@@ -77,3 +77,13 @@ export class Sierpinski {
 		return this.size / Math.pow(this.grid, this.iterations);
 	}
 }
+
+export const jerusalem = [
+	7, 11, 12, 13, 17, 27, 32,
+	35, 36, 37, 38, 39, 42, 47,
+	51, 52, 53, 55, 56, 57, 58,
+	59, 60, 61, 62, 63, 64, 65,
+	66, 67, 68, 69, 71, 72, 73,
+	77, 81, 82, 83, 85, 86, 87,
+	88, 89, 91, 92, 93, 97, 107,
+	111, 112, 113, 117];

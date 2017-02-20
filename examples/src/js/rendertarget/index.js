@@ -1,4 +1,5 @@
 import {
+	GL,
 	Renderer,
 	Scene,
 	PerspectiveCamera,
@@ -12,10 +13,14 @@ import {
 	OrthographicCamera,
 	ShaderChunks,
 } from 'index';
+import {
+	guiController
+} from '../gui';
 
 // Renderer
 const renderer = new Renderer({
 	ratio: window.innerWidth / window.innerHeight,
+	prefferedContext: guiController.context,
 });
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
@@ -68,7 +73,7 @@ const material = new Shader({
 			value: 0,
 		},
 	},
-	fragmentShader: `${ShaderChunks.EsVersion}
+	fragmentShader: GL.webgl2 ? `${ShaderChunks.EsVersion}
 		#HOOK_PRECISION
 		in vec2 vUv;
 		uniform sampler2D uTexture0;
@@ -81,6 +86,19 @@ const material = new Shader({
 			float g = cos(color.g + uTime) * 0.5 + 0.5;
 			float b = sin(color.b + uTime) * 0.5 + 0.5;
 			outputColor = vec4(r, g, b, 1.0);
+		}
+	` : `
+		#HOOK_PRECISION
+		varying vec2 vUv;
+		uniform sampler2D uTexture0;
+		uniform float uTime;
+
+		void main(void) {
+			vec3 color = texture2D(uTexture0, vUv).rgb;
+			float r = sin(color.r + uTime) * 0.5 + 0.5;
+			float g = cos(color.g + uTime) * 0.5 + 0.5;
+			float b = sin(color.b + uTime) * 0.5 + 0.5;
+			gl_FragColor = vec4(r, g, b, 1.0);
 		}
 	`,
 });

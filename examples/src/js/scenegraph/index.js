@@ -15,14 +15,14 @@ import {
 	Lights,
 	Constants,
 } from 'index';
-import dat from 'dat-gui';
-
-const gui = new dat.GUI();
-gui.open();
+import gui, {
+	guiController
+} from '../gui';
 
 // Renderer
 const renderer = new Renderer({
 	ratio: window.innerWidth / window.innerHeight,
+	prefferedContext: guiController.context,
 });
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
@@ -62,17 +62,16 @@ scene.directionalLights = directionalLights;
 const container = new Object3D();
 
 const material = new Shader({
-	directionalLights,
 	uniforms: {
 		uDiffuse: {
 			type: '3f',
 			value: new Color(0x666666).v,
 		},
 	},
+	directionalLights,
 });
 
 const material2 = new Shader({
-	directionalLights,
 	drawType: Constants.DRAW_LINES,
 	uniforms: {
 		uDiffuse: {
@@ -88,7 +87,6 @@ mesh0.setParent(container);
 
 const geometry1 = new SphereGeometry(2, 32, 32);
 const mesh1 = new Mesh(geometry1, material2);
-mesh1.isSphere = true;
 mesh1.setParent(mesh0);
 
 mesh0.position.x = -10;

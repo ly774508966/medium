@@ -7,7 +7,6 @@ import {
 	Shader,
 	PlaneGeometry,
 	BoxGeometry,
-	SphereGeometry,
 	GridHelper,
 	OrbitControls,
 	AxisHelper,
@@ -18,27 +17,12 @@ import {
 	Color,
 	Lights,
 } from 'index';
-import dat from 'dat-gui';
-import queryString from 'query-string';
-
-const gui = new dat.GUI();
-
-const options = ['webgl2', 'webgl'];
-
-const queries = queryString.parse(location.search);
-
-const controller = {
-	context: queries.context || options[0],
-};
-
-gui.add(controller, 'context', options).onChange(val => {
-	window.location.href = `webglcontext.html?context=${val}`
-});
+import { guiController } from '../gui';
 
 // Renderer
 const renderer = new Renderer({
 	ratio: window.innerWidth / window.innerHeight,
-	prefferedContext: controller.context,
+	prefferedContext: guiController.context,
 });
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
@@ -74,8 +58,8 @@ planeNormalsHelper.setParent(plane);
 scene.add(plane);
 
 colors = [];
-for (let i = 0; i < 6; i++) {
-	for (let j = 0; j < 3; j++) {
+for (let i = 0; i < 6; i += 1) {
+	for (let j = 0; j < 3; j += 1) {
 		colors = colors.concat([Math.random(), Math.random(), Math.random()]);
 	}
 }
@@ -142,9 +126,8 @@ const material = new Shader({
 		uniform sampler2D uTexture0;
 	`,
 	hookFragmentMain: GL.webgl2 ?
-	`color = texture(uTexture0, vUv).rgb;` :
-	`color = texture2D(uTexture0, vUv).rgb;`
-	,
+	'color = texture(uTexture0, vUv).rgb;' :
+	'color = texture2D(uTexture0, vUv).rgb;',
 	uniforms: {
 		uTexture0: {
 			type: 't',
