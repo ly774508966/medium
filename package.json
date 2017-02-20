@@ -12,6 +12,9 @@
     "build": "npm run lint; babel src --out-dir lib",
     "lint": "eslint --fix --ext .js ./src --cache"
   },
+  "pre-push": [
+    "lint"
+  ],
   "author": "Amelie Rosser <mail@ixviii.co.uk> (https://www.ixviii.io)",
   "license": "MIT",
   "devDependencies": {
@@ -28,6 +31,7 @@
     "eslint-import-resolver-babel-module": "3.0.0",
     "eslint-plugin-import": "2.2.0",
     "live-server": "^1.2.0",
+    "pre-push": "^0.1.1",
     "pug-cli": "^1.0.0-alpha6",
     "query-string": "^4.3.1",
     "webpack": "^2.2.1"
