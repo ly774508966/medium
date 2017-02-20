@@ -149,7 +149,7 @@ export default class Shader {
 		if (this.uniforms.uCameraPosition === undefined && this.pointLights) {
 			this.uniforms.uCameraPosition = {
 				type: '3f',
-				value: [20, 20, 20],
+				value: [0, 0, 0],
 			};
 		}
 
