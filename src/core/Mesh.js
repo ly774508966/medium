@@ -60,7 +60,13 @@ export default class Mesh extends Object3D {
 				this.geometry.attributesInstanced[attributeName].bind();
 				// vertexAttribPointer
 				this.shader.setAttributeInstancedPointer(attributeName);
-				gl.vertexAttribDivisor(this.shader.attributeLocations[attributeName], 1);
+
+				if (GL.webgl2) {
+					gl.vertexAttribDivisor(this.shader.attributeLocations[attributeName], 1);
+				} else {
+					extensions.angleInstancedArrays.vertexAttribDivisorANGLE(
+						this.shader.attributeLocations[attributeName], 1);
+				}
 			}
 		});
 	}
@@ -140,8 +146,13 @@ export default class Mesh extends Object3D {
 			this.bindIndexBuffer();
 		}
 
-		gl.drawElementsInstanced(this.shader.drawType,
-			this.geometry.attributes.aIndex.numItems, gl.UNSIGNED_SHORT, 0, this.instanceCount);
+		if (GL.webgl2) {
+			gl.drawElementsInstanced(this.shader.drawType,
+				this.geometry.attributes.aIndex.numItems, gl.UNSIGNED_SHORT, 0, this.instanceCount);
+		} else {
+			extensions.angleInstancedArrays.drawElementsInstancedANGLE(this.shader.drawType,
+				this.geometry.attributes.aIndex.numItems, gl.UNSIGNED_SHORT, 0, this.instanceCount);
+		}
 
 		if (extensions.vertexArrayObject) {
 			this.vao.unbind();
