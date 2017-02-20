@@ -1,6 +1,6 @@
 {
-  "name": "medium",
-  "version": "0.0.0",
+  "name": "ixviii.medium",
+  "version": "0.1.0",
   "description": "Personal webgl toolkit.",
   "main": "lib/index.js",
   "scripts": {
@@ -10,6 +10,7 @@
     "examples:html": "npm run examples:files; pug --obj ./examples/files.json --watch ./examples/src/templates/*.pug --out ./examples",
     "examples:files": "pug --obj ./examples/files.json ./examples/src/templates/*.pug --out ./examples; node ./examples/files",
     "build": "npm run lint; babel src --out-dir lib",
+    "prepublish": "npm run build",
     "lint": "eslint --fix --ext .js ./src --cache"
   },
   "pre-push": [

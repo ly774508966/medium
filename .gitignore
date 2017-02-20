@@ -4,7 +4,5 @@ npm-debug.log
 .eslintcache
 *.js.map
 lib
-.vscode
-
 /examples/js/*.js
 /examples/*.html
