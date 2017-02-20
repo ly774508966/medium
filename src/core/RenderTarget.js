@@ -53,11 +53,13 @@ export default class RenderTarget {
 
 		mat4.lookAt(scene.modelViewMatrix, camera.position.v, camera.center.v, camera.up.v);
 
-		// Update global uniform buffers
-		UniformBuffers.updateProjectionView(gl, camera.projectionMatrix, scene.modelViewMatrix);
-
 		// Update the scene
 		scene.update();
+
+		if (GL.webgl2) {
+			// Update global uniform buffers
+			UniformBuffers.updateProjectionView(gl, camera.projectionMatrix, scene.modelViewMatrix);
+		}
 
 		// Render the scene objects
 		scene.objects.forEach(child => {
