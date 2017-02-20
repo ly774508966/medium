@@ -63,7 +63,9 @@ function Capabilities(gl) {
 
 function Extensions(gl) {
 	const vertexArrayObject = GL.webgl2 || gl.getExtension('OES_vertex_array_object') || false;
+	const angleInstancedArrays = gl.getExtension('ANGLE_instanced_arrays') || false;
 	return {
+		angleInstancedArrays,
 		vertexArrayObject,
 	};
 }
