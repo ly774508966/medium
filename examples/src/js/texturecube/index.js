@@ -93,6 +93,7 @@ new ObjLoader('assets/models/mass.obj').then(objGeometry => {
 			uTexture0: {
 				type: 'tc',
 				value: texture.texture,
+				textureIndex: 0,
 			},
 		},
 	});

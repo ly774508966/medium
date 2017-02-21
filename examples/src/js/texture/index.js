@@ -11,7 +11,7 @@ import {
 	AxisHelper,
 	Texture,
 } from 'index';
-import {
+import gui, {
 	guiController
 } from '../gui';
 
@@ -41,29 +41,47 @@ colors = colors.concat([0, 1, 0]);
 colors = colors.concat([0, 0, 1]);
 colors = colors.concat([1, 1, 0]);
 
-const texture = new Texture({
+const texture0 = new Texture({
 	src: '/assets/textures/texture-nopow2.jpg',
 });
 
+const texture1 = new Texture({
+	src: '/assets/textures/texture-nopow2-2.jpg',
+});
+
 const geometry = new PlaneGeometry(1, 1, colors);
-const material1 = new Shader({
+const material = new Shader({
 	name: 'Plane',
 	hookFragmentPre: `
 		uniform sampler2D uTexture0;
+		uniform sampler2D uTexture1;
+		uniform float uMix;
 	`,
 	hookFragmentMain: GL.webgl2 ?
-	'color = texture(uTexture0, vUv).rgb;' :
-	'color = texture2D(uTexture0, vUv).rgb;',
+	`color = mix(texture(uTexture0, vUv).rgb, texture(uTexture1, vUv).rgb, uMix);` :
+	'color = mix(texture2D(uTexture0, vUv).rgb, texture2D(uTexture1, vUv).rgb, uMix);',
 	uniforms: {
+		uMix: {
+			type: 'f',
+			value: 0.5,
+		},
 		uTexture0: {
 			type: 't',
-			value: texture.texture,
+			value: texture0.texture,
+			textureIndex: 0,
+		},
+		uTexture1: {
+			type: 't',
+			value: texture1.texture,
+			textureIndex: 1,
 		},
 	},
 });
 
-const plane = new Mesh(geometry, material1);
+const plane = new Mesh(geometry, material);
 scene.add(plane);
+
+gui.add(plane.shader.uniforms.uMix, 'value', 0, 1);
 
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas);
