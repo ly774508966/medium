@@ -445,7 +445,7 @@ export default class Shader {
 		gl = GL.get();
 		let shader;
 
-		// console.log(soursce);
+		// console.log(source);
 
 		switch (type) {
 			case 'vs':

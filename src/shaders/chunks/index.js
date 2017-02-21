@@ -6,6 +6,7 @@ import Packing from './Packing.glsl';
 import PointLights from './PointLights.glsl';
 import Fog from './Fog.glsl';
 import ProjectionView from './ProjectionView.glsl';
+import Transpose from './Transpose.glsl';
 
 export default {
 	EsVersion,
@@ -16,4 +17,5 @@ export default {
 	PointLights,
 	Fog,
 	ProjectionView,
+	Transpose,
 };

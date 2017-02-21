@@ -1,5 +1,7 @@
 import * as GL from './GL';
 import EventDispatcher from 'happens';
+import ImageLoader from 'loaders/ImageLoader';
+import HdrLoader from 'loaders/HdrLoader';
 
 let gl;
 
@@ -20,19 +22,26 @@ export default class TextureCube {
 
 		this.texture = gl.createTexture();
 		this.images = [];
+		this.loaders = [];
 		this._loaded = 0;
 
 		this.update(this.placeholder());
 
+		// Check media type
+		this._isHdr = this.src[0].split('.').pop() === 'hdr';
+		const Loader = this._isHdr ? HdrLoader : ImageLoader;
+
 		this.src.forEach((src, i) => {
-			this.images[i] = new Image();
-			this.images[i].onload = this.onImageLoaded;
-			this.images[i].src = this.src[i];
+			this.loaders[i] = new Loader(this.src[i]);
+			this.loaders[i].once('loaded', this.onImageLoaded);
+			this.loaders[i].load();
 		});
 	}
 
-	onImageLoaded = () => {
+	onImageLoaded = (image) => {
+		console.log(image);
 		this._loaded += 1;
+		this.images.push(image);
 		if (this._loaded === 6) {
 			this.onTextureLoaded();
 		}
@@ -58,15 +67,19 @@ export default class TextureCube {
 		];
 
 		for (let i = 0; i < 6; i += 1) {
-			const image = this._resizeImage(images[i]);
+			const image = this._isHdr ? images[i] : this._resizeImage(images[i]);
 			gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
-			gl.texImage2D(targets[i], 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+			if (image.shape) {
+				gl.texImage2D(targets[i], 0, gl.RGBA16F, image.shape[0], image.shape[1], 0, gl.RGBA, gl.FLOAT, image.shape.data);
+			} else {
+				gl.texImage2D(targets[i], 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+			}
 			gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, this.magFilter);
 			gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, this.minFilter);
 			gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_S, this.wrapS);
 			gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_T, this.wrapT);
 		}
-		gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+		// gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
 		gl.bindTexture(gl.TEXTURE_CUBE_MAP, null);
 	}
 
