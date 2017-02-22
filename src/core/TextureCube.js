@@ -2,6 +2,9 @@ import * as GL from './GL';
 import EventDispatcher from 'happens';
 import ImageLoader from 'loaders/ImageLoader';
 import HdrLoader from 'loaders/HdrLoader';
+import {
+	warn,
+} from 'utils/Console';
 
 let gl;
 
@@ -23,7 +26,6 @@ export default class TextureCube {
 		this.texture = gl.createTexture();
 		this.images = [];
 		this.loaders = [];
-		this._loaded = 0;
 
 		this.update(this.placeholder());
 
@@ -33,23 +35,22 @@ export default class TextureCube {
 
 		this.src.forEach((src, i) => {
 			this.loaders[i] = new Loader(this.src[i]);
-			this.loaders[i].once('loaded', this.onImageLoaded);
-			this.loaders[i].load();
 		});
+
+		Promise.all(this.loaders)
+		.then(this.onTextureLoaded)
+		.catch(this.onTextureError);
 	}
 
-	onImageLoaded = (image) => {
-		console.log(image);
-		this._loaded += 1;
-		this.images.push(image);
-		if (this._loaded === 6) {
-			this.onTextureLoaded();
-		}
-	}
 
-	onTextureLoaded = () => {
+	onTextureLoaded = (response) => {
+		this.images = response;
 		this.update(this.images);
 		this.emit('loaded');
+	}
+
+	onTextureError = (error) => {
+		warn(error);
 	}
 
 	update(images) {
@@ -70,7 +71,8 @@ export default class TextureCube {
 			const image = this._isHdr ? images[i] : this._resizeImage(images[i]);
 			gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
 			if (image.shape) {
-				gl.texImage2D(targets[i], 0, gl.RGBA16F, image.shape[0], image.shape[1], 0, gl.RGBA, gl.FLOAT, image.shape.data);
+				gl.texImage2D(targets[i], 0, gl.RGBA, image.shape[0], image.shape[1],
+					0, gl.RGBA, gl.UNSIGNED_BYTE, image.shape.data);
 			} else {
 				gl.texImage2D(targets[i], 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 			}
@@ -79,7 +81,7 @@ export default class TextureCube {
 			gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_S, this.wrapS);
 			gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_T, this.wrapT);
 		}
-		// gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+		gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
 		gl.bindTexture(gl.TEXTURE_CUBE_MAP, null);
 	}
 

@@ -30,7 +30,7 @@ function readPixelsRawRLE(buffer, data, offset, fileOffset, scanlineWidth, numSc
 		let bytesRead = 0;
 		do {
 			buf[bytesRead++] = buffer[fileOffset];
-		} while(++fileOffset < bufferLength && bytesRead < buf.length);
+		} while (++fileOffset < bufferLength && bytesRead < buf.length);
 		return bytesRead;
 	}
 
@@ -38,7 +38,7 @@ function readPixelsRawRLE(buffer, data, offset, fileOffset, scanlineWidth, numSc
 		let bytesRead = 0;
 		do {
 			buf[offset + bytesRead++] = buffer[fileOffset];
-		} while(++fileOffset < bufferLength && bytesRead < length);
+		} while (++fileOffset < bufferLength && bytesRead < length);
 		return bytesRead;
 	}
 
@@ -77,7 +77,7 @@ function readPixelsRawRLE(buffer, data, offset, fileOffset, scanlineWidth, numSc
 		/* read each of the four channels for the scanline into the buffer */
 		for (let i = 0; i < 4; i++) {
 			ptrEnd = (i + 1) * scanlineWidth;
-			while(ptr < ptrEnd) {
+			while (ptr < ptrEnd) {
 				if (readBuf(buf) < buf.length) {
 					throw new Error('Error reading 2-byte buffer');
 				}
@@ -87,7 +87,7 @@ function readPixelsRawRLE(buffer, data, offset, fileOffset, scanlineWidth, numSc
 					if ((count === 0) || (count > ptrEnd - ptr)) {
 						throw new Error('Bad scanline data');
 					}
-					while(count-- > 0) {
+					while (count-- > 0) {
 						scanlineBuffer[ptr++] = buf[1];
 					}
 				} else {
@@ -108,7 +108,7 @@ function readPixelsRawRLE(buffer, data, offset, fileOffset, scanlineWidth, numSc
 		}
 
 		/* copy byte data to output */
-		for(let i = 0; i < scanlineWidth; i++) {
+		for (let i = 0; i < scanlineWidth; i++) {
 			data[offset + 0] = scanlineBuffer[i];
 			data[offset + 1] = scanlineBuffer[i + scanlineWidth];
 			data[offset + 2] = scanlineBuffer[i + 2 * scanlineWidth];
@@ -118,7 +118,6 @@ function readPixelsRawRLE(buffer, data, offset, fileOffset, scanlineWidth, numSc
 
 		numScanlines--;
 	}
-
 }
 
 // Returns data as floats and flipped along Y by default
@@ -141,7 +140,7 @@ function parseHdr(buffer) {
 				break;
 			}
 			buf += String.fromCharCode(b);
-		} while(++fileOffset < bufferLength);
+		} while (++fileOffset < bufferLength);
 		return buf;
 	}
 
@@ -151,7 +150,7 @@ function parseHdr(buffer) {
 	const gamma = 1;
 	let rle = false;
 
-	for(let i = 0; i < 20; i++) {
+	for (let i = 0; i < 20; i++) {
 		const line = readLine();
 		let match;
 		if (match = line.match(radiancePattern)) {
@@ -179,7 +178,7 @@ function parseHdr(buffer) {
 
 	// TODO: Should be Float16
 	const floatData = new Float32Array(width * height * 4);
-	for(let offset = 0; offset < data.length; offset += 4) {
+	for (let offset = 0; offset < data.length; offset += 4) {
 		let r = data[offset + 0] / 255;
 		let g = data[offset + 1] / 255;
 		let b = data[offset + 2] / 255;

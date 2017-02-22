@@ -73,7 +73,7 @@ const vertexShaderEs300 = `${EsVersion}
 		#endif
 
 		// Calculate world position of vertex with transformed
-		vec3 vPosition = (uModelMatrix * vec4(aVertexPosition + transformed, 1.0)).xyz;
+		vPosition = (uModelMatrix * vec4(aVertexPosition + transformed, 1.0)).xyz;
 
 		#ifdef pointLights
 		for (int i = 0; i < #HOOK_POINT_LIGHTS; i++) {
@@ -157,7 +157,7 @@ const vertexShaderEs100 = `
 		#endif
 
 		// Calculate world position of vertex with transformed
-		vec3 vPosition = (uModelMatrix * vec4(aVertexPosition + transformed, 1.0)).xyz;
+		vPosition = (uModelMatrix * vec4(aVertexPosition + transformed, 1.0)).xyz;
 
 		#ifdef pointLights
 		for (int i = 0; i < #HOOK_POINT_LIGHTS; i++) {
