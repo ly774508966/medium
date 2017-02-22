@@ -11,6 +11,8 @@ import {
 	Mesh,
 	TextureCube,
 	ShaderChunks,
+	// BoxGeometry,
+	BoxGeometry,
 } from 'index';
 import gui, {
 	guiController
@@ -69,6 +71,8 @@ guiController.exposure = 2.0;
 
 gui.add(guiController, 'exposure', 0, 2);
 
+const hdrObjects = [];
+
 function skybox() {
 	const material = new Shader({
 		hookFragmentPre: `
@@ -125,11 +129,11 @@ function skybox() {
 
 	scene.add(mesh);
 
-	return mesh;
+	hdrObjects.push(mesh);
 }
-const skyboxMesh = skybox();
+skybox();
 
-function sphere() {
+function reflectiveObjects() {
 	const material = new Shader({
 		hookVertexPre: GL.webgl2 ? `
 			out vec3 vReflect;
@@ -138,7 +142,11 @@ function sphere() {
 		`,
 		hookVertexEnd: `
 			// Calculate world normal position (of surface)
-			vec3 worldNormal = (uModelMatrix * vec4(vNormal, 1.0)).xyz;
+
+			// This is wrong, we don't want to apply model transformations to normal
+			// vec3 worldNormal = (uModelMatrix * vec4(vNormal, 1.0)).xyz;
+
+			vec3 worldNormal = vNormal;
 
 			// Calculate eye ray (from camera to surface)
 			vec3 eye = normalize(vWorldPosition.xyz - uCameraPosition);
@@ -209,14 +217,21 @@ function sphere() {
 		},
 	});
 
-	const geometry = new SphereGeometry(2, 64, 64);
-	const mesh = new Mesh(geometry, material);
+	const geometry0 = new SphereGeometry(2, 64, 64);
+	const mesh0 = new Mesh(geometry0, material);
+	scene.add(mesh0);
 
-	scene.add(mesh);
+	// const geometry1 = new BoxGeometry(2, 2, 2);
+	// const mesh1 = new Mesh(geometry1, material);
+	// scene.add(mesh1);
 
-	return mesh;
+	// mesh0.position.z = -3;
+	// mesh1.position.z = 3;
+
+	hdrObjects.push(mesh0);
+	// hdrObjects.push(mesh1);
 }
-const sphereMesh = sphere();
+reflectiveObjects();
 
 function resize() {
 	const width = window.innerWidth;
@@ -230,10 +245,10 @@ window.addEventListener('resize', resize);
 function update() {
 	requestAnimationFrame(update);
 
-	skyboxMesh.shader.uniforms.uGamma.value = guiController.gamma;
-	skyboxMesh.shader.uniforms.uExposure.value = guiController.exposure;
-	sphereMesh.shader.uniforms.uGamma.value = guiController.gamma;
-	sphereMesh.shader.uniforms.uExposure.value = guiController.exposure;
+	hdrObjects.forEach(object => {
+		object.shader.uniforms.uGamma.value = guiController.gamma;
+		object.shader.uniforms.uExposure.value = guiController.exposure;
+	});
 
 	renderer.render(scene, camera);
 }
