@@ -42,7 +42,6 @@ export default class TextureCube {
 		.catch(this.onTextureError);
 	}
 
-
 	onTextureLoaded = (response) => {
 		this.images = response;
 		this.update(this.images);
@@ -71,8 +70,8 @@ export default class TextureCube {
 			const image = this._isHdr ? images[i] : this._resizeImage(images[i]);
 			gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
 			if (image.shape) {
-				gl.texImage2D(targets[i], 0, gl.RGBA, image.shape[0], image.shape[1],
-					0, gl.RGBA, gl.UNSIGNED_BYTE, image.shape.data);
+				gl.texImage2D(targets[i], 0, gl.RGBA16F, image.shape[0], image.shape[1],
+					0, gl.RGBA, gl.FLOAT, image.data);
 			} else {
 				gl.texImage2D(targets[i], 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 			}

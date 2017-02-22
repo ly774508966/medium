@@ -24,6 +24,7 @@ import UniformBuffers from 'core/UniformBuffers';
 
 let gl;
 const normalMatrix = mat3.create();
+const inversedViewMatrix = mat4.create();
 const inversedModelViewMatrix = mat4.create();
 
 export default class Shader {
@@ -175,6 +176,11 @@ export default class Shader {
 
 		// Default uniforms
 		this.uniforms = Object.assign({
+			uViewMatrixInverse: {
+				type: '4fv',
+				value: mat4.create(),
+				location: null,
+			},
 			uModelMatrix: {
 				type: '4fv',
 				value: mat4.create(),
@@ -417,7 +423,13 @@ export default class Shader {
 			gl.uniformMatrix4fv(this.uniforms.uViewMatrix.location, false, modelViewMatrix);
 		}
 
-		// Matrix
+		// Inverse view matrix
+		mat4.identity(inversedViewMatrix);
+		mat4.invert(inversedViewMatrix, modelViewMatrix);
+
+		gl.uniformMatrix4fv(this.uniforms.uViewMatrixInverse.location, false, inversedViewMatrix);
+
+		// Inverse model matrix
 		gl.uniformMatrix4fv(this.uniforms.uModelMatrix.location, false, modelMatrix);
 
 		mat4.identity(inversedModelViewMatrix);

@@ -1,4 +1,4 @@
-import parseHdr from 'utils/HdrParser';
+import parseHDR from 'parse-hdr';
 
 export default class HdrLoader {
 	constructor(src) {
@@ -9,7 +9,7 @@ export default class HdrLoader {
 			req.onreadystatechange = () => {
 				if (req.readyState !== 4) return;
 				if (req.readyState === 4 && req.status === 200) {
-					resolve(parseHdr(req.response));
+					resolve(parseHDR(req.response));
 				} else {
 					reject(req.status);
 				}

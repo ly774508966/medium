@@ -1,6 +1,8 @@
 {
   "demos": [
     "fullscreen",
+    "hdr",
+    "hdrcube",
     "instancing",
     "memory",
     "obj",
