@@ -35,7 +35,7 @@ const camera = new PerspectiveCamera({
 	fov: 45,
 });
 
-camera.position.set(10, 5, 10);
+camera.position.set(10, 0, -60);
 camera.lookAt();
 
 // Helpers
@@ -46,28 +46,34 @@ const axis = new AxisHelper(1);
 scene.add(axis);
 controls.update();
 
+// const environmentMap = new TextureCube({
+// 	src: [
+// 		'/assets/textures/cube/pisa-hdr/px.hdr',
+// 		'/assets/textures/cube/pisa-hdr/nx.hdr',
+// 		'/assets/textures/cube/pisa-hdr/py.hdr',
+// 		'/assets/textures/cube/pisa-hdr/ny.hdr',
+// 		'/assets/textures/cube/pisa-hdr/pz.hdr',
+// 		'/assets/textures/cube/pisa-hdr/nz.hdr',
+// 	],
+// });
+
 const environmentMap = new TextureCube({
 	src: [
-		'/assets/textures/cube/pisa-hdr/px.hdr',
-		'/assets/textures/cube/pisa-hdr/nx.hdr',
-		'/assets/textures/cube/pisa-hdr/py.hdr',
-		'/assets/textures/cube/pisa-hdr/ny.hdr',
-		'/assets/textures/cube/pisa-hdr/pz.hdr',
-		'/assets/textures/cube/pisa-hdr/nz.hdr',
+		'/assets/textures/cube/pisa/px.png',
+		'/assets/textures/cube/pisa/nx.png',
+		'/assets/textures/cube/pisa/py.png',
+		'/assets/textures/cube/pisa/ny.png',
+		'/assets/textures/cube/pisa/pz.png',
+		'/assets/textures/cube/pisa/nz.png',
 	],
 });
 
 function skybox() {
 	const material = new Shader({
-		hookVertexPre: GL.webgl2 ?
-		'out vec3 vTexturePosition;' :
-		'varying vec3 vTexturePosition;',
-		hookVertexEnd: `
-			vTexturePosition = (uModelMatrix * vec4(aVertexPosition, 1.0)).xyz;
-		`,
-		hookFragmentPre: GL.webgl2 ? `
+		hookFragmentPre: `
 			uniform samplerCube uEnvironment;
-			in vec3 vTexturePosition;
+			uniform float uGamma;
+			uniform float uExposure;
 
 			const float A = 0.15;
 			const float B = 0.50;
@@ -81,34 +87,39 @@ function skybox() {
 				return ((x*(A*x+C*B)+D*E)/(x*(A*x+B)+D*F))-E/F;
 			}
 
-		` : `
-			uniform samplerCube uEnvironment;
-			varying vec3 vTexturePosition;
 		`,
-		hookFragmentMain: GL.webgl2 ?
-		`
-		float uExposure = 1.0;
-		float uGamma = 1.0;
-		color = texture(uEnvironment, vTexturePosition).rgb;
-		color				= Uncharted2Tonemap( color * uExposure );
-		// white balance
-		color				= color * ( 1.0 / Uncharted2Tonemap( vec3( 20.0 ) ) );
+		hookFragmentMain: `
+			color = texture(uEnvironment, vPosition).rgb;
+			color	= Uncharted2Tonemap(color * uExposure);
 
-		// gamma correction
-		color				= pow( color, vec3( 1.0 / uGamma ) );
-		` :
-		'color = textureCube(uEnvironment, vTexturePosition).rgb;',
+			// white balance
+			color	= color * (1.0 / Uncharted2Tonemap(vec3(20.0)));
+
+			// gamma correction
+			color	= pow(color, vec3(1.0 / uGamma));
+		`,
 		uniforms: {
 			uEnvironment: {
 				type: 'tc',
 				value: environmentMap.texture,
 				textureIndex: 0,
 			},
+			uGamma: {
+				type: 'f',
+				value: 1.2,
+			},
+			uExposure: {
+				type: 'f',
+				value: 2,
+			},
 		},
 	});
 
-	const geometry = new SphereGeometry(10, 64, 64);
+	const geometry = new SphereGeometry(40, 64, 64);
 	const mesh = new Mesh(geometry, material);
+
+	gui.add(mesh.shader.uniforms.uGamma, 'value', 0, 2);
+	gui.add(mesh.shader.uniforms.uExposure, 'value', 0, 2);
 
 	scene.add(mesh);
 }

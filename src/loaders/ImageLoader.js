@@ -1,22 +1,19 @@
-import EventDispatcher from 'happens';
-
 export default class ImageLoader {
 	constructor(src) {
-		EventDispatcher(this);
-		this.src = src;
-	}
+		return new Promise((resolve, reject) => {
+			const image = new Image();
 
-	load() {
-		const image = new Image();
+			console.log(src);
 
-		image.onload = () => {
-			this.emit('loaded', image);
-		};
+			image.onload = () => {
+				resolve(image);
+			};
 
-		image.onerror = () => {
-			this.emit('error', `Failed to load ${this.asset.src}`);
-		};
+			image.onerror = () => {
+				reject(`Failed to load ${this.asset.src}`);
+			};
 
-		image.src = this.src;
+			image.src = src;
+		});
 	}
 }
