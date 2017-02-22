@@ -3,8 +3,6 @@ export default class ImageLoader {
 		return new Promise((resolve, reject) => {
 			const image = new Image();
 
-			console.log(src);
-
 			image.onload = () => {
 				resolve(image);
 			};
