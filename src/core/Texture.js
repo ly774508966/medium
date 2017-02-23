@@ -68,7 +68,8 @@ export default class Texture {
 		gl.bindTexture(gl.TEXTURE_2D, this.texture);
 		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 		if (image.shape) {
-			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA16F, image.shape[0], image.shape[1], 0, gl.RGBA, gl.FLOAT, image.data);
+			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA16F, image.shape[0], image.shape[1],
+				0, gl.RGBA, gl.FLOAT, image.data);
 		} else {
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this._resizeImage(image));
 		}
