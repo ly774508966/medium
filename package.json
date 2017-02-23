@@ -15,8 +15,16 @@
   "pre-push": [
     "lint"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ixviii/medium.git"
+  },
   "author": "Amelie Rosser <mail@ixviii.co.uk> (https://www.ixviii.io)",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ixviii/medium/issues"
+  },
+  "homepage": "https://github.com/ixviii/medium",
   "devDependencies": {
     "babel-cli": "^6.6.5",
     "babel-eslint": "7.1.1",
@@ -38,7 +46,8 @@
   },
   "dependencies": {
     "gl-matrix": "^2.3.2",
-    "happens": "^0.6.0"
+    "happens": "^0.6.0",
+    "parse-hdr": "^1.0.0"
   },
   "eslintConfig": {
     "parser": "babel-eslint",

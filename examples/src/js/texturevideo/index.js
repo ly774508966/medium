@@ -61,6 +61,7 @@ const material = new Shader({
 		uTexture0: {
 			type: 't',
 			value: textureVideo.texture,
+			textureIndex: 0,
 		},
 	},
 });

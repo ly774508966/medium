@@ -5,8 +5,14 @@ import {
 	mat4,
 	vec3,
 } from 'gl-matrix';
-import { vertexShaderEs300, vertexShaderEs100 } from 'shaders/basic/Vertex.glsl';
-import { fragmentShaderEs300, fragmentShaderEs100 } from 'shaders/basic/Frag.glsl';
+import {
+	vertexShaderEs300,
+	vertexShaderEs100,
+} from 'shaders/basic/Vertex.glsl';
+import {
+	fragmentShaderEs300,
+	fragmentShaderEs100,
+} from 'shaders/basic/Frag.glsl';
 import {
 	warn,
 } from 'utils/Console';
@@ -18,6 +24,7 @@ import UniformBuffers from 'core/UniformBuffers';
 
 let gl;
 const normalMatrix = mat3.create();
+const inversedViewMatrix = mat4.create();
 const inversedModelViewMatrix = mat4.create();
 
 export default class Shader {
@@ -109,15 +116,15 @@ export default class Shader {
 		// Uniforms for ProjectionView uniform block
 		if (GL.webgl2) {
 			this.setUniformBlockLocation('ProjectionView',
-					UniformBuffers.projectionView.buffer, CONSTANTS.UNIFORM_PROJECTION_VIEW_LOCATION);
+				UniformBuffers.projectionView.buffer, CONSTANTS.UNIFORM_PROJECTION_VIEW_LOCATION);
 		}
 
 		if (this.directionalLights) {
 			if (GL.webgl2) {
 				// Setup uniform block for directional lights
 				this.setUniformBlockLocation('DirectionalLights',
-						this.directionalLights.uniformBuffer.buffer,
-						CONSTANTS.UNIFORM_DIRECTIONAL_LIGHTS_LOCATION);
+					this.directionalLights.uniformBuffer.buffer,
+					CONSTANTS.UNIFORM_DIRECTIONAL_LIGHTS_LOCATION);
 			} else {
 				// Generate uniforms for directional lights
 				this.directionalLights.get().forEach((directionalLight, i) => {
@@ -133,7 +140,7 @@ export default class Shader {
 			if (GL.webgl2) {
 				// Setup uniform block for point lights
 				this.setUniformBlockLocation('PointLights',
-						this.pointLights.uniformBuffer.buffer, CONSTANTS.UNIFORM_SPOT_LIGHTS_LOCATION);
+					this.pointLights.uniformBuffer.buffer, CONSTANTS.UNIFORM_SPOT_LIGHTS_LOCATION);
 			} else {
 				// Generate uniforms for point lights
 				this.pointLights.get().forEach((pointLight, i) => {
@@ -169,7 +176,17 @@ export default class Shader {
 
 		// Default uniforms
 		this.uniforms = Object.assign({
+			uViewMatrixInverse: {
+				type: '4fv',
+				value: mat4.create(),
+				location: null,
+			},
 			uModelMatrix: {
+				type: '4fv',
+				value: mat4.create(),
+				location: null,
+			},
+			uModelMatrixInverse: {
 				type: '4fv',
 				value: mat4.create(),
 				location: null,
@@ -258,20 +275,56 @@ export default class Shader {
 			switch (uniform.type) {
 				case 't':
 					{
-						const textureIndex =
-							parseInt(uniformName.substring(uniformName.length - 1, uniformName.length), 10);
-						gl.activeTexture(gl.TEXTURE0 + textureIndex);
+						gl.uniform1i(uniform.location, uniform.textureIndex);
+						let activeTexture;
+						switch (uniform.textureIndex) {
+							case 5:
+								activeTexture = gl.TEXTURE5;
+								break;
+							case 4:
+								activeTexture = gl.TEXTURE4;
+								break;
+							case 3:
+								activeTexture = gl.TEXTURE3;
+								break;
+							case 2:
+								activeTexture = gl.TEXTURE2;
+								break;
+							case 1:
+								activeTexture = gl.TEXTURE1;
+								break;
+							default:
+								activeTexture = gl.TEXTURE0;
+						}
+						gl.activeTexture(activeTexture);
 						gl.bindTexture(gl.TEXTURE_2D, uniform.value);
-						gl.uniform1i(uniform.location, 0);
 						break;
 					}
 				case 'tc':
 					{
-						const textureIndex =
-							parseInt(uniformName.substring(uniformName.length - 1, uniformName.length), 10);
-						gl.activeTexture(gl.TEXTURE0 + textureIndex);
+						gl.uniform1i(uniform.location, uniform.textureIndex);
+						let activeTexture;
+						switch (uniform.textureIndex) {
+							case 5:
+								activeTexture = gl.TEXTURE5;
+								break;
+							case 4:
+								activeTexture = gl.TEXTURE4;
+								break;
+							case 3:
+								activeTexture = gl.TEXTURE3;
+								break;
+							case 2:
+								activeTexture = gl.TEXTURE2;
+								break;
+							case 1:
+								activeTexture = gl.TEXTURE1;
+								break;
+							default:
+								activeTexture = gl.TEXTURE0;
+						}
+						gl.activeTexture(activeTexture);
 						gl.bindTexture(gl.TEXTURE_CUBE_MAP, uniform.value);
-						gl.uniform1i(uniform.location, 0);
 						break;
 					}
 				case 'i':
@@ -370,11 +423,19 @@ export default class Shader {
 			gl.uniformMatrix4fv(this.uniforms.uViewMatrix.location, false, modelViewMatrix);
 		}
 
-		// Matrix
+		// Inverse view matrix
+		mat4.identity(inversedViewMatrix);
+		mat4.invert(inversedViewMatrix, modelViewMatrix);
+
+		gl.uniformMatrix4fv(this.uniforms.uViewMatrixInverse.location, false, inversedViewMatrix);
+
+		// Inverse model matrix
 		gl.uniformMatrix4fv(this.uniforms.uModelMatrix.location, false, modelMatrix);
 
 		mat4.identity(inversedModelViewMatrix);
 		mat4.invert(inversedModelViewMatrix, modelMatrix);
+
+		gl.uniformMatrix4fv(this.uniforms.uModelMatrixInverse.location, false, inversedModelViewMatrix);
 
 		// Create normal normalMatrix
 		// Removes scale and translation

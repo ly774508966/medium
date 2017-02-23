@@ -45,6 +45,6 @@ export default class SphereGeometry extends Geometry {
 			}
 		}
 
-		super(vertices, indices, normals, null, colors);
+		super(vertices, indices, normals, uvs, colors);
 	}
 }
