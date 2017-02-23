@@ -26,8 +26,12 @@ export default class Color {
 	get b() {
 		return this.v[2];
 	}
-	set(x, y, z) {
-		vec3.set(this.v, x, y, z);
+	set(r, g, b) {
+		vec3.set(this.v, r, g, b);
+		return this;
+	}
+	copy(rgb) {
+		vec3.copy(this.v, rgb);
 		return this;
 	}
 	convert(hex) {

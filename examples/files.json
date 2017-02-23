@@ -1,9 +1,12 @@
 {
   "demos": [
     "fullscreen",
+    "hdr",
+    "hdrcube",
     "instancing",
     "memory",
     "obj",
+    "pbr",
     "pointlights",
     "points",
     "raycast",

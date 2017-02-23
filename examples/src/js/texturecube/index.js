@@ -57,12 +57,12 @@ controls.update();
 
 const texture = new TextureCube({
 	src: [
-		'/assets/textures/cube/px.jpg',
-		'/assets/textures/cube/nx.jpg',
-		'/assets/textures/cube/py.jpg',
-		'/assets/textures/cube/ny.jpg',
-		'/assets/textures/cube/pz.jpg',
-		'/assets/textures/cube/nz.jpg',
+		'/assets/textures/cube/blackice/px.jpg',
+		'/assets/textures/cube/blackice/nx.jpg',
+		'/assets/textures/cube/blackice/py.jpg',
+		'/assets/textures/cube/blackice/ny.jpg',
+		'/assets/textures/cube/blackice/pz.jpg',
+		'/assets/textures/cube/blackice/nz.jpg',
 	],
 });
 
@@ -73,26 +73,19 @@ new ObjLoader('assets/models/mass.obj').then(objGeometry => {
 		objGeometry.indices, objGeometry.vertexNormals);
 
 	const material = new Shader({
-		hookVertexPre: GL.webgl2 ?
-		'out vec3 vTexturePosition;' :
-		'varying vec3 vTexturePosition;',
-		hookVertexEnd: `
-			vTexturePosition = (uModelMatrix * vec4(aVertexPosition, 1.0)).xyz;
-		`,
 		hookFragmentPre: GL.webgl2 ? `
 			uniform samplerCube uTexture0;
-			in vec3 vTexturePosition;
 		` : `
 			uniform samplerCube uTexture0;
-			varying vec3 vTexturePosition;
 		`,
 		hookFragmentMain: GL.webgl2 ?
-		'color = texture(uTexture0, vTexturePosition).rgb;' :
-		'color = textureCube(uTexture0, vTexturePosition).rgb;',
+		'color = texture(uTexture0, vNormal).rgb;' :
+		'color = textureCube(uTexture0, vNormal).rgb;',
 		uniforms: {
 			uTexture0: {
 				type: 'tc',
 				value: texture.texture,
+				textureIndex: 0,
 			},
 		},
 	});

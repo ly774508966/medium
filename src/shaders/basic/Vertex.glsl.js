@@ -14,11 +14,14 @@ const vertexShaderEs300 = `${EsVersion}
 
 	uniform mat4 uProjectionMatrix;
 	uniform mat4 uViewMatrix;
+	uniform mat4 uViewMatrixInverse;
 	uniform mat4 uModelMatrix;
+	uniform mat4 uModelMatrixInverse;
 	uniform mat3 uNormalMatrix;
 
 	in vec3 aVertexPosition;
 	out vec3 vPosition;
+	out vec4 vWorldPosition;
 
 	// Camera
 	uniform vec3 uCameraPosition;
@@ -71,19 +74,22 @@ const vertexShaderEs300 = `${EsVersion}
 		vNormal = uNormalMatrix * aVertexNormal;
 		#endif
 
+		// Vertex position + offset
+		vPosition = aVertexPosition + transformed;
+
+		// Calculate world position of vertex with transformed
+		vWorldPosition = uModelMatrix * vec4(aVertexPosition + transformed, 1.0);
+
 		#ifdef pointLights
 		for (int i = 0; i < #HOOK_POINT_LIGHTS; i++) {
-			// Calculate word position of vertex
-			vec3 surfaceWorldPosition = (uModelMatrix * vec4(aVertexPosition, 1.0)).xyz;
 			// Calculate directional vector of surface to the light
-			vPointLightSurfaceToLightDirection[i] = uPointLights[i].position.xyz - surfaceWorldPosition;
+			vPointLightSurfaceToLightDirection[i] = uPointLights[i].position.xyz - vWorldPosition.xyz;
 			// Calculate directional vector of camera to the surface
-			vPointLightSurfaceToCameraDirection[i] = uCameraPosition - surfaceWorldPosition;
+			vPointLightSurfaceToCameraDirection[i] = uCameraPosition - vWorldPosition.xyz;
 		}
 		#endif
 
-		vPosition = aVertexPosition;
-		gl_Position = uProjectionView.projectionMatrix * uProjectionView.viewMatrix * uModelMatrix * vec4(aVertexPosition + transformed, 1.0);
+		gl_Position = uProjectionView.projectionMatrix * uProjectionView.viewMatrix * uModelMatrix * vec4(vPosition, 1.0);
 
 		#HOOK_VERTEX_END
 	}
@@ -98,10 +104,13 @@ const vertexShaderEs100 = `
 	// Position
 	uniform mat4 uProjectionMatrix;
 	uniform mat4 uViewMatrix;
+	uniform mat4 uViewMatrixInverse;
 	uniform mat4 uModelMatrix;
+	uniform mat4 uModelMatrixInverse;
 	uniform mat3 uNormalMatrix;
 	attribute vec3 aVertexPosition;
 	varying vec3 vPosition;
+	varying vec4 vWorldPosition;
 
 	// Camera
 	uniform vec3 uCameraPosition;
@@ -154,19 +163,24 @@ const vertexShaderEs100 = `
 		vNormal = uNormalMatrix * aVertexNormal;
 		#endif
 
+		// Vertex position + offset
+		vPosition = aVertexPosition + transformed;
+
+		// Calculate world position of vertex with transformed
+		vWorldPosition = uModelMatrix * vec4(aVertexPosition + transformed, 1.0);
+
 		#ifdef pointLights
 		for (int i = 0; i < #HOOK_POINT_LIGHTS; i++) {
 			// Calculate word position of vertex
 			vec3 surfaceWorldPosition = (uModelMatrix * vec4(aVertexPosition, 1.0)).xyz;
 			// Calculate directional vector of surface to the light
-			vPointLightSurfaceToLightDirection[i] = uPointLights[i].position - surfaceWorldPosition;
+			vPointLightSurfaceToLightDirection[i] = uPointLights[i].position - vPosition;
 			// Calculate directional vector of camera to the surface
-			vPointLightSurfaceToCameraDirection[i] = uCameraPosition - surfaceWorldPosition;
+			vPointLightSurfaceToCameraDirection[i] = uCameraPosition - vPosition;
 		}
 		#endif
 
-		vPosition = aVertexPosition;
-		gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition + transformed, 1.0);
+		gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(vPosition, 1.0);
 
 		#HOOK_VERTEX_END
 	}
