@@ -48,6 +48,10 @@ export default class PointLight extends Light {
 		if (GL.webgl2) {
 			// Set values for buffer data
 			this.setValues(this.position.v);
+			this.setValues(this.uniforms.color, 4);
+			this.setValues(this.uniforms.specularColor, 8);
+			this.setValues([this.uniforms.shininess.value], 12);
+			this.setValues([this.uniforms.intensity.value], 16);
 		} else {
 			this.uniforms.position.value.set(this.position.v);
 		}
