@@ -893,11 +893,11 @@ var Mesh = function (_Object3D) {
 			Object.keys(this.geometry.attributes).forEach(function (attributeName) {
 				if (attributeName !== 'aIndex') {
 					// enableVertexAttribArray
-					_this2.shader.setAttributeLocation(attributeName);
+					_this2.shader.program.setAttributeLocation(attributeName, _this2.geometry.attributes[attributeName].itemSize);
 					// Bind buffer
 					_this2.geometry.attributes[attributeName].bind();
 					// vertexAttribPointer
-					_this2.shader.setAttributePointer(attributeName);
+					_this2.shader.program.setAttributePointer(attributeName, _this2.geometry.attributes[attributeName].itemSize);
 				}
 			});
 		}
@@ -910,16 +910,15 @@ var Mesh = function (_Object3D) {
 			Object.keys(this.geometry.attributesInstanced).forEach(function (attributeName) {
 				if (attributeName !== 'aIndex') {
 					// enableVertexAttribArray
-					_this3.shader.setAttributeLocation(attributeName);
+					_this3.shader.program.setAttributeLocation(attributeName, _this3.geometry.attributesInstanced[attributeName].itemSize);
 					// Bind buffer
 					_this3.geometry.attributesInstanced[attributeName].bind();
 					// vertexAttribPointer
-					_this3.shader.setAttributeInstancedPointer(attributeName);
-
+					_this3.shader.program.setAttributeInstancedPointer(attributeName, _this3.geometry.attributesInstanced[attributeName].itemSize);
 					if (GL.webgl2) {
-						gl.vertexAttribDivisor(_this3.shader.attributeLocations[attributeName], 1);
+						gl.vertexAttribDivisor(_this3.shader.program.attributeLocations[attributeName], 1);
 					} else {
-						_Capabilities.extensions.angleInstancedArrays.vertexAttribDivisorANGLE(_this3.shader.attributeLocations[attributeName], 1);
+						_Capabilities.extensions.angleInstancedArrays.vertexAttribDivisorANGLE(_this3.shader.program.attributeLocations[attributeName], 1);
 					}
 				}
 			});
@@ -942,7 +941,7 @@ var Mesh = function (_Object3D) {
 			// Update modelMatrix
 			this.updateMatrix();
 
-			this.shader.bindProgram();
+			this.shader.program.bind();
 
 			// Culling enable
 			if (this.shader.culling !== false) {
@@ -985,7 +984,7 @@ var Mesh = function (_Object3D) {
 			// Update modelMatrix
 			this.updateMatrix();
 
-			this.shader.bindProgram();
+			this.shader.program.bind();
 			this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix, camera);
 
 			// Culling enable
@@ -1061,8 +1060,6 @@ var _Vertex = __webpack_require__(58);
 
 var _Frag = __webpack_require__(57);
 
-var _Console = __webpack_require__(8);
-
 var _Color = __webpack_require__(12);
 
 var _Color2 = _interopRequireDefault(_Color);
@@ -1072,6 +1069,10 @@ var _Capabilities = __webpack_require__(4);
 var _UniformBuffers = __webpack_require__(14);
 
 var _UniformBuffers2 = _interopRequireDefault(_UniformBuffers);
+
+var _Program = __webpack_require__(106);
+
+var _Program2 = _interopRequireDefault(_Program);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1108,42 +1109,11 @@ var Shader = function () {
 		};
 
 		Object.assign(this, defaults, options);
+
+		this.program = new _Program2.default();
 	}
 
 	_createClass(Shader, [{
-		key: 'setAttributeLocation',
-		value: function setAttributeLocation(attributeName) {
-			gl = GL.get();
-			this.attributeLocations[attributeName] = gl.getAttribLocation(this.program, attributeName);
-			gl.enableVertexAttribArray(this.attributeLocations[attributeName]);
-		}
-	}, {
-		key: 'setAttributePointer',
-		value: function setAttributePointer(attributeName) {
-			gl = GL.get();
-			gl.vertexAttribPointer(this.attributeLocations[attributeName], this.geometry.attributes[attributeName].itemSize, gl.FLOAT, false, 0, 0);
-		}
-	}, {
-		key: 'setAttributeInstancedPointer',
-		value: function setAttributeInstancedPointer(attributeName) {
-			gl = GL.get();
-			gl.vertexAttribPointer(this.attributeLocations[attributeName], this.geometry.attributesInstanced[attributeName].itemSize, gl.FLOAT, false, 0, 0);
-		}
-	}, {
-		key: 'setUniformLocation',
-		value: function setUniformLocation(uniformName) {
-			gl = GL.get();
-			this.uniforms[uniformName].location = gl.getUniformLocation(this.program, uniformName);
-		}
-	}, {
-		key: 'setUniformBlockLocation',
-		value: function setUniformBlockLocation(uniformName, uniformBuffer, index) {
-			gl = GL.get();
-			this.uniformBlocks[uniformName] = gl.getUniformBlockIndex(this.program, uniformName);
-			gl.uniformBlockBinding(this.program, this.uniformBlocks[uniformName], this.uniformBlocks[uniformName]);
-			gl.bindBufferBase(gl.UNIFORM_BUFFER, index, uniformBuffer);
-		}
-	}, {
 		key: 'create',
 		value: function create(geometry) {
 			var _this = this;
@@ -1156,44 +1126,20 @@ var Shader = function () {
 			this.vertexShader = this._processShader(this.vertexShader, this.geometry);
 			this.fragmentShader = this._processShader(this.fragmentShader, this.geometry);
 
-			// Create program
-			this.compiledVertexShader = this._compile('vs', this.vertexShader);
-			this.compiledFragmentShader = this._compile('fs', this.fragmentShader);
+			this.program.link(this.vertexShader, this.fragmentShader, transformFeedbackVaryings);
+
+			// User defined uniforms
 			this.customUniforms = this.uniforms || {};
-
-			this.program = gl.createProgram();
-
-			gl.attachShader(this.program, this.compiledVertexShader);
-			gl.attachShader(this.program, this.compiledFragmentShader);
-
-			if (transformFeedbackVaryings) {
-				gl.transformFeedbackVaryings(this.program, transformFeedbackVaryings, gl.SEPARATE_ATTRIBS);
-			}
-
-			gl.linkProgram(this.program);
-			gl.validateProgram(this.program);
-
-			if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
-				var info = gl.getProgramInfoLog(this.program);
-				(0, _Console.warn)('Failed to initialise shaders', info);
-				return;
-			}
-
-			// Uniform blocks
-			this.uniformBlocks = {};
-
-			// Cache all attribute locations
-			this.attributeLocations = {};
 
 			// Uniforms for ProjectionView uniform block
 			if (GL.webgl2) {
-				this.setUniformBlockLocation('ProjectionView', _UniformBuffers2.default.projectionView.buffer, CONSTANTS.UNIFORM_PROJECTION_VIEW_LOCATION);
+				this.program.setUniformBlockLocation('ProjectionView', _UniformBuffers2.default.projectionView.buffer, CONSTANTS.UNIFORM_PROJECTION_VIEW_LOCATION);
 			}
 
 			if (this.directionalLights) {
 				if (GL.webgl2) {
 					// Setup uniform block for directional lights
-					this.setUniformBlockLocation('DirectionalLights', this.directionalLights.uniformBuffer.buffer, CONSTANTS.UNIFORM_DIRECTIONAL_LIGHTS_LOCATION);
+					this.program.setUniformBlockLocation('DirectionalLights', this.directionalLights.uniformBuffer.buffer, CONSTANTS.UNIFORM_DIRECTIONAL_LIGHTS_LOCATION);
 				} else {
 					// Generate uniforms for directional lights
 					this.directionalLights.get().forEach(function (directionalLight, i) {
@@ -1208,7 +1154,7 @@ var Shader = function () {
 			if (this.pointLights) {
 				if (GL.webgl2) {
 					// Setup uniform block for point lights
-					this.setUniformBlockLocation('PointLights', this.pointLights.uniformBuffer.buffer, CONSTANTS.UNIFORM_SPOT_LIGHTS_LOCATION);
+					this.program.setUniformBlockLocation('PointLights', this.pointLights.uniformBuffer.buffer, CONSTANTS.UNIFORM_SPOT_LIGHTS_LOCATION);
 				} else {
 					// Generate uniforms for point lights
 					this.pointLights.get().forEach(function (pointLight, i) {
@@ -1272,10 +1218,8 @@ var Shader = function () {
 			}, this.customUniforms, projectionViewUniforms);
 
 			Object.keys(this.uniforms).forEach(function (uniformName) {
-				_this.setUniformLocation(uniformName);
+				_this.program.setUniformLocation(_this.uniforms, uniformName);
 			});
-
-			// console.log(this.name, this.uniforms);
 		}
 	}, {
 		key: '_processShader',
@@ -1327,12 +1271,6 @@ var Shader = function () {
 			}
 
 			return shader;
-		}
-	}, {
-		key: 'bindProgram',
-		value: function bindProgram() {
-			var gl = GL.get();
-			gl.useProgram(this.program);
 		}
 	}, {
 		key: 'setUniforms',
@@ -1501,44 +1439,9 @@ var Shader = function () {
 			}
 		}
 	}, {
-		key: '_compile',
-		value: function _compile(type, source) {
-			gl = GL.get();
-			var shader = void 0;
-
-			// console.log(source);
-
-			switch (type) {
-				case 'vs':
-					shader = gl.createShader(gl.VERTEX_SHADER);
-					break;
-				default:
-					shader = gl.createShader(gl.FRAGMENT_SHADER);
-			}
-
-			gl.shaderSource(shader, source);
-			gl.compileShader(shader);
-
-			if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-				(0, _Console.warn)('Failed to compile shader', gl.getShaderInfoLog(shader));
-				return null;
-			}
-
-			return shader;
-		}
-	}, {
 		key: 'dispose',
 		value: function dispose() {
 			var _this3 = this;
-
-			gl = GL.get();
-			var attributeLocation = void 0;
-
-			// Cleanup attribute locations
-			Object.keys(this.attributeLocations).forEach(function (attributeName) {
-				attributeLocation = _this3.attributeLocations[attributeName];
-				gl.disableVertexAttribArray(attributeLocation);
-			});
 
 			// Dispose textures
 			Object.keys(this.customUniforms).forEach(function (uniformName) {
@@ -1553,10 +1456,7 @@ var Shader = function () {
 					default:
 				}
 			});
-
-			gl.detachShader(this.program, this.compiledVertexShader);
-			gl.detachShader(this.program, this.compiledFragmentShader);
-			gl.deleteProgram(this.program);
+			this.program.dispose();
 		}
 	}]);
 
@@ -7056,7 +6956,7 @@ var Axis = function (_Mesh) {
 			// Update modelMatrix
 			this.updateMatrix();
 
-			this.shader.bindProgram();
+			this.shader.program.bind();
 			this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
 
 			gl.lineWidth(this.lineWidth);
@@ -7211,7 +7111,7 @@ var Grid = function (_Mesh) {
 			// Update modelMatrix
 			this.updateMatrix();
 
-			this.shader.bindProgram();
+			this.shader.program.bind();
 			this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
 
 			gl.lineWidth(this.lineWidth);
@@ -7362,7 +7262,7 @@ var Normals = function (_Mesh) {
 			// Update modelMatrix
 			this.updateMatrix();
 
-			this.shader.bindProgram();
+			this.shader.program.bind();
 			this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
 
 			gl.lineWidth(this.lineWidth);
@@ -17909,6 +17809,176 @@ function update() {
 	renderer.render(scene, camera);
 }
 update();
+
+/***/ }),
+/* 92 */,
+/* 93 */,
+/* 94 */,
+/* 95 */,
+/* 96 */,
+/* 97 */,
+/* 98 */,
+/* 99 */,
+/* 100 */,
+/* 101 */,
+/* 102 */,
+/* 103 */,
+/* 104 */,
+/* 105 */,
+/* 106 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _GL = __webpack_require__(0);
+
+var GL = _interopRequireWildcard(_GL);
+
+var _Console = __webpack_require__(8);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var gl = void 0;
+
+var Program = function () {
+	function Program() {
+		_classCallCheck(this, Program);
+
+		gl = GL.get();
+		this.program = gl.createProgram();
+
+		// Uniform blocks
+		this.uniformBlocks = {};
+
+		// Cache all attribute locations
+		this.attributeLocations = {};
+	}
+
+	_createClass(Program, [{
+		key: 'link',
+		value: function link(vertexShader, fragmentShader, transformFeedbackVaryings) {
+			this.compiledVertexShader = this.compile('vs', vertexShader);
+			this.compiledFragmentShader = this.compile('fs', fragmentShader);
+
+			// Don't attach a broken shader
+			// this will allow other objects to continue rendering
+			if (!this.compiledVertexShader || !this.compiledFragmentShader) {
+				return;
+			}
+
+			gl.attachShader(this.program, this.compiledVertexShader);
+			gl.attachShader(this.program, this.compiledFragmentShader);
+
+			if (transformFeedbackVaryings) {
+				gl.transformFeedbackVaryings(this.program, transformFeedbackVaryings, gl.SEPARATE_ATTRIBS);
+			}
+
+			gl.linkProgram(this.program);
+			gl.validateProgram(this.program);
+
+			if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
+				var info = gl.getProgramInfoLog(this.program);
+				(0, _Console.warn)('Failed to initialise shaders', info);
+			}
+		}
+	}, {
+		key: 'compile',
+		value: function compile(type, source) {
+			gl = GL.get();
+			var shader = void 0;
+
+			// console.log(source);
+
+			switch (type) {
+				case 'vs':
+					shader = gl.createShader(gl.VERTEX_SHADER);
+					break;
+				default:
+					shader = gl.createShader(gl.FRAGMENT_SHADER);
+			}
+
+			gl.shaderSource(shader, source);
+			gl.compileShader(shader);
+
+			if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+				(0, _Console.warn)('Failed to compile shader:', gl.getShaderInfoLog(shader));
+				return false;
+			}
+
+			return shader;
+		}
+	}, {
+		key: 'setAttributeLocation',
+		value: function setAttributeLocation(attributeName) {
+			gl = GL.get();
+			this.attributeLocations[attributeName] = gl.getAttribLocation(this.program, attributeName);
+			gl.enableVertexAttribArray(this.attributeLocations[attributeName]);
+		}
+	}, {
+		key: 'setAttributePointer',
+		value: function setAttributePointer(attributeName, itemSize) {
+			gl = GL.get();
+			gl.vertexAttribPointer(this.attributeLocations[attributeName], itemSize, gl.FLOAT, false, 0, 0);
+		}
+	}, {
+		key: 'setAttributeInstancedPointer',
+		value: function setAttributeInstancedPointer(attributeName, itemSize) {
+			gl = GL.get();
+			gl.vertexAttribPointer(this.attributeLocations[attributeName], itemSize, gl.FLOAT, false, 0, 0);
+		}
+	}, {
+		key: 'setUniformLocation',
+		value: function setUniformLocation(uniforms, uniformName) {
+			gl = GL.get();
+			uniforms[uniformName].location = gl.getUniformLocation(this.program, uniformName);
+		}
+	}, {
+		key: 'setUniformBlockLocation',
+		value: function setUniformBlockLocation(uniformName, uniformBuffer, index) {
+			gl = GL.get();
+			this.uniformBlocks[uniformName] = gl.getUniformBlockIndex(this.program, uniformName);
+			gl.uniformBlockBinding(this.program, this.uniformBlocks[uniformName], this.uniformBlocks[uniformName]);
+			gl.bindBufferBase(gl.UNIFORM_BUFFER, index, uniformBuffer);
+		}
+	}, {
+		key: 'bind',
+		value: function bind() {
+			var gl = GL.get();
+			gl.useProgram(this.program);
+		}
+	}, {
+		key: 'dispose',
+		value: function dispose() {
+			var _this = this;
+
+			gl = GL.get();
+			var attributeLocation = void 0;
+
+			// Cleanup attribute locations
+			Object.keys(this.attributeLocations).forEach(function (attributeName) {
+				attributeLocation = _this.attributeLocations[attributeName];
+				gl.disableVertexAttribArray(attributeLocation);
+			});
+
+			gl.detachShader(this.program, this.compiledVertexShader);
+			gl.detachShader(this.program, this.compiledFragmentShader);
+			gl.deleteProgram(this.program);
+		}
+	}]);
+
+	return Program;
+}();
+
+exports.default = Program;
 
 /***/ })
 /******/ ]);

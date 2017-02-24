@@ -13,14 +13,12 @@ import {
 	fragmentShaderEs300,
 	fragmentShaderEs100,
 } from 'shaders/basic/Frag.glsl';
-import {
-	warn,
-} from 'utils/Console';
 import Color from 'math/Color';
 import {
 	capabilities,
 } from 'core/Capabilities';
 import UniformBuffers from 'core/UniformBuffers';
+import Program from 'core/Program';
 
 let gl;
 const normalMatrix = mat3.create();
@@ -49,37 +47,8 @@ export default class Shader {
 		};
 
 		Object.assign(this, defaults, options);
-	}
 
-	setAttributeLocation(attributeName) {
-		gl = GL.get();
-		this.attributeLocations[attributeName] = gl.getAttribLocation(this.program, attributeName);
-		gl.enableVertexAttribArray(this.attributeLocations[attributeName]);
-	}
-
-	setAttributePointer(attributeName) {
-		gl = GL.get();
-		gl.vertexAttribPointer(this.attributeLocations[attributeName],
-			this.geometry.attributes[attributeName].itemSize, gl.FLOAT, false, 0, 0);
-	}
-
-	setAttributeInstancedPointer(attributeName) {
-		gl = GL.get();
-		gl.vertexAttribPointer(this.attributeLocations[attributeName],
-			this.geometry.attributesInstanced[attributeName].itemSize, gl.FLOAT, false, 0, 0);
-	}
-
-	setUniformLocation(uniformName) {
-		gl = GL.get();
-		this.uniforms[uniformName].location = gl.getUniformLocation(this.program, uniformName);
-	}
-
-	setUniformBlockLocation(uniformName, uniformBuffer, index) {
-		gl = GL.get();
-		this.uniformBlocks[uniformName] = gl.getUniformBlockIndex(this.program, uniformName);
-		gl.uniformBlockBinding(this.program,
-			this.uniformBlocks[uniformName], this.uniformBlocks[uniformName]);
-		gl.bindBufferBase(gl.UNIFORM_BUFFER, index, uniformBuffer);
+		this.program = new Program();
 	}
 
 	create(geometry, transformFeedbackVaryings = false) {
@@ -89,45 +58,21 @@ export default class Shader {
 		this.vertexShader = this._processShader(this.vertexShader, this.geometry);
 		this.fragmentShader = this._processShader(this.fragmentShader, this.geometry);
 
-		// Create program
-		this.compiledVertexShader = this._compile('vs', this.vertexShader);
-		this.compiledFragmentShader = this._compile('fs', this.fragmentShader);
+		this.program.link(this.vertexShader, this.fragmentShader, transformFeedbackVaryings);
+
+		// User defined uniforms
 		this.customUniforms = this.uniforms || {};
-
-		this.program = gl.createProgram();
-
-		gl.attachShader(this.program, this.compiledVertexShader);
-		gl.attachShader(this.program, this.compiledFragmentShader);
-
-		if (transformFeedbackVaryings) {
-			gl.transformFeedbackVaryings(this.program, transformFeedbackVaryings, gl.SEPARATE_ATTRIBS);
-		}
-
-		gl.linkProgram(this.program);
-		gl.validateProgram(this.program);
-
-		if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
-			const info = gl.getProgramInfoLog(this.program);
-			warn('Failed to initialise shaders', info);
-			return;
-		}
-
-		// Uniform blocks
-		this.uniformBlocks = {};
-
-		// Cache all attribute locations
-		this.attributeLocations = {};
 
 		// Uniforms for ProjectionView uniform block
 		if (GL.webgl2) {
-			this.setUniformBlockLocation('ProjectionView',
+			this.program.setUniformBlockLocation('ProjectionView',
 				UniformBuffers.projectionView.buffer, CONSTANTS.UNIFORM_PROJECTION_VIEW_LOCATION);
 		}
 
 		if (this.directionalLights) {
 			if (GL.webgl2) {
 				// Setup uniform block for directional lights
-				this.setUniformBlockLocation('DirectionalLights',
+				this.program.setUniformBlockLocation('DirectionalLights',
 					this.directionalLights.uniformBuffer.buffer,
 					CONSTANTS.UNIFORM_DIRECTIONAL_LIGHTS_LOCATION);
 			} else {
@@ -144,7 +89,7 @@ export default class Shader {
 		if (this.pointLights) {
 			if (GL.webgl2) {
 				// Setup uniform block for point lights
-				this.setUniformBlockLocation('PointLights',
+				this.program.setUniformBlockLocation('PointLights',
 					this.pointLights.uniformBuffer.buffer, CONSTANTS.UNIFORM_SPOT_LIGHTS_LOCATION);
 			} else {
 				// Generate uniforms for point lights
@@ -209,10 +154,8 @@ export default class Shader {
 		}, this.customUniforms, projectionViewUniforms);
 
 		Object.keys(this.uniforms).forEach(uniformName => {
-			this.setUniformLocation(uniformName);
+			this.program.setUniformLocation(this.uniforms, uniformName);
 		});
-
-		// console.log(this.name, this.uniforms);
 	}
 
 	_processShader(shader, geometry) {
@@ -264,11 +207,6 @@ export default class Shader {
 		}
 
 		return shader;
-	}
-
-	bindProgram() {
-		const gl = GL.get();
-		gl.useProgram(this.program);
 	}
 
 	setUniforms(modelViewMatrix, projectionMatrix, modelMatrix, camera) {
@@ -458,41 +396,7 @@ export default class Shader {
 		}
 	}
 
-	_compile(type, source) {
-		gl = GL.get();
-		let shader;
-
-		// console.log(source);
-
-		switch (type) {
-			case 'vs':
-				shader = gl.createShader(gl.VERTEX_SHADER);
-				break;
-			default:
-				shader = gl.createShader(gl.FRAGMENT_SHADER);
-		}
-
-		gl.shaderSource(shader, source);
-		gl.compileShader(shader);
-
-		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-			warn('Failed to compile shader', gl.getShaderInfoLog(shader));
-			return null;
-		}
-
-		return shader;
-	}
-
 	dispose() {
-		gl = GL.get();
-		let attributeLocation;
-
-		// Cleanup attribute locations
-		Object.keys(this.attributeLocations).forEach(attributeName => {
-			attributeLocation = this.attributeLocations[attributeName];
-			gl.disableVertexAttribArray(attributeLocation);
-		});
-
 		// Dispose textures
 		Object.keys(this.customUniforms).forEach(uniformName => {
 			const uniform = this.uniforms[uniformName];
@@ -506,9 +410,6 @@ export default class Shader {
 				default:
 			}
 		});
-
-		gl.detachShader(this.program, this.compiledVertexShader);
-		gl.detachShader(this.program, this.compiledFragmentShader);
-		gl.deleteProgram(this.program);
+		this.program.dispose();
 	}
 }

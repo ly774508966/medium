@@ -41,11 +41,13 @@ export default class Mesh extends Object3D {
 		Object.keys(this.geometry.attributes).forEach(attributeName => {
 			if (attributeName !== 'aIndex') {
 				// enableVertexAttribArray
-				this.shader.setAttributeLocation(attributeName);
+				this.shader.program.setAttributeLocation(attributeName,
+					this.geometry.attributes[attributeName].itemSize);
 				// Bind buffer
 				this.geometry.attributes[attributeName].bind();
 				// vertexAttribPointer
-				this.shader.setAttributePointer(attributeName);
+				this.shader.program.setAttributePointer(attributeName,
+					this.geometry.attributes[attributeName].itemSize);
 			}
 		});
 	}
@@ -55,17 +57,18 @@ export default class Mesh extends Object3D {
 		Object.keys(this.geometry.attributesInstanced).forEach(attributeName => {
 			if (attributeName !== 'aIndex') {
 				// enableVertexAttribArray
-				this.shader.setAttributeLocation(attributeName);
+				this.shader.program.setAttributeLocation(attributeName,
+					this.geometry.attributesInstanced[attributeName].itemSize);
 				// Bind buffer
 				this.geometry.attributesInstanced[attributeName].bind();
 				// vertexAttribPointer
-				this.shader.setAttributeInstancedPointer(attributeName);
-
+				this.shader.program.setAttributeInstancedPointer(attributeName,
+					this.geometry.attributesInstanced[attributeName].itemSize);
 				if (GL.webgl2) {
-					gl.vertexAttribDivisor(this.shader.attributeLocations[attributeName], 1);
+					gl.vertexAttribDivisor(this.shader.program.attributeLocations[attributeName], 1);
 				} else {
 					extensions.angleInstancedArrays.vertexAttribDivisorANGLE(
-						this.shader.attributeLocations[attributeName], 1);
+						this.shader.program.attributeLocations[attributeName], 1);
 				}
 			}
 		});
@@ -86,7 +89,7 @@ export default class Mesh extends Object3D {
 		// Update modelMatrix
 		this.updateMatrix();
 
-		this.shader.bindProgram();
+		this.shader.program.bind();
 
 		// Culling enable
 		if (this.shader.culling !== false) {
@@ -129,7 +132,7 @@ export default class Mesh extends Object3D {
 		// Update modelMatrix
 		this.updateMatrix();
 
-		this.shader.bindProgram();
+		this.shader.program.bind();
 		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix, camera);
 
 		// Culling enable

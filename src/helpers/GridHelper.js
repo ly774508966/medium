@@ -101,7 +101,7 @@ export default class Grid extends Mesh {
 		// Update modelMatrix
 		this.updateMatrix();
 
-		this.shader.bindProgram();
+		this.shader.program.bind();
 		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
 
 		gl.lineWidth(this.lineWidth);

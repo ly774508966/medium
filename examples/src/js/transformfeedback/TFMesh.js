@@ -37,11 +37,13 @@ export default class TFMesh extends Object3D {
 		Object.keys(this.geometry.attributes).forEach(attributeName => {
 			if (attributeName !== 'aIndex') {
 				// enableVertexAttribArray
-				this.shaderDraw.setAttributeLocation(attributeName);
+				this.shaderDraw.program.setAttributeLocation(attributeName,
+					this.geometry.attributes[attributeName].itemSize);
 				// Bind buffer
 				this.geometry.attributes[attributeName].bind();
 				// vertexAttribPointer
-				this.shaderDraw.setAttributePointer(attributeName);
+				this.shaderDraw.program.setAttributePointer(attributeName,
+					this.geometry.attributes[attributeName].itemSize);
 			}
 		});
 	}
@@ -54,13 +56,14 @@ export default class TFMesh extends Object3D {
 
 		gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, this.transformFeedback);
 
-		this.shaderEmit.bindProgram();
+		this.shaderEmit.program.bind();
 
 		sourceVAO.bind();
 
 		// Bind aPosition
 		gl.bindBuffer(gl.ARRAY_BUFFER, sourceVBO[0]);
-		gl.vertexAttribPointer(this.shaderEmit.attributeLocations.aPosition, 3, gl.FLOAT, false, 0, 0);
+		gl.vertexAttribPointer(this.shaderEmit.program.attributeLocations.aPosition,
+			3, gl.FLOAT, false, 0, 0);
 		gl.enableVertexAttribArray(0);
 
 		// Use pin pong buffer data
@@ -94,7 +97,7 @@ export default class TFMesh extends Object3D {
 
 		gl = GL.get();
 
-		this.shaderDraw.bindProgram();
+		this.shaderDraw.program.bind();
 
 		this.shaderDraw.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix, camera);
 
@@ -104,7 +107,8 @@ export default class TFMesh extends Object3D {
 
 		const sourceVBO = this.vbos[this.currentSourceIdx];
 		gl.bindBuffer(gl.ARRAY_BUFFER, sourceVBO[0]);
-		gl.vertexAttribPointer(this.shaderDraw.attributeLocations.aPosition, 3, gl.FLOAT, false, 0, 0);
+		gl.vertexAttribPointer(this.shaderDraw.program.attributeLocations.aPosition,
+			3, gl.FLOAT, false, 0, 0);
 		gl.enableVertexAttribArray(0);
 
 		// http://www.nutty.ca/articles/blend_modes/
