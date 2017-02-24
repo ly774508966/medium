@@ -3,9 +3,7 @@ import {
 	Renderer,
 	Scene,
 	PerspectiveCamera,
-	GridHelper,
 	OrbitControls,
-	AxisHelper,
 	OrthographicCamera,
 	TextureCube,
 	Shader,
@@ -47,12 +45,6 @@ cameras.main.lookAt(0, 0, 0);
 // Helpers
 const controls = new OrbitControls(cameras.dev, renderer.canvas);
 
-const grid = new GridHelper(10);
-scene.add(grid);
-
-const axis = new AxisHelper(1);
-scene.add(axis);
-
 controls.update();
 
 const texture = new TextureCube({
@@ -92,7 +84,7 @@ new ObjLoader('assets/models/mass.obj').then(objGeometry => {
 
 	mesh = new Mesh(geometry, material);
 
-	const scale = 0.25;
+	const scale = 2.25;
 	mesh.scale.set(scale, scale, scale);
 	scene.add(mesh);
 }).catch(error => {

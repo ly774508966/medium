@@ -72,10 +72,16 @@ const hookVertexEndEs100 = `
 `;
 
 const hookFragmentEndEs300 = `
+	if(length(gl_PointCoord - 0.5) > 0.5) {
+		discard;
+	}
 	outputColor = vec4(1.0);
 `;
 
 const hookFragmentEndEs100 = `
+	if(length(gl_PointCoord - 0.5) > 0.5) {
+		discard;
+	}
 	gl_FragColor = vec4(1.0);
 `;
 

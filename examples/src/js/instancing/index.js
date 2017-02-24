@@ -6,9 +6,7 @@ import {
 	Mesh,
 	Shader,
 	BoxGeometry,
-	GridHelper,
 	OrbitControls,
-	AxisHelper,
 	Color,
 	DirectionalLight,
 	ShaderChunks,
@@ -39,18 +37,11 @@ const camera = new PerspectiveCamera({
 	far: 500,
 });
 
-const s = 2;
-camera.position.set(20 * s, 5 * s, 20 * s);
+camera.position.set(0, 0, 50);
 camera.lookAt();
 
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas);
-
-// const grid = new GridHelper(10);
-// scene.add(grid);
-
-// const axis = new AxisHelper(1);
-// scene.add(axis);
 
 controls.update();
 
@@ -153,12 +144,6 @@ mesh.setInstanceCount(totalInstances);
 scene.add(mesh);
 
 gui.add(mesh.shader.uniforms.uFogDensity, 'value', 0, 0.1);
-
-const grid = new GridHelper(10);
-scene.add(grid);
-
-const axis = new AxisHelper(1);
-scene.add(axis);
 
 function resize() {
 	const width = window.innerWidth;

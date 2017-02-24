@@ -6,9 +6,7 @@ import {
 	Mesh,
 	Shader,
 	BoxGeometry,
-	GridHelper,
 	OrbitControls,
-	AxisHelper,
 	Color,
 	DirectionalLight,
 	ShaderChunks,
@@ -53,12 +51,6 @@ cameraR.lookAt();
 // Helpers
 const controlsL = new OrbitControls(cameraL, renderer.canvas);
 const controlsR = new OrbitControls(cameraR, renderer.canvas);
-
-const grid = new GridHelper(10);
-scene.add(grid);
-
-const axis = new AxisHelper(1);
-scene.add(axis);
 
 controlsL.update();
 controlsR.update();
