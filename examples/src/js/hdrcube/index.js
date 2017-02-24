@@ -12,11 +12,8 @@ import {
 	TextureCube,
 	ShaderChunks,
 	// BoxGeometry,
-	BoxGeometry,
 } from 'index';
-import gui, {
-	guiController
-} from '../gui';
+const { gui, guiController } = require('../gui')(['webgl2']);
 
 // Renderer
 const renderer = new Renderer({

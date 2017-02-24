@@ -18,9 +18,7 @@ import {
 	Lights,
 	DirectionalLight,
 } from 'index';
-import gui, {
-	guiController
-} from '../gui';
+const { gui, guiController } = require('../gui')(['webgl2']);
 import { hookFragmentPre, hookFragmentMain } from './shader.glsl';
 
 // Renderer

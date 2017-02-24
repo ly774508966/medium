@@ -13,9 +13,7 @@ import {
 	OrthographicCamera,
 	ShaderChunks,
 } from 'index';
-import {
-	guiController
-} from '../gui';
+const { guiController } = require('../gui')();
 
 // Renderer
 const renderer = new Renderer({

@@ -19,9 +19,7 @@ import {
 	Sierpinski,
 	jerusalem,
 } from '../fractal';
-import {
-	guiController,
-} from '../gui';
+const { guiController } = require('../gui')();
 
 // Renderer
 const renderer = new Renderer({

@@ -19,9 +19,7 @@ import {
 import {
 	vec2,
 } from 'gl-matrix';
-import {
-	guiController,
-} from '../gui';
+const { guiController } = require('../gui')();
 
 // Renderer
 const renderer = new Renderer({

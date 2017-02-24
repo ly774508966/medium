@@ -15,9 +15,7 @@ import {
 	Lights,
 	Constants,
 } from 'index';
-import gui, {
-	guiController
-} from '../gui';
+const { gui, guiController } = require('../gui')();
 
 // Renderer
 const renderer = new Renderer({

@@ -11,9 +11,7 @@ import {
 	Shader,
 	Vao,
 } from 'index';
-import {
-	guiController,
-} from '../gui';
+const { guiController } = require('../gui')(['webgl2']);
 import Shaders from './shaders.glsl';
 import TFMesh from './TFMesh';
 
