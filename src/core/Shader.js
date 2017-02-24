@@ -82,12 +82,12 @@ export default class Shader {
 		gl.bindBufferBase(gl.UNIFORM_BUFFER, index, uniformBuffer);
 	}
 
-	create(geometry) {
+	create(geometry, transformFeedbackVaryings = false) {
 		gl = GL.get();
 		this.geometry = geometry;
 
-		this.vertexShader = this._processShader(this.vertexShader, geometry);
-		this.fragmentShader = this._processShader(this.fragmentShader, geometry);
+		this.vertexShader = this._processShader(this.vertexShader, this.geometry);
+		this.fragmentShader = this._processShader(this.fragmentShader, this.geometry);
 
 		// Create program
 		this.compiledVertexShader = this._compile('vs', this.vertexShader);
@@ -98,6 +98,11 @@ export default class Shader {
 
 		gl.attachShader(this.program, this.compiledVertexShader);
 		gl.attachShader(this.program, this.compiledFragmentShader);
+
+		if (transformFeedbackVaryings) {
+			gl.transformFeedbackVaryings(this.program, transformFeedbackVaryings, gl.SEPARATE_ATTRIBS);
+		}
+
 		gl.linkProgram(this.program);
 		gl.validateProgram(this.program);
 

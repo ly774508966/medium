@@ -18,6 +18,7 @@
     "texture",
     "texturecube",
     "texturevideo",
+    "transformfeedback",
     "vive",
     "webglcontext"
   ]

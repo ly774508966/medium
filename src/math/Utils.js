@@ -52,3 +52,17 @@ export function barycoordFromPoint(point, a, b, c) {
 	// barycentric coordinates must always sum to 1
 	return result.set(1 - u - v, v, u);
 }
+
+/*
+http://stackoverflow.com/questions/5531827/random-point-on-a-given-sphere
+ */
+export function randomSpherePoint(x0, y0, z0, radius) {
+	const u = Math.random();
+	const v = Math.random();
+	const theta = 2 * Math.PI * u;
+	const phi = Math.acos(2 * v - 1);
+	const x = x0 + (radius * Math.sin(phi) * Math.cos(theta));
+	const y = y0 + (radius * Math.sin(phi) * Math.sin(theta));
+	const z = z0 + (radius * Math.cos(phi));
+	return [x, y, z];
+}

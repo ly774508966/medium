@@ -1,5 +1,5 @@
 // Core
-import Capabilities from 'core/Capabilities';
+import * as Capabilities from 'core/Capabilities';
 import * as Constants from 'core/Constants';
 import * as GL from 'core/GL';
 import Mesh from 'core/Mesh';
@@ -14,6 +14,7 @@ import Shader from 'core/Shader';
 import Texture from 'core/Texture';
 import TextureCube from 'core/TextureCube';
 import TextureVideo from 'core/TextureVideo';
+import Vao from 'core/Vao';
 
 // Extras
 import WebVRVive from 'extras/WebVRVive';
@@ -70,6 +71,7 @@ export {
 	Texture,
 	TextureCube,
 	TextureVideo,
+	Vao,
 	Detect,
 	WebVRVive,
 	BoxGeometry,
