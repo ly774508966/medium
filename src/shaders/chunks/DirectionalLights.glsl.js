@@ -18,7 +18,7 @@ const directionalLightsEs100 = `
 	uniform DirectionalLight uDirectionalLights[#HOOK_DIRECTIONAL_LIGHTS];
 `;
 
-export  {
+export {
 	directionalLightsEs300,
 	directionalLightsEs100,
 }
