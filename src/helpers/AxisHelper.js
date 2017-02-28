@@ -86,7 +86,7 @@ class AxisGeometry extends Geometry {
 }
 
 export default class Axis extends Mesh {
-	constructor(size = 1, lineWidth = 3) {
+	constructor(size = 1) {
 		const vertexShader = GL.webgl2 ? vertexShaderEs300 : vertexShaderEs100;
 		const fragmentShader = GL.webgl2 ? fragmentShaderEs300() : fragmentShaderEs100();
 		super(new AxisGeometry(size), new Shader({
@@ -94,7 +94,6 @@ export default class Axis extends Mesh {
 			vertexShader,
 			fragmentShader,
 		}));
-		this.lineWidth = lineWidth;
 	}
 
 	draw(modelViewMatrix, projectionMatrix) {
@@ -105,8 +104,6 @@ export default class Axis extends Mesh {
 
 		this.shader.program.bind();
 		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
-
-		gl.lineWidth(this.lineWidth);
 
 		if (extensions.vertexArrayObject) {
 			this.vao.bind();

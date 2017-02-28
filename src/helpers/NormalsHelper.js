@@ -80,7 +80,7 @@ class NormalsGeometry extends Geometry {
 }
 
 export default class Normals extends Mesh {
-	constructor(mesh, size = 1, lineWidth = 2) {
+	constructor(mesh, size = 1) {
 		const vertexShader = GL.webgl2 ? vertexShaderEs300 : vertexShaderEs100;
 		const fragmentShader = GL.webgl2 ? fragmentShaderEs300() : fragmentShaderEs100();
 		super(new NormalsGeometry(mesh, size), new Shader({
@@ -88,7 +88,6 @@ export default class Normals extends Mesh {
 			vertexShader,
 			fragmentShader,
 		}));
-		this.lineWidth = lineWidth;
 	}
 
 	draw(modelViewMatrix, projectionMatrix) {
@@ -99,8 +98,6 @@ export default class Normals extends Mesh {
 
 		this.shader.program.bind();
 		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
-
-		gl.lineWidth(this.lineWidth);
 
 		if (extensions.vertexArrayObject) {
 			this.vao.bind();

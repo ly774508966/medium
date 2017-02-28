@@ -24,7 +24,7 @@ const scene = new Scene();
 const camera = new OrthographicCamera();
 camera.position.set(0, 0, 1);
 
-const geometry = new PlaneGeometry(1, 1);
+const geometry = new PlaneGeometry(2, 2);
 const material = new Shader({
 	name: 'Plane',
 	hookFragmentEnd: GL.webgl2 ?

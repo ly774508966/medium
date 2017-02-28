@@ -84,7 +84,7 @@ class GridGeometry extends Geometry {
 }
 
 export default class Grid extends Mesh {
-	constructor(size = 1, divisions = 10, lineWidth = 3) {
+	constructor(size = 1, divisions = 10) {
 		const vertexShader = GL.webgl2 ? vertexShaderEs300 : vertexShaderEs100;
 		const fragmentShader = GL.webgl2 ? fragmentShaderEs300() : fragmentShaderEs100();
 		super(new GridGeometry(size, divisions), new Shader({
@@ -92,7 +92,6 @@ export default class Grid extends Mesh {
 			vertexShader,
 			fragmentShader,
 		}));
-		this.lineWidth = lineWidth;
 	}
 
 	draw(modelViewMatrix, projectionMatrix) {
@@ -103,8 +102,6 @@ export default class Grid extends Mesh {
 
 		this.shader.program.bind();
 		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
-
-		gl.lineWidth(this.lineWidth);
 
 		if (extensions.vertexArrayObject) {
 			this.vao.bind();

@@ -106,11 +106,6 @@ export default class Renderer {
 		this.setSize(this.width, this.height);
 	}
 
-	_reset(gl) {
-		// Line width
-		gl.lineWidth(LINE_DEFAULT_WIDTH);
-	}
-
 	_drawObjects(scene, projectionMatrix, modelViewMatrix, camera) {
 		if (GL.webgl2) {
 			// Update global uniform buffers
@@ -129,7 +124,6 @@ export default class Renderer {
 
 	render(scene, camera) {
 		gl = GL.get();
-		this._reset(gl);
 
 		gl.viewport(0.0, 0.0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
@@ -164,7 +158,6 @@ export default class Renderer {
 		cameraR,
 	) {
 		gl = GL.get();
-		this._reset(gl);
 
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -200,7 +193,6 @@ export default class Renderer {
 		rightViewMatrix,
 	) {
 		gl = GL.get();
-		this._reset(gl);
 
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
