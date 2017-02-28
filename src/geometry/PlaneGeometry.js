@@ -47,20 +47,20 @@ export default class Plane extends Geometry {
 					case 'YZ': {
 						// Facing towards x
 
-						vertices = vertices.concat([0, triangleX, triangleY]);
-						vertices = vertices.concat([0, triangleX + spacerX, triangleY]);
-						vertices = vertices.concat([0, triangleX + spacerX, triangleY + spacerY]);
-						vertices = vertices.concat([0, triangleX, triangleY + spacerY]);
+						vertices = vertices.concat([0, triangleY, triangleX]);
+						vertices = vertices.concat([0, triangleY, triangleX + spacerX]);
+						vertices = vertices.concat([0, triangleY + spacerY, triangleX + spacerX]);
+						vertices = vertices.concat([0, triangleY + spacerY, triangleX]);
 
 						normals = normals.concat([1, 0, 0]);
 						normals = normals.concat([1, 0, 0]);
 						normals = normals.concat([1, 0, 0]);
 						normals = normals.concat([1, 0, 0]);
 
-						uvs = uvs.concat([u, v]);
-						uvs = uvs.concat([u + spacerU, v]);
-						uvs = uvs.concat([u + spacerU, v + spacerV]);
-						uvs = uvs.concat([u, v + spacerV]);
+						uvs = uvs.concat([1 - u, v]);
+						uvs = uvs.concat([1 - (u + spacerU), v]);
+						uvs = uvs.concat([1 - (u + spacerU), v + spacerV]);
+						uvs = uvs.concat([1 - u, v + spacerV]);
 						break;
 					}
 					default: {
