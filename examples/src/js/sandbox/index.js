@@ -16,7 +16,6 @@ import {
 	Texture,
 	Color,
 	Lights,
-	Constants,
 } from 'index';
 import { guiController } from '../gui';
 
@@ -50,8 +49,7 @@ for (let i = 0; i < subdivisions * subdivisions; i += 1) {
 	colors = colors.concat([1, 1, 0]);
 }
 
-// let geometry = new PlaneGeometry(2, 2, subdivisions, subdivisions, 'XY', colors);
-let geometry = new PlaneGeometry(2, 2, subdivisions, subdivisions, 'YZ', colors);
+let geometry = new PlaneGeometry(2, 2, subdivisions, subdivisions, 'XY', colors);
 const material1 = new Shader({
 	name: 'Plane',
 });
@@ -59,16 +57,16 @@ const material1 = new Shader({
 const plane = new Mesh(geometry, material1);
 
 // Normals currently don't update properly
-// const offset = 0;
-// plane.geometry.vertices[0 + offset].z += 1;
-// plane.geometry.vertices[1 + offset].z += 1;
-// plane.geometry.vertices[4 + offset].z += 1;
-// plane.geometry.vertices[5 + offset].z += 1;
-// plane.geometry.updateVertices();
+const offset = 0;
+plane.geometry.vertices[0 + offset].z += 1;
+plane.geometry.vertices[1 + offset].z += 1;
+plane.geometry.vertices[4 + offset].z += 1;
+plane.geometry.vertices[5 + offset].z += 1;
+plane.geometry.updateVertices();
 
-// plane.position.z = 2;
+plane.position.z = 2;
 const planeNormalsHelper = new NormalsHelper(plane);
-// scene.add(planeNormalsHelper);
+scene.add(planeNormalsHelper);
 planeNormalsHelper.setParent(plane);
 scene.add(plane);
 
@@ -154,13 +152,13 @@ const material = new Shader({
 });
 const box = new Mesh(geometry, material);
 
-// scene.add(box);
+scene.add(box);
 
-// box.position.x = 3;
-// box.position.y = 3;
+box.position.x = 3;
+box.position.y = 3;
 
 const boxNormalsHelper = new NormalsHelper(box);
-// scene.add(boxNormalsHelper);
+scene.add(boxNormalsHelper);
 
 boxNormalsHelper.setParent(box);
 
@@ -188,8 +186,8 @@ function update(time) {
 	requestAnimationFrame(update);
 	box.rotation.x += 0.01;
 	box.rotation.y += 0.01;
-	// plane.rotation.x += 0.01;
-	// plane.rotation.y += 0.01;
+	plane.rotation.x += 0.01;
+	plane.rotation.y += 0.01;
 
 	const radius = 30;
 	const t = time * 0.0005;
