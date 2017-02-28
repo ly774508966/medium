@@ -1,0 +1,4 @@
+src
+*.js.map
+/examples/js/*.js
+/examples/*.html

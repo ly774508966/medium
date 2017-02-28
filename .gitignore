@@ -4,4 +4,3 @@ npm-debug.log
 .eslintcache
 *.js.map
 lib
-.vscode

@@ -59,23 +59,23 @@ class GridGeometry extends Geometry {
 		let vertices = [];
 		const halfSize = size * 0.5;
 
-		for (let i = 0; i < divisions; i += 1) {
-			const x1 = lerp(-halfSize, halfSize, i / (divisions - 1));
+		for (let i = 0; i < divisions + 1; i += 1) {
+			const x1 = lerp(-halfSize, halfSize, i / divisions);
 			const y1 = 0;
 			const z1 = -halfSize;
-			const x2 = lerp(-halfSize, halfSize, i / (divisions - 1));
+			const x2 = lerp(-halfSize, halfSize, i / divisions);
 			const y2 = 0;
 			const z2 = halfSize;
 			vertices = vertices.concat([x1, y1, z1, x2, y2, z2]);
 		}
 
-		for (let i = 0; i < divisions; i += 1) {
+		for (let i = 0; i < divisions + 1; i += 1) {
 			const x1 = -halfSize;
 			const y1 = 0;
-			const z1 = lerp(-halfSize, halfSize, i / (divisions - 1));
+			const z1 = lerp(-halfSize, halfSize, i / divisions);
 			const x2 = halfSize;
 			const y2 = 0;
-			const z2 = lerp(-halfSize, halfSize, i / (divisions - 1));
+			const z2 = lerp(-halfSize, halfSize, i / divisions);
 			vertices = vertices.concat([x1, y1, z1, x2, y2, z2]);
 		}
 

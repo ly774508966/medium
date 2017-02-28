@@ -16,6 +16,18 @@ export default class BufferAttribute {
 		gl.bindBuffer(this.type, this.buffer);
 	}
 
+	unbind() {
+		gl = GL.get();
+		gl.bindBuffer(this.type, null);
+	}
+
+	update(data) {
+		this.bind();
+		gl = GL.get();
+		gl.bufferSubData(this.type, 0, data);
+		this.unbind();
+	}
+
 	dispose() {
 		gl = GL.get();
 		gl.deleteBuffer(this.buffer);

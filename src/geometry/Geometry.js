@@ -91,6 +91,15 @@ export default class Geometry {
 		}
 	}
 
+	updateVertices() {
+		gl = GL.get();
+		this.bufferVertices = [];
+		this.vertices.forEach(vertex => {
+			this.bufferVertices = this.bufferVertices.concat(...vertex.v);
+		});
+		this.attributes.aVertexPosition.update(new Float32Array(this.bufferVertices));
+	}
+
 	dispose() {
 		gl = GL.get();
 		// Dispose attributes and buffers

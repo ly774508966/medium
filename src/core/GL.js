@@ -25,11 +25,12 @@ export function get() {
  * createBuffer
  * @return {Buffer}
  */
-function createBuffer(type, data) {
+function createBuffer(type, data, isDynamic = false) {
 	const buffer = gl.createBuffer();
 	const ArrayView = type === gl.ARRAY_BUFFER ? Float32Array : Uint16Array;
+	const usage = isDynamic ? gl.DYNAMIC_DRAW : gl.STATIC_DRAW;
 	gl.bindBuffer(type, buffer);
-	gl.bufferData(type, new ArrayView(data), gl.STATIC_DRAW);
+	gl.bufferData(type, new ArrayView(data), usage);
 	gl.bindBuffer(type, null);
 	return buffer;
 }
