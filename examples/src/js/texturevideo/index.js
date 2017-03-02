@@ -10,10 +10,8 @@ import {
 	OrbitControls,
 	AxisHelper,
 	TextureVideo,
-} from 'index';
-import {
-	guiController,
-} from '../gui';
+} from '../../../../src/index';
+const { guiController } = require('../gui')();
 
 // Renderer
 const renderer = new Renderer({

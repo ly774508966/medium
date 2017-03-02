@@ -3,11 +3,12 @@ import {
 	Renderer,
 	Scene,
 	OrthographicCamera,
+	PerspectiveCamera,
 	Mesh,
 	Shader,
 	PlaneGeometry,
-} from 'index';
-import { guiController } from '../gui';
+} from '../../../../src/index';
+const { guiController } = require('../gui')();
 
 // Renderer
 const renderer = new Renderer({
@@ -21,10 +22,12 @@ document.body.appendChild(renderer.canvas);
 const scene = new Scene();
 
 // Camera
+// const camera = new PerspectiveCamera();
 const camera = new OrthographicCamera();
 camera.position.set(0, 0, 1);
+camera.lookAt();
 
-const geometry = new PlaneGeometry(1, 1);
+const geometry = new PlaneGeometry(2, 2);
 const material = new Shader({
 	name: 'Plane',
 	hookFragmentEnd: GL.webgl2 ?

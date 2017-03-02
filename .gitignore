@@ -4,5 +4,6 @@ npm-debug.log
 .eslintcache
 *.js.map
 lib
-/examples/js/*.js
-/examples/*.html
+
+examples/js/*.js
+examples/*.html

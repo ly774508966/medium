@@ -12,10 +12,8 @@ import {
 	PlaneGeometry,
 	OrthographicCamera,
 	ShaderChunks,
-} from 'index';
-import {
-	guiController
-} from '../gui';
+} from '../../../../src/index';
+const { guiController } = require('../gui')();
 
 // Renderer
 const renderer = new Renderer({
@@ -103,7 +101,7 @@ const material = new Shader({
 	`,
 });
 
-const plane = new Mesh(new PlaneGeometry(1, 1), material);
+const plane = new Mesh(new PlaneGeometry(2, 2), material);
 scene2.add(plane);
 
 function resize() {

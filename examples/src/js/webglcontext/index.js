@@ -16,8 +16,8 @@ import {
 	Texture,
 	Color,
 	Lights,
-} from 'index';
-import { guiController } from '../gui';
+} from '../../../../src/index';
+const { guiController } = require('../gui')();
 
 // Renderer
 const renderer = new Renderer({
@@ -45,7 +45,7 @@ colors = colors.concat([0, 1, 0]);
 colors = colors.concat([0, 0, 1]);
 colors = colors.concat([1, 1, 0]);
 
-let geometry = new PlaneGeometry(1, 1, colors);
+let geometry = new PlaneGeometry(1, 1, 1, 1, 'YZ', colors);
 const material1 = new Shader({
 	name: 'Plane',
 });

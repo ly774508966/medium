@@ -11,10 +11,8 @@ import {
 	Mesh,
 	Shader,
 	Constants,
-} from 'index';
-import {
-	guiController
-} from '../gui';
+} from '../../../../src/index';
+const { guiController } = require('../gui')();
 
 // Renderer
 const renderer = new Renderer({
@@ -46,9 +44,9 @@ const axis = new AxisHelper(1);
 scene.add(axis);
 
 // Objects
-const TOTAL_POINTS = 1000;
+const TOTAL_POINTS = 200;
 const bufferVertices = new Float32Array(TOTAL_POINTS * 3);
-const range = 10;
+const range = 3;
 
 let i3 = 0;
 for (let i = 0; i < TOTAL_POINTS; i += 1) {
@@ -61,20 +59,27 @@ for (let i = 0; i < TOTAL_POINTS; i += 1) {
 const geometry = new Geometry(bufferVertices);
 
 const hookVertexEndEs300 = `
-	vec4 mvPosition = uProjectionView.viewMatrix * uModelMatrix * vec4(aVertexPosition + transformed, 1.0);
+	vec4 mvPosition = uProjectionView.projectionMatrix * uProjectionView.viewMatrix * uModelMatrix * vec4(aVertexPosition + transformed, 1.0);
 	gl_PointSize = uSize * (100.0 / length(mvPosition.xyz));
+
 `;
 
 const hookVertexEndEs100 = `
-	vec4 mvPosition = uViewMatrix * uModelMatrix * vec4(aVertexPosition + transformed, 1.0);
+	vec4 mvPosition = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition + transformed, 1.0);
 	gl_PointSize = uSize * (100.0 / length(mvPosition.xyz));
 `;
 
 const hookFragmentEndEs300 = `
+	if(length(gl_PointCoord - 0.5) > 0.5) {
+		discard;
+	}
 	outputColor = vec4(1.0);
 `;
 
 const hookFragmentEndEs100 = `
+	if(length(gl_PointCoord - 0.5) > 0.5) {
+		discard;
+	}
 	gl_FragColor = vec4(1.0);
 `;
 

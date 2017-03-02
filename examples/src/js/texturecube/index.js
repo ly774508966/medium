@@ -3,19 +3,15 @@ import {
 	Renderer,
 	Scene,
 	PerspectiveCamera,
-	GridHelper,
 	OrbitControls,
-	AxisHelper,
 	OrthographicCamera,
 	TextureCube,
 	Shader,
 	Mesh,
 	ObjLoader,
 	Geometry,
-} from 'index';
-import {
-	guiController,
-} from '../gui';
+} from '../../../../src/index';
+const { guiController } = require('../gui')();
 
 // Renderer
 const renderer = new Renderer({
@@ -46,12 +42,6 @@ cameras.main.lookAt(0, 0, 0);
 
 // Helpers
 const controls = new OrbitControls(cameras.dev, renderer.canvas);
-
-const grid = new GridHelper(10);
-scene.add(grid);
-
-const axis = new AxisHelper(1);
-scene.add(axis);
 
 controls.update();
 
@@ -92,7 +82,7 @@ new ObjLoader('assets/models/mass.obj').then(objGeometry => {
 
 	mesh = new Mesh(geometry, material);
 
-	const scale = 0.25;
+	const scale = 2.25;
 	mesh.scale.set(scale, scale, scale);
 	scene.add(mesh);
 }).catch(error => {

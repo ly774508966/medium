@@ -10,10 +10,8 @@ import {
 	OrbitControls,
 	AxisHelper,
 	Texture,
-} from 'index';
-import gui, {
-	guiController
-} from '../gui';
+} from '../../../../src/index';
+const { gui, guiController } = require('../gui')(['webgl2']);
 
 // Renderer
 const renderer = new Renderer({
@@ -35,17 +33,11 @@ camera.position.set(10, 5, 10);
 camera.lookAt();
 
 // Objects
-let colors = [];
-colors = colors.concat([1, 0, 0]);
-colors = colors.concat([0, 1, 0]);
-colors = colors.concat([0, 0, 1]);
-colors = colors.concat([1, 1, 0]);
-
 const texture0 = new Texture({
 	src: '/assets/textures/cube/pisa-hdr/nx.hdr',
 });
 
-const geometry = new PlaneGeometry(1, 1, colors);
+const geometry = new PlaneGeometry(1, 1);
 const material = new Shader({
 	name: 'Plane',
 	hookFragmentPre: `

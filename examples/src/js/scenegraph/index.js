@@ -14,10 +14,8 @@ import {
 	BoxGeometry,
 	Lights,
 	Constants,
-} from 'index';
-import gui, {
-	guiController
-} from '../gui';
+} from '../../../../src/index';
+const { gui, guiController } = require('../gui')();
 
 // Renderer
 const renderer = new Renderer({

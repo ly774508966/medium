@@ -3,20 +3,14 @@ import {
 	Renderer,
 	Scene,
 	PerspectiveCamera,
-	// AxisHelper,
-	// GridHelper,
 	OrbitControls,
 	SphereGeometry,
 	Shader,
 	Mesh,
 	TextureCube,
 	ShaderChunks,
-	// BoxGeometry,
-	BoxGeometry,
-} from 'index';
-import gui, {
-	guiController
-} from '../gui';
+} from '../../../../src/index';
+const { gui, guiController } = require('../gui')(['webgl2']);
 
 // Renderer
 const renderer = new Renderer({
@@ -39,10 +33,6 @@ camera.lookAt();
 
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas);
-// const grid = new GridHelper(10);
-// scene.add(grid);
-// const axis = new AxisHelper(1);
-// scene.add(axis);
 controls.update();
 
 const environmentMap = new TextureCube({

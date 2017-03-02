@@ -2,23 +2,5 @@
 	"presets": [
 		"es2015",
 		"stage-0"
-	],
-	"plugins": [
-		["module-resolver", {
-			"root": ["./src"],
-			"alias": {
-				"controls": "./controls",
-				"core": "./core",
-				"extras": "./extras",
-				"geometry": "./geometry",
-				"helpers": "./helpers",
-				"lights": "./lights",
-				"loaders": "./loaders",
-				"materials": "./materials",
-				"math": "./math",
-				"shaders": "./shaders",
-				"utils": "./utils"
-			}
-		}]
 	]
 }

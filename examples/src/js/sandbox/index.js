@@ -16,8 +16,8 @@ import {
 	Texture,
 	Color,
 	Lights,
-} from 'index';
-import { guiController } from '../gui';
+} from '../../../../src/index';
+const { guiController } = require('../gui')();
 
 // Renderer
 const renderer = new Renderer({
@@ -39,18 +39,31 @@ camera.position.set(10, 5, 10);
 camera.lookAt();
 
 // Objects
+const subdivisions = 2;
 let colors = [];
-colors = colors.concat([1, 0, 0]);
-colors = colors.concat([0, 1, 0]);
-colors = colors.concat([0, 0, 1]);
-colors = colors.concat([1, 1, 0]);
 
-let geometry = new PlaneGeometry(1, 1, colors);
+for (let i = 0; i < subdivisions * subdivisions; i += 1) {
+	colors = colors.concat([1, 0, 0]);
+	colors = colors.concat([0, 1, 0]);
+	colors = colors.concat([0, 0, 1]);
+	colors = colors.concat([1, 1, 0]);
+}
+
+let geometry = new PlaneGeometry(2, 2, subdivisions, subdivisions, 'XY', colors);
 const material1 = new Shader({
 	name: 'Plane',
 });
 
 const plane = new Mesh(geometry, material1);
+
+// Normals currently don't update properly
+const offset = 0;
+plane.geometry.vertices[0 + offset].z += 1;
+plane.geometry.vertices[1 + offset].z += 1;
+plane.geometry.vertices[4 + offset].z += 1;
+plane.geometry.vertices[5 + offset].z += 1;
+plane.geometry.updateVertices();
+
 plane.position.z = 2;
 const planeNormalsHelper = new NormalsHelper(plane);
 scene.add(planeNormalsHelper);
