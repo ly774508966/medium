@@ -421,6 +421,12 @@ export default class Shader {
 		mat3.transpose(normalMatrix, normalMatrix);
 		gl.uniformMatrix3fv(this.uniforms.uNormalMatrix.location, false, normalMatrix);
 
+		// uDiffuse
+		gl.uniform3f(this.uniforms.uDiffuse.location,
+															this.uniforms.uDiffuse.value[0],
+															this.uniforms.uDiffuse.value[1],
+															this.uniforms.uDiffuse.value[2]);
+
 		// Camera
 		if (camera && this.uniforms.uCameraPosition) {
 			gl.uniform3f(this.uniforms.uCameraPosition.location,
