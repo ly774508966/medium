@@ -108,7 +108,6 @@ export default class Geometry {
 
 	updateVertices() {
 		gl = GL.get();
-		// this.bufferVertices = [];
 		this.vertices.forEach((vertex, i) => {
 			this.bufferVertices.set(vertex.v, i * vertex.v.length);
 		});

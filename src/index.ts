@@ -23,6 +23,7 @@ import WebVRVive from './extras/WebVRVive';
 import BoxGeometry from './geometry/BoxGeometry';
 import BufferAttribute from './geometry/BufferAttribute';
 import Geometry from './geometry/Geometry';
+import LineGeometry from './geometry/LineGeometry';
 import PlaneGeometry from './geometry/PlaneGeometry';
 import SphereGeometry from './geometry/SphereGeometry';
 
@@ -75,6 +76,7 @@ export {
 	Detect,
 	WebVRVive,
 	BoxGeometry,
+	LineGeometry,
 	BufferAttribute,
 	Geometry,
 	PlaneGeometry,
