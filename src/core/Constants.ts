@@ -22,7 +22,8 @@ export const LINE_DEFAULT_WIDTH = 1;
 
 // Draw style
 export const DRAW_POINTS = 0;
-export const DRAW_LINES = 2;
+export const DRAW_LINES = 1;
+export const DRAW_LINE_STRIP = 2;
 export const DRAW_TRIANGLES = 4;
 
 // Uniform location indices
