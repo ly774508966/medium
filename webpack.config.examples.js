@@ -7,9 +7,19 @@ function isDir(file) {
 const dirs = fs.readdirSync('./examples/src/js/').filter(isDir);
 
 const entries = {};
-dirs.forEach(dir => {
-	entries[dir] = `./examples/src/js/${dir}/index.js`;
-});
+
+// To make developing an example faster
+// set the env variable EXAMPLE e.g:
+// EXAMPLE=linegeometry npm run start
+const exampleDir = process.env.EXAMPLE;
+
+if (exampleDir !== undefined) {
+	entries[exampleDir] = `./examples/src/js/${exampleDir}/index.js`;
+} else {
+	dirs.forEach(dir => {
+			entries[dir] = `./examples/src/js/${dir}/index.js`;
+	});
+}
 
 module.exports = {
 	entry: entries,
