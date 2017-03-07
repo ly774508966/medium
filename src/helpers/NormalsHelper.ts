@@ -79,7 +79,7 @@ class NormalsGeometry extends Geometry {
 	}
 }
 
-export default class Normals extends Mesh {
+export default class NormalsHelper extends Mesh {
 	constructor(mesh, size = 1) {
 		const vertexShader = GL.webgl2 ? vertexShaderEs300 : vertexShaderEs100;
 		const fragmentShader = GL.webgl2 ? fragmentShaderEs300() : fragmentShaderEs100();

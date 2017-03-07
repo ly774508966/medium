@@ -1,6 +1,7 @@
 import {
 	vec3,
 } from 'gl-matrix';
+import Vector2 from '../math/Vector2';
 import Vector3 from '../math/Vector3';
 
 export function degToRad(degrees: number) {
@@ -65,4 +66,21 @@ export function randomSpherePoint(x0, y0, z0, radius) {
 	const y = y0 + (radius * Math.sin(phi) * Math.sin(theta));
 	const z = z0 + (radius * Math.cos(phi));
 	return [x, y, z];
+}
+
+// https://github.com/hughsk/from-3d-to-2d/blob/master/index.js
+export function from3DTo2D(position, pVMatrix) {
+	const ix = position.x;
+	const iy = position.y;
+	const iz = position.z;
+
+	const ox = pVMatrix[0] * ix + pVMatrix[4] * iy + pVMatrix[8] * iz + pVMatrix[12];
+	const oy = pVMatrix[1] * ix + pVMatrix[5] * iy + pVMatrix[9] * iz + pVMatrix[13];
+	const ow = pVMatrix[3] * ix + pVMatrix[7] * iy + pVMatrix[11] * iz + pVMatrix[15];
+
+	const screenPosition = new Vector2();
+	screenPosition.x = (ox / ow + 1) / 2;
+	screenPosition.y = 1 - (oy / ow + 1) / 2;
+
+	return screenPosition;
 }

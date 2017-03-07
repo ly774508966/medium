@@ -16,6 +16,7 @@ import {
 	Texture,
 	Color,
 	Lights,
+ VerticesHelper,
 } from '../../../../src/index';
 const { guiController } = require('../gui')();
 
@@ -161,6 +162,10 @@ const boxNormalsHelper = new NormalsHelper(box);
 scene.add(boxNormalsHelper);
 
 boxNormalsHelper.setParent(box);
+
+const verticesHelper = new VerticesHelper(box, 1);
+scene.add(verticesHelper);
+verticesHelper.setParent(box);
 
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas);

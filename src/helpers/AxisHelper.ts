@@ -85,7 +85,7 @@ class AxisGeometry extends Geometry {
 	}
 }
 
-export default class Axis extends Mesh {
+export default class AxisHelper extends Mesh {
 	constructor(size = 1) {
 		const vertexShader = GL.webgl2 ? vertexShaderEs300 : vertexShaderEs100;
 		const fragmentShader = GL.webgl2 ? fragmentShaderEs300() : fragmentShaderEs100();

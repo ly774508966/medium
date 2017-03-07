@@ -31,6 +31,7 @@ import SphereGeometry from './geometry/SphereGeometry';
 import AxisHelper from './helpers/AxisHelper';
 import GridHelper from './helpers/GridHelper';
 import NormalsHelper from './helpers/NormalsHelper';
+import VerticesHelper from './helpers/VerticesHelper';
 
 // Lights
 import Lights from './lights/Lights';
@@ -84,6 +85,7 @@ export {
 	AxisHelper,
 	GridHelper,
 	NormalsHelper,
+	VerticesHelper,
 	Lights,
 	DirectionalLight,
 	PointLight,

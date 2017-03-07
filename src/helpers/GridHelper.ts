@@ -83,7 +83,7 @@ class GridGeometry extends Geometry {
 	}
 }
 
-export default class Grid extends Mesh {
+export default class GridHelper extends Mesh {
 	constructor(size = 1, divisions = 10) {
 		const vertexShader = GL.webgl2 ? vertexShaderEs300 : vertexShaderEs100;
 		const fragmentShader = GL.webgl2 ? fragmentShaderEs300() : fragmentShaderEs100();
