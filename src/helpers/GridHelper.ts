@@ -1,4 +1,7 @@
 import {
+	mat4,
+} from 'gl-matrix';
+import {
 	lerp,
 } from '../math/Utils';
 import Mesh from '../core/Mesh';
@@ -94,7 +97,7 @@ export default class GridHelper extends Mesh {
 		}));
 	}
 
-	draw(modelViewMatrix, projectionMatrix) {
+	draw(modelViewMatrix: mat4, projectionMatrix: mat4) {
 		const gl = GL.get();
 
 		// Update modelMatrix

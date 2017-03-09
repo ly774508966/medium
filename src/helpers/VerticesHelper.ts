@@ -90,7 +90,7 @@ export default class VerticesHelper extends Mesh {
 	_labels: Array<any>;
 	_parentMesh: Mesh;
 
-	constructor(mesh, size = 1, colorPoint = 0x00ff00, colorLabel = '#ffffff') {
+	constructor(mesh: Mesh, size = 1, colorPoint = 0x00ff00, colorLabel = '#ffffff') {
 		const vertexShader = GL.webgl2 ? vertexShaderEs300 : vertexShaderEs100;
 		const fragmentShader = GL.webgl2 ? fragmentShaderEs300() : fragmentShaderEs100();
 		super(new VerticesGeometry(mesh, size), new Shader({
@@ -132,7 +132,7 @@ export default class VerticesHelper extends Mesh {
 		});
 	}
 
-	draw(modelViewMatrix, projectionMatrix) {
+	draw(modelViewMatrix: mat4, projectionMatrix: mat4) {
 		const gl = GL.get();
 
 		// Update modelMatrix

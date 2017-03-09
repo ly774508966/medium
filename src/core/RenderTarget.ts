@@ -7,8 +7,8 @@ import Scene from './Scene';
 import PerspectiveCamera from './PerspectiveCamera';
 import OrthographicCamera from './OrthographicCamera';
 
-let gl;
-let ratio;
+let gl: WebGLRenderingContext;
+let ratio: number;
 
 interface Options {
 	width?: number;

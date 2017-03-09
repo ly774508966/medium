@@ -1,7 +1,7 @@
 import * as GL from './GL';
 import { extensions } from './Capabilities';
 
-let gl;
+let gl: WebGLRenderingContext;
 
 export default class Vao {
 	vao: any;

@@ -19,7 +19,7 @@ export function setup() {
 
 // Update projectionView buffer data
 let projectionViewData;
-export function updateProjectionView(gl, projectionMatrix, modelViewMatrix) {
+export function updateProjectionView(gl: WebGLRenderingContext, projectionMatrix: mat4, modelViewMatrix: mat4) {
 	gl.bindBufferBase(gl.UNIFORM_BUFFER, 0, uniformBuffers.projectionView.buffer);
 	gl.bindBuffer(gl.UNIFORM_BUFFER, uniformBuffers.projectionView.buffer);
 

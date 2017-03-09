@@ -7,7 +7,7 @@ import {
 	warn,
 } from '../utils/Console';
 
-let gl;
+let gl: WebGLRenderingContext;
 
 interface Options {
 	src?: number;
@@ -74,11 +74,11 @@ export default class Texture {
 		this.emit('loaded');
 	}
 
-	onTextureError = (error) => {
+	onTextureError = (error: string) => {
 		warn(error);
 	}
 
-	updateImage(src) {
+	updateImage(src: string) {
 		this.src = src || this.src;
 		this.load(this.src);
 	}

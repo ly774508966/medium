@@ -61,12 +61,13 @@ const geometry = new Geometry(bufferVertices);
 const hookVertexEndEs300 = `
 	vec4 mvPosition = uProjectionView.projectionMatrix * uProjectionView.viewMatrix * uModelMatrix * vec4(aVertexPosition + transformed, 1.0);
 	gl_PointSize = uSize * (100.0 / length(mvPosition.xyz));
-
+	gl_Position = mvPosition;
 `;
 
 const hookVertexEndEs100 = `
 	vec4 mvPosition = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition + transformed, 1.0);
 	gl_PointSize = uSize * (100.0 / length(mvPosition.xyz));
+	gl_Position = mvPosition;
 `;
 
 const hookFragmentEndEs300 = `

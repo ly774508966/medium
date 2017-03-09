@@ -21,7 +21,7 @@ import PerspectiveCamera from './PerspectiveCamera';
 import OrthorgraphicCamera from './OrthographicCamera';
 const config = require('../../package.json');
 
-let gl;
+let gl: WebGLRenderingContext;
 
 interface Options {
 	width?: number;
@@ -201,11 +201,11 @@ export default class Renderer {
 		this._drawObjects(scene, rightProjectionMatrix, rightViewMatrix);
 	}
 
-	renderWebVR(scene,
-													leftProjectionMatrix,
-													leftViewMatrix,
-													rightProjectionMatrix,
-													rightViewMatrix,
+	renderWebVR(scene: Scene,
+													leftProjectionMatrix: mat4,
+													leftViewMatrix: mat4,
+													rightProjectionMatrix: mat4,
+													rightViewMatrix: mat4,
 	) {
 		gl = GL.get();
 

@@ -4,6 +4,8 @@ export default class Plane extends Geometry {
 	constructor(width = 1, height = 1, subdivisionsX = 1, subdivisionsY = 1, axis = 'XY', colors?: Float32Array) {
   // https://github.com/yiwenl/Alfrid/blob/master/src/alfrid/Geom.js#L9
 
+		// Note triangles are seperate...
+
 		let vertices = [];
 		let indices = [];
 		let normals = [];

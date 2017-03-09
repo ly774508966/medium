@@ -10,63 +10,63 @@ export default class Color {
 		this.convert(hex);
 		return this;
 	}
-	set r(value) {
+	set r(value: number) {
 		this.v[0] = value;
 	}
 	get r() {
 		return this.v[0];
 	}
-	set g(value) {
+	set g(value: number) {
 		this.v[1] = value;
 	}
 	get g() {
 		return this.v[1];
 	}
-	set b(value) {
+	set b(value: number) {
 		this.v[2] = value;
 	}
 	get b() {
 		return this.v[2];
 	}
-	set(r, g, b) {
+	set(r: number, g: number, b: number) {
 		vec3.set(this.v, r, g, b);
 		return this;
 	}
-	copy(rgb) {
+	copy(rgb: Array<number>) {
 		vec3.copy(this.v, rgb);
 		return this;
 	}
-	convert(hex) {
+	convert(hex: string | number) {
 		const rgb = typeof hex === 'number' ? this.hexIntToRgb(hex) : this.hexStringToRgb(hex);
 		vec3.copy(this.v, this.normalize(rgb));
 		return this;
 	}
-	normalize(array) {
+	normalize(array: Array<number>) {
 		return vec3.fromValues(
 			array[0] / 255,
 			array[1] / 255,
 			array[2] / 255);
 	}
-	fromArray(array) {
+	fromArray(array: Array<number>) {
 		this.set(array[0], array[1], array[2]);
 	}
-	componentToHex(c) {
+	componentToHex(c: number) {
 		const hex = c.toString(16);
 		return hex.length === 1 ? `0${hex}` : hex;
 	}
-	rgbToHex(r, g, b) {
+	rgbToHex(r: number, g: number, b: number) {
 		const hexR = this.componentToHex(r);
 		const hexG = this.componentToHex(g);
 		const hexB = this.componentToHex(b);
 		return `#${hexR}${hexG}${hexB}`;
 	}
-	hexIntToRgb(hex) {
+	hexIntToRgb(hex: number) {
 		const r = hex >> 16;
 		const g = hex >> 8 & 0xFF;
 		const b = hex & 0xFF;
 		return vec3.fromValues(r, g, b);
 	}
-	hexStringToRgb(hex) {
+	hexStringToRgb(hex: string) {
 		const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 		return result ? vec3.fromValues(
 			parseInt(result[1], 16),

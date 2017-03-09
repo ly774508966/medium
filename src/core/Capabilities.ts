@@ -1,3 +1,5 @@
+declare const OESTextureFloat: any;
+
 import * as GL from './GL';
 import {
 	PRECISION,
@@ -10,7 +12,7 @@ import {
 	* https://github.com/mrdoob/three.js/blob/dev/src/renderers/webgl/WebGLCapabilities.js
 	*/
 
-function getMaxPrecision(gl, precision) {
+function getMaxPrecision(gl: WebGLRenderingContext, precision: string) {
 	if (precision === 'highp') {
 		if (gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT).precision > 0 &&
 	gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT).precision > 0) {
@@ -28,7 +30,7 @@ function getMaxPrecision(gl, precision) {
 	return 'lowp';
 }
 
-function Capabilities(gl) {
+function Capabilities(gl: WebGLRenderingContext) {
 	let precision = PRECISION;
 	const maxPrecision = getMaxPrecision(gl, precision);
 
@@ -37,15 +39,15 @@ function Capabilities(gl) {
 		precision = maxPrecision;
 	}
 
-	const maxTextures = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
-	const maxVertexTextures = gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
-	const maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
-	const maxCubemapSize = gl.getParameter(gl.MAX_CUBE_MAP_TEXTURE_SIZE);
+	const maxTextures: number = gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS);
+	const maxVertexTextures: number = gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS);
+	const maxTextureSize: number = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+	const maxCubemapSize: number = gl.getParameter(gl.MAX_CUBE_MAP_TEXTURE_SIZE);
 
-	const maxAttributes = gl.getParameter(gl.MAX_VERTEX_ATTRIBS);
-	const maxVertexUniforms = gl.getParameter(gl.MAX_VERTEX_UNIFORM_VECTORS);
-	const maxVaryings = gl.getParameter(gl.MAX_VARYING_VECTORS);
-	const maxFragmentUniforms = gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS);
+	const maxAttributes: number = gl.getParameter(gl.MAX_VERTEX_ATTRIBS);
+	const maxVertexUniforms: number = gl.getParameter(gl.MAX_VERTEX_UNIFORM_VECTORS);
+	const maxVaryings: number = gl.getParameter(gl.MAX_VARYING_VECTORS);
+	const maxFragmentUniforms: number = gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS);
 
 	return {
 		precision,
@@ -61,10 +63,12 @@ function Capabilities(gl) {
 	};
 }
 
-function Extensions(gl) {
+function Extensions(gl: WebGLRenderingContext) {
+
 	const vertexArrayObject = GL.webgl2 || gl.getExtension('OES_vertex_array_object') || false;
 	const angleInstancedArrays = gl.getExtension('ANGLE_instanced_arrays') || false;
 	const textureFloat = gl.getExtension('OES_texture_float') || false;
+
 	return {
 		angleInstancedArrays,
 		vertexArrayObject,
@@ -78,7 +82,7 @@ let extensions: any = {};
 /*
 	Set the capabilities once
 */
-export function set(gl) {
+export function set(gl: WebGLRenderingContext) {
 	capabilities = Capabilities(gl);
 	extensions = Extensions(gl);
 }

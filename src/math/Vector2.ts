@@ -10,50 +10,50 @@ export default class Vector2 {
 		this.set(x, y);
 		return this;
 	}
-	set x(value) {
+	set x(value: number) {
 		this.v[0] = value;
 	}
 	get x() {
 		return this.v[0];
 	}
-	set y(value) {
+	set y(value: number) {
 		this.v[1] = value;
 	}
 	get y() {
 		return this.v[1];
 	}
-	set(x, y) {
+	set(x: number, y: number) {
 		vec2.set(this.v, x, y);
 		return this;
 	}
 	clone() {
 		return new Vector2(this.v[0], this.v[1]);
 	}
-	copy(vector2) {
+	copy(vector2: Vector2) {
 		vec2.copy(this.v, vector2.v);
 		return this;
 	}
-	add(vector2) {
+	add(vector2: Vector2) {
 		vec2.add(this.v, this.v, vector2.v);
 		return this;
 	}
-	subtract(vector2) {
+	subtract(vector2: Vector2) {
 		vec2.subtract(this.v, this.v, vector2.v);
 		return this;
 	}
-	subtractVectors(vector0, vector1) {
+	subtractVectors(vector0: Vector2, vector1: Vector2) {
 		const out = vec2.create();
 		vec2.subtract(out, vector0.v, vector1.v);
 		return out;
 	}
-	scale(value) {
+	scale(value: number) {
 		vec2.scale(this.v, this.v, value);
 		return this;
 	}
-	distance(vector2) {
+	distance(vector2: Vector2) {
 		return vec2.distance(this.v, vector2.v);
 	}
-	length() {
+	length(): number {
 		return vec2.length(this.v);
 	}
 	negate() {
@@ -64,11 +64,11 @@ export default class Vector2 {
 		vec2.normalize(this.v, this.v);
 		return this;
 	}
-	lerp(vector2, value) {
+	lerp(vector2: Vector2, value: number) {
 		vec2.lerp(this.v, this.v, vector2.v, value);
 		return this;
 	}
-	equals(vector2) {
+	equals(vector2: Vector2): boolean {
 		return vec2.equals(this.v, vector2.v);
 	}
 }

@@ -17,14 +17,11 @@ export default class Scene {
 		this.modelViewMatrix = mat4.create();
 	}
 
-	add(object) {
-		switch (object.type) {
-			default:
-				this.objects.push(object);
-		}
+	add(object: Mesh) {
+		this.objects.push(object);
 	}
 
-	remove(object, dispose = false) {
+	remove(object: Mesh, dispose = false) {
 		const objectIndex = this.objects.indexOf(object);
 		if (objectIndex !== -1) {
 			this.objects.splice(objectIndex, 1);

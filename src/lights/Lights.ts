@@ -15,7 +15,7 @@ export default class Lights {
 	uniformBuffer: UniformBuffer;
 	_lightsData: Float32Array;
 
-	constructor(lights) {
+	constructor(lights: Array<DirectionalLight | PointLight>) {
 		this.lights = lights;
 
 		if (GL.webgl2) {

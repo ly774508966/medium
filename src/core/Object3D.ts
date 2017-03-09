@@ -52,7 +52,7 @@ export default class Object3D {
 		mat4.scale(this.modelMatrix, this.modelMatrix, this.scale.v);
 	}
 
-	setParent(parent) {
+	setParent(parent: Object3D) {
 		this.unParent();
 		if (parent.isObject3D) {
 			parent.children.push(this);

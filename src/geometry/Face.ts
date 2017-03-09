@@ -5,9 +5,9 @@ export default class Face {
 	vertices: Array<Vector3>;
 	uvs: Array<number>;
 
-	constructor(iA: number, iB: number, iC: number, vA: Vector3, vB: Vector3, vC: Vector3) {
-		this.indices = [iA, iB, iC];
-		this.vertices = [vA, vB, vC];
-		this.uvs = [iA, iB, iC];
+	constructor(indiceA: number, indiceB: number, indiceC: number, vertexA: Vector3, vertexB: Vector3, vertexC: Vector3) {
+		this.indices = [indiceA, indiceB, indiceC];
+		this.vertices = [vertexA, vertexB, vertexC];
+		this.uvs = [indiceA, indiceB, indiceC];
 	}
 }

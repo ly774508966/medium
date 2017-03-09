@@ -1,14 +1,14 @@
 import { WEBGL2_CONTEXT } from './Constants';
 
-let gl;
-let contextType;
-let webgl2;
+let gl: WebGLRenderingContext;
+let contextType: string;
+let webgl2: boolean;
 
 /*
 	Set the gl instance
 	This is set from the renderer
 */
-export function set(_gl, _contextType) {
+export function set(_gl: WebGLRenderingContext, _contextType: string) {
 	gl = _gl;
 	contextType = _contextType;
 	webgl2 = contextType === WEBGL2_CONTEXT;
@@ -17,7 +17,7 @@ export function set(_gl, _contextType) {
 /*
 	Get the gl instance
 */
-export function get() {
+export function get(): WebGLRenderingContext {
 	return gl;
 }
 
@@ -25,7 +25,7 @@ export function get() {
 	* createBuffer
 	* @return {Buffer}
 	*/
-function createBuffer(type, data, isDynamic = false) {
+function createBuffer(type: number, data: Float32Array | Uint16Array, isDynamic: boolean = false) {
 	const buffer = gl.createBuffer();
 	const ArrayView = type === gl.ARRAY_BUFFER ? Float32Array : Uint16Array;
 	const usage = isDynamic ? gl.DYNAMIC_DRAW : gl.STATIC_DRAW;
@@ -39,7 +39,7 @@ function createBuffer(type, data, isDynamic = false) {
 	* createUniformBuffer
 	* @return {Buffer}
 	*/
-function createUniformBuffer(data) {
+function createUniformBuffer(data: Float32Array) {
 	const buffer = gl.createBuffer();
 	gl.bindBuffer(gl.UNIFORM_BUFFER, buffer);
 	gl.bufferData(gl.UNIFORM_BUFFER, new Float32Array(data), gl.DYNAMIC_DRAW);

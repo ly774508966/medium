@@ -4,11 +4,7 @@ import Face from './Face';
 import Vector3 from '../math/Vector3';
 import Vector2 from '../math/Vector2';
 
-let gl;
-
-interface Attributes extends Object {
-	aVertexPosition?: BufferAttribute;
-}
+let gl: WebGLRenderingContext;
 
 export default class Geometry {
 	bufferVertices: Float32Array;

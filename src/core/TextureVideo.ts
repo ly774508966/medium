@@ -3,6 +3,16 @@ import EventDispatcher from 'happens';
 
 let gl;
 
+interface Options {
+	src?: number;
+	magFilter?: number;
+	minFilter?: number;
+	wrapS?: number;
+	wrapT?: number;
+	loop: boolean;
+	autoplay: boolean;
+}
+
 export default class VideoTexture {
 	src: string;
 	magFilter: number;
@@ -16,7 +26,7 @@ export default class VideoTexture {
 	_currentTime: number;
 	emit: Function;
 
-	constructor(options) {
+	constructor(options: Options) {
 		EventDispatcher(this);
 		gl = GL.get();
 

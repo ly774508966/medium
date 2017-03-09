@@ -3,7 +3,7 @@ import {
 	warn,
 } from '../utils/Console';
 
-let gl;
+let gl: WebGLRenderingContext;
 
 export default class Program {
 	program: WebGLProgram;

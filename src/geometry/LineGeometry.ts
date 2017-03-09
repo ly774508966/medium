@@ -1,7 +1,7 @@
 import Geometry from './Geometry';
 
 export default class LineGeometry extends Geometry {
-	constructor(bufferVertices) {
+	constructor(bufferVertices: Array<number> | Float32Array) {
 		const vertices = [];
 		let i3 = 0;
 		let i6 = 0;

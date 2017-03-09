@@ -4,15 +4,16 @@ import Vector2 from '../math/Vector2';
 import Ray from '../math/Ray';
 import Scene from './Scene';
 import Mesh from './Mesh';
+import Face from '../geometry/Face';
 import PerspectiveCamera from './PerspectiveCamera';
 import { barycoordFromPoint } from '../math/Utils';
 
-const inversedProjectionMatrix = mat4.create();
-const cameraDirection = vec3.create();
+const inversedProjectionMatrix: mat4 = mat4.create();
+const cameraDirection: vec3 = vec3.create();
 const directionVector = new Vector3();
 
-let face;
-let barycoord;
+let face: Face;
+let barycoord: Vector3;
 const fvA = new Vector3();
 const fvB = new Vector3();
 const fvC = new Vector3();

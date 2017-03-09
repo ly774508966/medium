@@ -7,12 +7,15 @@ import {
 	warn,
 } from '../utils/Console';
 
-let gl;
+let gl: WebGLRenderingContext;
 
 interface Options {
-	near?: number;
-	far?: number;
-	fov?: number;
+	src: Array<string>;
+	magFilter: number;
+	minFilter: number;
+	wrapS: number;
+	wrapT: number;
+	resizeToPow2: boolean;
 }
 
 export default class TextureCube {
@@ -73,12 +76,11 @@ export default class TextureCube {
 		this.emit('loaded');
 	}
 
-	onTextureError = (error) => {
+	onTextureError = (error: string) => {
 		warn(error);
 	}
 
-	// TODO add hdr type to arg
-	update(images: Array<HTMLCanvasElement|HTMLImageElement|ImageData>) {
+	update(images: Array<HTMLCanvasElement | HTMLImageElement | ImageData>) {
 		gl = GL.get();
 
 		gl.bindTexture(gl.TEXTURE_CUBE_MAP, this.texture);

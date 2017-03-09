@@ -6,9 +6,11 @@ import Object3D from './Object3D';
 import Vao from './Vao';
 import Geometry from '../geometry/Geometry';
 import Shader from './Shader';
+import PerspectiveCamera from './PerspectiveCamera';
+import OrthographicCamera from './OrthographicCamera';
 import { extensions } from './Capabilities';
 
-let gl;
+let gl: WebGLRenderingContext;
 
 export default class Mesh extends Object3D {
 	geometry: Geometry;
@@ -19,12 +21,11 @@ export default class Mesh extends Object3D {
 	instanceCount: number;
 	isInstanced: boolean;
 
-	constructor(geometry, shader) {
+	constructor(geometry: Geometry, shader: Shader) {
 		super();
 		this.geometry = geometry;
 		this.shader = shader;
 		this.vao = new Vao();
-		this.modelMatrix = mat4.create();
 		this.visible = true;
 		this.instanceCount = 0;
 		this.shader.create(this.geometry);
@@ -40,7 +41,7 @@ export default class Mesh extends Object3D {
 		this.vao.unbind();
 	}
 
-	setInstanceCount(value) {
+	setInstanceCount(value: number) {
 		gl = GL.get();
 		this.instanceCount = value;
 		this.isInstanced = true;
@@ -89,7 +90,7 @@ export default class Mesh extends Object3D {
 		}
 	}
 
-	draw(modelViewMatrix, projectionMatrix, camera) {
+	draw(modelViewMatrix: mat4, projectionMatrix: mat4, camera: PerspectiveCamera | OrthographicCamera) {
 		if (!this.visible) return;
 
 		gl = GL.get();
@@ -100,7 +101,7 @@ export default class Mesh extends Object3D {
 		this.shader.program.bind();
 
 		// Culling enable
-		if (this.shader.culling !== false) {
+		if (this.shader.culling !== -1) {
 			gl.enable(gl.CULL_FACE);
 			gl.cullFace(this.shader.culling);
 		}
@@ -127,12 +128,12 @@ export default class Mesh extends Object3D {
 		}
 
 		// Culling disable
-		if (this.shader.culling !== false) {
+		if (this.shader.culling !== -1) {
 			gl.disable(gl.CULL_FACE);
 		}
 	}
 
-	drawInstance(modelViewMatrix, projectionMatrix, camera) {
+	drawInstance(modelViewMatrix: mat4, projectionMatrix: mat4, camera: PerspectiveCamera | OrthographicCamera) {
 		if (!this.visible) return;
 
 		gl = GL.get();
@@ -144,7 +145,7 @@ export default class Mesh extends Object3D {
 		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix, camera);
 
 		// Culling enable
-		if (this.shader.culling !== false) {
+		if (this.shader.culling !== -1) {
 			gl.enable(gl.CULL_FACE);
 			gl.cullFace(this.shader.culling);
 		}
@@ -170,7 +171,7 @@ export default class Mesh extends Object3D {
 		}
 
 		// Culling disable
-		if (this.shader.culling !== false) {
+		if (this.shader.culling !== -1) {
 			gl.disable(gl.CULL_FACE);
 		}
 	}

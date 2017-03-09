@@ -24,10 +24,10 @@ import Lights from '../lights/Lights';
 import PerspectiveCamera from '../core/PerspectiveCamera';
 import OrthographicCamera from '../core/OrthographicCamera';
 
-let gl;
-const normalMatrix = mat3.create();
-const inversedViewMatrix = mat4.create();
-const inversedModelViewMatrix = mat4.create();
+let gl: WebGLRenderingContext;
+const normalMatrix: mat3 = mat3.create();
+const inversedViewMatrix: mat4 = mat4.create();
+const inversedModelViewMatrix: mat4 = mat4.create();
 
 interface Options {
 	name?: string;
@@ -62,7 +62,7 @@ export default class Shader {
 	drawType: number;
 	directionalLights: Lights;
 	pointLights: Lights;
-	culling: number|boolean;
+	culling: number;
 	program: Program;
 	customUniforms: object;
 
@@ -192,7 +192,7 @@ export default class Shader {
 		});
 	}
 
-	_processShader(shader, geometry) {
+	_processShader(shader: string, geometry: Geometry) {
 		gl = GL.get();
 		let defines = '';
 
@@ -233,11 +233,11 @@ export default class Shader {
 		shader = shader.replace(/#HOOK_FRAGMENT_END/g, this.hookFragmentEnd);
 
 		if (this.pointLights) {
-			shader = shader.replace(/#HOOK_POINT_LIGHTS/g, this.pointLights.length);
+			shader = shader.replace(/#HOOK_POINT_LIGHTS/g, String(this.pointLights.length));
 		}
 
 		if (this.directionalLights) {
-			shader = shader.replace(/#HOOK_DIRECTIONAL_LIGHTS/g, this.directionalLights.length);
+			shader = shader.replace(/#HOOK_DIRECTIONAL_LIGHTS/g, String(this.directionalLights.length));
 		}
 
 		return shader;

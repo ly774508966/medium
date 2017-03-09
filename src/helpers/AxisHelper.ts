@@ -1,3 +1,6 @@
+import {
+	mat4,
+} from 'gl-matrix';
 import Mesh from '../core/Mesh';
 import Shader from '../core/Shader';
 import * as GL from '../core/GL';
@@ -96,7 +99,7 @@ export default class AxisHelper extends Mesh {
 		}));
 	}
 
-	draw(modelViewMatrix, projectionMatrix) {
+	draw(modelViewMatrix: mat4, projectionMatrix: mat4) {
 		const gl = GL.get();
 
 		// Update modelMatrix

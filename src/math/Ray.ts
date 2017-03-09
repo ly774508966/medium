@@ -17,7 +17,7 @@ export default class Ray {
 		this.direction = new Vector3();
 	}
 
-	set(origin, direction) {
+	set(origin: Vector3, direction: Vector3) {
 		this.origin.copy(origin);
 		this.direction.copy(direction);
 	}

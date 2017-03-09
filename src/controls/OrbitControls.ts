@@ -38,7 +38,7 @@ export default class OrbitControls {
 	_startX: number;
 	_startY: number;
 
-	constructor(camera, element) {
+	constructor(camera: PerspectiveCamera, element: HTMLCanvasElement | HTMLDivElement) {
 		this.rotationSpeed = 5;
 		this.panSpeed = 10;
 		this._camera = camera;
@@ -78,7 +78,7 @@ export default class OrbitControls {
 		event.preventDefault();
 
 		if (event.touches) {
-	// Device
+			// Device
 			switch (event.touches.length) {
 				case 1:
 					this._mode = MODE_DRAG;
@@ -97,7 +97,7 @@ export default class OrbitControls {
 				}
 			}
 		} else {
-	// Desktop
+			// Desktop
 			switch (event.which) {
 				case 3:
 					this._mode = MODE_PAN;
@@ -121,11 +121,10 @@ export default class OrbitControls {
 
 	_onTouchMove = (event) => {
 		if (this.isDown) {
-			const y = event.pageX / this._width;
-			const x = event.pageY / this._height;
-
 			switch (this._mode) {
 				case MODE_PAN: {
+					const y = event.pageX / this._width;
+					const x = event.pageY / this._height;
 					this._direction.copy(this._camera.position).subtract(this._target).normalize();
 					const cross = this._direction.cross(UP);
 					const tx = this._targetOffset.x + -(this._startY - y) * this.panSpeed * cross.x;
@@ -139,13 +138,15 @@ export default class OrbitControls {
 					const dy = event.touches[0].pageY - event.touches[1].pageY;
 					const distance = Math.sqrt(dx * dx + dy * dy);
 					const sign = this._lastZoomDistance > distance ? 1 : -1;
-		// Simulate the same data as the scroll
+					// Simulate the same data as the scroll
 					this._zoomConstraint(sign * 100);
 					this._lastZoomDistance = distance;
 					break;
 				}
 				default: {
-		// Drag
+					// Drag
+					const y = event.pageX / this._width;
+					const x = event.pageY / this._height;
 					this._rotationX = this._offsetX + -(this._startX - x) * this.rotationSpeed;
 					this._rotationY = this._offsetY + (this._startY - y) * this.rotationSpeed;
 					this._rotationX = clamp(this._rotationX, -Math.PI / 2, Math.PI / 2);
@@ -185,10 +186,10 @@ export default class OrbitControls {
 		let delta = 0;
 
 		if (event.wheelDelta) {
-	// Webkit, Opera, Explorer
+			// Webkit, Opera, Explorer
 			delta = event.wheelDelta;
 		} else if (event.detail) {
-	// Firefox
+			// Firefox
 			delta = event.detail;
 		}
 
@@ -198,7 +199,7 @@ export default class OrbitControls {
 	_onKeypress = (event) => {
 		switch (event.keyCode) {
 			case 114: // r
-	// Reset
+				// Reset
 				this.reset();
 				break;
 			default:

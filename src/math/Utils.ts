@@ -1,5 +1,6 @@
 import {
 	vec3,
+	mat4,
 } from 'gl-matrix';
 import Vector2 from '../math/Vector2';
 import Vector3 from '../math/Vector3';
@@ -57,7 +58,7 @@ export function barycoordFromPoint(point: vec3, a: vec3, b: vec3, c: vec3) {
 /*
 http://stackoverflow.com/questions/5531827/random-point-on-a-given-sphere
 	*/
-export function randomSpherePoint(x0, y0, z0, radius) {
+export function randomSpherePoint(x0: number, y0: number, z0: number, radius: number) {
 	const u = Math.random();
 	const v = Math.random();
 	const theta = 2 * Math.PI * u;
@@ -69,7 +70,7 @@ export function randomSpherePoint(x0, y0, z0, radius) {
 }
 
 // https://github.com/hughsk/from-3d-to-2d/blob/master/index.js
-export function from3DTo2D(position, pVMatrix) {
+export function from3DTo2D(position: Vector3, pVMatrix: mat4) {
 	const ix = position.x;
 	const iy = position.y;
 	const iz = position.z;
