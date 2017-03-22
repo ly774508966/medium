@@ -49,7 +49,7 @@ export default class Vector3 {
 	subtractVectors(vector0: Vector3, vector1: Vector3) {
 		const out = vec3.create();
 		vec3.subtract(out, vector0.v, vector1.v);
-		return this;
+		return out;
 	}
 	scale(value: number) {
 		vec3.scale(this.v, this.v, value);
