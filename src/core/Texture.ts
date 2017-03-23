@@ -7,7 +7,7 @@ import {
 	warn,
 } from '../utils/Console';
 
-let gl: WebGLRenderingContext;
+let gl: WebGL2RenderingContext | WebGLRenderingContext;
 
 interface Options {
 	src?: number;
@@ -88,7 +88,7 @@ export default class Texture {
 
 		gl.bindTexture(gl.TEXTURE_2D, this.texture);
 		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-		if (image instanceof ImageData) {
+		if (image instanceof ImageData && gl instanceof WebGL2RenderingContext) {
 			// This is only for hdr data texture atm
 			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA16F, image.width, image.height,
 				0, gl.RGBA, gl.FLOAT, image.data);

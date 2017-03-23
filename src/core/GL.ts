@@ -1,6 +1,6 @@
 import { WEBGL2_CONTEXT } from './Constants';
 
-let gl: WebGLRenderingContext;
+let gl: WebGL2RenderingContext | WebGLRenderingContext;
 let contextType: string;
 let webgl2: boolean;
 
@@ -8,16 +8,17 @@ let webgl2: boolean;
 	Set the gl instance
 	This is set from the renderer
 */
-export function set(_gl: WebGLRenderingContext, _contextType: string) {
+export function set(_gl: WebGL2RenderingContext | WebGLRenderingContext, _contextType: string) {
 	gl = _gl;
 	contextType = _contextType;
 	webgl2 = contextType === WEBGL2_CONTEXT;
 }
 
+
 /*
 	Get the gl instance
 */
-export function get(): WebGLRenderingContext {
+export function get(): WebGL2RenderingContext | WebGLRenderingContext {
 	return gl;
 }
 
@@ -25,12 +26,17 @@ export function get(): WebGLRenderingContext {
 	* createBuffer
 	* @return {Buffer}
 	*/
-function createBuffer(type: number, data: Float32Array | Uint16Array, isDynamic: boolean = false) {
+function createBuffer(type: GLenum, data: Float32Array | Uint16Array, isDynamic: boolean = false) {
 	const buffer = gl.createBuffer();
-	const ArrayView = type === gl.ARRAY_BUFFER ? Float32Array : Uint16Array;
 	const usage = isDynamic ? gl.DYNAMIC_DRAW : gl.STATIC_DRAW;
+	const ArrayView = type === gl.ARRAY_BUFFER ? Float32Array : Uint16Array;
 	gl.bindBuffer(type, buffer);
-	gl.bufferData(type, new ArrayView(data), usage);
+	// https://github.com/nkemnitz/webgl2-ts/blob/master/WebGL2/webgl2-context.d.ts#L276
+	if (gl instanceof WebGL2RenderingContext) {
+		gl.bufferData(type, new ArrayView(data), usage, 0);
+	} else {
+		gl.bufferData(type, new ArrayView(data), usage);
+	}
 	gl.bindBuffer(type, null);
 	return buffer;
 }
@@ -41,10 +47,14 @@ function createBuffer(type: number, data: Float32Array | Uint16Array, isDynamic:
 	*/
 function createUniformBuffer(data: Float32Array) {
 	const buffer = gl.createBuffer();
-	gl.bindBuffer(gl.UNIFORM_BUFFER, buffer);
-	gl.bufferData(gl.UNIFORM_BUFFER, new Float32Array(data), gl.DYNAMIC_DRAW);
-	gl.bindBuffer(gl.UNIFORM_BUFFER, null);
-	return buffer;
+	if (gl instanceof WebGL2RenderingContext) {
+		gl.bindBuffer(gl.UNIFORM_BUFFER, buffer);
+		gl.bufferData(gl.UNIFORM_BUFFER, new Float32Array(data), gl.DYNAMIC_DRAW);
+		gl.bindBuffer(gl.UNIFORM_BUFFER, null);
+		return buffer;
+	} else {
+		return false;
+	}
 }
 
 export {

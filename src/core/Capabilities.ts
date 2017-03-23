@@ -12,7 +12,7 @@ import {
 	* https://github.com/mrdoob/three.js/blob/dev/src/renderers/webgl/WebGLCapabilities.js
 	*/
 
-function getMaxPrecision(gl: WebGLRenderingContext, precision: string) {
+function getMaxPrecision(gl: WebGL2RenderingContext | WebGLRenderingContext, precision: string) {
 	if (precision === 'highp') {
 		if (gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT).precision > 0 &&
 	gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT).precision > 0) {
@@ -30,7 +30,7 @@ function getMaxPrecision(gl: WebGLRenderingContext, precision: string) {
 	return 'lowp';
 }
 
-function Capabilities(gl: WebGLRenderingContext) {
+function Capabilities(gl: WebGL2RenderingContext | WebGLRenderingContext) {
 	let precision = PRECISION;
 	const maxPrecision = getMaxPrecision(gl, precision);
 
@@ -63,7 +63,7 @@ function Capabilities(gl: WebGLRenderingContext) {
 	};
 }
 
-function Extensions(gl: WebGLRenderingContext) {
+function Extensions(gl: WebGL2RenderingContext | WebGLRenderingContext) {
 
 	const vertexArrayObject = GL.webgl2 || gl.getExtension('OES_vertex_array_object') || false;
 	const angleInstancedArrays = gl.getExtension('ANGLE_instanced_arrays') || false;
@@ -82,7 +82,7 @@ let extensions: any = {};
 /*
 	Set the capabilities once
 */
-export function set(gl: WebGLRenderingContext) {
+export function set(gl: WebGL2RenderingContext | WebGLRenderingContext) {
 	capabilities = Capabilities(gl);
 	extensions = Extensions(gl);
 }

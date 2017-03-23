@@ -7,7 +7,7 @@ import {
 	warn,
 } from '../utils/Console';
 
-let gl: WebGLRenderingContext;
+let gl: WebGL2RenderingContext | WebGLRenderingContext;
 
 interface Options {
 	src: Array<string>;
@@ -98,8 +98,12 @@ export default class TextureCube {
 			const image = this._isHdr ? images[i] : this._resizeImage(images[i]);
 			gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
 			if (image instanceof ImageData) {
-				gl.texImage2D(targets[i], 0, gl.RGBA16F, image.width, image.height,
-					0, gl.RGBA, gl.FLOAT, image.data);
+				if (gl instanceof WebGL2RenderingContext) {
+					gl.texImage2D(targets[i], 0, gl.RGBA16F, image.width, image.height,
+						0, gl.RGBA, gl.FLOAT, image.data);
+				} else {
+					// TODO
+				}
 			} else {
 				gl.texImage2D(targets[i], 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
 			}

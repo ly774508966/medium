@@ -3,7 +3,7 @@ import {
 	warn,
 } from '../utils/Console';
 
-let gl: WebGLRenderingContext;
+let gl: WebGL2RenderingContext | WebGLRenderingContext;
 
 export default class Program {
 	program: WebGLProgram;
@@ -23,7 +23,7 @@ export default class Program {
 		this.attributeLocations = {};
 	}
 
-	link(vertexShader: string, fragmentShader: string, transformFeedbackVaryings: boolean | Array<string>) {
+	link(vertexShader: string, fragmentShader: string, transformFeedbackVaryings: Array<string>) {
 		this.compiledVertexShader = this.compile('vs', vertexShader);
 		this.compiledFragmentShader = this.compile('fs', fragmentShader);
 
@@ -36,7 +36,7 @@ export default class Program {
 		gl.attachShader(this.program, this.compiledVertexShader);
 		gl.attachShader(this.program, this.compiledFragmentShader);
 
-		if (transformFeedbackVaryings) {
+		if (transformFeedbackVaryings instanceof Array && gl instanceof WebGL2RenderingContext) {
 			gl.transformFeedbackVaryings(this.program, transformFeedbackVaryings, gl.SEPARATE_ATTRIBS);
 		}
 
@@ -97,10 +97,12 @@ export default class Program {
 
 	setUniformBlockLocation(uniformName: string, uniformBuffer: WebGLBuffer, index: number) {
 		gl = GL.get();
-		this.uniformBlocks[uniformName] = gl.getUniformBlockIndex(this.program, uniformName);
-		gl.uniformBlockBinding(this.program,
-																									this.uniformBlocks[uniformName], this.uniformBlocks[uniformName]);
-		gl.bindBufferBase(gl.UNIFORM_BUFFER, index, uniformBuffer);
+		if (gl instanceof WebGL2RenderingContext) {
+			this.uniformBlocks[uniformName] = gl.getUniformBlockIndex(this.program, uniformName);
+			gl.uniformBlockBinding(this.program,
+																										this.uniformBlocks[uniformName], this.uniformBlocks[uniformName]);
+			gl.bindBufferBase(gl.UNIFORM_BUFFER, index, uniformBuffer);
+		}
 	}
 
 	bind() {

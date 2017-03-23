@@ -1,6 +1,6 @@
 import * as GL from '../core/GL';
 
-let gl;
+let gl: WebGL2RenderingContext | WebGLRenderingContext;
 
 export default class BufferAttribute {
 	type: number;
@@ -10,7 +10,7 @@ export default class BufferAttribute {
 	buffer: WebGLBuffer;
 	shaderAttribute: boolean;
 
-	constructor(type: number, data: Float32Array | Uint16Array, itemSize: number, shaderAttribute = true) {
+	constructor(type: GLenum, data: Float32Array | Uint16Array, itemSize: number, shaderAttribute = true) {
 		this.type = type;
 		this.itemSize = itemSize;
 		this.numItems = data.length / itemSize;

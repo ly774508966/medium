@@ -10,7 +10,7 @@ import PerspectiveCamera from './PerspectiveCamera';
 import OrthographicCamera from './OrthographicCamera';
 import { extensions } from './Capabilities';
 
-let gl: WebGLRenderingContext;
+let gl: WebGL2RenderingContext | WebGLRenderingContext;
 
 export default class Mesh extends Object3D {
 	geometry: Geometry;
@@ -73,7 +73,7 @@ export default class Mesh extends Object3D {
 				// vertexAttribPointer
 				this.shader.program.setAttributeInstancedPointer(attributeName,
 					this.geometry.attributesInstanced[attributeName].itemSize);
-				if (GL.webgl2) {
+				if (gl instanceof WebGL2RenderingContext) {
 					gl.vertexAttribDivisor(this.shader.program.attributeLocations[attributeName], 1);
 				} else {
 					extensions.angleInstancedArrays.vertexAttribDivisorANGLE(
@@ -158,7 +158,7 @@ export default class Mesh extends Object3D {
 			this.bindIndexBuffer();
 		}
 
-		if (GL.webgl2) {
+		if (gl instanceof WebGL2RenderingContext) {
 			gl.drawElementsInstanced(this.shader.drawType,
 				this.geometry.attributes.aIndex.numItems, gl.UNSIGNED_SHORT, 0, this.instanceCount);
 		} else {

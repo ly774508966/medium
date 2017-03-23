@@ -24,7 +24,7 @@ import Lights from '../lights/Lights';
 import PerspectiveCamera from '../core/PerspectiveCamera';
 import OrthographicCamera from '../core/OrthographicCamera';
 
-let gl: WebGLRenderingContext;
+let gl: WebGL2RenderingContext | WebGLRenderingContext;
 const normalMatrix: mat3 = mat3.create();
 const inversedViewMatrix: mat4 = mat4.create();
 const inversedModelViewMatrix: mat4 = mat4.create();
@@ -87,7 +87,7 @@ export default class Shader {
 		this.program = new Program();
 	}
 
-	create(geometry: Geometry, transformFeedbackVaryings?: boolean | Array<string>) {
+	create(geometry: Geometry, transformFeedbackVaryings?: Array<string>) {
 		gl = GL.get();
 
 		this.vertexShader = this._processShader(this.vertexShader, geometry);

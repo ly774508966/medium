@@ -7,7 +7,7 @@ import Scene from './Scene';
 import PerspectiveCamera from './PerspectiveCamera';
 import OrthographicCamera from './OrthographicCamera';
 
-let gl: WebGLRenderingContext;
+let gl: WebGL2RenderingContext | WebGLRenderingContext;
 let ratio: number;
 
 interface Options {
@@ -70,7 +70,7 @@ export default class RenderTarget {
 		// Update the scene
 		scene.update();
 
-		if (GL.webgl2) {
+		if (gl instanceof WebGL2RenderingContext) {
 			// Update global uniform buffers
 			UniformBuffers.updateProjectionView(gl, camera.projectionMatrix, scene.modelViewMatrix);
 		}

@@ -4,7 +4,8 @@ import Face from './Face';
 import Vector3 from '../math/Vector3';
 import Vector2 from '../math/Vector2';
 
-let gl: WebGLRenderingContext;
+let gl: WebGL2RenderingContext | WebGLRenderingContext;
+let bufferNormalsTmp = [];
 
 export default class Geometry {
 	bufferVertices: Float32Array;
@@ -57,7 +58,7 @@ export default class Geometry {
 		}
 	}
 
-	addAttribute(name: string, type: number, data: Float32Array | Uint16Array, count: number, shaderAttribute?: boolean) {
+	addAttribute(name: string, type: GLenum, data: Float32Array | Uint16Array, count: number, shaderAttribute?: boolean) {
 		this.attributes[name] = new BufferAttribute(type, data, count, shaderAttribute);
 	}
 
@@ -85,7 +86,6 @@ export default class Geometry {
 			const a = this.vertices[ia];
 			const b = this.vertices[ib];
 			const c = this.vertices[ic];
-
 			const face = new Face(ia, ib, ic, a, b, c);
 			this.faces.push(face);
 		}
@@ -107,7 +107,25 @@ export default class Geometry {
 		this.vertices.forEach((vertex, i) => {
 			this.bufferVertices.set(vertex.v, i * vertex.v.length);
 		});
-		this.attributes.aVertexPosition.update(new Float32Array(this.bufferVertices));
+		this.attributes.aVertexPosition.update(this.bufferVertices);
+	}
+
+	updateNormals() {
+		const normals = [];
+		this.faces.forEach(face => {
+			face.updateFaceNormal();
+			normals[face.indices[0]] = face.normal.v;
+			normals[face.indices[1]] = face.normal.v;
+			normals[face.indices[2]] = face.normal.v;
+		});
+		// Flatten
+		bufferNormalsTmp = [];
+		normals.forEach(normal => {
+			bufferNormalsTmp = bufferNormalsTmp.concat(...normal);
+		});
+		// Copy from temp
+		this.bufferNormals.set(bufferNormalsTmp);
+		this.attributes.aVertexNormal.update(this.bufferNormals);
 	}
 
 	dispose() {

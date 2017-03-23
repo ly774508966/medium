@@ -21,7 +21,7 @@ import PerspectiveCamera from './PerspectiveCamera';
 import OrthorgraphicCamera from './OrthographicCamera';
 const config = require('../../package.json');
 
-let gl: WebGLRenderingContext;
+let gl: WebGL2RenderingContext | WebGLRenderingContext;
 
 interface Options {
 	width?: number;
@@ -69,12 +69,14 @@ export default class Renderer {
 			let contextType;
 			if (detect.webgl2 && this.prefferedContext === WEBGL2_CONTEXT) {
 				contextType = WEBGL2_CONTEXT;
-				gl = this.canvas.getContext('webgl2', attributes);
+				const _gl = <WebGL2RenderingContext> this.canvas.getContext('webgl2', attributes);
+				GL.set(_gl, contextType);
 			} else {
 				contextType = WEBGL_CONTEXT;
-				gl = this.canvas.getContext('webgl', attributes) || this.canvas.getContext('experimental-webgl');
+				const _gl = <WebGLRenderingContext> this.canvas.getContext('webgl', attributes)
+				|| <WebGLRenderingContext> this.canvas.getContext('experimental-webgl', attributes);
+				GL.set(_gl, contextType);
 			}
-			GL.set(gl, contextType);
 		} else {
 			warn('Webgl not supported');
 			return;
@@ -122,7 +124,7 @@ export default class Renderer {
 	}
 
 	_drawObjects(scene: Scene, projectionMatrix: mat4, modelViewMatrix: mat4, camera?: PerspectiveCamera | OrthorgraphicCamera) {
-		if (GL.webgl2) {
+		if (gl instanceof WebGL2RenderingContext) {
 			// Update global uniform buffers
 			UniformBuffers.updateProjectionView(gl, projectionMatrix, modelViewMatrix);
 		}
