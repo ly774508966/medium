@@ -1,54 +1,55 @@
 {
-	"name": "ixviii.medium",
-	"version": "0.1.0",
-	"description": "Personal webgl toolkit.",
-	"main": "lib/ixviii.medium.js",
-	"scripts": {
-		"start": "concurrently 'npm run server' 'npm run examples:js' 'npm run examples:html'",
-		"server": "live-server ./examples --port 3000 --quiet --watch ./examples --watch ./src --wait 0",
-		"examples:js": "webpack --config webpack.config.examples.js --colors --watch",
-		"examples:html": "npm run examples:files; pug --obj ./examples/files.json --watch ./examples/src/templates/*.pug --out ./examples",
-		"examples:files": "pug --obj ./examples/files.json ./examples/src/templates/*.pug --out ./examples; node ./examples/files",
-		"build": "npm run lint; webpack --config webpack.config.build.js --colors",
-		"prepublish": "npm run build",
-		"lint": "tslint ./src/**/*.ts",
-		"docs": "typedoc --target es6 --tsconfig ./tsconfig.json --ignoreCompilerErrors --theme default --name Medium --out ./docs ./src"
-	},
-	"pre-push": [
-		"lint"
-	],
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/ixviii/medium.git"
-	},
-	"author": "Amelie Rosser <mail@ixviii.co.uk> (https://www.ixviii.io)",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/ixviii/medium/issues"
-	},
-	"homepage": "https://github.com/ixviii/medium",
-	"devDependencies": {
-		"babel-cli": "^6.6.5",
-		"babel-loader": "^6.2.4",
-		"babel-preset-es2015": "^6.6.0",
-		"babel-preset-stage-0": "^6.16.0",
-		"concurrently": "^3.1.0",
-		"dat-gui": "^0.5.0",
-		"json-loader": "^0.5.4",
-		"live-server": "^1.2.0",
-		"pre-push": "^0.1.1",
-		"pug-cli": "^1.0.0-alpha6",
-		"query-string": "^4.3.1",
-		"ts-loader": "^2.0.1",
-		"tslint": "^4.5.1",
-		"typedoc": "^0.5.7",
-		"typescript": "^2.2.1",
-		"webpack": "^2.2.1"
-	},
-	"dependencies": {
-		"gl-matrix": "^2.3.2",
-		"happens": "^0.6.0",
-		"parse-hdr": "^1.0.0",
-		"webgl-obj-loader": "^0.1.1"
-	}
+  "name": "ixviii.medium",
+  "version": "0.1.0",
+  "description": "Personal webgl toolkit.",
+  "main": "lib/ixviii.medium.js",
+  "scripts": {
+    "start": "concurrently 'npm run server' 'npm run examples:js' 'npm run examples:html'",
+    "server": "live-server ./examples --port 3000 --quiet --watch ./examples --watch ./src --wait 0",
+    "examples:js": "webpack --config webpack.config.examples.js --colors --watch",
+    "examples:html": "npm run examples:files; pug --obj ./examples/files.json --watch ./examples/src/templates/*.pug --out ./examples",
+    "examples:files": "pug --obj ./examples/files.json ./examples/src/templates/*.pug --out ./examples; node ./examples/files",
+    "build": "npm run lint; webpack --config webpack.config.build.js --colors",
+    "prepublish": "npm run build",
+    "lint": "tslint ./src/**/*.ts",
+    "docs": "typedoc --target es6 --tsconfig ./tsconfig.json --ignoreCompilerErrors --theme default --name Medium --out ./docs ./src"
+  },
+  "pre-push": [
+    "lint"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ixviii/medium.git"
+  },
+  "author": "Amelie Rosser <mail@ixviii.co.uk> (https://www.ixviii.io)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ixviii/medium/issues"
+  },
+  "homepage": "https://github.com/ixviii/medium",
+  "devDependencies": {
+    "@types/webgl2": "0.0.0",
+    "babel-cli": "^6.6.5",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "concurrently": "^3.1.0",
+    "dat-gui": "^0.5.0",
+    "json-loader": "^0.5.4",
+    "live-server": "^1.2.0",
+    "pre-push": "^0.1.1",
+    "pug-cli": "^1.0.0-alpha6",
+    "query-string": "^4.3.1",
+    "ts-loader": "^2.0.1",
+    "tslint": "^4.5.1",
+    "typedoc": "^0.5.7",
+    "typescript": "^2.2.1",
+    "webpack": "^2.2.1"
+  },
+  "dependencies": {
+    "gl-matrix": "^2.3.2",
+    "happens": "^0.6.0",
+    "parse-hdr": "^1.0.0",
+    "webgl-obj-loader": "^0.1.1"
+  }
 }
