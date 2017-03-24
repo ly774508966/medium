@@ -193,27 +193,6 @@ export default class Shader {
 		});
 	}
 
-	_processSyntax(chunk: string) {
-		// Convert es300 to es100
-		if (GL.webgl2) {
-			return chunk;
-		}
-
-		const rules = [
-			// Vertex
-
-			// Frag
-			{ match: 'outgoingColor', replace: 'gl_FragColor' },
-			{ match: 'texture', replace: 'texture2D' },
-		];
-
-		rules.forEach(rule => {
-			chunk = chunk.replace(`/${rule.match}/g`, rule.replace);
-		});
-
-		return chunk;
-	}
-
 	_processShader(shader: string, type: string, geometry: Geometry) {
 		gl = GL.get();
 		let defines = '';
