@@ -48,9 +48,9 @@ const material = new Shader({
 		uniform sampler2D uTexture1;
 		uniform float uMix;
 	`,
-	hookFragmentMain: GL.webgl2 ?
-	'color = mix(texture(uTexture0, vUv).rgb, texture(uTexture1, vUv).rgb, uMix);' :
-	'color = mix(texture2D(uTexture0, vUv).rgb, texture2D(uTexture1, vUv).rgb, uMix);',
+	hookFragmentMain: `
+		color = mix(texture(uTexture0, vUv).rgb, texture(uTexture1, vUv).rgb, uMix);
+	`,
 	uniforms: {
 		uMix: {
 			type: 'f',

@@ -64,7 +64,7 @@ scene.directionalLights = directionalLights;
 
 const sierpinski = new Sierpinski();
 
-const positions = sierpinski.generate(40, 2, 5, jerusalem);
+const positions = sierpinski.generate(40, 1, 5, jerusalem);
 
 const totalInstances = positions.length;
 const data = new Float32Array(totalInstances * 3);
@@ -98,23 +98,15 @@ const mesh = new Mesh(geometry, new Shader({
 		},
 		uFogDensity: {
 			type: 'f',
-			// value: 0.054,
 			value: 0.027,
 		},
 	},
-	hookVertexPre: GL.webgl2 ? `
+	hookVertexPre: `
 		in vec3 aOffset;
 		uniform float uFogStart;
 		uniform float uFogEnd;
 		uniform float uFogDensity;
 		out float vFogAmount;
-		${ShaderChunks.Fog.exp2}
-	` : `
-		attribute vec3 aOffset;
-		uniform float uFogStart;
-		uniform float uFogEnd;
-		uniform float uFogDensity;
-		varying float vFogAmount;
 		${ShaderChunks.Fog.exp2}
 	`,
 	hookVertexMain: `
@@ -124,15 +116,12 @@ const mesh = new Mesh(geometry, new Shader({
 		float fogDistance = length(gl_Position.xyz);
 		vFogAmount = fogExp2(fogDistance, uFogDensity);
 	`,
-	hookFragmentPre: GL.webgl2 ?
-		'in float vFogAmount;' :
-		'varying float vFogAmount;',
-	hookFragmentEnd: GL.webgl2 ? `
+	hookFragmentPre: `
+		in float vFogAmount;
+	`,
+	hookFragmentEnd: `
 		vec3 fogColor = vec3(0.0);
-		outputColor = vec4(mix(color, fogColor, vFogAmount), 1.0);
-	` : `
-		vec3 fogColor = vec3(0.0);
-		gl_FragColor = vec4(mix(color, fogColor, vFogAmount), 1.0);
+		outgoingColor = vec4(mix(color, fogColor, vFogAmount), 1.0);
 	`,
 	directionalLights,
 }));

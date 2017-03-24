@@ -74,9 +74,9 @@ const material = new Shader({
 			color = vec3(1.0);
 		}
 	`,
-	hookFragmentEnd: GL.webgl2 ?
-	'outputColor = vec4(color, 1.0);' :
-	'gl_FragColor = vec4(color, 1.0);',
+	hookFragmentEnd: `
+		outgoingColor = vec4(color, 1.0);
+	`,
 	uniforms: {
 		uDiffuse: {
 			type: '3f',

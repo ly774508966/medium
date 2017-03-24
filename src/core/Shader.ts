@@ -13,6 +13,7 @@ import {
 	fragmentShaderEs300,
 	fragmentShaderEs100,
 } from '../shaders/basic/Frag.glsl';
+import ShaderParser from '../utils/ShaderParser';
 import Color from '../math/Color';
 import {
 	capabilities,
@@ -90,8 +91,8 @@ export default class Shader {
 	create(geometry: Geometry, transformFeedbackVaryings?: Array<string>) {
 		gl = GL.get();
 
-		this.vertexShader = this._processShader(this.vertexShader, geometry);
-		this.fragmentShader = this._processShader(this.fragmentShader, geometry);
+		this.vertexShader = this._processShader(this.vertexShader, 'vertex', geometry);
+		this.fragmentShader = this._processShader(this.fragmentShader, 'fragment', geometry);
 
 		this.program.link(this.vertexShader, this.fragmentShader, transformFeedbackVaryings);
 
@@ -192,7 +193,28 @@ export default class Shader {
 		});
 	}
 
-	_processShader(shader: string, geometry: Geometry) {
+	_processSyntax(chunk: string) {
+		// Convert es300 to es100
+		if (GL.webgl2) {
+			return chunk;
+		}
+
+		const rules = [
+			// Vertex
+
+			// Frag
+			{ match: 'outgoingColor', replace: 'gl_FragColor' },
+			{ match: 'texture', replace: 'texture2D' },
+		];
+
+		rules.forEach(rule => {
+			chunk = chunk.replace(`/${rule.match}/g`, rule.replace);
+		});
+
+		return chunk;
+	}
+
+	_processShader(shader: string, type: string, geometry: Geometry) {
 		gl = GL.get();
 		let defines = '';
 
@@ -240,7 +262,7 @@ export default class Shader {
 			shader = shader.replace(/#HOOK_DIRECTIONAL_LIGHTS/g, String(this.directionalLights.length));
 		}
 
-		return shader;
+		return ShaderParser(shader, type);
 	}
 
 	setUniforms(modelViewMatrix: mat4, projectionMatrix: mat4, modelMatrix: mat4, camera?: PerspectiveCamera | OrthographicCamera) {
@@ -307,87 +329,87 @@ export default class Shader {
 				case 'i':
 					{
 						gl.uniform1i(uniform.location,
-																			uniform.value);
+							uniform.value);
 						break;
 					}
 				case 'f':
 					{
 						gl.uniform1f(uniform.location,
-																			uniform.value);
+							uniform.value);
 						break;
 					}
 				case '2f':
 					{
 						gl.uniform2f(uniform.location,
-																			uniform.value[0],
-																			uniform.value[1]);
+							uniform.value[0],
+							uniform.value[1]);
 						break;
 					}
 				case '3f':
 					{
 						gl.uniform3f(uniform.location,
-																			uniform.value[0],
-																			uniform.value[1],
-																			uniform.value[2]);
+							uniform.value[0],
+							uniform.value[1],
+							uniform.value[2]);
 						break;
 					}
 				case '4f':
 					{
 						gl.uniform4f(uniform.location,
-																			uniform.value[0],
-																			uniform.value[1],
-																			uniform.value[2],
-																			uniform.value[3]);
+							uniform.value[0],
+							uniform.value[1],
+							uniform.value[2],
+							uniform.value[3]);
 						break;
 					}
 				case '1iv':
 					{
 						gl.uniform1iv(uniform.location,
-																				uniform.value);
+							uniform.value);
 						break;
 					}
 				case '2iv':
 					{
 						gl.uniform2iv(uniform.location,
-																				uniform.value);
+							uniform.value);
 						break;
 					}
 				case '1fv':
 					{
 						gl.uniform1fv(uniform.location,
-																				uniform.value);
+							uniform.value);
 						break;
 					}
 				case '2fv':
 					{
 						gl.uniform2fv(uniform.location,
-																				uniform.value);
+							uniform.value);
 						break;
 					}
 				case '3fv':
 					{
 						gl.uniform3fv(uniform.location,
-																				uniform.value);
+							uniform.value);
 						break;
 					}
 				case '4fv':
 					{
 						gl.uniform4fv(uniform.location,
-																				uniform.value);
+							uniform.value);
 						break;
 					}
 				case 'Matrix3fv':
 					{
 						gl.uniformMatrix3fv(uniform.location,
-																										false,
-																										uniform.value);
+							false,
+							uniform.value);
 						break;
 					}
 				case 'Matrix4fv':
 					{
 						gl.uniformMatrix4fv(uniform.location,
-																										false,
-																										uniform.value);
+							false,
+							uniform.value);
 						break;
 					}
 				default:
@@ -423,9 +445,9 @@ export default class Shader {
 
 		// uDiffuse
 		gl.uniform3f(this.uniforms.uDiffuse.location,
-															this.uniforms.uDiffuse.value[0],
-															this.uniforms.uDiffuse.value[1],
-															this.uniforms.uDiffuse.value[2]);
+			this.uniforms.uDiffuse.value[0],
+			this.uniforms.uDiffuse.value[1],
+			this.uniforms.uDiffuse.value[2]);
 
 		// Camera
 		if (camera && this.uniforms.uCameraPosition) {

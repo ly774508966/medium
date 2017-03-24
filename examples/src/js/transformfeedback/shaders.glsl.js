@@ -18,10 +18,10 @@ export default {
 			#HOOK_PRECISION
 			#HOOK_DEFINES
 
-			out vec4 outputColor;
+			out vec4 outgoingColor;
 
 			void main() {
-				outputColor = vec4(1.0);
+				outgoingColor = vec4(1.0);
 			}
 		`,
 	},
@@ -47,7 +47,7 @@ export default {
 			if(length(gl_PointCoord - 0.5) > 0.5) {
 				discard;
 			}
-			outputColor = vec4(vColor, 1);
+			outgoingColor = vec4(vColor, 1);
 		`,
 	}
 }

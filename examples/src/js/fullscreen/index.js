@@ -30,9 +30,7 @@ camera.lookAt();
 const geometry = new PlaneGeometry(2, 2);
 const material = new Shader({
 	name: 'Plane',
-	hookFragmentEnd: GL.webgl2 ?
-	'outputColor = vec4(vUv, 1.0, 1.0);' :
-	'gl_FragColor = vec4(vUv, 1.0, 1.0);',
+	hookFragmentEnd: 'outgoingColor = vec4(vUv, 1.0, 1.0);'
 });
 
 const plane = new Mesh(geometry, material);

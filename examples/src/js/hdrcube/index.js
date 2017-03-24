@@ -74,7 +74,7 @@ function skybox() {
 			${ShaderChunks.Tonemap.tonemapReinhard}
 			${ShaderChunks.Gamma}
 		`,
-		hookFragmentEnd: GL.webgl2 ? `
+		hookFragmentEnd: `
 			color = texture(uEnvironment, envMapCube(vPosition)).rgb;
 			color *= uExposure;
 
@@ -84,18 +84,7 @@ function skybox() {
 			// gamma correction
 			color	= toGamma(color);
 
-			outputColor = vec4(color, 1.0);
-		` : `
-			color = textureCube(uEnvironment, envMapCube(vPosition)).rgb;
-			color *= uExposure;
-
-			// white balance
-			color	= tonemapReinhard(color);
-
-			// gamma correction
-			color	= toGamma(color);
-
-			gl_FragColor = vec4(color, 1.0);
+			outgoingColor = vec4(color, 1.0);
 		`,
 		uniforms: {
 			uEnvironment: {
@@ -173,7 +162,7 @@ function reflectiveObjects() {
 			// gamma correction
 			color	= toGamma(color);
 
-			outputColor = vec4(color, 1.0);
+			outgoingColor = vec4(color, 1.0);
 		` : `
 			color = textureCube(uEnvironment, envMapCube(vReflect)).rgb;
 			color *= uExposure;

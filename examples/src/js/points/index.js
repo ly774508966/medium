@@ -70,18 +70,11 @@ const hookVertexEndEs100 = `
 	gl_Position = mvPosition;
 `;
 
-const hookFragmentEndEs300 = `
+const hookFragmentEnd = `
 	if(length(gl_PointCoord - 0.5) > 0.5) {
 		discard;
 	}
-	outputColor = vec4(1.0);
-`;
-
-const hookFragmentEndEs100 = `
-	if(length(gl_PointCoord - 0.5) > 0.5) {
-		discard;
-	}
-	gl_FragColor = vec4(1.0);
+	outgoingColor = vec4(1.0);
 `;
 
 const shader = new Shader({
@@ -89,7 +82,7 @@ const shader = new Shader({
 		uniform float uSize;
 	`,
 	hookVertexEnd: GL.webgl2 ? hookVertexEndEs300 : hookVertexEndEs100,
-	hookFragmentEnd: GL.webgl2 ? hookFragmentEndEs300 : hookFragmentEndEs100,
+	hookFragmentEnd,
 	uniforms: {
 		uSize: {
 			type: 'f',

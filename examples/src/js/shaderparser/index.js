@@ -1,17 +1,17 @@
 import {
-	GL,
 	Renderer,
 	Scene,
 	PerspectiveCamera,
-	Mesh,
-	Shader,
-	PlaneGeometry,
 	GridHelper,
 	OrbitControls,
 	AxisHelper,
 	Texture,
+	BoxGeometry,
+	Shader,
+	Mesh,
+	TextureCube,
 } from '../../../../src/index';
-const { gui, guiController } = require('../gui')(['webgl2']);
+const { guiController } = require('../gui')();
 
 // Renderer
 const renderer = new Renderer({
@@ -27,54 +27,65 @@ const scene = new Scene();
 // Camera
 const camera = new PerspectiveCamera({
 	fov: 45,
+	far: 500,
 });
 
 camera.position.set(10, 5, 10);
 camera.lookAt();
-
-// Objects
-const texture0 = new Texture({
-	src: '/assets/textures/cube/pisa-hdr/nx.hdr',
-});
-
-const geometry = new PlaneGeometry(1, 1);
-const material = new Shader({
-	name: 'Plane',
-	hookFragmentPre: `
-		uniform sampler2D uTexture0;
-		uniform float uMix;
-	`,
-	hookFragmentMain: `
-		color = texture(uTexture0, vUv).rgb;
-	`,
-	uniforms: {
-		uMix: {
-			type: 'f',
-			value: 0.5,
-		},
-		uTexture0: {
-			type: 't',
-			value: texture0.texture,
-			textureIndex: 0,
-		},
-	},
-});
-
-const plane = new Mesh(geometry, material);
-scene.add(plane);
-
-gui.add(plane.shader.uniforms.uMix, 'value', 0, 1);
 
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas);
 
 const grid = new GridHelper(10);
 scene.add(grid);
-//
+
 const axis = new AxisHelper(1);
 scene.add(axis);
 
 controls.update();
+
+
+const texture = new Texture({
+	src: '/assets/textures/texture.jpg',
+});
+
+const textureCube = new TextureCube({
+	src: [
+		'/assets/textures/cube/blackice/px.jpg',
+		'/assets/textures/cube/blackice/nx.jpg',
+		'/assets/textures/cube/blackice/py.jpg',
+		'/assets/textures/cube/blackice/ny.jpg',
+		'/assets/textures/cube/blackice/pz.jpg',
+		'/assets/textures/cube/blackice/nz.jpg',
+	],
+});
+
+const geometry = new BoxGeometry();
+const material = new Shader({
+	name: 'Box',
+	hookFragmentPre: `
+		uniform sampler2D uTexture0;
+		uniform samplerCube uTexture1;
+	`,
+	hookFragmentMain: `
+		color = texture(uTexture0, vUv).rgb;
+		color += texture(uTexture1, vec3(0.0)).rgb;
+	`,
+	uniforms: {
+		uTexture0: {
+			type: 't',
+			value: texture.texture,
+			textureIndex: 0,
+		},
+		uTexture1: {
+			type: 'tc',
+			value: textureCube.texture,
+			textureIndex: 1,
+		},
+	},
+});
+const box = new Mesh(geometry, material);
+scene.add(box);
 
 function resize() {
 	const width = window.innerWidth;
