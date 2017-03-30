@@ -63,14 +63,12 @@ new ObjLoader('assets/models/mass.obj').then(objGeometry => {
 		objGeometry.indices, objGeometry.vertexNormals);
 
 	const material = new Shader({
-		hookFragmentPre: GL.webgl2 ? `
-			uniform samplerCube uTexture0;
-		` : `
+		hookFragmentPre: `
 			uniform samplerCube uTexture0;
 		`,
-		hookFragmentMain: GL.webgl2 ?
-		'color = texture(uTexture0, vNormal).rgb;' :
-		'color = textureCube(uTexture0, vNormal).rgb;',
+		hookFragmentMain: `
+			color = texture(uTexture0, vNormal).rgb;
+		`,
 		uniforms: {
 			uTexture0: {
 				type: 'tc',

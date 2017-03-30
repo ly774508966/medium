@@ -29,7 +29,7 @@ const fragmentShaderEs300 = `${EsVersion}
 	${pointLightsInEs300}
 	#endif
 
-	out vec4 outputColor;
+	out vec4 outgoingColor;
 
 	${whenGreaterThan}
 
@@ -67,7 +67,7 @@ const fragmentShaderEs300 = `${EsVersion}
 		}
 		#endif
 
-		outputColor = vec4(color.rgb, 1.0);
+		outgoingColor = vec4(color.rgb, 1.0);
 
 		#HOOK_FRAGMENT_END
 	}

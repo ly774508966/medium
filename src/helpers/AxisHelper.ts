@@ -45,10 +45,10 @@ function fragmentShaderEs300() {
 	return `${EsVersion}
 	precision ${capabilities.precision} float;
 	in vec3 vColor;
-	out vec4 outputColor;
+	out vec4 outgoingColor;
 
 	void main(void){
-		outputColor = vec4(vColor, 1.0);
+		outgoingColor = vec4(vColor, 1.0);
 	}
 	`;
 }

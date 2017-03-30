@@ -71,32 +71,19 @@ const material = new Shader({
 			value: 0,
 		},
 	},
-	fragmentShader: GL.webgl2 ? `${ShaderChunks.EsVersion}
+	fragmentShader: `${ShaderChunks.EsVersion}
 		#HOOK_PRECISION
 		in vec2 vUv;
 		uniform sampler2D uTexture0;
 		uniform float uTime;
-		out vec4 outputColor;
+		out vec4 outgoingColor;
 
 		void main(void) {
 			vec3 color = texture(uTexture0, vUv).rgb;
 			float r = sin(color.r + uTime) * 0.5 + 0.5;
 			float g = cos(color.g + uTime) * 0.5 + 0.5;
 			float b = sin(color.b + uTime) * 0.5 + 0.5;
-			outputColor = vec4(r, g, b, 1.0);
-		}
-	` : `
-		#HOOK_PRECISION
-		varying vec2 vUv;
-		uniform sampler2D uTexture0;
-		uniform float uTime;
-
-		void main(void) {
-			vec3 color = texture2D(uTexture0, vUv).rgb;
-			float r = sin(color.r + uTime) * 0.5 + 0.5;
-			float g = cos(color.g + uTime) * 0.5 + 0.5;
-			float b = sin(color.b + uTime) * 0.5 + 0.5;
-			gl_FragColor = vec4(r, g, b, 1.0);
+			outgoingColor = vec4(r, g, b, 1.0);
 		}
 	`,
 });

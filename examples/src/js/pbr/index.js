@@ -116,7 +116,7 @@ function skybox() {
 			// gamma correction
 			color	= toGamma(color);
 
-			outputColor = vec4(color, 1.0);
+			outgoingColor = vec4(color, 1.0);
 		` : `
 			color = textureCube(uEnvironment, envMapCube(vPosition)).rgb;
 			color *= uExposure;

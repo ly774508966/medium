@@ -39,10 +39,10 @@ const vertexShaderEs100 = `
 function fragmentShaderEs300() {
 	return `${EsVersion}
 	precision ${capabilities.precision} float;
-	out vec4 outputColor;
+	out vec4 outgoingColor;
 
 	void main(void){
-		outputColor = vec4(vec3(0.5), 1.0);
+		outgoingColor = vec4(vec3(0.5), 1.0);
 	}
 	`;
 }

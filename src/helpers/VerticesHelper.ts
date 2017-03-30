@@ -45,13 +45,13 @@ function fragmentShaderEs300() {
 	return `${EsVersion}
 	precision ${capabilities.precision} float;
 	uniform vec3 uColor;
-	out vec4 outputColor;
+	out vec4 outgoingColor;
 
 	void main(void){
 		if(length(gl_PointCoord - 0.5) > 0.5) {
 			discard;
 		}
-		outputColor = vec4(uColor, 1.0);
+		outgoingColor = vec4(uColor, 1.0);
 	}
 	`;
 }

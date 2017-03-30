@@ -54,9 +54,9 @@ function addBox() {
 		hookFragmentPre: `
 			uniform sampler2D uTexture0;
 		`,
-		hookFragmentMain: GL.webgl2 ?
-			'color = texture(uTexture0, vUv).rgb;' :
-			'color = texture2D(uTexture0, vUv).rgb;',
+		hookFragmentMain: `
+			color = texture(uTexture0, vUv).rgb;
+		`,
 		uniforms: {
 			uTexture0: {
 				type: 't',
