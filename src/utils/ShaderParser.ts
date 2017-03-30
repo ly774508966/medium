@@ -1,4 +1,5 @@
 import * as GL from '../core/GL';
+import EsVersion from '../shaders/chunks/EsVersion.glsl';
 
 const WORD_REGX = (word) => {
 	return new RegExp(`\\b${word}\\b`, 'gi');
@@ -30,10 +31,7 @@ const FRAGMENT = [
 		replace: 'gl_FragColor',
 	}, {
 		match: WORD_REGX('texture'),
-		replace: function(shader) {
-
-			console.log('shader', shader);
-
+		replace: function(shader: any): string {
 			// Find all texture defintions
 			const textureGlobalRegx = new RegExp('\\btexture\\b', 'gi');
 
@@ -77,7 +75,12 @@ const FRAGMENT = [
 		},
 	},
 ];
-const GENERIC = [];
+const GENERIC = [
+	{
+		match: LINE_REGX(EsVersion),
+		replace: '',
+	},
+];
 
 const VERTEX_RULES = [
 	...GENERIC,
@@ -102,15 +105,10 @@ export default function parse(shader: string, shaderType: string) {
 		: FRAGMENT_RULES;
 
 	rules.forEach(rule => {
-		console.log(rule);
-		switch (typeof rule.with) {
-			case 'function': {
-				shader = rule.replace(shader);
-				break;
-			}
-			default: {
-				shader = shader.replace(rule.match, rule.replace);
-			}
+		if (typeof rule.replace === 'function') {
+			shader = rule.replace(shader);
+		} else {
+			shader = shader.replace(rule.match, rule.replace);
 		}
 	});
 

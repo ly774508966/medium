@@ -76,10 +76,10 @@ function addBox() {
 	console.log('boxes', count);
 }
 
-// setInterval(() => {
-// 	removeBox();
-// 	addBox();
-// }, 1000);
+setInterval(() => {
+	removeBox();
+	addBox();
+}, 1000);
 
 addBox();
 

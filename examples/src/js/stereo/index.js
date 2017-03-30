@@ -126,7 +126,7 @@ const mesh = new Mesh(geometry, new Shader({
 		vFogAmount = fogExp2(fogDistance, uFogDensity);
 	`,
 	hookFragmentPre: `
-		'in float vFogAmount;
+		in float vFogAmount;
 	`,
 	hookFragmentEnd: `
 		vec3 fogColor = vec3(0.0);

@@ -67,7 +67,7 @@ new ObjLoader('assets/models/mass.obj').then(objGeometry => {
 			uniform samplerCube uTexture0;
 		`,
 		hookFragmentMain: `
-			color = texture(uTexture0, vNormal).rgb;'
+			color = texture(uTexture0, vNormal).rgb;
 		`,
 		uniforms: {
 			uTexture0: {
