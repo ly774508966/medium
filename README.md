@@ -1,20 +1,7 @@
 # Medium
 
-[![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
-
 Progressive WebGL toolkit for art.
 
-# Shaders
-
-Shaders are created in javascript files for dynamic variable interpolation.
-
-For syntax highlighting in the [Atom Editor](https://atom.io) install the following packages:
-
-`apm install language-glsl file-types`
-
-Then add the following to your atom config:
-
-```
-"file-types":
-  "glsl.js": "source.glsl"
-```
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Status](https://david-dm.org/amelierosser/medium.svg)](https://david-dm.org/amelierosser/medium)
+[![devDependency Status](https://david-dm.org/amelierosser/medium/dev-status.svg)](https://david-dm.org/amelierosser/medium#info=devDependencies)
