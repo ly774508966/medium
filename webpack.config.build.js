@@ -3,7 +3,7 @@ const fs = require('fs');
 module.exports = {
 	entry: './src/index.ts',
 	output: {
-		path: './lib',
+		path: __dirname + '/lib',
 		filename: 'ixviii.medium.js',
 		libraryTarget: 'commonjs2',
 	},

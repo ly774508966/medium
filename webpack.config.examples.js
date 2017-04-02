@@ -25,7 +25,7 @@ module.exports = {
 	entry: entries,
 	devtool: 'source-map',
 	output: {
-		path: './examples/js',
+		path: __dirname + '/examples/js',
 		filename: '[name].js',
 	},
 	resolve: {
