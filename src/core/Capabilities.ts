@@ -1,5 +1,3 @@
-declare const OESTextureFloat: any;
-
 import * as GL from './GL';
 import {
 	PRECISION,
