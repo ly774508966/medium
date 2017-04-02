@@ -1,10 +1,12 @@
 const fs = require('fs');
+const webpack = require('webpack');
+const production = process.env.NODE_ENV === 'production';
 
 module.exports = {
 	entry: './src/index.ts',
 	output: {
 		path: __dirname + '/lib',
-		filename: 'ixviii.medium.js',
+		filename: production ? 'ixviii.medium.min.js' : 'ixviii.medium.js',
 		libraryTarget: 'commonjs2',
 	},
 	resolve: {
@@ -27,5 +29,14 @@ module.exports = {
 			loader: 'json-loader',
 		}],
 	},
-	stats: 'minimal'
+	stats: 'minimal',
+	plugins: production ? [
+		new webpack.optimize.OccurrenceOrderPlugin(),
+		new webpack.optimize.UglifyJsPlugin({
+			compress: {
+				screw_ie8: true,
+				warnings: false
+			}
+		}),
+	] : [],
 };

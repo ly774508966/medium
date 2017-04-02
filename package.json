@@ -9,7 +9,7 @@
     "examples:js": "webpack --config webpack.config.examples.js --colors --watch",
     "examples:html": "npm run examples:files; pug --obj ./examples/files.json --watch ./examples/src/templates/*.pug --out ./examples",
     "examples:files": "pug --obj ./examples/files.json ./examples/src/templates/*.pug --out ./examples; node ./examples/files",
-    "build": "npm run lint; webpack --config webpack.config.build.js --colors",
+    "build": "npm run lint; webpack --config webpack.config.build.js --colors; NODE_ENV=production webpack --config webpack.config.build.js --colors",
     "prepublish": "npm run build",
     "lint": "tslint ./src/**/*.ts",
     "docs": "typedoc --target es6 --tsconfig ./tsconfig.json --ignoreCompilerErrors --theme default --name Medium --out ./docs ./src"
@@ -41,7 +41,7 @@
     "pug-cli": "^1.0.0-alpha6",
     "query-string": "^4.3.1",
     "ts-loader": "^2.0.1",
-    "tslint": "^4.5.1",
+    "tslint": "^5.0.0",
     "typedoc": "^0.5.7",
     "typescript": "^2.2.1",
     "webpack": "^2.2.1"
