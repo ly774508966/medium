@@ -7,6 +7,7 @@ let gl: WebGL2RenderingContext | WebGLRenderingContext;
 
 export default class Program {
 	program: WebGLProgram;
+	created: boolean;
 	uniformBlocks: object;
 	attributeLocations: object;
 	compiledVertexShader: string;
@@ -15,6 +16,7 @@ export default class Program {
 	constructor() {
 		gl = GL.get();
 		this.program = gl.createProgram();
+		this.created = false;
 
 		// Uniform blocks
 		this.uniformBlocks = {};
@@ -47,6 +49,8 @@ export default class Program {
 			const info = gl.getProgramInfoLog(this.program);
 			warn('Failed to initialise shaders', info);
 		}
+
+		this.created = true;
 	}
 
 	compile(type: string, source: string) {

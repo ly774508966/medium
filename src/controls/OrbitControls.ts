@@ -27,7 +27,7 @@ export default class OrbitControls {
 	_offsetY: number;
 	_offsetPanX: number;
 	_offsetPanY: number;
-	_target: Vector3;
+	target: Vector3;
 	_targetOffset: Vector3;
 	_direction: Vector3;
 	_lastZoomDistance: number;
@@ -56,7 +56,7 @@ export default class OrbitControls {
 		this._offsetY = 0;
 		this._offsetPanX = 0;
 		this._offsetPanY = 0;
-		this._target = new Vector3();
+		this.target = new Vector3();
 		this._targetOffset = new Vector3();
 		this._direction = new Vector3();
 		this._lastZoomDistance = 0;
@@ -92,8 +92,8 @@ export default class OrbitControls {
 				}
 				default: {
 					this._mode = MODE_PAN;
-					this._offsetY = this._target.y;
-					this._offsetX = this._target.x;
+					this._offsetY = this.target.y;
+					this._offsetX = this.target.x;
 				}
 			}
 		} else {
@@ -101,8 +101,8 @@ export default class OrbitControls {
 			switch (event.which) {
 				case 3:
 					this._mode = MODE_PAN;
-					this._offsetY = this._target.y;
-					this._offsetX = this._target.x;
+					this._offsetY = this.target.y;
+					this._offsetX = this.target.x;
 					break;
 				default: {
 					this._mode = MODE_DRAG;
@@ -114,7 +114,7 @@ export default class OrbitControls {
 
 		this._startY = event.pageX / this._width;
 		this._startX = event.pageY / this._height;
-		this._targetOffset.copy(this._target);
+		this._targetOffset.copy(this.target);
 		this._radiusOffset = this._radius;
 		this.isDown = true;
 	}
@@ -125,12 +125,12 @@ export default class OrbitControls {
 				case MODE_PAN: {
 					const y = event.pageX / this._width;
 					const x = event.pageY / this._height;
-					this._direction.copy(this._camera.position).subtract(this._target).normalize();
+					this._direction.copy(this._camera.position).subtract(this.target).normalize();
 					const cross = this._direction.cross(UP);
 					const tx = this._targetOffset.x + -(this._startY - y) * this.panSpeed * cross.x;
 					const ty = this._targetOffset.y + -(this._startX - x) * this.panSpeed;
 					const tz = this._targetOffset.z + -(this._startY - y) * this.panSpeed * cross.z;
-					this._target.set(tx, ty, tz);
+					this.target.set(tx, ty, tz);
 					break;
 				}
 				case MODE_ZOOM: {
@@ -178,8 +178,8 @@ export default class OrbitControls {
 		const r = this._radius * Math.cos(this._rotationX); // radius of the sphere
 		const x = Math.sin(this._rotationY) * r;
 		const z = Math.cos(this._rotationY) * r;
-		this._camera.position.set(x, y, z).add(this._target);
-		this._camera.lookAt(this._target.x, this._target.y, this._target.z);
+		this._camera.position.set(x, y, z).add(this.target);
+		this._camera.lookAt(this.target.x, this.target.y, this.target.z);
 	}
 
 	_onMouseWheel = (event) => {
@@ -207,7 +207,7 @@ export default class OrbitControls {
 	}
 
 	reset() {
-		this._target.set(0, 0, 0);
+		this.target.set(0, 0, 0);
 		this._rotationY = this._defaultRotationY;
 		this._rotationX = this._defaultRotationX;
 		this._radius = this._defaultRadius;

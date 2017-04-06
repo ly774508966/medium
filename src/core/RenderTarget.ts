@@ -32,7 +32,7 @@ export default class RenderTarget {
 		gl.bindTexture(gl.TEXTURE_2D, this.texture);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-		gl.generateMipmap(gl.TEXTURE_2D);
+		// gl.generateMipmap(gl.TEXTURE_2D);
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.width, this.height, 0, gl.RGBA,
 																gl.UNSIGNED_BYTE, null);
 		const renderBuffer = gl.createRenderbuffer();

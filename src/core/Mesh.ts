@@ -28,7 +28,10 @@ export default class Mesh extends Object3D {
 		this.vao = new Vao();
 		this.visible = true;
 		this.instanceCount = 0;
-		this.shader.create(this.geometry);
+		// Allow meshes to share shaders and programs
+		if (!this.shader.program.created) {
+			this.shader.create(this.geometry);
+		}
 		this.isInstanced = false;
 
 		gl = GL.get();
