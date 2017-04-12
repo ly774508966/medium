@@ -94,6 +94,7 @@ scene2.add(plane);
 function resize() {
 	const width = window.innerWidth;
 	const height = window.innerHeight;
+	renderTarget.setSize(width, height);
 	renderer.setSize(width, height);
 }
 resize();
@@ -108,7 +109,6 @@ function update(time) {
 	plane.shader.uniforms.uTime.value = t * 0.01;
 
 	renderTarget.render(scene, cameras.dev);
-
 	renderer.render(scene2, cameras.main);
 }
 update();

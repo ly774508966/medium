@@ -8,22 +8,28 @@ import PerspectiveCamera from './PerspectiveCamera';
 import OrthographicCamera from './OrthographicCamera';
 
 let gl: WebGL2RenderingContext | WebGLRenderingContext;
-let ratio: number;
 
 interface Options {
 	width?: number;
 	height?: number;
+	ratio?: number;
+	pixelRatio?: number;
 }
 
 export default class RenderTarget {
 	width: number;
 	height: number;
+	ratio: number;
+	pixelRatio: number;
 	_frameBuffer: WebGLFramebuffer;
+	_renderBuffer: WebGLRenderbuffer;
 	texture: WebGLTexture;
 
 	constructor(options: Options) {
-		this.width = 1024;
-		this.height = 1024;
+		this.width = window.innerWidth;
+		this.height = window.innerHeight;
+		this.ratio = this.width / this.height;
+		this.pixelRatio = 1;
 		Object.assign(this, options);
 		gl = GL.get();
 		this._frameBuffer = gl.createFramebuffer();
@@ -34,17 +40,35 @@ export default class RenderTarget {
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
 		// gl.generateMipmap(gl.TEXTURE_2D);
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.width, this.height, 0, gl.RGBA,
-																gl.UNSIGNED_BYTE, null);
-		const renderBuffer = gl.createRenderbuffer();
-		gl.bindRenderbuffer(gl.RENDERBUFFER, renderBuffer);
+			gl.UNSIGNED_BYTE, null);
+		this._renderBuffer = gl.createRenderbuffer();
+		gl.bindRenderbuffer(gl.RENDERBUFFER, this._renderBuffer);
 		gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, this.width, this.height);
 		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.texture, 0);
-		gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, renderBuffer);
+		gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, this._renderBuffer);
 		gl.bindTexture(gl.TEXTURE_2D, null);
 		gl.bindRenderbuffer(gl.RENDERBUFFER, null);
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 	}
 
+	setSize(width: number, height: number) {
+		const newWidth = width * this.pixelRatio;
+		const newHeight = height * this.pixelRatio;
+
+		if (newWidth !== this.width || newHeight !== this.height) {
+			this.width = width * this.pixelRatio;
+			this.height = height * this.pixelRatio;
+			this.ratio = this.width / this.height;
+
+			gl.bindTexture(gl.TEXTURE_2D, this.texture);
+			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.width, this.height, 0, gl.RGBA,
+				gl.UNSIGNED_BYTE, null);
+			gl.bindTexture(gl.TEXTURE_2D, null);
+			gl.bindRenderbuffer(gl.RENDERBUFFER, this._renderBuffer);
+			gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, this.width, this.height);
+			gl.bindRenderbuffer(gl.RENDERBUFFER, null);
+		}
+	}
 	render(scene: Scene, camera: PerspectiveCamera | OrthographicCamera) {
 		gl = GL.get();
 
@@ -55,8 +79,7 @@ export default class RenderTarget {
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
 		if (camera.isPespectiveCamera) {
-			ratio = this.width / this.height;
-			mat4.perspective(camera.projectionMatrix, camera.fov, ratio, camera.near, camera.far);
+			mat4.perspective(camera.projectionMatrix, camera.fov, this.ratio, camera.near, camera.far);
 		} else if (camera.isOrthographicCamera) {
 			mat4.ortho(camera.projectionMatrix, -1.0, 1.0, -1.0, 1.0, camera.near, camera.far);
 		} else {
