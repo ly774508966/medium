@@ -17,6 +17,7 @@ import {
 	Color,
 	Lights,
  VerticesHelper,
+	Clock,
 } from '../../../../src/index';
 const { guiController } = require('../gui')();
 
@@ -27,6 +28,9 @@ const renderer = new Renderer({
 });
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
+
+// Clock
+const clock = new Clock(true);
 
 // Scene
 const scene = new Scene();
@@ -187,21 +191,23 @@ resize();
 
 window.addEventListener('resize', resize);
 
+let delta;
+const radius = 30;
 function update(time) {
 	requestAnimationFrame(update);
-	box.rotation.x += 0.01;
-	box.rotation.y += 0.01;
-	plane.rotation.x += 0.01;
-	plane.rotation.y += 0.01;
 
-	const radius = 30;
-	const t = time * 0.0005;
+	delta = clock.getDelta();
+
+	box.rotation.x += delta;
+	box.rotation.y += delta;
+	plane.rotation.x += delta;
+	plane.rotation.y += delta;
 
 	pointLights.get().forEach((light, i) => {
 		const theta = (i / pointLights.length) * Math.PI * 2;
-		const x = Math.cos(t + theta) * radius;
-		const y = Math.cos(t + theta) * radius;
-		const z = Math.sin(t + theta) * radius;
+		const x = Math.cos(delta + theta) * radius;
+		const y = Math.cos(delta + theta) * radius;
+		const z = Math.sin(delta + theta) * radius;
 		light.position.set(x, y, z);
 	});
 

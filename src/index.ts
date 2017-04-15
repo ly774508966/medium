@@ -49,6 +49,7 @@ import * as MathUtils from './math/Utils';
 import ShaderChunks from './shaders/chunks/index';
 
 // Utils
+import Clock from './utils/Clock';
 import Detect from './utils/Detect';
 
 // Controls
@@ -74,6 +75,7 @@ export {
 	TextureCube,
 	TextureVideo,
 	Vao,
+	Clock,
 	Detect,
 	WebVRVive,
 	BoxGeometry,

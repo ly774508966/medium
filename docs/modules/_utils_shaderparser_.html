@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;core/Capabilities&quot; | Medium</title>
+	<title>&quot;utils/ShaderParser&quot; | Medium</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_core_capabilities_.html">&quot;core/Capabilities&quot;</a>
+					<a href="_utils_shaderparser_.html">&quot;utils/ShaderParser&quot;</a>
 				</li>
 			</ul>
-			<h1>External module &quot;core/Capabilities&quot;</h1>
+			<h1>External module &quot;utils/ShaderParser&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -73,17 +73,19 @@
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_core_capabilities_.html#capabilities" class="tsd-kind-icon">capabilities</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_core_capabilities_.html#extensions" class="tsd-kind-icon">extensions</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_utils_shaderparser_.html#fragment" class="tsd-kind-icon">FRAGMENT</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_utils_shaderparser_.html#fragment_rules" class="tsd-kind-icon">FRAGMENT_<wbr>RULES</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_utils_shaderparser_.html#generic" class="tsd-kind-icon">GENERIC</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_utils_shaderparser_.html#vertex" class="tsd-kind-icon">VERTEX</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_utils_shaderparser_.html#vertex_rules" class="tsd-kind-icon">VERTEX_<wbr>RULES</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported"><a href="_core_capabilities_.html#capabilities-1" class="tsd-kind-icon">Capabilities</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported"><a href="_core_capabilities_.html#extensions-1" class="tsd-kind-icon">Extensions</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported"><a href="_core_capabilities_.html#getmaxprecision" class="tsd-kind-icon">get<wbr>Max<wbr>Precision</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_core_capabilities_.html#set" class="tsd-kind-icon">set</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported"><a href="_utils_shaderparser_.html#line_regx" class="tsd-kind-icon">LINE_<wbr>REGX</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported"><a href="_utils_shaderparser_.html#word_regx" class="tsd-kind-icon">WORD_<wbr>REGX</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_utils_shaderparser_.html#parse" class="tsd-kind-icon">parse</a></li>
 							</ul>
 						</section>
 					</div>
@@ -92,22 +94,52 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Variables</h2>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="capabilities" class="tsd-anchor"></a>
-					<h3>capabilities</h3>
-					<div class="tsd-signature tsd-kind-icon">capabilities<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+					<a name="fragment" class="tsd-anchor"></a>
+					<h3>FRAGMENT</h3>
+					<div class="tsd-signature tsd-kind-icon">FRAGMENT<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[{match: WORD_REGX(&#x27;in&#x27;),replace: &#x27;varying&#x27;,}, {match: LINE_REGX(&#x27;out vec4 outgoingColor;&#x27;),replace: &#x27;&#x27;,}, {match: WORD_REGX(&#x27;outgoingColor&#x27;),replace: &#x27;gl_FragColor&#x27;,}, {match: WORD_REGX(&#x27;texture&#x27;),replace: function(shader: any): string {// Find all texture defintionsconst textureGlobalRegx &#x3D; new RegExp(&#x27;\\btexture\\b&#x27;, &#x27;gi&#x27;);// Find single texture definitionconst textureSingleRegx &#x3D; new RegExp(&#x27;\\btexture\\b&#x27;, &#x27;i&#x27;);// Gets the texture call signature e.g texture(uTexture1, vUv);const textureUniformNameRegx &#x3D; new RegExp(/texture\(([^)]+)\)/, &#x27;i&#x27;);// Get all matching occurancesconst matches &#x3D; shader.match(textureGlobalRegx);let replacement &#x3D; &#x27;&#x27;;// If nothing matches returnif (matches &#x3D;&#x3D;&#x3D; null) return shader;// Replace each occurance by it&#x27;s uniform typefor (let i &#x3D; 0; i &lt; matches.length; i++) {let match &#x3D; shader.match(textureUniformNameRegx)[0];if (match) {// Extract the uniform nameconst uniformName &#x3D; match.replace(&#x27;texture(&#x27;, &#x27;&#x27;).split(&#x27;,&#x27;)[0];// Find the uniform definitionlet uniformType &#x3D; shader.match(&#x60;(.*?) ${uniformName}&#x60;, &#x27;i&#x27;)[1];uniformType &#x3D; uniformType.split(&#x27; &#x27;)[1];switch (uniformType) {case &#x27;sampler2D&#x27;: {replacement &#x3D; &#x27;texture2D&#x27;;break;}case &#x27;samplerCube&#x27;: {replacement &#x3D; &#x27;textureCube&#x27;;break;}default:}}shader &#x3D; shader.replace(textureSingleRegx, replacement);}return shader;},},]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/b834cc8/src/core/Capabilities.ts#L77">core/Capabilities.ts:77</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/b834cc8/src/utils/ShaderParser.ts#L22">utils/ShaderParser.ts:22</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="extensions" class="tsd-anchor"></a>
-					<h3>extensions</h3>
-					<div class="tsd-signature tsd-kind-icon">extensions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+					<a name="fragment_rules" class="tsd-anchor"></a>
+					<h3>FRAGMENT_<wbr>RULES</h3>
+					<div class="tsd-signature tsd-kind-icon">FRAGMENT_<wbr>RULES<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[...GENERIC,...FRAGMENT,]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/b834cc8/src/core/Capabilities.ts#L78">core/Capabilities.ts:78</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/b834cc8/src/utils/ShaderParser.ts#L90">utils/ShaderParser.ts:90</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+					<a name="generic" class="tsd-anchor"></a>
+					<h3>GENERIC</h3>
+					<div class="tsd-signature tsd-kind-icon">GENERIC<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[{match: LINE_REGX(EsVersion),replace: &#x27;&#x27;,},]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/b834cc8/src/utils/ShaderParser.ts#L78">utils/ShaderParser.ts:78</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+					<a name="vertex" class="tsd-anchor"></a>
+					<h3>VERTEX</h3>
+					<div class="tsd-signature tsd-kind-icon">VERTEX<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[{match: WORD_REGX(&#x27;in&#x27;),replace: &#x27;attribute&#x27;,},{match: WORD_REGX(&#x27;out&#x27;),replace: &#x27;varying&#x27;,},]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/b834cc8/src/utils/ShaderParser.ts#L12">utils/ShaderParser.ts:12</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+					<a name="vertex_rules" class="tsd-anchor"></a>
+					<h3>VERTEX_<wbr>RULES</h3>
+					<div class="tsd-signature tsd-kind-icon">VERTEX_<wbr>RULES<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[...GENERIC,...VERTEX,]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/b834cc8/src/utils/ShaderParser.ts#L85">utils/ShaderParser.ts:85</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -115,145 +147,79 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="capabilities-1" class="tsd-anchor"></a>
-					<h3>Capabilities</h3>
+					<a name="line_regx" class="tsd-anchor"></a>
+					<h3>LINE_<wbr>REGX</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">Capabilities<span class="tsd-signature-symbol">(</span>gl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">WebGL2RenderingContext</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">WebGLRenderingContext</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
+						<li class="tsd-signature tsd-kind-icon">LINE_<wbr>REGX<span class="tsd-signature-symbol">(</span>word<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RegExp</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/b834cc8/src/core/Capabilities.ts#L31">core/Capabilities.ts:31</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/b834cc8/src/utils/ShaderParser.ts#L8">utils/ShaderParser.ts:8</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>gl: <span class="tsd-signature-type">WebGL2RenderingContext</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">WebGLRenderingContext</span></h5>
+									<h5>word: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
-							<ul class="tsd-parameters">
-								<li class="tsd-parameter">
-									<h5>max<wbr>Attributes<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li class="tsd-parameter">
-									<h5>max<wbr>Cubemap<wbr>Size<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li class="tsd-parameter">
-									<h5>max<wbr>Fragment<wbr>Uniforms<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li class="tsd-parameter">
-									<h5>max<wbr>Precision<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"highp"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"mediump"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"lowp"</span></h5>
-								</li>
-								<li class="tsd-parameter">
-									<h5>max<wbr>Texture<wbr>Size<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li class="tsd-parameter">
-									<h5>max<wbr>Textures<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li class="tsd-parameter">
-									<h5>max<wbr>Varyings<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li class="tsd-parameter">
-									<h5>max<wbr>Vertex<wbr>Textures<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li class="tsd-parameter">
-									<h5>max<wbr>Vertex<wbr>Uniforms<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li class="tsd-parameter">
-									<h5>precision<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
-								</li>
-							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">RegExp</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="extensions-1" class="tsd-anchor"></a>
-					<h3>Extensions</h3>
+					<a name="word_regx" class="tsd-anchor"></a>
+					<h3>WORD_<wbr>REGX</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">Extensions<span class="tsd-signature-symbol">(</span>gl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">WebGL2RenderingContext</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">WebGLRenderingContext</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
+						<li class="tsd-signature tsd-kind-icon">WORD_<wbr>REGX<span class="tsd-signature-symbol">(</span>word<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RegExp</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/b834cc8/src/core/Capabilities.ts#L64">core/Capabilities.ts:64</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/b834cc8/src/utils/ShaderParser.ts#L4">utils/ShaderParser.ts:4</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>gl: <span class="tsd-signature-type">WebGL2RenderingContext</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">WebGLRenderingContext</span></h5>
+									<h5>word: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
-							<ul class="tsd-parameters">
-								<li class="tsd-parameter">
-									<h5>angle<wbr>Instanced<wbr>Arrays<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></h5>
-								</li>
-								<li class="tsd-parameter">
-									<h5>texture<wbr>Float<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></h5>
-								</li>
-								<li class="tsd-parameter">
-									<h5>vertex<wbr>Array<wbr>Object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></h5>
-								</li>
-							</ul>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="getmaxprecision" class="tsd-anchor"></a>
-					<h3>get<wbr>Max<wbr>Precision</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Max<wbr>Precision<span class="tsd-signature-symbol">(</span>gl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">WebGL2RenderingContext</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">WebGLRenderingContext</span>, precision<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"highp"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"mediump"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"lowp"</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/b834cc8/src/core/Capabilities.ts#L13">core/Capabilities.ts:13</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>gl: <span class="tsd-signature-type">WebGL2RenderingContext</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">WebGLRenderingContext</span></h5>
-								</li>
-								<li>
-									<h5>precision: <span class="tsd-signature-type">string</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">"highp"</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">"mediump"</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">"lowp"</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">RegExp</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
-					<a name="set" class="tsd-anchor"></a>
-					<h3>set</h3>
+					<a name="parse" class="tsd-anchor"></a>
+					<h3>parse</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">(</span>gl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">WebGL2RenderingContext</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">WebGLRenderingContext</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">parse<span class="tsd-signature-symbol">(</span>shader<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, shaderType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/b834cc8/src/core/Capabilities.ts#L83">core/Capabilities.ts:83</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/b834cc8/src/utils/ShaderParser.ts#L98">utils/ShaderParser.ts:98</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Replaces es300 syntax to es100</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>gl: <span class="tsd-signature-type">WebGL2RenderingContext</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">WebGLRenderingContext</span></h5>
+									<h5>shader: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>shaderType: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -266,29 +232,35 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="_core_capabilities_.html">"core/<wbr>Capabilities"</a>
+						<a href="_utils_shaderparser_.html">"utils/<wbr>Shader<wbr>Parser"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_core_capabilities_.html#capabilities" class="tsd-kind-icon">capabilities</a>
+						<a href="_utils_shaderparser_.html#fragment" class="tsd-kind-icon">FRAGMENT</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_core_capabilities_.html#extensions" class="tsd-kind-icon">extensions</a>
+						<a href="_utils_shaderparser_.html#fragment_rules" class="tsd-kind-icon">FRAGMENT_<wbr>RULES</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_utils_shaderparser_.html#generic" class="tsd-kind-icon">GENERIC</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_utils_shaderparser_.html#vertex" class="tsd-kind-icon">VERTEX</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_utils_shaderparser_.html#vertex_rules" class="tsd-kind-icon">VERTEX_<wbr>RULES</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_core_capabilities_.html#capabilities-1" class="tsd-kind-icon">Capabilities</a>
+						<a href="_utils_shaderparser_.html#line_regx" class="tsd-kind-icon">LINE_<wbr>REGX</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_core_capabilities_.html#extensions-1" class="tsd-kind-icon">Extensions</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_core_capabilities_.html#getmaxprecision" class="tsd-kind-icon">get<wbr>Max<wbr>Precision</a>
+						<a href="_utils_shaderparser_.html#word_regx" class="tsd-kind-icon">WORD_<wbr>REGX</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="_core_capabilities_.html#set" class="tsd-kind-icon">set</a>
+						<a href="_utils_shaderparser_.html#parse" class="tsd-kind-icon">parse</a>
 					</li>
 				</ul>
 			</nav>
