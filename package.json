@@ -8,7 +8,7 @@
     "server": "live-server ./examples --port 3000 --quiet --watch ./examples --watch ./src --wait 0",
     "examples:js": "webpack --config webpack.config.examples.js --colors --watch",
     "examples:html": "npm run examples:files; pug --obj ./examples/files.json --watch ./examples/src/templates/*.pug --out ./examples",
-    "examples:files": "pug --obj ./examples/files.json ./examples/src/templates/*.pug --out ./examples; node ./examples/files",
+    "examples:files": "node ./examples/files; pug --obj ./examples/files.json ./examples/src/templates/*.pug --out ./examples;",
     "examples:build": "webpack --config webpack.config.examples.js --colors; npm run examples:files; pug --obj ./examples/files.json ./examples/src/templates/*.pug --out ./examples",
     "build": "npm run lint; webpack --config webpack.config.build.js --colors; NODE_ENV=production webpack --config webpack.config.build.js --colors",
     "prepublish": "npm run build",
