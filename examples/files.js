@@ -1,10 +1,14 @@
 const fs = require('fs');
+const path = require('path');
+const dir = path.join(__dirname, 'src/js');
 const demos = [];
-fs.readdir('./examples', (err, files) => {
+fs.readdir(path.join(__dirname, 'src/js'), (err, files) => {
 	files.forEach(file => {
-		if (file.indexOf('.html') !== -1 && file.indexOf('index') === -1) {
-			demos.push(file.split('.html')[0]);
+		if (fs.lstatSync(path.join(dir, file)).isDirectory()) {
+			demos.push(file.split('.js')[0]);
 		}
 	});
-	fs.writeFile('./examples/files.json', JSON.stringify({ demos }, null, 2), 'utf-8');
+	fs.writeFile(path.join(__dirname, 'files.json'), JSON.stringify({
+		demos
+	}, null, 2), 'utf-8');
 });
