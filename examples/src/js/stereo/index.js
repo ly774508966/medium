@@ -1,6 +1,5 @@
 import {
 	GL,
-	Renderer,
 	Scene,
 	PerspectiveCamera,
 	Mesh,
@@ -16,10 +15,11 @@ import {
 	Sierpinski,
 	jerusalem,
 } from '../fractal';
+import StereoRender from './StereoRender';
 const { gui, guiController } = require('../gui')();
 
 // Renderer
-const renderer = new Renderer({
+const renderer = new StereoRender({
 	ratio: window.innerWidth / window.innerHeight,
 	prefferedContext: guiController.context,
 });
@@ -154,6 +154,10 @@ function resize() {
 	const width = window.innerWidth;
 	const height = window.innerHeight;
 	renderer.setSize(width, height);
+	cameraL.ratio = width / height;
+	cameraL.updateProjectionMatrix();
+	cameraR.ratio = width / height;
+	cameraR.updateProjectionMatrix();
 }
 resize();
 
@@ -162,7 +166,7 @@ window.addEventListener('resize', resize);
 
 function update() {
 	requestAnimationFrame(update);
-	renderer.renderStereo(scene,
+	renderer.render(scene,
 		cameraL.projectionMatrix,
 		scene.modelViewMatrix,
 		cameraR.projectionMatrix,

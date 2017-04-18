@@ -87,6 +87,8 @@ function resize() {
 	const width = window.innerWidth;
 	const height = window.innerHeight;
 	renderer.setSize(width, height);
+	camera.ratio = width / height;
+	camera.updateProjectionMatrix();
 }
 resize();
 
