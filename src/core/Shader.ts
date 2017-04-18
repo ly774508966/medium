@@ -137,6 +137,20 @@ export default class Shader {
 			}
 		}
 
+		// Generate texture indices
+		let textureIndex = 0;
+		Object.keys(this.uniforms).forEach(uniformName => {
+			switch (this.uniforms[uniformName].type) {
+				case 't':
+				case 'tc': {
+					this.uniforms[uniformName].textureIndex = textureIndex;
+					textureIndex += 1;
+					break;
+				}
+				default:
+			}
+		});
+
 		// Add Camera position uniform for point lights if it doesn"t exist
 		if (this.uniforms.uCameraPosition === undefined && this.pointLights) {
 			this.uniforms.uCameraPosition = {
