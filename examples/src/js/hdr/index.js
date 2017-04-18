@@ -55,7 +55,6 @@ const material = new Shader({
 		uTexture0: {
 			type: 't',
 			value: texture0.texture,
-			textureIndex: 0,
 		},
 	},
 });

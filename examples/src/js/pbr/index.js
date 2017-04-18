@@ -133,7 +133,6 @@ function skybox() {
 			uEnvironment: {
 				type: 'tc',
 				value: environmentMap.texture,
-				textureIndex: 0,
 			},
 			uGamma: {
 				type: 'f',
@@ -186,22 +185,18 @@ function reflectiveObjects() {
 			uEnvironment: {
 				type: 'tc',
 				value: environmentMap.texture,
-				textureIndex: 0,
 			},
 			uAlbedioMap: {
 				type: 't',
 				value: albedoMap.texture,
-				textureIndex: 1,
 			},
 			uNormalMap: {
 				type: 't',
 				value: normalMap.texture,
-				textureIndex: 2,
 			},
 			uMetalnessMap: {
 				type: 't',
 				value: metalnessMap.texture,
-				textureIndex: 3,
 			},
 			uMetalness: {
 				type: 'f',

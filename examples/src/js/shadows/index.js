@@ -161,7 +161,6 @@ const objectMaterial = new Shader({
 		uDepthTexture: {
 			type: 't',
 			value: shadowMapRenderer.renderTarget.texture,
-			textureIndex: 0,
 		},
 		uLightProjectionMatrix: {
 			type: 'Matrix4fv',
@@ -269,7 +268,6 @@ const shadowMapDebug = new Mesh(new PlaneGeometry(3, 3), new Shader({
 		uTexture0: {
 			type: 't',
 			value: shadowMapRenderer.renderTarget.texture,
-			textureIndex: 0,
 		},
 	}
 }));

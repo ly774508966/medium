@@ -59,12 +59,10 @@ const material = new Shader({
 		uTexture0: {
 			type: 't',
 			value: texture0.texture,
-			textureIndex: 0,
 		},
 		uTexture1: {
 			type: 't',
 			value: texture1.texture,
-			textureIndex: 1,
 		},
 	},
 });

@@ -90,7 +90,6 @@ function skybox() {
 			uEnvironment: {
 				type: 'tc',
 				value: environmentMap.texture,
-				textureIndex: 0,
 			},
 			uGamma: {
 				type: 'f',
@@ -179,7 +178,6 @@ function reflectiveObjects() {
 			tex: {
 				type: 'tc',
 				value: environmentMap.texture,
-				textureIndex: 0,
 			},
 			uGamma: {
 				type: 'f',
