@@ -44,4 +44,8 @@ export default class PerspectiveCamera {
 	lookAt(x = 0, y = 0, z = 0) {
 		this.center.set(x, y, z);
 	}
+
+	updateProjectionMatrix() {
+		mat4.perspective(this.projectionMatrix, this.fov, this.ratio, this.near, this.far);
+	}
 }

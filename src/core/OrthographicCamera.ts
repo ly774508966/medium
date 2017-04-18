@@ -39,4 +39,8 @@ export default class OrthographicCamera {
 	lookAt(x = 0, y = 0, z = 0) {
 		this.center.set(x, y, z);
 	}
+
+	updateProjectionMatrix() {
+		mat4.ortho(this.projectionMatrix, -1.0, 1.0, -1.0, 1.0, this.near, this.far);
+	}
 }

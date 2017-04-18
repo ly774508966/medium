@@ -146,14 +146,6 @@ export default class Renderer {
 
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-		if (camera.isPespectiveCamera) {
-			mat4.perspective(camera.projectionMatrix, camera.fov, this.ratio, camera.near, camera.far);
-		} else if (camera.isOrthographicCamera) {
-			mat4.ortho(camera.projectionMatrix, -1.0, 1.0, -1.0, 1.0, camera.near, camera.far);
-		} else {
-			throw new Error('Camera type not supported');
-		}
-
 		mat4.identity(scene.modelViewMatrix);
 
 		mat4.lookAt(scene.modelViewMatrix, camera.position.v, camera.center.v, camera.up.v);
@@ -163,71 +155,5 @@ export default class Renderer {
 
 		// Draw the scene objects
 		this._drawObjects(scene, camera.projectionMatrix, scene.modelViewMatrix, camera);
-	}
-
-	// For debug atm
-	renderStereo(scene: Scene,
-														leftProjectionMatrix: mat4,
-														leftViewMatrix: mat4,
-														rightProjectionMatrix: mat4,
-														rightViewMatrix: mat4,
-														cameraL: PerspectiveCamera,
-														cameraR: PerspectiveCamera,
-	) {
-		gl = GL.get();
-
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-		// Draw both eyes
-
-		mat4.identity(scene.modelViewMatrix);
-
-		// Update the scene
-		scene.update();
-
-		// Left
-		gl.viewport(0.0, 0.0, gl.drawingBufferWidth * 0.5, gl.drawingBufferHeight);
-
-		mat4.perspective(leftProjectionMatrix, cameraL.fov, this.ratio, cameraL.near, cameraL.far);
-		mat4.lookAt(leftViewMatrix, cameraL.position.v, cameraL.center.v, cameraL.up.v);
-
-		this._drawObjects(scene, leftProjectionMatrix, leftViewMatrix);
-
-		// Right
-		gl.viewport(gl.drawingBufferWidth * 0.5,
-														0, gl.drawingBufferWidth * 0.5, gl.drawingBufferHeight);
-
-		mat4.perspective(rightProjectionMatrix, cameraR.fov, this.ratio, cameraR.near, cameraR.far);
-		mat4.lookAt(rightViewMatrix, cameraR.position.v, cameraR.center.v, cameraR.up.v);
-
-		this._drawObjects(scene, rightProjectionMatrix, rightViewMatrix);
-	}
-
-	renderWebVR(scene: Scene,
-													leftProjectionMatrix: mat4,
-													leftViewMatrix: mat4,
-													rightProjectionMatrix: mat4,
-													rightViewMatrix: mat4,
-	) {
-		gl = GL.get();
-
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-		// Draw both eyes
-
-		mat4.identity(scene.modelViewMatrix);
-
-		// Update the scene
-		scene.update();
-
-		// Left
-		gl.viewport(0.0, 0.0, gl.drawingBufferWidth * 0.5, gl.drawingBufferHeight);
-		this._drawObjects(scene, leftProjectionMatrix, leftViewMatrix);
-
-		// Right
-		gl.viewport(gl.drawingBufferWidth * 0.5,
-														0, gl.drawingBufferWidth * 0.5, gl.drawingBufferHeight);
-
-		this._drawObjects(scene, rightProjectionMatrix, rightViewMatrix);
 	}
 }
