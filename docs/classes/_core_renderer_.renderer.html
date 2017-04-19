@@ -90,12 +90,14 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_renderer_.renderer.html#autoclear" class="tsd-kind-icon">auto<wbr>Clear</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_renderer_.renderer.html#canvas" class="tsd-kind-icon">canvas</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_renderer_.renderer.html#height" class="tsd-kind-icon">height</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_renderer_.renderer.html#pixelratio" class="tsd-kind-icon">pixel<wbr>Ratio</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_renderer_.renderer.html#prefferedcontext" class="tsd-kind-icon">preffered<wbr>Context</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_renderer_.renderer.html#preservedrawingbuffer" class="tsd-kind-icon">preserve<wbr>Drawing<wbr>Buffer</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_renderer_.renderer.html#ratio" class="tsd-kind-icon">ratio</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_renderer_.renderer.html#viewport" class="tsd-kind-icon">viewport</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_renderer_.renderer.html#width" class="tsd-kind-icon">width</a></li>
 							</ul>
 						</section>
@@ -105,7 +107,10 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_core_renderer_.renderer.html#_drawobjects" class="tsd-kind-icon">_draw<wbr>Objects</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_core_renderer_.renderer.html#render" class="tsd-kind-icon">render</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_core_renderer_.renderer.html#setdevicepixelratio" class="tsd-kind-icon">set<wbr>Device<wbr>Pixel<wbr>Ratio</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_core_renderer_.renderer.html#setsissor" class="tsd-kind-icon">set<wbr>Sissor</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_core_renderer_.renderer.html#setsissortest" class="tsd-kind-icon">set<wbr>Sissor<wbr>Test</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_core_renderer_.renderer.html#setsize" class="tsd-kind-icon">set<wbr>Size</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_core_renderer_.renderer.html#setviewport" class="tsd-kind-icon">set<wbr>Viewport</a></li>
 							</ul>
 						</section>
 					</div>
@@ -123,7 +128,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/7b8c715/src/core/Renderer.ts#L42">core/Renderer.ts:42</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/27c9a42/src/core/Renderer.ts#L51">core/Renderer.ts:51</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -140,12 +145,22 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="autoclear" class="tsd-anchor"></a>
+					<h3>auto<wbr>Clear</h3>
+					<div class="tsd-signature tsd-kind-icon">auto<wbr>Clear<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/27c9a42/src/core/Renderer.ts#L51">core/Renderer.ts:51</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="canvas" class="tsd-anchor"></a>
 					<h3>canvas</h3>
 					<div class="tsd-signature tsd-kind-icon">canvas<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">HTMLCanvasElement</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/7b8c715/src/core/Renderer.ts#L42">core/Renderer.ts:42</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/27c9a42/src/core/Renderer.ts#L49">core/Renderer.ts:49</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -155,7 +170,7 @@
 					<div class="tsd-signature tsd-kind-icon">height<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/7b8c715/src/core/Renderer.ts#L37">core/Renderer.ts:37</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/27c9a42/src/core/Renderer.ts#L44">core/Renderer.ts:44</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -165,7 +180,7 @@
 					<div class="tsd-signature tsd-kind-icon">pixel<wbr>Ratio<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/7b8c715/src/core/Renderer.ts#L40">core/Renderer.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/27c9a42/src/core/Renderer.ts#L47">core/Renderer.ts:47</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -175,7 +190,7 @@
 					<div class="tsd-signature tsd-kind-icon">preffered<wbr>Context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/7b8c715/src/core/Renderer.ts#L41">core/Renderer.ts:41</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/27c9a42/src/core/Renderer.ts#L48">core/Renderer.ts:48</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -185,7 +200,7 @@
 					<div class="tsd-signature tsd-kind-icon">preserve<wbr>Drawing<wbr>Buffer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/7b8c715/src/core/Renderer.ts#L39">core/Renderer.ts:39</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/27c9a42/src/core/Renderer.ts#L46">core/Renderer.ts:46</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -195,7 +210,17 @@
 					<div class="tsd-signature tsd-kind-icon">ratio<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/7b8c715/src/core/Renderer.ts#L38">core/Renderer.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/27c9a42/src/core/Renderer.ts#L45">core/Renderer.ts:45</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="viewport" class="tsd-anchor"></a>
+					<h3>viewport</h3>
+					<div class="tsd-signature tsd-kind-icon">viewport<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_core_renderer_.viewport.html" class="tsd-signature-type">Viewport</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/27c9a42/src/core/Renderer.ts#L50">core/Renderer.ts:50</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -205,7 +230,7 @@
 					<div class="tsd-signature tsd-kind-icon">width<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/7b8c715/src/core/Renderer.ts#L36">core/Renderer.ts:36</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/27c9a42/src/core/Renderer.ts#L43">core/Renderer.ts:43</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -222,7 +247,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/7b8c715/src/core/Renderer.ts#L126">core/Renderer.ts:126</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/27c9a42/src/core/Renderer.ts#L166">core/Renderer.ts:166</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -254,7 +279,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/7b8c715/src/core/Renderer.ts#L142">core/Renderer.ts:142</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/27c9a42/src/core/Renderer.ts#L182">core/Renderer.ts:182</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -280,13 +305,68 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/7b8c715/src/core/Renderer.ts#L121">core/Renderer.ts:121</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/27c9a42/src/core/Renderer.ts#L140">core/Renderer.ts:140</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> ratio: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setsissor" class="tsd-anchor"></a>
+					<h3>set<wbr>Sissor</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Sissor<span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, width<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, height<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/27c9a42/src/core/Renderer.ts#L154">core/Renderer.ts:154</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>x: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>y: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>width: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>height: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setsissortest" class="tsd-anchor"></a>
+					<h3>set<wbr>Sissor<wbr>Test</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Sissor<wbr>Test<span class="tsd-signature-symbol">(</span>enable<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/27c9a42/src/core/Renderer.ts#L145">core/Renderer.ts:145</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> enable: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -303,11 +383,43 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/7b8c715/src/core/Renderer.ts#L104">core/Renderer.ts:104</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/27c9a42/src/core/Renderer.ts#L121">core/Renderer.ts:121</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
+								<li>
+									<h5>width: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>height: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setviewport" class="tsd-anchor"></a>
+					<h3>set<wbr>Viewport</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Viewport<span class="tsd-signature-symbol">(</span>x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, width<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, height<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/27c9a42/src/core/Renderer.ts#L159">core/Renderer.ts:159</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>x: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>y: <span class="tsd-signature-type">number</span></h5>
+								</li>
 								<li>
 									<h5>width: <span class="tsd-signature-type">number</span></h5>
 								</li>
@@ -343,6 +455,9 @@
 								<a href="_core_renderer_.renderer.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_core_renderer_.renderer.html#autoclear" class="tsd-kind-icon">auto<wbr>Clear</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_core_renderer_.renderer.html#canvas" class="tsd-kind-icon">canvas</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
@@ -361,6 +476,9 @@
 								<a href="_core_renderer_.renderer.html#ratio" class="tsd-kind-icon">ratio</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_core_renderer_.renderer.html#viewport" class="tsd-kind-icon">viewport</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_core_renderer_.renderer.html#width" class="tsd-kind-icon">width</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -373,7 +491,16 @@
 								<a href="_core_renderer_.renderer.html#setdevicepixelratio" class="tsd-kind-icon">set<wbr>Device<wbr>Pixel<wbr>Ratio</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_core_renderer_.renderer.html#setsissor" class="tsd-kind-icon">set<wbr>Sissor</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_core_renderer_.renderer.html#setsissortest" class="tsd-kind-icon">set<wbr>Sissor<wbr>Test</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_core_renderer_.renderer.html#setsize" class="tsd-kind-icon">set<wbr>Size</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_core_renderer_.renderer.html#setviewport" class="tsd-kind-icon">set<wbr>Viewport</a>
 							</li>
 						</ul>
 					</li>
@@ -381,6 +508,9 @@
 				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="../interfaces/_core_renderer_.options.html" class="tsd-kind-icon">Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../interfaces/_core_renderer_.viewport.html" class="tsd-kind-icon">Viewport</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="../modules/_core_renderer_.html#config" class="tsd-kind-icon">config</a>

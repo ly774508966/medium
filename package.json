@@ -41,6 +41,7 @@
     "pre-push": "^0.1.1",
     "pug-cli": "^1.0.0-alpha6",
     "query-string": "^4.3.1",
+    "three-obj": "^0.6.5",
     "ts-loader": "^2.0.1",
     "tslint": "^5.0.0",
     "typedoc": "^0.5.7",

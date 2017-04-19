@@ -32,6 +32,13 @@ interface Options {
 	prefferedContext?: string;
 }
 
+interface Viewport {
+	x: number;
+	y: number;
+	width: number;
+	height: number;
+}
+
 export default class Renderer {
 	width: number;
 	height: number;
@@ -40,6 +47,8 @@ export default class Renderer {
 	pixelRatio: number;
 	prefferedContext: string;
 	canvas: HTMLCanvasElement;
+	viewport: Viewport;
+	autoClear: boolean;
 
 	constructor(options: Options) {
 		// Default renderer settings
@@ -49,6 +58,7 @@ export default class Renderer {
 		this.preserveDrawingBuffer = false;
 		this.pixelRatio = 1;
 		this.prefferedContext = RENDERER_DEFAULT_CONTEXT;
+		this.autoClear = true;
 
 		// Apply defaults
 		Object.assign(this, options);
@@ -69,12 +79,12 @@ export default class Renderer {
 			let contextType;
 			if (detect.webgl2 && this.prefferedContext === WEBGL2_CONTEXT) {
 				contextType = WEBGL2_CONTEXT;
-				const _gl = <WebGL2RenderingContext> this.canvas.getContext('webgl2', attributes);
+				const _gl = <WebGL2RenderingContext>this.canvas.getContext('webgl2', attributes);
 				GL.set(_gl, contextType);
 			} else {
 				contextType = WEBGL_CONTEXT;
-				const _gl = <WebGLRenderingContext> this.canvas.getContext('webgl', attributes)
-				|| <WebGLRenderingContext> this.canvas.getContext('experimental-webgl', attributes);
+				const _gl = <WebGLRenderingContext>this.canvas.getContext('webgl', attributes)
+					|| <WebGLRenderingContext>this.canvas.getContext('experimental-webgl', attributes);
 				GL.set(_gl, contextType);
 			}
 		} else {
@@ -97,6 +107,13 @@ export default class Renderer {
 		// log("capabilities", Capabilities.capabilities);
 		// log("extensions", Capabilities.extensions);
 
+		this.viewport = {
+			x: 0,
+			y: 0,
+			width: gl.drawingBufferWidth,
+			height: gl.drawingBufferHeight,
+		};
+
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.enable(gl.DEPTH_TEST);
 	}
@@ -115,12 +132,35 @@ export default class Renderer {
 
 			this.canvas.style.width = `${width}px`;
 			this.canvas.style.height = `${height}px`;
+
+			this.setViewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 		}
 	}
 
 	setDevicePixelRatio(ratio = 1) {
 		this.pixelRatio = ratio || 1;
 		this.setSize(this.width, this.height);
+	}
+
+	setSissorTest(enable = false) {
+		gl = GL.get();
+		if (enable) {
+			gl.enable(gl.SCISSOR_TEST);
+		} else {
+			gl.disable(gl.SCISSOR_TEST);
+		}
+	}
+
+	setSissor(x: number, y: number, width: number, height: number) {
+		gl = GL.get();
+		gl.scissor(x, y, width, height);
+	}
+
+	setViewport(x: number, y: number, width: number, height: number) {
+		this.viewport.x = x;
+		this.viewport.y = y;
+		this.viewport.width = width;
+		this.viewport.height = height;
 	}
 
 	_drawObjects(scene: Scene, projectionMatrix: mat4, modelViewMatrix: mat4, camera?: PerspectiveCamera | OrthorgraphicCamera) {
@@ -142,9 +182,11 @@ export default class Renderer {
 	render(scene: Scene, camera: PerspectiveCamera | OrthorgraphicCamera) {
 		gl = GL.get();
 
-		gl.viewport(0.0, 0.0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+		gl.viewport(this.viewport.x, this.viewport.y, this.viewport.width, this.viewport.height);
 
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		if (this.autoClear) {
+			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		}
 
 		mat4.identity(scene.modelViewMatrix);
 
