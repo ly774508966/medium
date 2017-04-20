@@ -27,6 +27,7 @@ document.body.appendChild(renderer.canvas);
 const renderTarget = new RenderTarget({
 	width: window.innerWidth,
 	height: window.innerHeight,
+	pixelRatio: window.devicePixelRatio
 });
 
 // Scene
