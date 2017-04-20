@@ -3,9 +3,9 @@ import {
 } from 'gl-matrix';
 
 export default class Vector3 {
-	v: Float32Array;
+	v: vec3;
 	constructor(x = 0, y = 0, z = 0) {
-		this.v = new Float32Array(3);
+		this.v = vec3.create();
 		this.set(x, y, z);
 		return this;
 	}

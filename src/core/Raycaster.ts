@@ -1,4 +1,4 @@
-import { mat4, vec3 } from 'gl-matrix';
+import { mat4, vec3, vec2 } from 'gl-matrix';
 import Vector3 from '../math/Vector3';
 import Vector2 from '../math/Vector2';
 import Ray from '../math/Ray';
@@ -17,9 +17,9 @@ let barycoord: Vector3;
 const fvA = new Vector3();
 const fvB = new Vector3();
 const fvC = new Vector3();
-const uvA = new Vector3();
-const uvB = new Vector3();
-const uvC = new Vector3();
+const uvA = new Vector2();
+const uvB = new Vector2();
+const uvC = new Vector2();
 
 export default class RayCaster {
 	ray: Ray;
@@ -79,9 +79,9 @@ export default class RayCaster {
 
 			if (intersect) {
 				// Get uv intersection
-				vec3.copy(uvA.v, object.geometry.uvs[face.uvs[0]].v);
-				vec3.copy(uvB.v, object.geometry.uvs[face.uvs[1]].v);
-				vec3.copy(uvC.v, object.geometry.uvs[face.uvs[2]].v);
+				vec2.copy(uvA.v, object.geometry.uvs[face.uvs[0]].v);
+				vec2.copy(uvB.v, object.geometry.uvs[face.uvs[1]].v);
+				vec2.copy(uvC.v, object.geometry.uvs[face.uvs[2]].v);
 				uv = this.uvIntersection(intersect, fvA, fvB, fvC);
 				break;
 			}

@@ -12,7 +12,7 @@ export default class Object3D {
 	children: Array<Object3D>;
 	localMatrix: mat4;
 	modelMatrix: mat4;
-	position: mat4;
+	position: Vector3;
 	rotation: Vector3;
 	scale: Vector3;
 	_quaternion: quat;

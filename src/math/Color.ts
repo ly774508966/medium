@@ -3,7 +3,7 @@ import {
 } from 'gl-matrix';
 
 export default class Color {
-	v: Float32Array;
+	v: vec3;
 
 	constructor(hex = 0xFFFFFF) {
 		this.v = vec3.create();
@@ -33,11 +33,17 @@ export default class Color {
 		return this;
 	}
 	copy(rgb: Array<number>) {
-		vec3.copy(this.v, rgb);
+		vec3.copy(this.v, vec3.fromValues(rgb[0], rgb[1], rgb[2]));
 		return this;
 	}
 	convert(hex: string | number) {
-		const rgb = typeof hex === 'number' ? this.hexIntToRgb(hex) : this.hexStringToRgb(hex);
+		let rgb;
+		if (typeof hex === 'number') {
+			rgb = this.hexIntToRgb(hex);
+		}
+		if (typeof hex === 'string') {
+			rgb = this.hexStringToRgb(hex);
+		}
 		vec3.copy(this.v, this.normalize(rgb));
 		return this;
 	}

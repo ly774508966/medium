@@ -3,10 +3,10 @@ import {
 } from 'gl-matrix';
 
 export default class Vector2 {
-	v: Float32Array;
+	v: vec2;
 
 	constructor(x = 0, y = 0) {
-		this.v = new Float32Array(2);
+		this.v = vec2.create();
 		this.set(x, y);
 		return this;
 	}

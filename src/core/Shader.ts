@@ -431,7 +431,7 @@ export default class Shader {
 
 		// Create normal normalMatrix
 		// Removes scale and translation
-		vec3.set(normalMatrix, 0, 0, 0);
+		mat3.identity(normalMatrix);
 		mat3.fromMat4(normalMatrix, inversedModelViewMatrix);
 		mat3.transpose(normalMatrix, normalMatrix);
 		gl.uniformMatrix3fv(this.uniforms.uNormalMatrix.location, false, normalMatrix);

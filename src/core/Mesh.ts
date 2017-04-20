@@ -16,7 +16,6 @@ export default class Mesh extends Object3D {
 	geometry: Geometry;
 	shader: Shader;
 	vao: Vao;
-	modelMatrix: Array<number>;
 	visible: boolean;
 	instanceCount: number;
 	isInstanced: boolean;
