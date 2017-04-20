@@ -16,6 +16,13 @@ interface Options {
 	pixelRatio?: number;
 }
 
+interface Viewport {
+	x: number;
+	y: number;
+	width: number;
+	height: number;
+}
+
 export default class RenderTarget {
 	width: number;
 	height: number;
@@ -24,13 +31,24 @@ export default class RenderTarget {
 	_frameBuffer: WebGLFramebuffer;
 	_renderBuffer: WebGLRenderbuffer;
 	texture: WebGLTexture;
+	viewport: Viewport;
+	autoClear: boolean;
 
 	constructor(options: Options) {
-		this.width = window.innerWidth;
-		this.height = window.innerHeight;
+		this.pixelRatio = options.pixelRatio || 1;
+		this.width = options.width * this.pixelRatio;
+		this.height = options.height * this.pixelRatio;
 		this.ratio = this.width / this.height;
-		this.pixelRatio = 1;
-		Object.assign(this, options);
+		this.viewport = {
+			x: 0,
+			y: 0,
+			width: this.width,
+			height: this.height,
+		};
+		this.autoClear = true;
+
+		this.setClearColor();
+
 		gl = GL.get();
 		this._frameBuffer = gl.createFramebuffer();
 		gl.bindFramebuffer(gl.FRAMEBUFFER, this._frameBuffer);
@@ -51,6 +69,11 @@ export default class RenderTarget {
 		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 	}
 
+	setClearColor(r = 0, g = 0, b = 0, a = 1) {
+		gl = GL.get();
+		gl.clearColor(r, g, b, a);
+	}
+
 	setSize(width: number, height: number) {
 		const newWidth = width * this.pixelRatio;
 		const newHeight = height * this.pixelRatio;
@@ -67,23 +90,41 @@ export default class RenderTarget {
 			gl.bindRenderbuffer(gl.RENDERBUFFER, this._renderBuffer);
 			gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, this.width, this.height);
 			gl.bindRenderbuffer(gl.RENDERBUFFER, null);
+
+			this.setViewport(0, 0, width, height);
 		}
 	}
+
+	setSissorTest(enable = false) {
+		gl = GL.get();
+		if (enable) {
+			gl.enable(gl.SCISSOR_TEST);
+		} else {
+			gl.disable(gl.SCISSOR_TEST);
+		}
+	}
+
+	setSissor(x: number, y: number, width: number, height: number) {
+		gl = GL.get();
+		gl.scissor(x * this.pixelRatio, y * this.pixelRatio, width * this.pixelRatio, height * this.pixelRatio);
+	}
+
+	setViewport(x: number, y: number, width: number, height: number) {
+		this.viewport.x = x * this.pixelRatio;
+		this.viewport.y = y * this.pixelRatio;
+		this.viewport.width = width * this.pixelRatio;
+		this.viewport.height = height * this.pixelRatio;
+	}
+
 	render(scene: Scene, camera: PerspectiveCamera | OrthographicCamera) {
 		gl = GL.get();
 
-		gl.viewport(0.0, 0.0, this.width, this.height);
+		gl.viewport(this.viewport.x, this.viewport.y, this.viewport.width, this.viewport.height);
 
 		gl.bindFramebuffer(gl.FRAMEBUFFER, this._frameBuffer);
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
-		if (camera.isPespectiveCamera) {
-			mat4.perspective(camera.projectionMatrix, camera.fov, this.ratio, camera.near, camera.far);
-		} else if (camera.isOrthographicCamera) {
-			mat4.ortho(camera.projectionMatrix, -1.0, 1.0, -1.0, 1.0, camera.near, camera.far);
-		} else {
-			throw new Error('Camera type not supported');
+		if (this.autoClear) {
+			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 		}
 
 		mat4.identity(scene.modelViewMatrix);
