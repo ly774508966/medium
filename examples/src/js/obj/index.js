@@ -64,9 +64,9 @@ const pointLights = new Lights([
 scene.pointLights = pointLights;
 
 // Obj
-new ObjLoader('assets/models/mass.obj').then(objGeometry => {
-	const geometry = new Geometry(objGeometry.vertices,
-		objGeometry.indices, objGeometry.vertexNormals);
+new ObjLoader('assets/models/mass.obj').then(data => {
+	const geometry = new Geometry(data.vertices,
+		data.indices, data.normals);
 
 	const material = new Shader({
 		pointLights,

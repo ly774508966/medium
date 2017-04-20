@@ -1,6 +1,7 @@
 import {
 	Renderer,
 	GL,
+	UniformBuffers,
 } from '../../../../src/index';
 import {
 	mat4,
@@ -9,6 +10,22 @@ import {
 let gl;
 
 export default class StereoRender extends Renderer {
+	_drawObjects(scene, camera, viewMatrix) {
+		if (gl instanceof WebGL2RenderingContext) {
+			// Update global uniform buffers
+			UniformBuffers.updateProjectionView(gl, camera.projectionMatrix, scene.modelViewMatrix);
+		}
+
+		// Render the scene objects
+		scene.objects.forEach(child => {
+			if (child.isInstanced) {
+				child.drawInstance(scene.modelViewMatrix, camera.projectionMatrix, camera);
+			} else {
+				child.draw(scene.modelViewMatrix, camera.projectionMatrix, camera);
+			}
+		});
+	}
+
 	render(scene,
 		leftProjectionMatrix,
 		leftViewMatrix,
@@ -31,7 +48,7 @@ export default class StereoRender extends Renderer {
 
 		mat4.lookAt(leftViewMatrix, cameraL.position.v, cameraL.center.v, cameraL.up.v);
 
-		this._drawObjects(scene, cameraL.projectionMatrix, leftViewMatrix);
+		this._drawObjects(scene, cameraL, leftViewMatrix);
 
 		// Right
 		gl.viewport(gl.drawingBufferWidth * 0.5,
@@ -39,6 +56,6 @@ export default class StereoRender extends Renderer {
 
 		mat4.lookAt(rightViewMatrix, cameraR.position.v, cameraR.center.v, cameraR.up.v);
 
-		this._drawObjects(scene, cameraL.projectionMatrix, rightViewMatrix);
+		this._drawObjects(scene, cameraR, rightViewMatrix);
 	}
 }

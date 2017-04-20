@@ -29,6 +29,11 @@ export default class ShadowMapRenderer {
 		});
 	}
 
+	resize(width, height) {
+		this.camera.ratio = width / height;
+		this.camera.updateProjectionMatrix();
+	}
+
 	render(scene) {
 		mat4.identity(this.lightViewMatrix);
 		mat4.translate(this.lightViewMatrix, this.lightViewMatrix, this.light.position.v);

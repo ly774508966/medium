@@ -16,7 +16,7 @@ import {
 	OrthographicCamera,
 	Program,
 	Constants,
-	ObjLoader,
+	JsonLoader,
 	Geometry,
 	BoxGeometry,
 } from '../../../../src/index';
@@ -189,9 +189,9 @@ gui.add(objectMaterial.uniforms.uBias, 'value', 0, 0.01).name('shadow bias');
 
 // Obj
 let objMesh;
-new ObjLoader('assets/models/mass.obj').then(objGeometry => {
-	const geometry = new Geometry(objGeometry.vertices,
-		objGeometry.indices, objGeometry.vertexNormals);
+new JsonLoader('assets/models/mass.json').then(data => {
+	const geometry = new Geometry(data.vertices,
+		data.indices, data.normals);
 
 	objMesh = new Mesh(geometry, objectMaterial);
 
@@ -288,6 +288,7 @@ function resize() {
 	renderer.setSize(width, height);
 	camera.ratio = width / height;
 	camera.updateProjectionMatrix();
+	shadowMapRenderer.resize(width, height);
 }
 resize();
 

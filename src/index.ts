@@ -14,6 +14,8 @@ import Shader from './core/Shader';
 import Texture from './core/Texture';
 import TextureCube from './core/TextureCube';
 import TextureVideo from './core/TextureVideo';
+import UniformBuffer from './core/UniformBuffer';
+import * as UniformBuffers from './core/UniformBuffers';
 import Vao from './core/Vao';
 
 // Extras
@@ -51,11 +53,14 @@ import ShaderChunks from './shaders/chunks/index';
 // Utils
 import Clock from './utils/Clock';
 import Detect from './utils/Detect';
+import ObjParser from './utils/ObjParser';
 
 // Controls
 import OrbitControls from './controls/OrbitControls';
 
 // Loaders
+import FileLoader from './loaders/FileLoader';
+import JsonLoader from './loaders/JsonLoader';
 import ObjLoader from './loaders/ObjLoader';
 
 export {
@@ -74,6 +79,8 @@ export {
 	Texture,
 	TextureCube,
 	TextureVideo,
+	UniformBuffer,
+	UniformBuffers,
 	Vao,
 	Clock,
 	Detect,
@@ -98,5 +105,7 @@ export {
 	MathUtils,
 	ShaderChunks,
 	OrbitControls,
+	FileLoader,
+	JsonLoader,
 	ObjLoader,
 };
