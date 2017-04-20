@@ -10,8 +10,8 @@
     "examples:html": "npm run examples:files; pug --obj ./examples/files.json --watch ./examples/src/templates/*.pug --out ./examples",
     "examples:files": "node ./examples/files; pug --obj ./examples/files.json ./examples/src/templates/*.pug --out ./examples;",
     "examples:build": "webpack --config webpack.config.examples.js --colors; npm run examples:files; pug --obj ./examples/files.json ./examples/src/templates/*.pug --out ./examples",
-    "build": "npm run lint; npm run docs; webpack --config webpack.config.build.js --colors; NODE_ENV=production webpack --config webpack.config.build.js --colors",
-    "prepublish": "npm run build",
+    "build": "npm run lint; webpack --config webpack.config.build.js --colors; NODE_ENV=production webpack --config webpack.config.build.js --colors",
+    "prepublish": "npm run docs; npm run build",
     "lint": "tslint ./src/**/*.ts",
     "docs": "typedoc --target es6 --tsconfig ./tsconfig.json --ignoreCompilerErrors --theme default --name Medium --out ./docs ./src"
   },
@@ -49,6 +49,7 @@
     "webpack": "^2.2.1"
   },
   "dependencies": {
+    "@types/gl-matrix": "^2.2.34",
     "gl-matrix": "^2.3.2",
     "happens": "^0.6.0",
     "parse-hdr": "^1.0.0",
