@@ -114,8 +114,13 @@ export default class Renderer {
 			height: gl.drawingBufferHeight,
 		};
 
-		gl.clearColor(0.0, 0.0, 0.0, 1.0);
+		this.setClearColor();
 		gl.enable(gl.DEPTH_TEST);
+	}
+
+	setClearColor(r = 0, g = 0, b = 0, a = 1) {
+		gl = GL.get();
+		gl.clearColor(r, g, b, a);
 	}
 
 	setSize(width: number, height: number) {
@@ -133,7 +138,7 @@ export default class Renderer {
 			this.canvas.style.width = `${width}px`;
 			this.canvas.style.height = `${height}px`;
 
-			this.setViewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+			this.setViewport(0, 0, width, height);
 		}
 	}
 
@@ -153,30 +158,14 @@ export default class Renderer {
 
 	setSissor(x: number, y: number, width: number, height: number) {
 		gl = GL.get();
-		gl.scissor(x, y, width, height);
+		gl.scissor(x * this.pixelRatio, y * this.pixelRatio, width * this.pixelRatio, height * this.pixelRatio);
 	}
 
 	setViewport(x: number, y: number, width: number, height: number) {
-		this.viewport.x = x;
-		this.viewport.y = y;
-		this.viewport.width = width;
-		this.viewport.height = height;
-	}
-
-	_drawObjects(scene: Scene, projectionMatrix: mat4, modelViewMatrix: mat4, camera?: PerspectiveCamera | OrthorgraphicCamera) {
-		if (gl instanceof WebGL2RenderingContext) {
-			// Update global uniform buffers
-			UniformBuffers.updateProjectionView(gl, projectionMatrix, modelViewMatrix);
-		}
-
-		// Render the scene objects
-		scene.objects.forEach(child => {
-			if (child.isInstanced) {
-				child.drawInstance(modelViewMatrix, projectionMatrix, camera);
-			} else {
-				child.draw(modelViewMatrix, projectionMatrix, camera);
-			}
-		});
+		this.viewport.x = x * this.pixelRatio;
+		this.viewport.y = y * this.pixelRatio;
+		this.viewport.width = width * this.pixelRatio;
+		this.viewport.height = height * this.pixelRatio;
 	}
 
 	render(scene: Scene, camera: PerspectiveCamera | OrthorgraphicCamera) {
@@ -196,6 +185,18 @@ export default class Renderer {
 		scene.update();
 
 		// Draw the scene objects
-		this._drawObjects(scene, camera.projectionMatrix, scene.modelViewMatrix, camera);
+		if (gl instanceof WebGL2RenderingContext) {
+			// Update global uniform buffers
+			UniformBuffers.updateProjectionView(gl, camera.projectionMatrix, scene.modelViewMatrix);
+		}
+
+		// Render the scene objects
+		scene.objects.forEach(child => {
+			if (child.isInstanced) {
+				child.drawInstance(scene.modelViewMatrix, camera.projectionMatrix, camera);
+			} else {
+				child.draw(scene.modelViewMatrix, camera.projectionMatrix, camera);
+			}
+		});
 	}
 }
