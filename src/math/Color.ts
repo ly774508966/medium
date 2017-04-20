@@ -6,7 +6,7 @@ export default class Color {
 	v: Float32Array;
 
 	constructor(hex = 0xFFFFFF) {
-		this.v = new Float32Array(3);
+		this.v = vec3.create();
 		this.convert(hex);
 		return this;
 	}
