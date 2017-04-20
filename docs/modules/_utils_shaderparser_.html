@@ -99,7 +99,7 @@
 					<div class="tsd-signature tsd-kind-icon">FRAGMENT<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[{match: WORD_REGX(&#x27;in&#x27;),replace: &#x27;varying&#x27;,}, {match: LINE_REGX(&#x27;out vec4 outgoingColor;&#x27;),replace: &#x27;&#x27;,}, {match: WORD_REGX(&#x27;outgoingColor&#x27;),replace: &#x27;gl_FragColor&#x27;,}, {match: WORD_REGX(&#x27;texture&#x27;),replace: function(shader: any): string {// Find all texture defintionsconst textureGlobalRegx &#x3D; new RegExp(&#x27;\\btexture\\b&#x27;, &#x27;gi&#x27;);// Find single texture definitionconst textureSingleRegx &#x3D; new RegExp(&#x27;\\btexture\\b&#x27;, &#x27;i&#x27;);// Gets the texture call signature e.g texture(uTexture1, vUv);const textureUniformNameRegx &#x3D; new RegExp(/texture\(([^)]+)\)/, &#x27;i&#x27;);// Get all matching occurancesconst matches &#x3D; shader.match(textureGlobalRegx);let replacement &#x3D; &#x27;&#x27;;// If nothing matches returnif (matches &#x3D;&#x3D;&#x3D; null) return shader;// Replace each occurance by it&#x27;s uniform typefor (let i &#x3D; 0; i &lt; matches.length; i++) {let match &#x3D; shader.match(textureUniformNameRegx)[0];if (match) {// Extract the uniform nameconst uniformName &#x3D; match.replace(&#x27;texture(&#x27;, &#x27;&#x27;).split(&#x27;,&#x27;)[0];// Find the uniform definitionlet uniformType &#x3D; shader.match(&#x60;(.*?) ${uniformName}&#x60;, &#x27;i&#x27;)[1];uniformType &#x3D; uniformType.split(&#x27; &#x27;)[1];switch (uniformType) {case &#x27;sampler2D&#x27;: {replacement &#x3D; &#x27;texture2D&#x27;;break;}case &#x27;samplerCube&#x27;: {replacement &#x3D; &#x27;textureCube&#x27;;break;}default:}}shader &#x3D; shader.replace(textureSingleRegx, replacement);}return shader;},},]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/42142a6/src/utils/ShaderParser.ts#L22">utils/ShaderParser.ts:22</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/utils/ShaderParser.ts#L22">utils/ShaderParser.ts:22</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -109,7 +109,7 @@
 					<div class="tsd-signature tsd-kind-icon">FRAGMENT_<wbr>RULES<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[...GENERIC,...FRAGMENT,]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/42142a6/src/utils/ShaderParser.ts#L90">utils/ShaderParser.ts:90</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/utils/ShaderParser.ts#L90">utils/ShaderParser.ts:90</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -119,7 +119,7 @@
 					<div class="tsd-signature tsd-kind-icon">GENERIC<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[{match: LINE_REGX(EsVersion),replace: &#x27;&#x27;,},]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/42142a6/src/utils/ShaderParser.ts#L78">utils/ShaderParser.ts:78</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/utils/ShaderParser.ts#L78">utils/ShaderParser.ts:78</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -129,7 +129,7 @@
 					<div class="tsd-signature tsd-kind-icon">VERTEX<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[{match: WORD_REGX(&#x27;in&#x27;),replace: &#x27;attribute&#x27;,},{match: WORD_REGX(&#x27;out&#x27;),replace: &#x27;varying&#x27;,},]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/42142a6/src/utils/ShaderParser.ts#L12">utils/ShaderParser.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/utils/ShaderParser.ts#L12">utils/ShaderParser.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -139,7 +139,7 @@
 					<div class="tsd-signature tsd-kind-icon">VERTEX_<wbr>RULES<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[...GENERIC,...VERTEX,]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/42142a6/src/utils/ShaderParser.ts#L85">utils/ShaderParser.ts:85</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/utils/ShaderParser.ts#L85">utils/ShaderParser.ts:85</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -156,7 +156,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/42142a6/src/utils/ShaderParser.ts#L8">utils/ShaderParser.ts:8</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/utils/ShaderParser.ts#L8">utils/ShaderParser.ts:8</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -179,7 +179,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/42142a6/src/utils/ShaderParser.ts#L4">utils/ShaderParser.ts:4</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/utils/ShaderParser.ts#L4">utils/ShaderParser.ts:4</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -202,7 +202,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/42142a6/src/utils/ShaderParser.ts#L98">utils/ShaderParser.ts:98</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/utils/ShaderParser.ts#L98">utils/ShaderParser.ts:98</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
