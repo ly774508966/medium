@@ -10,7 +10,7 @@
     "examples:html": "npm run examples:files; pug --obj ./examples/files.json --watch ./examples/src/templates/*.pug --out ./examples",
     "examples:files": "node ./examples/files; pug --obj ./examples/files.json ./examples/src/templates/*.pug --out ./examples;",
     "examples:build": "webpack --config webpack.config.examples.js --colors; npm run examples:files; pug --obj ./examples/files.json ./examples/src/templates/*.pug --out ./examples",
-    "build": "npm run lint; webpack --config webpack.config.build.js --colors; NODE_ENV=production webpack --config webpack.config.build.js --colors",
+    "build": "npm run lint; npm run docs; webpack --config webpack.config.build.js --colors; NODE_ENV=production webpack --config webpack.config.build.js --colors",
     "prepublish": "npm run build",
     "lint": "tslint ./src/**/*.ts",
     "docs": "typedoc --target es6 --tsconfig ./tsconfig.json --ignoreCompilerErrors --theme default --name Medium --out ./docs ./src"
