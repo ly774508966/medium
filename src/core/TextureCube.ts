@@ -78,6 +78,7 @@ export default class TextureCube {
 
 	onTextureError = (error: string) => {
 		warn(error);
+		this.emit('error', error);
 	}
 
 	update(images: Array<HTMLCanvasElement | HTMLImageElement | ImageData>) {

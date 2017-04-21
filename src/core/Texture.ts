@@ -76,6 +76,7 @@ export default class Texture {
 
 	onTextureError = (error: string) => {
 		warn(error);
+		this.emit('error', error);
 	}
 
 	updateImage(src: string) {
