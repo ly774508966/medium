@@ -138,13 +138,13 @@ export default class Shader {
 		}
 
 		// Generate texture indices
-		let textureIndex = 0;
-		Object.keys(this.uniforms).forEach(uniformName => {
+		const textureIndices = [gl.TEXTURE0, gl.TEXTURE1, gl.TEXTURE2, gl.TEXTURE3, gl.TEXTURE4, gl.TEXTURE5];
+		Object.keys(this.uniforms).forEach((uniformName, i) => {
 			switch (this.uniforms[uniformName].type) {
 				case 't':
 				case 'tc': {
-					this.uniforms[uniformName].textureIndex = textureIndex;
-					textureIndex += 1;
+					this.uniforms[uniformName].textureIndex = i;
+					this.uniforms[uniformName].activeTexture = textureIndices[i];
 					break;
 				}
 				default:
@@ -268,54 +268,14 @@ export default class Shader {
 				case 't':
 					{
 						gl.uniform1i(uniform.location, uniform.textureIndex);
-						let activeTexture;
-						switch (uniform.textureIndex) {
-							case 5:
-								activeTexture = gl.TEXTURE5;
-								break;
-							case 4:
-								activeTexture = gl.TEXTURE4;
-								break;
-							case 3:
-								activeTexture = gl.TEXTURE3;
-								break;
-							case 2:
-								activeTexture = gl.TEXTURE2;
-								break;
-							case 1:
-								activeTexture = gl.TEXTURE1;
-								break;
-							default:
-								activeTexture = gl.TEXTURE0;
-						}
-						gl.activeTexture(activeTexture);
+						gl.activeTexture(uniform.activeTexture);
 						gl.bindTexture(gl.TEXTURE_2D, uniform.value);
 						break;
 					}
 				case 'tc':
 					{
 						gl.uniform1i(uniform.location, uniform.textureIndex);
-						let activeTexture;
-						switch (uniform.textureIndex) {
-							case 5:
-								activeTexture = gl.TEXTURE5;
-								break;
-							case 4:
-								activeTexture = gl.TEXTURE4;
-								break;
-							case 3:
-								activeTexture = gl.TEXTURE3;
-								break;
-							case 2:
-								activeTexture = gl.TEXTURE2;
-								break;
-							case 1:
-								activeTexture = gl.TEXTURE1;
-								break;
-							default:
-								activeTexture = gl.TEXTURE0;
-						}
-						gl.activeTexture(activeTexture);
+						gl.activeTexture(uniform.activeTexture);
 						gl.bindTexture(gl.TEXTURE_CUBE_MAP, uniform.value);
 						break;
 					}
