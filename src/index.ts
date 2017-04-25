@@ -12,6 +12,7 @@ import RenderTarget from './core/RenderTarget';
 import Scene from './core/Scene';
 import Shader from './core/Shader';
 import Texture from './core/Texture';
+import Texture3d from './core/Texture3d';
 import TextureCube from './core/TextureCube';
 import TextureVideo from './core/TextureVideo';
 import UniformBuffer from './core/UniformBuffer';
@@ -31,6 +32,7 @@ import SphereGeometry from './geometry/SphereGeometry';
 
 // Helpers
 import AxisHelper from './helpers/AxisHelper';
+import CameraHelper from './helpers/CameraHelper';
 import GridHelper from './helpers/GridHelper';
 import NormalsHelper from './helpers/NormalsHelper';
 import VerticesHelper from './helpers/VerticesHelper';
@@ -77,6 +79,7 @@ export {
 	Scene,
 	Shader,
 	Texture,
+	Texture3d,
 	TextureCube,
 	TextureVideo,
 	UniformBuffer,
@@ -92,6 +95,7 @@ export {
 	PlaneGeometry,
 	SphereGeometry,
 	AxisHelper,
+	CameraHelper,
 	GridHelper,
 	NormalsHelper,
 	VerticesHelper,
