@@ -79,7 +79,7 @@ export default class Vector3 {
 	crossVectors(vector0: Vector3, vector1: Vector3) {
 		const out = vec3.create();
 		vec3.cross(out, vector0.v, vector1.v);
-		return this;
+		return out;
 	}
 	lerp(vector3: Vector3, value: number) {
 		vec3.lerp(this.v, this.v, vector3.v, value);
