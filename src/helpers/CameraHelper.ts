@@ -15,7 +15,6 @@ import { DRAW_LINE_STRIP } from '../core/Constants';
 import Vector3, { UP } from '../math/Vector3';
 import PerspectiveCamera from '../core/PerspectiveCamera';
 import Object3D from '../core/Object3D';
-import { lookAt } from '../math/Utils';
 
 const vertexShaderEs300 = `${EsVersion}
 	${ProjectionView}
@@ -140,29 +139,9 @@ export default class CameraHelper extends Mesh {
 		this.camera = camera;
 	}
 
-	updateMatrix() {
-		// Reset
-		mat4.identity(this.localMatrix);
-		mat4.identity(this.modelMatrix);
-		quat.identity(this._quaternion);
-
-		// If Object3D has a parent, copy the computed modelMatrix into localMatrix
-		if (this.parent) {
-			mat4.copy(this.localMatrix, this.parent.modelMatrix);
-			mat4.multiply(this.modelMatrix, this.modelMatrix, this.localMatrix);
-		}
-
-		// Apply local transitions to modelMatrix
-		mat4.translate(this.modelMatrix, this.modelMatrix, this.position.v);
-
-		this._quaternion = lookAt(this.camera.position.v, this.camera.target.v, [0, 0, 0]);
-
-		axisAngle = quat.getAxisAngle(quaternionAxisAngle, this._quaternion);
-		mat4.rotate(this.modelMatrix, this.modelMatrix, axisAngle, quaternionAxisAngle);
-	}
-
 	update() {
 		this.position.copy(this.camera.position);
+		this.lookAt(this.camera.target);
 	}
 
 	draw(modelViewMatrix: mat4, projectionMatrix: mat4) {
