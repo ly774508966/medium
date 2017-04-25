@@ -12,7 +12,7 @@ import Geometry from '../geometry/Geometry';
 import EsVersion from '../shaders/chunks/EsVersion.glsl';
 import ProjectionView from '../shaders/chunks/ProjectionView.glsl';
 import { DRAW_LINE_STRIP } from '../core/Constants';
-import Vector3, { UP } from '../math/Vector3';
+import Vector3 from '../math/Vector3';
 import PerspectiveCamera from '../core/PerspectiveCamera';
 import Object3D from '../core/Object3D';
 
