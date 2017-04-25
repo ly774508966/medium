@@ -15,6 +15,7 @@ import { DRAW_LINE_STRIP } from '../core/Constants';
 import Vector3, { UP } from '../math/Vector3';
 import PerspectiveCamera from '../core/PerspectiveCamera';
 import Object3D from '../core/Object3D';
+import { lookAt } from '../math/Utils';
 
 const vertexShaderEs300 = `${EsVersion}
 	${ProjectionView}
@@ -95,9 +96,9 @@ class CameraGeometry extends Geometry {
 			addVertex(-1 * scale, -1 * scale, z);
 		}
 
-		const z = 5;
+		const z = 3.5;
 		const scaleNear = 0.5;
-		const scaleFar = 4;
+		const scaleFar = 3;
 
 		// Boxes
 		box(0, scaleNear);
@@ -154,42 +155,10 @@ export default class CameraHelper extends Mesh {
 		// Apply local transitions to modelMatrix
 		mat4.translate(this.modelMatrix, this.modelMatrix, this.position.v);
 
-		this._quaternion = this.lookAt(this.camera.position.v, this.camera.target.v, vec3.create(0, 1, 0));
+		this._quaternion = lookAt(this.camera.position.v, this.camera.target.v, [0, 0, 0]);
 
 		axisAngle = quat.getAxisAngle(quaternionAxisAngle, this._quaternion);
 		mat4.rotate(this.modelMatrix, this.modelMatrix, axisAngle, quaternionAxisAngle);
-	}
-
-	// https://github.com/mrdoob/three.js/blob/master/src/math/Matrix4.js#L324
-	lookAt(eye, target, up) {
-		const quatOut = quat.create();
-		const x = vec3.create();
-		const y = vec3.create();
-		const z = vec3.create();
-
-		vec3.sub(z, eye, target);
-
-		if (vec3.squaredLength(z) === 0) {
-			// eye and target are in the same position
-			z[2] = 1;
-		}
-
-		vec3.normalize(z, z);
-		vec3.cross(x, up, z);
-
-		if (vec3.squaredLength(x) === 0) {
-			// eye and target are in the same vertical
-			z[2] += 0.0001;
-			vec3.cross(x, up, z);
-		}
-
-		vec3.normalize(x, x);
-		vec3.cross(y, z, x);
-
-		quat.setAxes(quatOut, z, x, y);
-		quat.invert(quatOut, quatOut);
-
-		return quatOut;
 	}
 
 	update() {

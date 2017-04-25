@@ -1,6 +1,7 @@
 import {
 	vec3,
 	mat4,
+	quat,
 } from 'gl-matrix';
 import Vector2 from '../math/Vector2';
 import Vector3 from '../math/Vector3';
@@ -84,4 +85,36 @@ export function from3DTo2D(position: Vector3, pVMatrix: mat4) {
 	screenPosition.y = 1 - (oy / ow + 1) / 2;
 
 	return screenPosition;
+}
+
+// https://github.com/mrdoob/three.js/blob/master/src/math/Matrix4.js#L324
+export function lookAt(eye: vec3, target: vec3, up: vec3) {
+	const quatOut = quat.create();
+	const x = vec3.create();
+	const y = vec3.create();
+	const z = vec3.create();
+
+	vec3.sub(z, eye, target);
+
+	if (vec3.squaredLength(z) === 0) {
+		// eye and target are in the same position
+		z[2] = 1;
+	}
+
+	vec3.normalize(z, z);
+	vec3.cross(x, up, z);
+
+	if (vec3.squaredLength(x) === 0) {
+		// eye and target are in the same vertical
+		z[2] += 0.0001;
+		vec3.cross(x, up, z);
+	}
+
+	vec3.normalize(x, x);
+	vec3.cross(y, z, x);
+
+	quat.setAxes(quatOut, z, x, y);
+	quat.invert(quatOut, quatOut);
+
+	return quatOut;
 }
