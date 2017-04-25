@@ -179,7 +179,7 @@ export default class Renderer {
 
 		mat4.identity(scene.modelViewMatrix);
 
-		mat4.lookAt(scene.modelViewMatrix, camera.position.v, camera.center.v, camera.up.v);
+		mat4.lookAt(scene.modelViewMatrix, camera.position.v, camera.target.v, camera.up.v);
 
 		// Update the scene
 		scene.update();
