@@ -142,7 +142,8 @@ export default class Shader {
 		Object.keys(this.uniforms).forEach((uniformName, i) => {
 			switch (this.uniforms[uniformName].type) {
 				case 't':
-				case 'tc': {
+				case 'tc':
+				case 't3d': {
 					this.uniforms[uniformName].textureIndex = i;
 					this.uniforms[uniformName].activeTexture = textureIndices[i];
 					break;
@@ -277,6 +278,15 @@ export default class Shader {
 						gl.uniform1i(uniform.location, uniform.textureIndex);
 						gl.activeTexture(uniform.activeTexture);
 						gl.bindTexture(gl.TEXTURE_CUBE_MAP, uniform.value);
+						break;
+					}
+				case 't3d':
+					{
+						if (gl instanceof WebGL2RenderingContext) {
+							gl.uniform1i(uniform.location, uniform.textureIndex);
+							gl.activeTexture(uniform.activeTexture);
+							gl.bindTexture(gl.TEXTURE_3D, uniform.value);
+						}
 						break;
 					}
 				case 'i':
