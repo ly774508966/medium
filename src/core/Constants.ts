@@ -1,3 +1,4 @@
+
 // Contexts
 export const WEBGL_CONTEXT: string = 'webgl';
 export const WEBGL2_CONTEXT: string = 'webgl2';
@@ -20,7 +21,8 @@ export const CULL_FRONT_AND_BACK: number = 0x0408;
 // Draw style
 export const DRAW_POINTS: number = 0;
 export const DRAW_LINES: number = 1;
-export const DRAW_LINE_STRIP: number = 2;
+export const DRAW_LINE_LOOP: number = 2;
+export const DRAW_LINE_STRIP: number = 3;
 export const DRAW_TRIANGLES: number = 4;
 
 // Uniform location indices
