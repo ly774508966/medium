@@ -4,6 +4,7 @@ import {
 	quat,
 } from 'gl-matrix';
 import Vector3 from '../math/Vector3';
+import { lookAt } from '../math/Utils';
 
 let axisAngle = 0;
 const quaternionAxisAngle = vec3.create();
@@ -15,9 +16,11 @@ export default class Object3D {
 	position: Vector3;
 	rotation: Vector3;
 	scale: Vector3;
-	_quaternion: quat;
 	isObject3D: boolean;
 	parent: Object3D;
+	_quaternion: quat;
+	_quaternionLookAt: quat;
+	_lookAtUp: vec3;
 
 	constructor() {
 		this.children = [];
@@ -26,8 +29,10 @@ export default class Object3D {
 		this.position = new Vector3();
 		this.rotation = new Vector3();
 		this.scale = new Vector3(1, 1, 1);
-		this._quaternion = quat.create();
 		this.isObject3D = true;
+		this._quaternion = quat.create();
+		this._quaternionLookAt = quat.create();
+		this._lookAtUp = vec3.create(); // needs to be [0, 0, 0] although it should be [0, 1, 0]
 	}
 
 	updateMatrix() {
@@ -42,6 +47,10 @@ export default class Object3D {
 			mat4.multiply(this.modelMatrix, this.modelMatrix, this.localMatrix);
 		}
 
+		// Use lookAt quat as base
+		// Note: this.rotation isn't updated if lookAt's used
+		quat.copy(this._quaternion, this._quaternionLookAt);
+
 		// Apply local transitions to modelMatrix
 		mat4.translate(this.modelMatrix, this.modelMatrix, this.position.v);
 		quat.rotateX(this._quaternion, this._quaternion, this.rotation.x);
@@ -50,6 +59,11 @@ export default class Object3D {
 		axisAngle = quat.getAxisAngle(quaternionAxisAngle, this._quaternion);
 		mat4.rotate(this.modelMatrix, this.modelMatrix, axisAngle, quaternionAxisAngle);
 		mat4.scale(this.modelMatrix, this.modelMatrix, this.scale.v);
+	}
+
+	lookAt(target: Vector3) {
+		quat.identity(this._quaternionLookAt);
+		this._quaternionLookAt = lookAt(this.position.v, target.v, this._lookAtUp);
 	}
 
 	setParent(parent: Object3D) {
