@@ -42,9 +42,9 @@
   dependencies:
     "@types/node" "*"
 
-"@types/webgl2@0.0.0":
-  version "0.0.0"
-  resolved "https://registry.yarnpkg.com/@types/webgl2/-/webgl2-0.0.0.tgz#5be3e94fa6f920abfef66cd36eee66e0b57ba459"
+"@types/webgl2@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@types/webgl2/-/webgl2-0.0.1.tgz#fd3c46927c3e7be16702d5ebfd056c58a26db2e7"
 
 abbrev@1:
   version "1.1.0"
@@ -406,14 +406,13 @@ babel-helpers@^6.24.1:
     babel-runtime "^6.22.0"
     babel-template "^6.24.1"
 
-babel-loader@^6.2.4:
-  version "6.4.1"
-  resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-6.4.1.tgz#0b34112d5b0748a8dcdbf51acf6f9bd42d50b8ca"
+babel-loader@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-7.0.0.tgz#2e43a66bee1fff4470533d0402c8a4532fafbaf7"
   dependencies:
     find-cache-dir "^0.1.1"
-    loader-utils "^0.2.16"
+    loader-utils "^1.0.2"
     mkdirp "^0.5.1"
-    object-assign "^4.0.1"
 
 babel-messages@^6.23.0:
   version "6.23.0"
@@ -998,10 +997,6 @@ buffer@^4.3.0:
     base64-js "^1.0.2"
     ieee754 "^1.1.4"
     isarray "^1.0.0"
-
-bufferpack@x:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/bufferpack/-/bufferpack-0.0.6.tgz#fb3d8738a0e1e4e03bcff99f9a75f9ec18a9d73e"
 
 builtin-modules@^1.0.0:
   version "1.1.1"
@@ -3087,17 +3082,6 @@ tar@^2.2.1:
     block-stream "*"
     fstream "^1.0.2"
     inherits "2"
-
-three-obj@^0.6.5:
-  version "0.6.5"
-  resolved "https://registry.yarnpkg.com/three-obj/-/three-obj-0.6.5.tgz#36dc588fc6525f53f3d77fd6affc5c9606c7088b"
-  dependencies:
-    bufferpack x
-    three "0.56.x"
-
-three@0.56.x:
-  version "0.56.7"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.56.7.tgz#73cf4878daf85097ca3d28da8f07e84200374df1"
 
 through@2, through@~2.3, through@~2.3.1:
   version "2.3.8"
