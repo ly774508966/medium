@@ -8,7 +8,7 @@ interface Options {
 	far?: number;
 	fov?: number;
 	position?: Vector3;
-	center?: Vector3;
+	target?: Vector3;
 	up?: Vector3;
 }
 
@@ -20,7 +20,7 @@ export default class OrthographicCamera {
 	far: number;
 	fov: number;
 	position: Vector3;
-	center: Vector3;
+	target: Vector3;
 	up: Vector3;
 
 	constructor(options: Options) {
@@ -31,13 +31,13 @@ export default class OrthographicCamera {
 		this.far = 100;
 		this.fov = 65;
 		this.position = new Vector3();
-		this.center = new Vector3();
+		this.target = new Vector3();
 		this.up = new Vector3(0, 1, 0);
 		Object.assign(this, options);
 	}
 
 	lookAt(x = 0, y = 0, z = 0) {
-		this.center.set(x, y, z);
+		this.target.set(x, y, z);
 	}
 
 	updateProjectionMatrix() {

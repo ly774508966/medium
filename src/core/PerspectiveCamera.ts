@@ -11,7 +11,7 @@ interface Options {
 	far?: number;
 	fov?: number;
 	position?: Vector3;
-	center?: Vector3;
+	target?: Vector3;
 	up?: Vector3;
 }
 
@@ -24,7 +24,7 @@ export default class PerspectiveCamera {
 	fov: number;
 	ratio: number;
 	position: Vector3;
-	center: Vector3;
+	target: Vector3;
 	up: Vector3;
 
 	constructor(options: Options) {
@@ -36,13 +36,13 @@ export default class PerspectiveCamera {
 		this.fov = 70;
 		this.ratio = RENDERER_DEFAULT_RATIO;
 		this.position = new Vector3();
-		this.center = new Vector3();
+		this.target = new Vector3();
 		this.up = new Vector3(0, 1, 0);
 		Object.assign(this, options);
 	}
 
 	lookAt(x = 0, y = 0, z = 0) {
-		this.center.set(x, y, z);
+		this.target.set(x, y, z);
 	}
 
 	updateProjectionMatrix() {
