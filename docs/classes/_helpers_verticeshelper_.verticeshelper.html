@@ -96,8 +96,10 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_helpers_verticeshelper_.verticeshelper.html#_labels" class="tsd-kind-icon">_labels</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_helpers_verticeshelper_.verticeshelper.html#_lookatup" class="tsd-kind-icon">_look<wbr>AtUp</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_helpers_verticeshelper_.verticeshelper.html#_parentmesh" class="tsd-kind-icon">_parent<wbr>Mesh</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_helpers_verticeshelper_.verticeshelper.html#_quaternion" class="tsd-kind-icon">_quaternion</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_helpers_verticeshelper_.verticeshelper.html#_quaternionlookat" class="tsd-kind-icon">_quaternion<wbr>Look<wbr>At</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_helpers_verticeshelper_.verticeshelper.html#children" class="tsd-kind-icon">children</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_helpers_verticeshelper_.verticeshelper.html#geometry" class="tsd-kind-icon">geometry</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_helpers_verticeshelper_.verticeshelper.html#instancecount" class="tsd-kind-icon">instance<wbr>Count</a></li>
@@ -123,6 +125,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="_helpers_verticeshelper_.verticeshelper.html#dispose" class="tsd-kind-icon">dispose</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_helpers_verticeshelper_.verticeshelper.html#draw" class="tsd-kind-icon">draw</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_helpers_verticeshelper_.verticeshelper.html#drawinstance" class="tsd-kind-icon">draw<wbr>Instance</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_helpers_verticeshelper_.verticeshelper.html#lookat" class="tsd-kind-icon">look<wbr>At</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_helpers_verticeshelper_.verticeshelper.html#setinstancecount" class="tsd-kind-icon">set<wbr>Instance<wbr>Count</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_helpers_verticeshelper_.verticeshelper.html#setparent" class="tsd-kind-icon">set<wbr>Parent</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_helpers_verticeshelper_.verticeshelper.html#unparent" class="tsd-kind-icon">un<wbr>Parent</a></li>
@@ -145,7 +148,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_core_mesh_.mesh.html">Mesh</a>.<a href="_core_mesh_.mesh.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/helpers/VerticesHelper.ts#L91">helpers/VerticesHelper.ts:91</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/helpers/VerticesHelper.ts#L91">helpers/VerticesHelper.ts:91</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -176,7 +179,18 @@
 					<div class="tsd-signature tsd-kind-icon">_labels<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/helpers/VerticesHelper.ts#L90">helpers/VerticesHelper.ts:90</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/helpers/VerticesHelper.ts#L90">helpers/VerticesHelper.ts:90</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="_lookatup" class="tsd-anchor"></a>
+					<h3>_look<wbr>AtUp</h3>
+					<div class="tsd-signature tsd-kind-icon">_look<wbr>AtUp<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">vec3</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="_core_object3d_.object3d.html">Object3D</a>.<a href="_core_object3d_.object3d.html#_lookatup">_lookAtUp</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Object3D.ts#L23">core/Object3D.ts:23</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -186,7 +200,7 @@
 					<div class="tsd-signature tsd-kind-icon">_parent<wbr>Mesh<span class="tsd-signature-symbol">:</span> <a href="_core_mesh_.mesh.html" class="tsd-signature-type">Mesh</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/helpers/VerticesHelper.ts#L91">helpers/VerticesHelper.ts:91</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/helpers/VerticesHelper.ts#L91">helpers/VerticesHelper.ts:91</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -197,7 +211,18 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_core_object3d_.object3d.html">Object3D</a>.<a href="_core_object3d_.object3d.html#_quaternion">_quaternion</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Object3D.ts#L18">core/Object3D.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Object3D.ts#L21">core/Object3D.ts:21</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="_quaternionlookat" class="tsd-anchor"></a>
+					<h3>_quaternion<wbr>Look<wbr>At</h3>
+					<div class="tsd-signature tsd-kind-icon">_quaternion<wbr>Look<wbr>At<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">quat</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="_core_object3d_.object3d.html">Object3D</a>.<a href="_core_object3d_.object3d.html#_quaternionlookat">_quaternionLookAt</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Object3D.ts#L22">core/Object3D.ts:22</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -208,7 +233,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_core_object3d_.object3d.html">Object3D</a>.<a href="_core_object3d_.object3d.html#children">children</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Object3D.ts#L12">core/Object3D.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Object3D.ts#L13">core/Object3D.ts:13</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -219,7 +244,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_core_mesh_.mesh.html">Mesh</a>.<a href="_core_mesh_.mesh.html#geometry">geometry</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Mesh.ts#L16">core/Mesh.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Mesh.ts#L16">core/Mesh.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -230,7 +255,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_core_mesh_.mesh.html">Mesh</a>.<a href="_core_mesh_.mesh.html#instancecount">instanceCount</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Mesh.ts#L20">core/Mesh.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Mesh.ts#L20">core/Mesh.ts:20</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -241,7 +266,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_core_mesh_.mesh.html">Mesh</a>.<a href="_core_mesh_.mesh.html#isinstanced">isInstanced</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Mesh.ts#L21">core/Mesh.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Mesh.ts#L21">core/Mesh.ts:21</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -252,7 +277,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_core_object3d_.object3d.html">Object3D</a>.<a href="_core_object3d_.object3d.html#isobject3d">isObject3D</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Object3D.ts#L19">core/Object3D.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Object3D.ts#L19">core/Object3D.ts:19</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -263,7 +288,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_core_object3d_.object3d.html">Object3D</a>.<a href="_core_object3d_.object3d.html#localmatrix">localMatrix</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Object3D.ts#L13">core/Object3D.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Object3D.ts#L14">core/Object3D.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -274,7 +299,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_core_object3d_.object3d.html">Object3D</a>.<a href="_core_object3d_.object3d.html#modelmatrix">modelMatrix</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Object3D.ts#L14">core/Object3D.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Object3D.ts#L15">core/Object3D.ts:15</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -285,7 +310,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_core_object3d_.object3d.html">Object3D</a>.<a href="_core_object3d_.object3d.html#parent">parent</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Object3D.ts#L20">core/Object3D.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Object3D.ts#L20">core/Object3D.ts:20</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -296,7 +321,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_core_object3d_.object3d.html">Object3D</a>.<a href="_core_object3d_.object3d.html#position">position</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Object3D.ts#L15">core/Object3D.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Object3D.ts#L16">core/Object3D.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -307,7 +332,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_core_object3d_.object3d.html">Object3D</a>.<a href="_core_object3d_.object3d.html#rotation">rotation</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Object3D.ts#L16">core/Object3D.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Object3D.ts#L17">core/Object3D.ts:17</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -318,7 +343,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_core_object3d_.object3d.html">Object3D</a>.<a href="_core_object3d_.object3d.html#scale">scale</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Object3D.ts#L17">core/Object3D.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Object3D.ts#L18">core/Object3D.ts:18</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -329,7 +354,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_core_mesh_.mesh.html">Mesh</a>.<a href="_core_mesh_.mesh.html#shader">shader</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Mesh.ts#L17">core/Mesh.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Mesh.ts#L17">core/Mesh.ts:17</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -340,7 +365,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_core_mesh_.mesh.html">Mesh</a>.<a href="_core_mesh_.mesh.html#vao">vao</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Mesh.ts#L18">core/Mesh.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Mesh.ts#L18">core/Mesh.ts:18</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -351,7 +376,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_core_mesh_.mesh.html">Mesh</a>.<a href="_core_mesh_.mesh.html#visible">visible</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Mesh.ts#L19">core/Mesh.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Mesh.ts#L19">core/Mesh.ts:19</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -369,7 +394,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_core_mesh_.mesh.html">Mesh</a>.<a href="_core_mesh_.mesh.html#bindattributes">bindAttributes</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Mesh.ts#L52">core/Mesh.ts:52</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Mesh.ts#L52">core/Mesh.ts:52</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -387,7 +412,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_core_mesh_.mesh.html">Mesh</a>.<a href="_core_mesh_.mesh.html#bindattributesinstanced">bindAttributesInstanced</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Mesh.ts#L67">core/Mesh.ts:67</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Mesh.ts#L67">core/Mesh.ts:67</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -405,7 +430,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_core_mesh_.mesh.html">Mesh</a>.<a href="_core_mesh_.mesh.html#bindindexbuffer">bindIndexBuffer</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Mesh.ts#L88">core/Mesh.ts:88</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Mesh.ts#L88">core/Mesh.ts:88</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -424,7 +449,7 @@
 								<p>Inherited from <a href="_core_mesh_.mesh.html">Mesh</a>.<a href="_core_mesh_.mesh.html#dispose">dispose</a></p>
 								<p>Overrides <a href="_core_object3d_.object3d.html">Object3D</a>.<a href="_core_object3d_.object3d.html#dispose">dispose</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Mesh.ts#L181">core/Mesh.ts:181</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Mesh.ts#L181">core/Mesh.ts:181</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -442,7 +467,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_core_mesh_.mesh.html">Mesh</a>.<a href="_core_mesh_.mesh.html#draw">draw</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/helpers/VerticesHelper.ts#L135">helpers/VerticesHelper.ts:135</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/helpers/VerticesHelper.ts#L135">helpers/VerticesHelper.ts:135</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -469,7 +494,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_core_mesh_.mesh.html">Mesh</a>.<a href="_core_mesh_.mesh.html#drawinstance">drawInstance</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Mesh.ts#L138">core/Mesh.ts:138</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Mesh.ts#L138">core/Mesh.ts:138</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -489,6 +514,30 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<a name="lookat" class="tsd-anchor"></a>
+					<h3>look<wbr>At</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">look<wbr>At<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><a href="_math_vector3_.vector3.html" class="tsd-signature-type">Vector3</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="_core_object3d_.object3d.html">Object3D</a>.<a href="_core_object3d_.object3d.html#lookat">lookAt</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Object3D.ts#L64">core/Object3D.ts:64</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>target: <a href="_math_vector3_.vector3.html" class="tsd-signature-type">Vector3</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="setinstancecount" class="tsd-anchor"></a>
 					<h3>set<wbr>Instance<wbr>Count</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
@@ -499,7 +548,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_core_mesh_.mesh.html">Mesh</a>.<a href="_core_mesh_.mesh.html#setinstancecount">setInstanceCount</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Mesh.ts#L46">core/Mesh.ts:46</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Mesh.ts#L46">core/Mesh.ts:46</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -523,7 +572,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_core_object3d_.object3d.html">Object3D</a>.<a href="_core_object3d_.object3d.html#setparent">setParent</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Object3D.ts#L55">core/Object3D.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Object3D.ts#L69">core/Object3D.ts:69</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -547,7 +596,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_core_object3d_.object3d.html">Object3D</a>.<a href="_core_object3d_.object3d.html#unparent">unParent</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Object3D.ts#L63">core/Object3D.ts:63</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Object3D.ts#L77">core/Object3D.ts:77</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -565,7 +614,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_core_object3d_.object3d.html">Object3D</a>.<a href="_core_object3d_.object3d.html#updatematrix">updateMatrix</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/4b79df2/src/core/Object3D.ts#L33">core/Object3D.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/core/Object3D.ts#L38">core/Object3D.ts:38</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -601,11 +650,17 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_helpers_verticeshelper_.verticeshelper.html#_labels" class="tsd-kind-icon">_labels</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="_helpers_verticeshelper_.verticeshelper.html#_lookatup" class="tsd-kind-icon">_look<wbr>AtUp</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_helpers_verticeshelper_.verticeshelper.html#_parentmesh" class="tsd-kind-icon">_parent<wbr>Mesh</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="_helpers_verticeshelper_.verticeshelper.html#_quaternion" class="tsd-kind-icon">_quaternion</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="_helpers_verticeshelper_.verticeshelper.html#_quaternionlookat" class="tsd-kind-icon">_quaternion<wbr>Look<wbr>At</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="_helpers_verticeshelper_.verticeshelper.html#children" class="tsd-kind-icon">children</a>
@@ -666,6 +721,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="_helpers_verticeshelper_.verticeshelper.html#drawinstance" class="tsd-kind-icon">draw<wbr>Instance</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_helpers_verticeshelper_.verticeshelper.html#lookat" class="tsd-kind-icon">look<wbr>At</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="_helpers_verticeshelper_.verticeshelper.html#setinstancecount" class="tsd-kind-icon">set<wbr>Instance<wbr>Count</a>

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;math/Ray&quot; | Medium</title>
+	<title>&quot;helpers/CameraHelper&quot; | Medium</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_math_ray_.html">&quot;math/Ray&quot;</a>
+					<a href="_helpers_camerahelper_.html">&quot;helpers/CameraHelper&quot;</a>
 				</li>
 			</ul>
-			<h1>External module &quot;math/Ray&quot;</h1>
+			<h1>External module &quot;helpers/CameraHelper&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -73,16 +73,25 @@
 						<section class="tsd-index-section ">
 							<h3>Classes</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_math_ray_.ray.html" class="tsd-kind-icon">Ray</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-external-module tsd-is-not-exported"><a href="../classes/_helpers_camerahelper_.camerageometry.html" class="tsd-kind-icon">Camera<wbr>Geometry</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_helpers_camerahelper_.camerahelper.html" class="tsd-kind-icon">Camera<wbr>Helper</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_math_ray_.html#diff" class="tsd-kind-icon">diff</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_math_ray_.html#edge1" class="tsd-kind-icon">edge1</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_math_ray_.html#edge2" class="tsd-kind-icon">edge2</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_math_ray_.html#normal" class="tsd-kind-icon">normal</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_helpers_camerahelper_.html#axisangle" class="tsd-kind-icon">axis<wbr>Angle</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_helpers_camerahelper_.html#gl" class="tsd-kind-icon">gl</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_helpers_camerahelper_.html#quaternionaxisangle" class="tsd-kind-icon">quaternion<wbr>Axis<wbr>Angle</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_helpers_camerahelper_.html#vertexshaderes100" class="tsd-kind-icon">vertex<wbr>Shader<wbr>Es100</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_helpers_camerahelper_.html#vertexshaderes300" class="tsd-kind-icon">vertex<wbr>Shader<wbr>Es300</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-not-exported">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported"><a href="_helpers_camerahelper_.html#fragmentshaderes100" class="tsd-kind-icon">fragment<wbr>Shader<wbr>Es100</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported"><a href="_helpers_camerahelper_.html#fragmentshaderes300" class="tsd-kind-icon">fragment<wbr>Shader<wbr>Es300</a></li>
 							</ul>
 						</section>
 					</div>
@@ -91,44 +100,91 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Variables</h2>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="diff" class="tsd-anchor"></a>
-					<h3>diff</h3>
-					<div class="tsd-signature tsd-kind-icon">diff<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">vec3</span><span class="tsd-signature-symbol"> =&nbsp;vec3.create()</span></div>
+					<a name="axisangle" class="tsd-anchor"></a>
+					<h3>axis<wbr>Angle</h3>
+					<div class="tsd-signature tsd-kind-icon">axis<wbr>Angle<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/math/Ray.ts#L6">math/Ray.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/helpers/CameraHelper.ts#L67">helpers/CameraHelper.ts:67</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="edge1" class="tsd-anchor"></a>
-					<h3>edge1</h3>
-					<div class="tsd-signature tsd-kind-icon">edge1<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">vec3</span><span class="tsd-signature-symbol"> =&nbsp;vec3.create()</span></div>
+					<a name="gl" class="tsd-anchor"></a>
+					<h3>gl</h3>
+					<div class="tsd-signature tsd-kind-icon">gl<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/math/Ray.ts#L7">math/Ray.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/helpers/CameraHelper.ts#L66">helpers/CameraHelper.ts:66</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="edge2" class="tsd-anchor"></a>
-					<h3>edge2</h3>
-					<div class="tsd-signature tsd-kind-icon">edge2<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">vec3</span><span class="tsd-signature-symbol"> =&nbsp;vec3.create()</span></div>
+					<a name="quaternionaxisangle" class="tsd-anchor"></a>
+					<h3>quaternion<wbr>Axis<wbr>Angle</h3>
+					<div class="tsd-signature tsd-kind-icon">quaternion<wbr>Axis<wbr>Angle<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">vec3</span><span class="tsd-signature-symbol"> =&nbsp;vec3.create()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/math/Ray.ts#L8">math/Ray.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/helpers/CameraHelper.ts#L68">helpers/CameraHelper.ts:68</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="normal" class="tsd-anchor"></a>
-					<h3>normal</h3>
-					<div class="tsd-signature tsd-kind-icon">normal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">vec3</span><span class="tsd-signature-symbol"> =&nbsp;vec3.create()</span></div>
+					<a name="vertexshaderes100" class="tsd-anchor"></a>
+					<h3>vertex<wbr>Shader<wbr>Es100</h3>
+					<div class="tsd-signature tsd-kind-icon">vertex<wbr>Shader<wbr>Es100<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;attribute vec3 aVertexPosition;uniform mat4 uProjectionMatrix;uniform mat4 uViewMatrix;uniform mat4 uModelMatrix;uniform mat3 uNormalMatrix;void main(void){gl_Position &#x3D; uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);}&#x60;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/math/Ray.ts#L9">math/Ray.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/helpers/CameraHelper.ts#L32">helpers/CameraHelper.ts:32</a></li>
 						</ul>
 					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+					<a name="vertexshaderes300" class="tsd-anchor"></a>
+					<h3>vertex<wbr>Shader<wbr>Es300</h3>
+					<div class="tsd-signature tsd-kind-icon">vertex<wbr>Shader<wbr>Es300<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;${EsVersion}${ProjectionView}in vec3 aVertexPosition;uniform mat4 uModelMatrix;uniform mat3 uNormalMatrix;void main(void){gl_Position &#x3D; uProjectionView.projectionMatrix * uProjectionView.viewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);}&#x60;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/helpers/CameraHelper.ts#L19">helpers/CameraHelper.ts:19</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+					<a name="fragmentshaderes100" class="tsd-anchor"></a>
+					<h3>fragment<wbr>Shader<wbr>Es100</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">fragment<wbr>Shader<wbr>Es100<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/helpers/CameraHelper.ts#L56">helpers/CameraHelper.ts:56</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+					<a name="fragmentshaderes300" class="tsd-anchor"></a>
+					<h3>fragment<wbr>Shader<wbr>Es300</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">fragment<wbr>Shader<wbr>Es300<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/18ca343/src/helpers/CameraHelper.ts#L45">helpers/CameraHelper.ts:45</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -139,26 +195,38 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="_math_ray_.html">"math/<wbr>Ray"</a>
+						<a href="_helpers_camerahelper_.html">"helpers/<wbr>Camera<wbr>Helper"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../classes/_helpers_camerahelper_.camerageometry.html" class="tsd-kind-icon">Camera<wbr>Geometry</a>
+					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/_math_ray_.ray.html" class="tsd-kind-icon">Ray</a>
+						<a href="../classes/_helpers_camerahelper_.camerahelper.html" class="tsd-kind-icon">Camera<wbr>Helper</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_math_ray_.html#diff" class="tsd-kind-icon">diff</a>
+						<a href="_helpers_camerahelper_.html#axisangle" class="tsd-kind-icon">axis<wbr>Angle</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_math_ray_.html#edge1" class="tsd-kind-icon">edge1</a>
+						<a href="_helpers_camerahelper_.html#gl" class="tsd-kind-icon">gl</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_math_ray_.html#edge2" class="tsd-kind-icon">edge2</a>
+						<a href="_helpers_camerahelper_.html#quaternionaxisangle" class="tsd-kind-icon">quaternion<wbr>Axis<wbr>Angle</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_math_ray_.html#normal" class="tsd-kind-icon">normal</a>
+						<a href="_helpers_camerahelper_.html#vertexshaderes100" class="tsd-kind-icon">vertex<wbr>Shader<wbr>Es100</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_helpers_camerahelper_.html#vertexshaderes300" class="tsd-kind-icon">vertex<wbr>Shader<wbr>Es300</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_helpers_camerahelper_.html#fragmentshaderes100" class="tsd-kind-icon">fragment<wbr>Shader<wbr>Es100</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_helpers_camerahelper_.html#fragmentshaderes300" class="tsd-kind-icon">fragment<wbr>Shader<wbr>Es300</a>
 					</li>
 				</ul>
 			</nav>
