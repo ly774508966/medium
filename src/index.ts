@@ -62,6 +62,8 @@ import OrbitControls from './controls/OrbitControls';
 
 // Loaders
 import FileLoader from './loaders/FileLoader';
+import HdrLoader from './loaders/HdrLoader';
+import ImageLoader from './loaders/ImageLoader';
 import JsonLoader from './loaders/JsonLoader';
 import ObjLoader from './loaders/ObjLoader';
 
@@ -87,6 +89,7 @@ export {
 	Vao,
 	Clock,
 	Detect,
+	ObjParser,
 	WebVRVive,
 	BoxGeometry,
 	LineGeometry,
@@ -110,6 +113,8 @@ export {
 	ShaderChunks,
 	OrbitControls,
 	FileLoader,
+	HdrLoader,
+	ImageLoader,
 	JsonLoader,
 	ObjLoader,
 };

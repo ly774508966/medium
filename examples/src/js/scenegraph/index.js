@@ -1,26 +1,27 @@
 import {
-	Renderer,
-	Scene,
-	PerspectiveCamera,
-	AxisHelper,
-	GridHelper,
-	OrbitControls,
-	SphereGeometry,
-	Shader,
-	Mesh,
-	Color,
-	DirectionalLight,
-	Object3D,
-	BoxGeometry,
-	Lights,
-	Constants,
-} from '../../../../src/index';
+  Renderer,
+  Scene,
+  PerspectiveCamera,
+  AxisHelper,
+  GridHelper,
+  OrbitControls,
+  SphereGeometry,
+  Shader,
+  Mesh,
+  Color,
+  DirectionalLight,
+  Object3D,
+  BoxGeometry,
+  Lights,
+  Constants
+} from '../../../../src/index.ts';
+
 const { gui, guiController } = require('../gui')();
 
 // Renderer
 const renderer = new Renderer({
-	ratio: window.innerWidth / window.innerHeight,
-	prefferedContext: guiController.context,
+  ratio: window.innerWidth / window.innerHeight,
+  prefferedContext: guiController.context
 });
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
@@ -30,7 +31,7 @@ const scene = new Scene();
 
 // Camera
 const camera = new PerspectiveCamera({
-	fov: 45,
+  fov: 45
 });
 
 camera.position.set(10, 5, 10);
@@ -45,12 +46,12 @@ scene.add(axis);
 controls.update();
 
 const directionalLights = new Lights([
-	new DirectionalLight({
-		intensity: {
-			type: 'f',
-			value: 0.7,
-		},
-	}),
+  new DirectionalLight({
+    intensity: {
+      type: 'f',
+      value: 0.7
+    }
+  })
 ]);
 
 directionalLights.get()[0].position.set(1, 1, 1);
@@ -60,23 +61,23 @@ scene.directionalLights = directionalLights;
 const container = new Object3D();
 
 const material = new Shader({
-	uniforms: {
-		uDiffuse: {
-			type: '3f',
-			value: new Color(0x666666).v,
-		},
-	},
-	directionalLights,
+  uniforms: {
+    uDiffuse: {
+      type: '3f',
+      value: new Color(0x666666).v
+    }
+  },
+  directionalLights
 });
 
 const material2 = new Shader({
-	drawType: Constants.DRAW_LINES,
-	uniforms: {
-		uDiffuse: {
-			type: '3f',
-			value: new Color(0xFF0000).v,
-		},
-	},
+  drawType: Constants.DRAW_LINES,
+  uniforms: {
+    uDiffuse: {
+      type: '3f',
+      value: new Color(0xff0000).v
+    }
+  }
 });
 
 const geometry0 = new BoxGeometry(2, 2, 2);
@@ -99,29 +100,29 @@ gui.add(mesh0.position, 'z', -10, 10);
 gui.add(mesh1.position, 'x', -10, 10);
 
 function resize() {
-	const width = window.innerWidth;
-	const height = window.innerHeight;
-	renderer.setSize(width, height);
-	camera.ratio = width / height;
-	camera.updateProjectionMatrix();
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  renderer.setSize(width, height);
+  camera.ratio = width / height;
+  camera.updateProjectionMatrix();
 }
 resize();
 
 window.addEventListener('resize', resize);
 
 function update() {
-	requestAnimationFrame(update);
+  requestAnimationFrame(update);
 
-	container.rotation.x += 0.01;
-	container.rotation.y += 0.01;
-	container.rotation.z += 0.01;
-	mesh0.rotation.x += 0.02;
-	mesh0.rotation.y -= 0.02;
-	mesh0.rotation.z += 0.02;
+  container.rotation.x += 0.01;
+  container.rotation.y += 0.01;
+  container.rotation.z += 0.01;
+  mesh0.rotation.x += 0.02;
+  mesh0.rotation.y -= 0.02;
+  mesh0.rotation.z += 0.02;
 
-	// Container doesn't get drawn so updateMatrix() needs
-	// to be called manually
-	container.updateMatrix();
-	renderer.render(scene, camera);
+  // Container doesn't get drawn so updateMatrix() needs
+  // to be called manually
+  container.updateMatrix();
+  renderer.render(scene, camera);
 }
 update();

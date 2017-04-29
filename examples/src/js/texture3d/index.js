@@ -1,28 +1,24 @@
-import {
-	GL,
-	Renderer,
-	Scene,
-	PerspectiveCamera,
-	Mesh,
-	Shader,
-	PlaneGeometry,
-	OrbitControls,
-	AxisHelper,
-	Texture3d,
-	Clock,
-	BoxGeometry,
-	ShaderChunks,
-} from '../../../../src/index';
-const {
-	gui,
-	guiController
-} = require('../gui')(['webgl2']);
 import SimplexNoise from 'simplex-noise';
+import {
+  GL,
+  Renderer,
+  Scene,
+  PerspectiveCamera,
+  Mesh,
+  Shader,
+  PlaneGeometry,
+  OrbitControls,
+  Texture3d,
+  Clock,
+  ShaderChunks
+} from '../../../../src/index.ts';
+
+const { gui, guiController } = require('../gui')(['webgl2']);
 
 // Renderer
 const renderer = new Renderer({
-	ratio: window.innerWidth / window.innerHeight,
-	prefferedContext: guiController.context
+  ratio: window.innerWidth / window.innerHeight,
+  prefferedContext: guiController.context
 });
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
@@ -32,7 +28,7 @@ const scene = new Scene();
 
 // Camera
 const camera = new PerspectiveCamera({
-	fov: 45,
+  fov: 45
 });
 
 camera.position.set(35, -25, 35);
@@ -45,24 +41,25 @@ const simplex = new SimplexNoise(Math.random);
 const scale = 0.035;
 // const scale = 1;
 const src = new Uint8Array(SIZE * SIZE * SIZE);
-for (var k = 0; k < SIZE; ++k) {
-	for (var j = 0; j < SIZE; ++j) {
-		for (var i = 0; i < SIZE; ++i) {
-			src[i + j * SIZE + k * SIZE * SIZE] = Math.abs(simplex.noise3D(i * scale, j * scale, k * scale)) * 256;
-		}
-	}
+for (let k = 0; k < SIZE; k += 1) {
+  for (let j = 0; j < SIZE; j += 1) {
+    for (let i = 0; i < SIZE; i += 1) {
+      src[i + j * SIZE + k * SIZE * SIZE] =
+        Math.abs(simplex.noise3D(i * scale, j * scale, k * scale)) * 256;
+    }
+  }
 }
 
 const texture3d = new Texture3d({
-	src,
-	size: SIZE,
+  src,
+  size: SIZE
 });
 
 const PLANE_SIZE = 20;
 const geometry = new PlaneGeometry(PLANE_SIZE, PLANE_SIZE, 1, 1, 'XY');
 const material = new Shader({
-	name: 'Plane',
-	hookVertexPre: `
+  name: 'Plane',
+  hookVertexPre: `
 		precision highp int;
 		precision highp sampler3D;
 		uniform float uFogDensity;
@@ -74,10 +71,10 @@ const material = new Shader({
 		out float vFogAmount;
 		${ShaderChunks.Fog.exp2}
 	`,
-	hookVertexMain: `
+  hookVertexMain: `
 		transformed.z = (-uVz * 0.5) + (aUvZ * uVz);
 	`,
-	hookVertexEnd: `
+  hookVertexEnd: `
 		float wave = sin(uTime) * 0.5 + 0.5;
 		vUv3.x = vUv.x;
 		vUv3.y = vUv.y;
@@ -85,46 +82,46 @@ const material = new Shader({
 		float fogDistance = length(gl_Position.xyz);
 		vFogAmount = fogExp2(fogDistance, uFogDensity);
 	`,
-	hookFragmentPre: `
+  hookFragmentPre: `
 		precision highp int;
 		precision highp sampler3D;
 		uniform sampler3D uTexture;
 		in float vFogAmount;
 		in vec3 vUv3;
 	`,
-	hookFragmentEnd: `
+  hookFragmentEnd: `
 		vec3 fogColor = vec3(0.0);
 		color = mix(vec3(1.0), fogColor, vFogAmount);
 		vec4 color2 = texture(uTexture, vUv3);
 		outgoingColor = vec4(color * color2.r, 1.0 - color2.r);
 	`,
-	uniforms: {
-		uFogDensity: {
-			type: 'f',
-			value: 0.028,
-		},
-		uVz: {
-			type: 'f',
-			value: PLANE_SIZE,
-		},
-		uTime: {
-			type: 'f',
-			value: 0,
-		},
-		uSpeed: {
-			type: 'f',
-			value: 0.38,
-		},
-		uTexture: {
-			type: 't3d',
-			value: texture3d.texture,
-		},
-	},
+  uniforms: {
+    uFogDensity: {
+      type: 'f',
+      value: 0.028
+    },
+    uVz: {
+      type: 'f',
+      value: PLANE_SIZE
+    },
+    uTime: {
+      type: 'f',
+      value: 0
+    },
+    uSpeed: {
+      type: 'f',
+      value: 0.38
+    },
+    uTexture: {
+      type: 't3d',
+      value: texture3d.texture
+    }
+  }
 });
 
 const data = new Float32Array(SIZE);
 for (let i = 0; i < SIZE; i += 1) {
-	data[i] = i / SIZE;
+  data[i] = i / SIZE;
 }
 
 geometry.addInstancedBufferAttribute('aUvZ', data, 1);
@@ -145,11 +142,11 @@ controls.target.set(0, 2, 0);
 controls.update();
 
 function resize() {
-	const width = window.innerWidth;
-	const height = window.innerHeight;
-	renderer.setSize(width, height);
-	camera.ratio = width / height;
-	camera.updateProjectionMatrix();
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  renderer.setSize(width, height);
+  camera.ratio = width / height;
+  camera.updateProjectionMatrix();
 }
 resize();
 
@@ -158,13 +155,13 @@ window.addEventListener('resize', resize);
 const clock = new Clock(true);
 
 const gl = GL.get();
-gl.enable( gl.BLEND );
-gl.blendEquation( gl.FUNC_ADD );
-gl.blendFunc( gl.ONE, gl.SRC_ALPHA );
+gl.enable(gl.BLEND);
+gl.blendEquation(gl.FUNC_ADD);
+gl.blendFunc(gl.ONE, gl.SRC_ALPHA);
 
 function update() {
-	requestAnimationFrame(update);
-	plane.shader.uniforms.uTime.value += clock.getDelta();
-	renderer.render(scene, camera);
+  requestAnimationFrame(update);
+  plane.shader.uniforms.uTime.value += clock.getDelta();
+  renderer.render(scene, camera);
 }
 update();

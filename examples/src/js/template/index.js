@@ -1,17 +1,18 @@
 import {
-	Renderer,
-	Scene,
-	PerspectiveCamera,
-	GridHelper,
-	OrbitControls,
-	AxisHelper,
-} from '../../../../src/index';
+  Renderer,
+  Scene,
+  PerspectiveCamera,
+  GridHelper,
+  OrbitControls,
+  AxisHelper
+} from '../../../../src/index.ts';
+
 const { guiController } = require('../gui')();
 
 // Renderer
 const renderer = new Renderer({
-	ratio: window.innerWidth / window.innerHeight,
-	prefferedContext: guiController.context,
+  ratio: window.innerWidth / window.innerHeight,
+  prefferedContext: guiController.context
 });
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
@@ -21,8 +22,8 @@ const scene = new Scene();
 
 // Camera
 const camera = new PerspectiveCamera({
-	fov: 45,
-	far: 500,
+  fov: 45,
+  far: 500
 });
 
 camera.position.set(10, 5, 10);
@@ -40,18 +41,18 @@ scene.add(axis);
 controls.update();
 
 function resize() {
-	const width = window.innerWidth;
-	const height = window.innerHeight;
-	renderer.setSize(width, height);
-	camera.ratio = width / height;
-	camera.updateProjectionMatrix();
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  renderer.setSize(width, height);
+  camera.ratio = width / height;
+  camera.updateProjectionMatrix();
 }
 resize();
 
 window.addEventListener('resize', resize);
 
 function update() {
-	requestAnimationFrame(update);
-	renderer.render(scene, camera);
+  requestAnimationFrame(update);
+  renderer.render(scene, camera);
 }
 update();

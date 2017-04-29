@@ -1,19 +1,18 @@
 import {
-	GL,
-	Renderer,
-	Scene,
-	OrthographicCamera,
-	PerspectiveCamera,
-	Mesh,
-	Shader,
-	PlaneGeometry,
-} from '../../../../src/index';
+  Renderer,
+  Scene,
+  OrthographicCamera,
+  Mesh,
+  Shader,
+  PlaneGeometry
+} from '../../../../src/index.ts';
+
 const { guiController } = require('../gui')();
 
 // Renderer
 const renderer = new Renderer({
-	ratio: window.innerWidth / window.innerHeight,
-	prefferedContext: guiController.context,
+  ratio: window.innerWidth / window.innerHeight,
+  prefferedContext: guiController.context
 });
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
@@ -29,8 +28,8 @@ camera.lookAt();
 
 const geometry = new PlaneGeometry(2, 2);
 const material = new Shader({
-	name: 'Plane',
-	hookFragmentEnd: 'outgoingColor = vec4(vUv, 1.0, 1.0);'
+  name: 'Plane',
+  hookFragmentEnd: 'outgoingColor = vec4(vUv, 1.0, 1.0);'
 });
 
 const plane = new Mesh(geometry, material);
@@ -38,18 +37,18 @@ const plane = new Mesh(geometry, material);
 scene.add(plane);
 
 function resize() {
-	const width = window.innerWidth;
-	const height = window.innerHeight;
-	renderer.setSize(width, height);
-	camera.ratio = width / height;
-	camera.updateProjectionMatrix();
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  renderer.setSize(width, height);
+  camera.ratio = width / height;
+  camera.updateProjectionMatrix();
 }
 resize();
 
 window.addEventListener('resize', resize);
 
 function update() {
-	requestAnimationFrame(update);
-	renderer.render(scene, camera);
+  requestAnimationFrame(update);
+  renderer.render(scene, camera);
 }
 update();

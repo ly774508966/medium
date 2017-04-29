@@ -1,34 +1,24 @@
 import {
-	Renderer,
-	Scene,
-	PerspectiveCamera,
-	GridHelper,
-	OrbitControls,
-	AxisHelper,
-	Lights,
-	DirectionalLight,
-	Color,
-	Mesh,
-	PlaneGeometry,
-	SphereGeometry,
-	Shader,
-	RenderTarget,
-	OrthographicCamera,
-	Program,
-	Constants,
-	JsonLoader,
-	Geometry,
-	BoxGeometry,
-} from '../../../../src/index';
-import {
-	mat4,
-	vec3,
-} from 'gl-matrix';
-const {
-	gui,
-	guiController
-} = require('../gui')();
+  Renderer,
+  Scene,
+  PerspectiveCamera,
+  GridHelper,
+  OrbitControls,
+  AxisHelper,
+  Lights,
+  DirectionalLight,
+  Color,
+  Mesh,
+  PlaneGeometry,
+  SphereGeometry,
+  Shader,
+  JsonLoader,
+  Geometry,
+  BoxGeometry
+} from '../../../../src/index.ts';
 import ShadowMapRenderer from './ShadowMapRenderer';
+
+const { gui, guiController } = require('../gui')();
 
 // Simple shadow mapping using a directional light
 //
@@ -37,8 +27,8 @@ import ShadowMapRenderer from './ShadowMapRenderer';
 
 // Renderer
 const renderer = new Renderer({
-	ratio: window.innerWidth / window.innerHeight,
-	prefferedContext: guiController.context,
+  ratio: window.innerWidth / window.innerHeight,
+  prefferedContext: guiController.context
 });
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
@@ -48,8 +38,8 @@ const scene = new Scene();
 
 // Camera
 const camera = new PerspectiveCamera({
-	fov: 45,
-	far: 500,
+  fov: 45,
+  far: 500
 });
 
 camera.position.set(12.5, 5, 12.5);
@@ -67,30 +57,33 @@ scene.add(axis);
 controls.update();
 
 const directionalLights = new Lights([
-	new DirectionalLight({
-		intensity: {
-			type: 'f',
-			value: 0.6,
-		},
-		color: {
-			type: '3f',
-			value: new Color(0xffffff).v,
-		},
-	}),
+  new DirectionalLight({
+    intensity: {
+      type: 'f',
+      value: 0.6
+    },
+    color: {
+      type: '3f',
+      value: new Color(0xffffff).v
+    }
+  })
 ]);
 const s = 1;
 directionalLights.get()[0].position.set(10 * s, 10 * s, 10 * s);
 scene.directionalLights = directionalLights;
 
 // Visible light helper
-const lightHelper = new Mesh(new SphereGeometry(0.1, 16, 16), new Shader({
-	uniforms: {
-		uDiffuse: {
-			type: '3f',
-			value: new Color(0xff0000).v
-		},
-	},
-}));
+const lightHelper = new Mesh(
+  new SphereGeometry(0.1, 16, 16),
+  new Shader({
+    uniforms: {
+      uDiffuse: {
+        type: '3f',
+        value: new Color(0xff0000).v
+      }
+    }
+  })
+);
 lightHelper.position.copy(directionalLights.get()[0].position);
 scene.add(lightHelper);
 
@@ -100,9 +93,15 @@ const sceneShadow = new Scene();
 
 const range = 20;
 gui.add(shadowMapRenderer.camera, 'far', 0, 100).name('light far');
-gui.add(directionalLights.get()[0].position, 'x', -range, range).name('light x')
-gui.add(directionalLights.get()[0].position, 'y', -range, range).name('light y')
-gui.add(directionalLights.get()[0].position, 'z', -range, range).name('light z')
+gui
+  .add(directionalLights.get()[0].position, 'x', -range, range)
+  .name('light x');
+gui
+  .add(directionalLights.get()[0].position, 'y', -range, range)
+  .name('light y');
+gui
+  .add(directionalLights.get()[0].position, 'z', -range, range)
+  .name('light z');
 
 const hookFragmentPre = `
 	uniform sampler2D uDepthTexture;
@@ -150,59 +149,60 @@ const hookFragmentEnd = `
 `;
 
 const objectMaterial = new Shader({
-	directionalLights,
-	hookFragmentPre,
-	hookFragmentEnd,
-	uniforms: {
-		uDiffuse: {
-			type: '3f',
-			value: new Color(0x666666).v,
-		},
-		uDepthTexture: {
-			type: 't',
-			value: shadowMapRenderer.renderTarget.texture,
-		},
-		uLightProjectionMatrix: {
-			type: 'Matrix4fv',
-			value: shadowMapRenderer.camera.projectionMatrix,
-		},
-		uLightViewMatrix: {
-			type: 'Matrix4fv',
-			value: shadowMapRenderer.lightViewMatrix,
-		},
-		uLightDepthSize: {
-			type: 'f',
-			value: shadowMapRenderer.renderTarget.width,
-		},
-		uLightFar: {
-			type: 'f',
-			value: shadowMapRenderer.camera.far,
-		},
-		uBias: {
-			type: 'f',
-			value: 0.0035,
-		},
-	},
+  directionalLights,
+  hookFragmentPre,
+  hookFragmentEnd,
+  uniforms: {
+    uDiffuse: {
+      type: '3f',
+      value: new Color(0x666666).v
+    },
+    uDepthTexture: {
+      type: 't',
+      value: shadowMapRenderer.renderTarget.texture
+    },
+    uLightProjectionMatrix: {
+      type: 'Matrix4fv',
+      value: shadowMapRenderer.camera.projectionMatrix
+    },
+    uLightViewMatrix: {
+      type: 'Matrix4fv',
+      value: shadowMapRenderer.lightViewMatrix
+    },
+    uLightDepthSize: {
+      type: 'f',
+      value: shadowMapRenderer.renderTarget.width
+    },
+    uLightFar: {
+      type: 'f',
+      value: shadowMapRenderer.camera.far
+    },
+    uBias: {
+      type: 'f',
+      value: 0.0035
+    }
+  }
 });
 
 gui.add(objectMaterial.uniforms.uBias, 'value', 0, 0.01).name('shadow bias');
 
 // Obj
 let objMesh;
-new JsonLoader('assets/models/mass.json').then(data => {
-	const geometry = new Geometry(data.vertices,
-		data.indices, data.normals);
+new JsonLoader('assets/models/mass.json')
+  .then(data => {
+    const geometry = new Geometry(data.vertices, data.indices, data.normals);
 
-	objMesh = new Mesh(geometry, objectMaterial);
+    objMesh = new Mesh(geometry, objectMaterial);
 
-	const scale = 1;
-	objMesh.scale.set(scale, scale, scale);
-	objMesh.position.set(-2.5, 2.5, 2.5);
-	scene.add(objMesh);
-	sceneShadow.add(objMesh);
-}).catch(error => {
-	console.log('error loading', error);
-});
+    const scale = 1;
+    objMesh.scale.set(scale, scale, scale);
+    objMesh.position.set(-2.5, 2.5, 2.5);
+    scene.add(objMesh);
+    sceneShadow.add(objMesh);
+  })
+  .catch(error => {
+    console.log('error loading', error); // eslint-disable-line no-console
+  });
 
 const sphere = new Mesh(new SphereGeometry(1, 32, 32), objectMaterial);
 sphere.position.y = 2;
@@ -220,57 +220,60 @@ const floor = new Mesh(new PlaneGeometry(10, 10, 1, 1, 'XZ'), objectMaterial);
 scene.add(floor);
 
 const depthMaterial = new Shader({
-	hookVertexPre: `
+  hookVertexPre: `
 		uniform mat4 uLightProjectionMatrix;
 		uniform mat4 uLightViewMatrix;
 		uniform float uLightFar;
  `,
-	hookVertexEnd: `
+  hookVertexEnd: `
 		vWorldPosition = uModelMatrix * vec4(vPosition, 1.0);
 		gl_Position = uLightProjectionMatrix * uLightViewMatrix * vWorldPosition;
  `,
-	hookFragmentPre: `
+  hookFragmentPre: `
 		uniform mat4 uLightViewMatrix;
 		uniform float uLightFar;
 		in vec4 vWorldPosition;
 	`,
-	hookFragmentEnd: `
+  hookFragmentEnd: `
 		vec3 lightPosition = (uLightViewMatrix * vWorldPosition).xyz;
 		float depth = clamp(length(lightPosition) / uLightFar, 0.0, 1.0);
 		outgoingColor = vec4(vec3(depth), 1.0);
 	`,
-	uniforms: {
-		uLightProjectionMatrix: {
-			type: 'Matrix4fv',
-			value: shadowMapRenderer.camera.projectionMatrix,
-		},
-		uLightViewMatrix: {
-			type: 'Matrix4fv',
-			value: shadowMapRenderer.lightViewMatrix,
-		},
-		uLightFar: {
-			type: 'f',
-			value: shadowMapRenderer.camera.far,
-		},
-	}
+  uniforms: {
+    uLightProjectionMatrix: {
+      type: 'Matrix4fv',
+      value: shadowMapRenderer.camera.projectionMatrix
+    },
+    uLightViewMatrix: {
+      type: 'Matrix4fv',
+      value: shadowMapRenderer.lightViewMatrix
+    },
+    uLightFar: {
+      type: 'f',
+      value: shadowMapRenderer.camera.far
+    }
+  }
 });
 depthMaterial.create(sphere.geometry);
 
 // Debug plane for shadow map
-const shadowMapDebug = new Mesh(new PlaneGeometry(3, 3), new Shader({
-	hookFragmentPre: `
+const shadowMapDebug = new Mesh(
+  new PlaneGeometry(3, 3),
+  new Shader({
+    hookFragmentPre: `
 		uniform sampler2D uTexture0;
 	`,
-	hookFragmentEnd: `
+    hookFragmentEnd: `
 		outgoingColor = texture(uTexture0, vUv);
 	`,
-	uniforms: {
-		uTexture0: {
-			type: 't',
-			value: shadowMapRenderer.renderTarget.texture,
-		},
-	}
-}));
+    uniforms: {
+      uTexture0: {
+        type: 't',
+        value: shadowMapRenderer.renderTarget.texture
+      }
+    }
+  })
+);
 
 shadowMapDebug.position.set(-3, 6, 0);
 shadowMapDebug.rotation.y = Math.PI / 4;
@@ -283,50 +286,50 @@ sceneShadow.add(floor);
 sceneShadow.add(box);
 
 function resize() {
-	const width = window.innerWidth;
-	const height = window.innerHeight;
-	renderer.setSize(width, height);
-	camera.ratio = width / height;
-	camera.updateProjectionMatrix();
-	shadowMapRenderer.resize(width, height);
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  renderer.setSize(width, height);
+  camera.ratio = width / height;
+  camera.updateProjectionMatrix();
+  shadowMapRenderer.resize(width, height);
 }
 resize();
 
 window.addEventListener('resize', resize);
 
 function update() {
-	requestAnimationFrame(update);
+  requestAnimationFrame(update);
 
-	lightHelper.position.copy(directionalLights.get()[0].position);
+  lightHelper.position.copy(directionalLights.get()[0].position);
 
-	depthMaterial.uniforms.uLightFar.value = shadowMapRenderer.camera.far;
-	objectMaterial.uniforms.uLightFar.value = shadowMapRenderer.camera.far;
+  depthMaterial.uniforms.uLightFar.value = shadowMapRenderer.camera.far;
+  objectMaterial.uniforms.uLightFar.value = shadowMapRenderer.camera.far;
 
-	// set depth material for objects
-	sceneShadow.objects.forEach(object => {
-		object.shader = depthMaterial;
-	});
+  // set depth material for objects
+  sceneShadow.objects.forEach(object => {
+    object.shader = depthMaterial;
+  });
 
-	if (objMesh) {
-		objMesh.shader = depthMaterial;
-	}
+  if (objMesh) {
+    objMesh.shader = depthMaterial;
+  }
 
-	shadowMapRenderer.render(sceneShadow);
+  shadowMapRenderer.render(sceneShadow);
 
-	// set normal material for objects
-	sceneShadow.objects.forEach(object => {
-		object.shader = objectMaterial;
-	});
+  // set normal material for objects
+  sceneShadow.objects.forEach(object => {
+    object.shader = objectMaterial;
+  });
 
-	if (objMesh) {
-		objMesh.shader = objectMaterial;
-		objMesh.rotation.y += 0.005;
-	}
+  if (objMesh) {
+    objMesh.shader = objectMaterial;
+    objMesh.rotation.y += 0.005;
+  }
 
-	box.rotation.x += 0.005;
-	box.rotation.y += 0.005;
-	box.rotation.z += 0.005;
+  box.rotation.x += 0.005;
+  box.rotation.y += 0.005;
+  box.rotation.z += 0.005;
 
-	renderer.render(scene, camera);
+  renderer.render(scene, camera);
 }
 update();

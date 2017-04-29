@@ -1,22 +1,22 @@
 import {
-	GL,
-	Renderer,
-	Scene,
-	PerspectiveCamera,
-	OrbitControls,
-	OrthographicCamera,
-	TextureCube,
-	Shader,
-	Mesh,
-	JsonLoader,
-	Geometry,
-} from '../../../../src/index';
+  Renderer,
+  Scene,
+  PerspectiveCamera,
+  OrbitControls,
+  OrthographicCamera,
+  TextureCube,
+  Shader,
+  Mesh,
+  JsonLoader,
+  Geometry
+} from '../../../../src/index.ts';
+
 const { guiController } = require('../gui')();
 
 // Renderer
 const renderer = new Renderer({
-	ratio: window.innerWidth / window.innerHeight,
-	prefferedContext: guiController.context,
+  ratio: window.innerWidth / window.innerHeight,
+  prefferedContext: guiController.context
 });
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
@@ -26,12 +26,12 @@ const scene = new Scene();
 
 // Camera
 const cameras = {
-	dev: new PerspectiveCamera({
-		fov: 45,
-	}),
-	main: new OrthographicCamera({
-		fov: 45,
-	}),
+  dev: new PerspectiveCamera({
+    fov: 45
+  }),
+  main: new OrthographicCamera({
+    fov: 45
+  })
 };
 
 cameras.dev.position.set(10, 5, 10);
@@ -46,64 +46,65 @@ const controls = new OrbitControls(cameras.dev, renderer.canvas);
 controls.update();
 
 const texture = new TextureCube({
-	src: [
-		'/assets/textures/cube/blackice/px.jpg',
-		'/assets/textures/cube/blackice/nx.jpg',
-		'/assets/textures/cube/blackice/py.jpg',
-		'/assets/textures/cube/blackice/ny.jpg',
-		'/assets/textures/cube/blackice/pz.jpg',
-		'/assets/textures/cube/blackice/nz.jpg',
-	],
+  src: [
+    '/assets/textures/cube/blackice/px.jpg',
+    '/assets/textures/cube/blackice/nx.jpg',
+    '/assets/textures/cube/blackice/py.jpg',
+    '/assets/textures/cube/blackice/ny.jpg',
+    '/assets/textures/cube/blackice/pz.jpg',
+    '/assets/textures/cube/blackice/nz.jpg'
+  ]
 });
 
 let mesh;
 
-new JsonLoader('assets/models/mass.json').then(data => {
-	const geometry = new Geometry(data.vertices,
-		data.indices, data.normals);
+new JsonLoader('assets/models/mass.json')
+  .then(data => {
+    const geometry = new Geometry(data.vertices, data.indices, data.normals);
 
-	const material = new Shader({
-		hookFragmentPre: `
+    const material = new Shader({
+      hookFragmentPre: `
 			uniform samplerCube uTexture0;
 		`,
-		hookFragmentMain: `
+      hookFragmentMain: `
 			color = texture(uTexture0, vNormal).rgb;
 		`,
-		uniforms: {
-			uTexture0: {
-				type: 'tc',
-				value: texture.texture,
-			},
-		},
-	});
+      uniforms: {
+        uTexture0: {
+          type: 'tc',
+          value: texture.texture
+        }
+      }
+    });
 
-	mesh = new Mesh(geometry, material);
+    mesh = new Mesh(geometry, material);
 
-	const scale = 2.25;
-	mesh.scale.set(scale, scale, scale);
-	scene.add(mesh);
-}).catch(error => {
-	console.log('error loading', error);
-});
+    const scale = 2.25;
+    mesh.scale.set(scale, scale, scale);
+    scene.add(mesh);
+  })
+  .catch(error => {
+    console.log('error loading', error); // eslint-disable-line no-console
+  });
 
 function resize() {
-	const width = window.innerWidth;
-	const height = window.innerHeight;
-	renderer.setSize(width, height);
-	cameras.dev.ratio = width / height;
-	cameras.dev.updateProjectionMatrix();
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  renderer.setSize(width, height);
+  cameras.dev.ratio = width / height;
+  cameras.dev.updateProjectionMatrix();
 }
 resize();
 
 window.addEventListener('resize', resize);
 
 function update() {
-	requestAnimationFrame(update);
+  requestAnimationFrame(update);
 
-	if (mesh) {
-		mesh.rotation.y += 0.003;
-	}
+  if (mesh) {
+    mesh.rotation.y += 0.003;
+  }
 
-	renderer.render(scene, cameras.dev);
+  renderer.render(scene, cameras.dev);
 }
 update();

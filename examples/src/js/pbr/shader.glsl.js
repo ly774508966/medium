@@ -1,4 +1,4 @@
-import { ShaderChunks } from '../../../../src/index';
+import { ShaderChunks } from '../../../../src/index.ts';
 
 export const hookFragmentPre = `
 	in vec3 vReflect;
