@@ -9,6 +9,8 @@ import Geometry from '../geometry/Geometry';
 import EsVersion from '../shaders/chunks/EsVersion.glsl';
 import ProjectionView from '../shaders/chunks/ProjectionView.glsl';
 
+let gl: WebGL2RenderingContext | WebGLRenderingContext;
+
 const vertexShaderEs300 = `${EsVersion}
 	${ProjectionView}
 
@@ -94,7 +96,7 @@ export default class NormalsHelper extends Mesh {
 	}
 
 	draw(modelViewMatrix: mat4, projectionMatrix: mat4) {
-		const gl = GL.get();
+		gl = GL.get();
 
 		// Update modelMatrix
 		this.updateMatrix();

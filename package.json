@@ -60,12 +60,15 @@
     "webpack": "^2.2.1"
   },
   "dependencies": {
+    "@types/dat-gui": "^0.6.2",
+    "bezier-js": "^2.2.3",
     "dat-gui": "^0.5.0",
     "gl-matrix": "^2.3.2",
     "happens": "^0.6.0",
     "parse-hdr": "^1.0.0",
     "query-string": "^4.3.4",
     "simplex-noise": "^2.3.0",
+    "uuid": "^3.0.1",
     "webgl-obj-loader": "^0.1.1"
   }
 }

@@ -67,7 +67,7 @@ export default class Shader {
 	program: Program;
 	customUniforms: object;
 
-	constructor(options: Options) {
+	constructor(options?: Options) {
 		const vertexShader = GL.webgl2 ? vertexShaderEs300 : vertexShaderEs100;
 		const fragmentShader = GL.webgl2 ? fragmentShaderEs300 : fragmentShaderEs100;
 		this.name = '';

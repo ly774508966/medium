@@ -1,8 +1,5 @@
 import {
-	vec3,
-	mat3,
 	mat4,
-	quat,
 } from 'gl-matrix';
 import Mesh from '../core/Mesh';
 import Shader from '../core/Shader';
@@ -12,9 +9,9 @@ import Geometry from '../geometry/Geometry';
 import EsVersion from '../shaders/chunks/EsVersion.glsl';
 import ProjectionView from '../shaders/chunks/ProjectionView.glsl';
 import { DRAW_LINE_STRIP } from '../core/Constants';
-import Vector3 from '../math/Vector3';
 import PerspectiveCamera from '../core/PerspectiveCamera';
-import Object3D from '../core/Object3D';
+
+let gl: WebGL2RenderingContext | WebGLRenderingContext;
 
 const vertexShaderEs300 = `${EsVersion}
 	${ProjectionView}
@@ -62,10 +59,6 @@ function fragmentShaderEs100() {
 	}
 	`;
 }
-
-let gl;
-let axisAngle = 0;
-const quaternionAxisAngle = vec3.create();
 
 class CameraGeometry extends Geometry {
 	constructor(mesh: Mesh, size = 0.5) {

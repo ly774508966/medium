@@ -4,10 +4,14 @@ import {
   PerspectiveCamera,
   GridHelper,
   OrbitControls,
-  AxisHelper
+  AxisHelper,
+  CameraHelper
 } from '../../../../src/index.ts';
 
-const { guiController } = require('../gui')();
+const { gui, guiController } = require('../gui')();
+
+guiController.debug = true;
+gui.add(guiController, 'debug');
 
 // Renderer
 const renderer = new Renderer({
@@ -15,22 +19,34 @@ const renderer = new Renderer({
   prefferedContext: guiController.context
 });
 renderer.setDevicePixelRatio(window.devicePixelRatio);
+renderer.setSissorTest(true);
 document.body.appendChild(renderer.canvas);
 
 // Scene
 const scene = new Scene();
 
 // Camera
-const camera = new PerspectiveCamera({
-  fov: 45,
-  far: 500
-});
+const cameras = {
+  dev: new PerspectiveCamera({
+    fov: 45,
+    far: 500,
+    ratio: window.innerWidth / window.innerHeight
+  }),
+  main: new PerspectiveCamera({
+    fov: 45,
+    far: 500,
+    ratio: window.innerWidth / window.innerHeight
+  })
+};
 
-camera.position.set(10, 5, 10);
-camera.lookAt();
+cameras.dev.position.set(10, 5, 10);
+cameras.dev.lookAt();
+
+cameras.main.position.set(10, 5, 10);
+cameras.main.lookAt();
 
 // Helpers
-const controls = new OrbitControls(camera, renderer.canvas);
+const controls = new OrbitControls(cameras.dev, renderer.canvas);
 
 const grid = new GridHelper(10);
 scene.add(grid);
@@ -38,21 +54,50 @@ scene.add(grid);
 const axis = new AxisHelper(1);
 scene.add(axis);
 
+const cameraHelper = new CameraHelper(cameras.main);
+scene.add(cameraHelper);
+
 controls.update();
 
 function resize() {
   const width = window.innerWidth;
   const height = window.innerHeight;
   renderer.setSize(width, height);
-  camera.ratio = width / height;
-  camera.updateProjectionMatrix();
+  cameras.dev.ratio = width / height;
+  cameras.dev.updateProjectionMatrix();
+  cameras.main.ratio = width / height;
+  cameras.main.updateProjectionMatrix();
 }
 resize();
 
 window.addEventListener('resize', resize);
 
+function render(camera, x, y, width, height) {
+  renderer.setSissor(
+    x,
+    y,
+    width * window.innerWidth,
+    height * window.innerHeight
+  );
+  renderer.setViewport(
+    x,
+    y,
+    width * window.innerWidth,
+    height * window.innerHeight
+  );
+  renderer.render(scene, camera);
+}
+
 function update() {
   requestAnimationFrame(update);
-  renderer.render(scene, camera);
+
+  cameraHelper.update();
+
+  if (guiController.debug) {
+    render(cameras.dev, 0, 0, 1, 1);
+    render(cameras.main, 0, 0, 0.25, 0.25);
+  } else {
+    render(cameras.main, 0, 0, 1, 1);
+  }
 }
 update();

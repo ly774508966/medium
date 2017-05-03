@@ -9,6 +9,8 @@ import Geometry from '../geometry/Geometry';
 import EsVersion from '../shaders/chunks/EsVersion.glsl';
 import ProjectionView from '../shaders/chunks/ProjectionView.glsl';
 
+let gl: WebGL2RenderingContext | WebGLRenderingContext;
+
 const vertexShaderEs300 = `${EsVersion}
 	layout (location = 0) in vec3 aVertexPosition;
 	layout (location = 1) in vec3 aVertexColor;
@@ -100,7 +102,7 @@ export default class AxisHelper extends Mesh {
 	}
 
 	draw(modelViewMatrix: mat4, projectionMatrix: mat4) {
-		const gl = GL.get();
+		gl = GL.get();
 
 		// Update modelMatrix
 		this.updateMatrix();
