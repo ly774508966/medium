@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 function isDir(file) {
-	return fs.statSync(path.join('./examples/src/js/', file)).isDirectory();
+  return fs.statSync(path.join('./examples/src/js/', file)).isDirectory();
 }
 const dirs = fs.readdirSync('./examples/src/js/').filter(isDir);
 
@@ -14,36 +14,49 @@ const entries = {};
 const exampleDir = process.env.EXAMPLE;
 
 if (exampleDir !== undefined) {
-	entries[exampleDir] = `./examples/src/js/${exampleDir}/index.js`;
+  entries[exampleDir] = `./examples/src/js/${exampleDir}/index.js`;
 } else {
-	dirs.forEach(dir => {
-			entries[dir] = `./examples/src/js/${dir}/index.js`;
-	});
+  dirs.forEach(dir => {
+    entries[dir] = `./examples/src/js/${dir}/index.js`;
+  });
 }
 
 module.exports = {
-	entry: entries,
-	devtool: 'source-map',
-	output: {
-		path: __dirname + '/examples/js',
-		filename: '[name].js',
-	},
-	resolve: {
-		extensions: ['.ts', '.js'],
-	},
-	module: {
-		loaders: [{
-			test: /\.ts(x?)$/,
-			exclude: /node_modules/,
-			loader: 'babel-loader!ts-loader'
-		}, {
-			test: /\.js$/,
-			exclude: /node_modules/,
-			loader: 'babel-loader',
-			query: {
-				presets: ['es2015', 'stage-0'],
-			},
-		}],
-	},
-	stats: 'minimal',
+  entry: entries,
+  devtool: 'source-map',
+  output: {
+    path: path.join(process.cwd(), 'examples/js'),
+    filename: '[name].js'
+  },
+  resolve: {
+    extensions: ['.ts', '.js']
+  },
+  module: {
+    loaders: [
+      {
+        test: /\.ts(x?)$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader!ts-loader'
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        query: {
+          presets: [
+            [
+              'env',
+              {
+                targets: {
+                  browsers: ['last 2 versions', 'ios_saf >= 8', 'not IE <= 10']
+                }
+              }
+            ]
+          ],
+          plugins: ['babel-plugin-transform-class-properties']
+        }
+      }
+    ]
+  },
+  stats: 'minimal'
 };
