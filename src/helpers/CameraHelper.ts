@@ -138,6 +138,7 @@ export default class CameraHelper extends Mesh {
 	}
 
 	draw(modelViewMatrix: mat4, projectionMatrix: mat4) {
+		if (!this.visible) return;
 		gl = GL.get();
 
 		// Update modelMatrix
