@@ -12,6 +12,8 @@ const UP = new Vector3(0, 1, 0);
 export default class OrbitControls {
 	rotationSpeed: number;
 	panSpeed: number;
+	zoom: boolean;
+	pan: boolean;
 	_camera: PerspectiveCamera;
 	_element: HTMLElement;
 	_zoomMin: number;
@@ -41,6 +43,8 @@ export default class OrbitControls {
 	constructor(camera: PerspectiveCamera, element: HTMLCanvasElement | HTMLDivElement) {
 		this.rotationSpeed = 5;
 		this.panSpeed = 10;
+		this.zoom = true;
+		this.pan = true;
 		this._camera = camera;
 		this._element = element;
 		this._zoomMin = 0.1;
@@ -123,6 +127,7 @@ export default class OrbitControls {
 		if (this.isDown) {
 			switch (this._mode) {
 				case MODE_PAN: {
+					if (!this.pan) return;
 					const y = event.pageX / this._width;
 					const x = event.pageY / this._height;
 					this._direction.copy(this._camera.position).subtract(this.target).normalize();
@@ -134,6 +139,7 @@ export default class OrbitControls {
 					break;
 				}
 				case MODE_ZOOM: {
+					if (!this.zoom) return;
 					const dx = event.touches[0].pageX - event.touches[1].pageX;
 					const dy = event.touches[0].pageY - event.touches[1].pageY;
 					const distance = Math.sqrt(dx * dx + dy * dy);
@@ -166,6 +172,7 @@ export default class OrbitControls {
 	}
 
 	_zoomConstraint(delta) {
+		if (!this.zoom) return;
 		const value = delta / 1000;
 		const speed = 3;
 		this._radius += value * speed;
