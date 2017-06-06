@@ -4,6 +4,7 @@ import EnvMapCube from './EnvMapCube.glsl';
 import EsVersion from './EsVersion.glsl';
 import Fog from './Fog.glsl';
 import Gamma from './Gamma.glsl';
+import Matcap from './Matcap.glsl';
 import Math from './Math.glsl';
 import * as Noise from './Noise.glsl';
 import Packing from './Packing.glsl';
@@ -19,6 +20,7 @@ export default {
 	EsVersion,
 	Fog,
 	Gamma,
+	Matcap,
 	Math,
 	Noise,
 	Packing,

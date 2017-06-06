@@ -47,6 +47,7 @@ cameras.main.lookAt();
 
 // Helpers
 const controls = new OrbitControls(cameras.dev, renderer.canvas);
+controls.smoothing = true;
 
 const grid = new GridHelper(10);
 scene.add(grid);
@@ -92,6 +93,7 @@ function update() {
   requestAnimationFrame(update);
 
   cameraHelper.update();
+  controls.update();
 
   if (guiController.debug) {
     render(cameras.dev, 0, 0, 1, 1);
