@@ -23,8 +23,6 @@ export default class AmbientLight extends Light {
 		};
 		Object.assign(this.uniforms, uniforms);
 
-		this.position = new Vector3();
-
 		if (GL.webgl2) {
 			// Buffer data
 			this.data = new Float32Array([
