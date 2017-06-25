@@ -2,27 +2,23 @@ import * as GL from '../core/GL';
 import Light from './Light';
 import Vector3 from '../math/Vector3';
 import Color from '../math/Color';
-import { LIGHT_DIRECTIONAL } from '../core/Constants';
+import { LIGHT_AMBIENT } from '../core/Constants';
 
-export default class DirectionalLight extends Light {
+export default class AmbientLight extends Light {
 	uniforms: any;
 	position: Vector3;
 
 	constructor(uniforms = {}) {
 		super();
-		this.type = LIGHT_DIRECTIONAL;
+		this.type = LIGHT_AMBIENT;
 		this.uniforms = {
-			position: {
-				type: '3f',
-				value: new Vector3(0, 0, 0).v,
-			},
 			color: {
 				type: '3f',
-				value: new Color(0xffffff).v,
+				value: new Color(0x404040).v,
 			},
 			intensity: {
 				type: 'f',
-				value: 1,
+				value: 0.1,
 			},
 		};
 		Object.assign(this.uniforms, uniforms);
@@ -32,7 +28,6 @@ export default class DirectionalLight extends Light {
 		if (GL.webgl2) {
 			// Buffer data
 			this.data = new Float32Array([
-				...this.uniforms.position.value, 0.0,
 				...this.uniforms.color.value, 0.0,
 				this.uniforms.intensity.value, 0.0, 0.0, 0.0,
 			]);
@@ -42,11 +37,8 @@ export default class DirectionalLight extends Light {
 	update() {
 		if (GL.webgl2) {
 			// Set values for buffer data
-			this.setValues(this.position.v);
-			this.setValues(this.uniforms.color.value, 4);
-			this.setValues([this.uniforms.intensity.value], 8);
-		} else {
-			this.uniforms.position.value.set(this.position.v);
+			this.setValues(this.uniforms.color.value, 0);
+			this.setValues([this.uniforms.intensity.value], 4);
 		}
 	}
 }

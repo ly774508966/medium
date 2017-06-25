@@ -14,7 +14,8 @@ import {
   Shader,
   JsonLoader,
   Geometry,
-  BoxGeometry
+  BoxGeometry,
+	AmbientLight
 } from '../../../../src/index.ts';
 import ShadowMapRenderer from './ShadowMapRenderer';
 
@@ -56,11 +57,24 @@ scene.add(axis);
 
 controls.update();
 
+const ambientLight = new Lights([
+  new AmbientLight({
+    intensity: {
+      type: 'f',
+      value: 0.5
+    },
+    color: {
+      type: '3f',
+      value: new Color(0x404040).v
+    }
+  }),
+]);
+
 const directionalLights = new Lights([
   new DirectionalLight({
     intensity: {
       type: 'f',
-      value: 0.6
+      value: 0.7
     },
     color: {
       type: '3f',
@@ -149,13 +163,15 @@ const hookFragmentEnd = `
 `;
 
 const objectMaterial = new Shader({
+  type: 'lambert',
+	// ambientLight,
   directionalLights,
   hookFragmentPre,
   hookFragmentEnd,
   uniforms: {
     uDiffuse: {
       type: '3f',
-      value: new Color(0x666666).v
+      value: new Color(0xffffff).v
     },
     uDepthTexture: {
       type: 't',

@@ -10,6 +10,7 @@ import {
   OrbitControls,
   AxisHelper,
   NormalsHelper,
+	AmbientLight,
   DirectionalLight,
   PointLight,
   Texture,
@@ -89,27 +90,17 @@ for (let i = 0; i < 6; i += 1) {
   }
 }
 
-const pointLights = new Lights([
-  new PointLight({
+const ambientLight = new Lights([
+  new AmbientLight({
     intensity: {
       type: 'f',
-      value: 0.7
+      value: 0.5
     },
     color: {
       type: '3f',
-      value: new Color(0xff0000).v
+      value: new Color(0x404040).v
     }
   }),
-  new PointLight({
-    intensity: {
-      type: 'f',
-      value: 0.7
-    },
-    color: {
-      type: '3f',
-      value: new Color(0x00ff00).v
-    }
-  })
 ]);
 
 const directionalLights = new Lights([
@@ -135,9 +126,33 @@ const directionalLights = new Lights([
   })
 ]);
 
+const pointLights = new Lights([
+  new PointLight({
+    intensity: {
+      type: 'f',
+      value: 0.7
+    },
+    color: {
+      type: '3f',
+      value: new Color(0xff0000).v
+    }
+  }),
+  new PointLight({
+    intensity: {
+      type: 'f',
+      value: 0.7
+    },
+    color: {
+      type: '3f',
+      value: new Color(0x00ff00).v
+    }
+  })
+]);
+
 directionalLights.get()[0].position.set(0, 1, 0);
 directionalLights.get()[1].position.set(0, -1, 0);
 
+scene.ambientLight = ambientLight;
 scene.pointLights = pointLights;
 scene.directionalLights = directionalLights;
 
@@ -146,6 +161,7 @@ const texture = new Texture({
 });
 geometry = new BoxGeometry();
 const material = new Shader({
+	type: 'phong',
   name: 'Box',
   hookFragmentPre: `
 		uniform sampler2D uTexture0;
@@ -159,6 +175,7 @@ const material = new Shader({
       value: texture.texture
     }
   },
+	ambientLight,
   directionalLights,
   pointLights
 });

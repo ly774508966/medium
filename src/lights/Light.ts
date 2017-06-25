@@ -1,4 +1,5 @@
 export default class Light {
+	type: string;
 	data: Float32Array;
 
 	update() {return; }

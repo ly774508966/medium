@@ -103,9 +103,8 @@ export default class Program {
 		gl = GL.get();
 		if (gl instanceof WebGL2RenderingContext) {
 			this.uniformBlocks[uniformName] = gl.getUniformBlockIndex(this.program, uniformName);
-			gl.uniformBlockBinding(this.program,
-																										this.uniformBlocks[uniformName], this.uniformBlocks[uniformName]);
-			gl.bindBufferBase(gl.UNIFORM_BUFFER, index, uniformBuffer);
+			gl.uniformBlockBinding(this.program, this.uniformBlocks[uniformName], this.uniformBlocks[uniformName]);
+			gl.bindBufferBase(gl.UNIFORM_BUFFER, this.uniformBlocks[uniformName], uniformBuffer);
 		}
 	}
 

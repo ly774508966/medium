@@ -1,7 +1,16 @@
 import * as GL from '../core/GL';
 import UniformBuffer from '../core/UniformBuffer';
+import AmbientLight from '../lights/AmbientLight';
 import DirectionalLight from '../lights/DirectionalLight';
 import PointLight from '../lights/PointLight';
+import {
+	UNIFORM_AMBIENT_LIGHT_LOCATION,
+	UNIFORM_DIRECTIONAL_LIGHTS_LOCATION,
+	UNIFORM_POINT_LIGHTS_LOCATION,
+	LIGHT_AMBIENT,
+	LIGHT_DIRECTIONAL,
+	LIGHT_POINT,
+} from '../core/Constants';
 
 let gl;
 
@@ -11,12 +20,14 @@ let gl;
 	* light type
 	*/
 export default class Lights {
-	lights: Array<DirectionalLight|PointLight>;
+	lights: Array<DirectionalLight | PointLight | AmbientLight>;
 	uniformBuffer: UniformBuffer;
 	_lightsData: Float32Array;
 
-	constructor(lights: Array<DirectionalLight | PointLight>) {
+	constructor(lights: Array<AmbientLight | DirectionalLight | PointLight>) {
 		this.lights = lights;
+
+		gl = GL.get();
 
 		if (GL.webgl2) {
 			const dataLength = this.lights[0].data.length;
@@ -61,9 +72,7 @@ export default class Lights {
 		if (GL.webgl2) {
 			gl = GL.get();
 
-			gl.bindBufferBase(gl.UNIFORM_BUFFER, 1, this.uniformBuffer.buffer);
 			gl.bindBuffer(gl.UNIFORM_BUFFER, this.uniformBuffer.buffer);
-
 			gl.bufferSubData(gl.UNIFORM_BUFFER, 0, this.uniformBuffer.data);
 			gl.bindBuffer(gl.UNIFORM_BUFFER, null);
 		}

@@ -25,7 +25,17 @@ export const DRAW_LINE_LOOP: number = 2;
 export const DRAW_LINE_STRIP: number = 3;
 export const DRAW_TRIANGLES: number = 4;
 
-// Uniform location indices
+// Uniform buffer location indices
 export const UNIFORM_PROJECTION_VIEW_LOCATION: number = 0;
-export const UNIFORM_DIRECTIONAL_LIGHTS_LOCATION: number = 1;
-export const UNIFORM_SPOT_LIGHTS_LOCATION: number = 2;
+export const UNIFORM_AMBIENT_LIGHT_LOCATION: number = 1;
+export const UNIFORM_DIRECTIONAL_LIGHTS_LOCATION: number = 2;
+export const UNIFORM_POINT_LIGHTS_LOCATION: number = 3;
+
+// Shader types
+export const SHADER_BASIC = 'basic';
+export const SHADER_LAMBERT = 'lambert';
+export const SHADER_PHONG = 'phong';
+
+export const LIGHT_AMBIENT = 'ambient';
+export const LIGHT_DIRECTIONAL = 'directional';
+export const LIGHT_POINT = 'point';

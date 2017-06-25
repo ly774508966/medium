@@ -36,6 +36,7 @@ import VerticesHelper from './helpers/VerticesHelper';
 
 // Lights
 import Lights from './lights/Lights';
+import AmbientLight from './lights/AmbientLight';
 import DirectionalLight from './lights/DirectionalLight';
 import PointLight from './lights/PointLight';
 
@@ -101,6 +102,7 @@ export {
 	NormalsHelper,
 	VerticesHelper,
 	Lights,
+	AmbientLight,
 	DirectionalLight,
 	PointLight,
 	Color,

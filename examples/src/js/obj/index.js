@@ -7,9 +7,11 @@ import {
   Geometry,
   Shader,
   Mesh,
-  Lights,
   Color,
-  PointLight
+  PointLight,
+	Lights,
+	AmbientLight,
+	DirectionalLight
 } from '../../../../src/index.ts';
 
 const { guiController } = require('../gui')();
@@ -37,17 +39,39 @@ camera.lookAt();
 const controls = new OrbitControls(camera, renderer.canvas);
 controls.update();
 
+const ambientLight = new Lights([
+  new AmbientLight({
+    intensity: {
+      type: 'f',
+      value: 0.7
+    },
+  })
+]);
+
+const directionalLights = new Lights([
+  new DirectionalLight({
+    intensity: {
+      type: 'f',
+      value: 0.7
+    },
+    color: {
+      type: '3f',
+      value: new Color(0xffffff).v
+    }
+  })
+]);
+
 const pointLights = new Lights([
   new PointLight({
     intensity: {
       type: 'f',
-      value: 0.7
+      value: 0.7,
     }
   }),
   new PointLight({
     intensity: {
       type: 'f',
-      value: 0.7
+      value: 0.7,
     }
   }),
   new PointLight({
@@ -55,26 +79,29 @@ const pointLights = new Lights([
       type: 'f',
       value: 0.7
     },
-    color: {
-      type: '3f',
-      value: new Color(0x000000).v
-    }
   })
 ]);
 
+directionalLights.get()[0].position.set(1, 1, 1);
+
+scene.ambientLight = ambientLight;
+scene.directionalLights = directionalLights;
 scene.pointLights = pointLights;
 
 // Obj
-new ObjLoader('assets/models/mass.obj')
+new ObjLoader('assets/models/obj/mass.obj')
   .then(data => {
     const geometry = new Geometry(data.vertices, data.indices, data.normals);
 
     const material = new Shader({
+			type: 'phong',
+			ambientLight,
+			directionalLights,
       pointLights,
       uniforms: {
         uDiffuse: {
           type: '3f',
-          value: new Color(0x000000).v
+          value: new Color(0xff0000).v
         }
       }
     });

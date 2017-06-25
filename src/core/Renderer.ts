@@ -50,7 +50,7 @@ export default class Renderer {
 	viewport: Viewport;
 	autoClear: boolean;
 
-	constructor(options: Options) {
+	constructor(options?: Options) {
 		// Default renderer settings
 		this.width = RENDERER_DEFAULT_WIDTH;
 		this.height = RENDERER_DEFAULT_HEIGHT;

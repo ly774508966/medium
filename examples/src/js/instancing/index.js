@@ -61,7 +61,7 @@ scene.directionalLights = directionalLights;
 
 const sierpinski = new Sierpinski();
 
-const positions = sierpinski.generate(40, 1, 5, jerusalem);
+const positions = sierpinski.generate(40, 2, 5, jerusalem);
 
 const totalInstances = positions.length;
 const data = new Float32Array(totalInstances * 3);
@@ -82,28 +82,19 @@ geometry.addInstancedBufferAttribute('aOffset', data, 3);
 const mesh = new Mesh(
   geometry,
   new Shader({
+    type: 'lambert',
     uniforms: {
       uDiffuse: {
         type: '3f',
         value: new Color(0xffffff).v
       },
-      uFogStart: {
-        type: 'f',
-        value: 0.0
-      },
-      uFogEnd: {
-        type: 'f',
-        value: 50.0
-      },
       uFogDensity: {
         type: 'f',
-        value: 0.027
+        value: 0.016
       }
     },
     hookVertexPre: `
 		in vec3 aOffset;
-		uniform float uFogStart;
-		uniform float uFogEnd;
 		uniform float uFogDensity;
 		out float vFogAmount;
 		${ShaderChunks.Fog.exp2}

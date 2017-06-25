@@ -2,6 +2,7 @@ import * as GL from '../core/GL';
 import Light from './Light';
 import Vector3 from '../math/Vector3';
 import Color from '../math/Color';
+import { LIGHT_POINT } from '../core/Constants';
 
 export default class PointLight extends Light {
 	uniforms: any;
@@ -9,6 +10,7 @@ export default class PointLight extends Light {
 
 	constructor(uniforms = {}) {
 		super();
+		this.type = LIGHT_POINT;
 		this.uniforms = {
 			position: {
 				type: '3f',

@@ -4,12 +4,10 @@ const path = require('path');
 
 const dir = path.join(__dirname, 'examples/src/js');
 const demos = [];
-fs.readdirSync(dir, (err, files) => {
-  files.forEach(file => {
-    if (fs.lstatSync(path.join(dir, file)).isDirectory()) {
-      demos.push(file.split('.js')[0]);
-    }
-  });
+shell.ls(`${dir}`).forEach(file => {
+  if (fs.lstatSync(path.join(dir, file)).isDirectory()) {
+    demos.push(file.split('.js')[0]);
+  }
 });
 
 const obj = JSON.stringify({
