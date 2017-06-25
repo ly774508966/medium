@@ -6,6 +6,7 @@ import Lights from '../lights/Lights';
 
 export default class Scene {
 	objects: Array<Mesh>;
+	ambientLight: Lights;
 	pointLights: Lights;
 	directionalLights: Lights;
 	modelViewMatrix: mat4;
@@ -33,6 +34,10 @@ export default class Scene {
 	}
 
 	update() {
+		if (this.ambientLight) {
+			this.ambientLight.update();
+			this.ambientLight.bind();
+		}
 		if (this.directionalLights) {
 			this.directionalLights.update();
 			this.directionalLights.bind();

@@ -5,7 +5,15 @@ import {
   GridHelper,
   OrbitControls,
   AxisHelper,
-  CameraHelper
+  CameraHelper,
+		Lights,
+		AmbientLight,
+		DirectionalLight,
+		Color,
+		Mesh,
+		SphereGeometry,
+		Shader,
+		PlaneGeometry
 } from '../../../../src/index.ts';
 
 const { gui, guiController } = require('../gui')();
@@ -59,6 +67,51 @@ const cameraHelper = new CameraHelper(cameras.main);
 scene.add(cameraHelper);
 
 controls.update();
+
+const ambientLight = new Lights([
+  new AmbientLight({
+    intensity: {
+      type: 'f',
+      value: 0.5
+    },
+    color: {
+      type: '3f',
+      value: new Color(0x404040).v
+    }
+  }),
+]);
+
+const directionalLights = new Lights([
+  new DirectionalLight({
+    intensity: {
+      type: 'f',
+      value: 0.7
+    },
+    color: {
+      type: '3f',
+      value: new Color(0xffffff).v
+    }
+  }),
+]);
+
+directionalLights.get()[0].position.set(1, 1, 1);
+
+scene.ambientLight = ambientLight;
+scene.directionalLights = directionalLights;
+
+// Objects
+const mesh = new Mesh(new SphereGeometry(2, 32, 32), new Shader({
+	directionalLights,
+	ambientLight,
+	type: 'lambert',
+	uniforms: {
+		uDiffuse: {
+			type: '3f',
+			value: new Color(0xffffff).v
+		}
+	}
+}));
+scene.add(mesh);
 
 function resize() {
   const width = window.innerWidth;

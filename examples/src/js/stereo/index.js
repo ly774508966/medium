@@ -20,6 +20,7 @@ const renderer = new StereoRender({
   ratio: window.innerWidth / window.innerHeight,
   prefferedContext: guiController.context
 });
+console.log(renderer);
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
 

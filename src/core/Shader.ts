@@ -3,16 +3,23 @@ import * as CONSTANTS from './Constants';
 import {
 	mat3,
 	mat4,
-	vec3,
 } from 'gl-matrix';
 import {
 	vertexShaderEs300,
 	vertexShaderEs100,
-} from '../shaders/basic/Vertex.glsl';
+} from '../shaders/Vertex.glsl';
 import {
-	fragmentShaderEs300,
-	fragmentShaderEs100,
-} from '../shaders/basic/Frag.glsl';
+	basicFragmentShaderEs300,
+	basicFragmentShaderEs100,
+} from '../shaders/Basic.glsl';
+import {
+	lambertFragmentShaderEs300,
+	lambertFragmentShaderEs100,
+} from '../shaders/Lambert.glsl';
+import {
+	phongFragmentShaderEs300,
+	phongFragmentShaderEs100,
+} from '../shaders/Phong.glsl';
 import ShaderParser from '../utils/ShaderParser';
 import Color from '../math/Color';
 import {
@@ -32,6 +39,7 @@ const inversedModelViewMatrix: mat4 = mat4.create();
 
 interface Options {
 	name?: string;
+	type?: string;
 	uniforms?: any;
 	fov?: number;
 	hookVertexPre?: string;
@@ -43,6 +51,7 @@ interface Options {
 	vertexShader?: string;
 	fragmentShader?: string;
 	drawType?: number;
+	ambientLight?: Lights;
 	directionalLights?: Lights;
 	pointLights?: Lights;
 	culling?: number;
@@ -50,6 +59,7 @@ interface Options {
 
 export default class Shader {
 	name: string;
+	type: string;
 	uniforms: any;
 	fov: number;
 	hookVertexPre: string;
@@ -61,16 +71,33 @@ export default class Shader {
 	vertexShader: string;
 	fragmentShader: string;
 	drawType: number;
+	ambientLight: Lights;
 	directionalLights: Lights;
 	pointLights: Lights;
 	culling: number;
 	program: Program;
 	customUniforms: object;
 
-	constructor(options: Options) {
+	constructor(options?: Options) {
 		const vertexShader = GL.webgl2 ? vertexShaderEs300 : vertexShaderEs100;
-		const fragmentShader = GL.webgl2 ? fragmentShaderEs300 : fragmentShaderEs100;
+		let fragmentShader;
+
+		switch (options.type) {
+			case CONSTANTS.SHADER_LAMBERT: {
+				fragmentShader = GL.webgl2 ? lambertFragmentShaderEs300 : lambertFragmentShaderEs100;
+				break;
+			}
+			case CONSTANTS.SHADER_PHONG: {
+				fragmentShader = GL.webgl2 ? phongFragmentShaderEs300 : phongFragmentShaderEs100;
+				break;
+			}
+			default: {
+				fragmentShader = GL.webgl2 ? basicFragmentShaderEs300 : basicFragmentShaderEs100;
+			}
+		}
+
 		this.name = '';
+		this.type = CONSTANTS.SHADER_BASIC;
 		this.uniforms = {};
 		this.hookVertexPre = '';
 		this.hookVertexMain = '';
@@ -105,6 +132,22 @@ export default class Shader {
 				UniformBuffers.projectionView.buffer, CONSTANTS.UNIFORM_PROJECTION_VIEW_LOCATION);
 		}
 
+		if (this.ambientLight) {
+			if (GL.webgl2) {
+				// Setup uniform block for point lights
+				this.program.setUniformBlockLocation('AmbientLight',
+					this.ambientLight.uniformBuffer.buffer, CONSTANTS.UNIFORM_AMBIENT_LIGHT_LOCATION);
+			} else {
+				// Generate uniforms for point lights
+				this.ambientLight.get().forEach((ambientLight, i) => {
+					Object.keys(ambientLight.uniforms).forEach(ambientLightUniform => {
+						const uniform = ambientLight.uniforms[ambientLightUniform];
+						this.customUniforms[`uAmbientLight.${ambientLightUniform}`] = uniform;
+					});
+				});
+			}
+		}
+
 		if (this.directionalLights) {
 			if (GL.webgl2) {
 				// Setup uniform block for directional lights
@@ -125,7 +168,7 @@ export default class Shader {
 			if (GL.webgl2) {
 				// Setup uniform block for point lights
 				this.program.setUniformBlockLocation('PointLights',
-					this.pointLights.uniformBuffer.buffer, CONSTANTS.UNIFORM_SPOT_LIGHTS_LOCATION);
+					this.pointLights.uniformBuffer.buffer, CONSTANTS.UNIFORM_POINT_LIGHTS_LOCATION);
 			} else {
 				// Generate uniforms for point lights
 				this.pointLights.get().forEach((pointLight, i) => {
@@ -229,6 +272,10 @@ export default class Shader {
 
 		if (geometry.bufferNormals) {
 			addDefine('normals');
+		}
+
+		if (this.ambientLight) {
+			addDefine('ambientLight');
 		}
 
 		if (this.directionalLights) {

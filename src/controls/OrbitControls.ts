@@ -8,10 +8,15 @@ const MODE_DRAG = 'MODE_DRAG';
 const MODE_PAN = 'MODE_PAN';
 const MODE_ZOOM = 'MODE_ZOOM';
 const UP = new Vector3(0, 1, 0);
+const EASE_THRESHOLD = 0.0001;
 
 export default class OrbitControls {
 	rotationSpeed: number;
 	panSpeed: number;
+	zoom: boolean;
+	pan: boolean;
+	smoothing: boolean;
+	easing: number;
 	_camera: PerspectiveCamera;
 	_element: HTMLElement;
 	_zoomMin: number;
@@ -23,6 +28,9 @@ export default class OrbitControls {
 	_rotationY: number;
 	_defaultRotationX: number;
 	_defaultRotationY: number;
+	_x: number;
+	_y: number;
+	_z: number;
 	_offsetX: number;
 	_offsetY: number;
 	_offsetPanX: number;
@@ -41,6 +49,10 @@ export default class OrbitControls {
 	constructor(camera: PerspectiveCamera, element: HTMLCanvasElement | HTMLDivElement) {
 		this.rotationSpeed = 5;
 		this.panSpeed = 10;
+		this.zoom = true;
+		this.pan = true;
+		this.smoothing = false;
+		this.easing = 0.1;
 		this._camera = camera;
 		this._element = element;
 		this._zoomMin = 0.1;
@@ -52,6 +64,15 @@ export default class OrbitControls {
 		this._rotationY = Math.atan2(camera.position.z - 0, camera.position.x - 0);
 		this._defaultRotationX = Math.atan2(camera.position.y - 0, +this._radius - 0);
 		this._defaultRotationY = Math.atan2(camera.position.z - 0, camera.position.x - 0);
+
+		const y = this._radius * Math.sin(this._rotationX);
+		const r = this._radius * Math.cos(this._rotationX);
+		const x = Math.sin(this._rotationY) * r;
+		const z = Math.cos(this._rotationY) * r;
+
+		this._x = x;
+		this._y = y;
+		this._z = z;
 		this._offsetX = 0;
 		this._offsetY = 0;
 		this._offsetPanX = 0;
@@ -123,6 +144,7 @@ export default class OrbitControls {
 		if (this.isDown) {
 			switch (this._mode) {
 				case MODE_PAN: {
+					if (!this.pan) return;
 					const y = event.pageX / this._width;
 					const x = event.pageY / this._height;
 					this._direction.copy(this._camera.position).subtract(this.target).normalize();
@@ -134,6 +156,7 @@ export default class OrbitControls {
 					break;
 				}
 				case MODE_ZOOM: {
+					if (!this.zoom) return;
 					const dx = event.touches[0].pageX - event.touches[1].pageX;
 					const dy = event.touches[0].pageY - event.touches[1].pageY;
 					const distance = Math.sqrt(dx * dx + dy * dy);
@@ -166,6 +189,7 @@ export default class OrbitControls {
 	}
 
 	_zoomConstraint(delta) {
+		if (!this.zoom) return;
 		const value = delta / 1000;
 		const speed = 3;
 		this._radius += value * speed;
@@ -178,7 +202,30 @@ export default class OrbitControls {
 		const r = this._radius * Math.cos(this._rotationX); // radius of the sphere
 		const x = Math.sin(this._rotationY) * r;
 		const z = Math.cos(this._rotationY) * r;
-		this._camera.position.set(x, y, z).add(this.target);
+
+		if (this.smoothing) {
+			this._x += (x - this._x) * this.easing;
+			this._y += (y - this._y) * this.easing;
+			this._z += (z - this._z) * this.easing;
+
+			if (Math.abs(this._x - x) < EASE_THRESHOLD) {
+				this._x = x;
+			}
+
+			if (Math.abs(this._y - y) < EASE_THRESHOLD) {
+				this._y = y;
+			}
+
+			if (Math.abs(this._z - z) < EASE_THRESHOLD) {
+				this._z = z;
+			}
+		} else {
+			this._x = x;
+			this._y = y;
+			this._z = z;
+		}
+
+		this._camera.position.set(this._x, this._y, this._z).add(this.target);
 		this._camera.lookAt(this.target.x, this.target.y, this.target.z);
 	}
 

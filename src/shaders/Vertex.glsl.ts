@@ -1,7 +1,6 @@
-import EsVersion from '../chunks/EsVersion.glsl';
-import { pointLightsOutEs300, pointLightsEs100 } from '../chunks/PointLights.glsl';
-import { definePI, definePITwo } from '../chunks/Math.glsl';
-import ProjectionView from '../chunks/ProjectionView.glsl';
+import EsVersion from './chunks/EsVersion.glsl';
+import { definePI, definePITwo } from './chunks/Math.glsl';
+import ProjectionView from './chunks/ProjectionView.glsl';
 
 const vertexShaderEs300 = `${EsVersion}
 	${definePI}
@@ -46,11 +45,6 @@ const vertexShaderEs300 = `${EsVersion}
 	out vec2 vUv;
 	#endif
 
-	// Lighting
-	#ifdef pointLights
-	${pointLightsOutEs300}
-	#endif
-
 	#HOOK_VERTEX_PRE
 
 	void main(void){
@@ -79,15 +73,6 @@ const vertexShaderEs300 = `${EsVersion}
 
 		// Calculate world position of vertex with transformed
 		vWorldPosition = uModelMatrix * vec4(aVertexPosition + transformed, 1.0);
-
-		#ifdef pointLights
-		for (int i = 0; i < #HOOK_POINT_LIGHTS; i++) {
-			// Calculate directional vector of surface to the light
-			vPointLightSurfaceToLightDirection[i] = uPointLights[i].position.xyz - vWorldPosition.xyz;
-			// Calculate directional vector of camera to the surface
-			vPointLightSurfaceToCameraDirection[i] = uCameraPosition - vWorldPosition.xyz;
-		}
-		#endif
 
 		gl_Position = uProjectionView.projectionMatrix * uProjectionView.viewMatrix * uModelMatrix * vec4(vPosition, 1.0);
 
@@ -135,11 +120,6 @@ const vertexShaderEs100 = `
 	varying vec2 vUv;
 	#endif
 
-	// Lighting
-	#ifdef pointLights
-	${pointLightsEs100}
-	#endif
-
 	#HOOK_VERTEX_PRE
 
 	void main(void){
@@ -168,17 +148,6 @@ const vertexShaderEs100 = `
 
 		// Calculate world position of vertex with transformed
 		vWorldPosition = uModelMatrix * vec4(aVertexPosition + transformed, 1.0);
-
-		#ifdef pointLights
-		for (int i = 0; i < #HOOK_POINT_LIGHTS; i++) {
-			// Calculate word position of vertex
-			vec3 surfaceWorldPosition = (uModelMatrix * vec4(aVertexPosition, 1.0)).xyz;
-			// Calculate directional vector of surface to the light
-			vPointLightSurfaceToLightDirection[i] = uPointLights[i].position - vPosition;
-			// Calculate directional vector of camera to the surface
-			vPointLightSurfaceToCameraDirection[i] = uCameraPosition - vPosition;
-		}
-		#endif
 
 		gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(vPosition, 1.0);
 

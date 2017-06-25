@@ -2,7 +2,7 @@ import Geometry from './Geometry';
 
 export default class SphereGeometry extends Geometry {
 	constructor(radius = 1, axisDivisions = 8, heightDivisons = 8, colors?: Float32Array) {
-  // https://github.com/gpjt/webgl-lessons/blob/master/lesson12/index.html
+		// https://github.com/gpjt/webgl-lessons/blob/master/lesson12/index.html
 
 		const vertices = [];
 		const normals = [];

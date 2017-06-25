@@ -2,6 +2,7 @@ import * as GL from '../core/GL';
 import Light from './Light';
 import Vector3 from '../math/Vector3';
 import Color from '../math/Color';
+import { LIGHT_POINT } from '../core/Constants';
 
 export default class PointLight extends Light {
 	uniforms: any;
@@ -9,6 +10,7 @@ export default class PointLight extends Light {
 
 	constructor(uniforms = {}) {
 		super();
+		this.type = LIGHT_POINT;
 		this.uniforms = {
 			position: {
 				type: '3f',
@@ -51,8 +53,8 @@ export default class PointLight extends Light {
 		if (GL.webgl2) {
 			// Set values for buffer data
 			this.setValues(this.position.v);
-			this.setValues(this.uniforms.color, 4);
-			this.setValues(this.uniforms.specularColor, 8);
+			this.setValues(this.uniforms.color.value, 4);
+			this.setValues(this.uniforms.specularColor.value, 8);
 			this.setValues([this.uniforms.shininess.value], 12);
 			this.setValues([this.uniforms.intensity.value], 16);
 		} else {

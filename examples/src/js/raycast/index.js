@@ -53,6 +53,7 @@ scene.directionalLights = directionalLights;
 
 const geometry = new BoxGeometry(2, 2, 2);
 const material = new Shader({
+  type: 'lambert',
   name: 'Box',
   hookFragmentPre: `
 		uniform vec2 uIntersect;

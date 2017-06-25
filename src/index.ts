@@ -19,9 +19,6 @@ import UniformBuffer from './core/UniformBuffer';
 import * as UniformBuffers from './core/UniformBuffers';
 import Vao from './core/Vao';
 
-// Extras
-import WebVRVive from './extras/WebVRVive';
-
 // Geometry
 import BoxGeometry from './geometry/BoxGeometry';
 import BufferAttribute from './geometry/BufferAttribute';
@@ -39,6 +36,7 @@ import VerticesHelper from './helpers/VerticesHelper';
 
 // Lights
 import Lights from './lights/Lights';
+import AmbientLight from './lights/AmbientLight';
 import DirectionalLight from './lights/DirectionalLight';
 import PointLight from './lights/PointLight';
 
@@ -53,6 +51,7 @@ import * as MathUtils from './math/Utils';
 import ShaderChunks from './shaders/chunks/index';
 
 // Utils
+import CameraDolly from './utils/CameraDolly';
 import Clock from './utils/Clock';
 import Detect from './utils/Detect';
 import ObjParser from './utils/ObjParser';
@@ -88,9 +87,9 @@ export {
 	UniformBuffers,
 	Vao,
 	Clock,
+	CameraDolly,
 	Detect,
 	ObjParser,
-	WebVRVive,
 	BoxGeometry,
 	LineGeometry,
 	BufferAttribute,
@@ -103,6 +102,7 @@ export {
 	NormalsHelper,
 	VerticesHelper,
 	Lights,
+	AmbientLight,
 	DirectionalLight,
 	PointLight,
 	Color,

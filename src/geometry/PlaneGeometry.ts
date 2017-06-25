@@ -2,7 +2,7 @@ import Geometry from './Geometry';
 
 export default class Plane extends Geometry {
 	constructor(width = 1, height = 1, subdivisionsX = 1, subdivisionsY = 1, axis = 'XY', colors?: Float32Array) {
-  // https://github.com/yiwenl/Alfrid/blob/master/src/alfrid/Geom.js#L9
+		// https://github.com/yiwenl/Alfrid/blob/master/src/alfrid/Geom.js#L9
 
 		// Note triangles are seperate...
 
@@ -29,7 +29,7 @@ export default class Plane extends Geometry {
 
 				switch (axis) {
 					case 'XZ': {
-      // Facing towards y
+						// Facing towards y
 						vertices = vertices.concat([triangleX, 0, triangleY]);
 						vertices = vertices.concat([triangleX + spacerX, 0, triangleY]);
 						vertices = vertices.concat([triangleX + spacerX, 0, triangleY + spacerY]);
@@ -47,7 +47,7 @@ export default class Plane extends Geometry {
 						break;
 					}
 					case 'YZ': {
-      // Facing towards x
+						// Facing towards x
 
 						vertices = vertices.concat([0, triangleY, triangleX]);
 						vertices = vertices.concat([0, triangleY, triangleX + spacerX]);
@@ -66,7 +66,7 @@ export default class Plane extends Geometry {
 						break;
 					}
 					default: {
-      // Facing towards z
+						// Facing towards z
 						vertices = vertices.concat([triangleX, triangleY, 0]);
 						vertices = vertices.concat([triangleX + spacerX, triangleY, 0]);
 						vertices = vertices.concat([triangleX + spacerX, triangleY + spacerY, 0]);

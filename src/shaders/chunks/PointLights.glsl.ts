@@ -1,4 +1,4 @@
-const structEs300 = `
+const pointLightsEs300 = `
 	struct PointLight {
 		vec4 position;
 		vec4 color;
@@ -11,18 +11,6 @@ const structEs300 = `
 	};
 `;
 
-const pointLightsOutEs300 = `
-	${structEs300}
-	out vec3 vPointLightSurfaceToLightDirection[#HOOK_POINT_LIGHTS];
-	out vec3 vPointLightSurfaceToCameraDirection[#HOOK_POINT_LIGHTS];
-`;
-
-const pointLightsInEs300 = `
-	${structEs300}
-	in vec3 vPointLightSurfaceToLightDirection[#HOOK_POINT_LIGHTS];
-	in vec3 vPointLightSurfaceToCameraDirection[#HOOK_POINT_LIGHTS];
-`;
-
 const pointLightsEs100 = `
 	struct PointLight {
 		vec3 position;
@@ -32,12 +20,9 @@ const pointLightsEs100 = `
 		float intensity;
 	};
 	uniform PointLight uPointLights[#HOOK_POINT_LIGHTS];
-	varying vec3 vPointLightSurfaceToLightDirection[#HOOK_POINT_LIGHTS];
-	varying vec3 vPointLightSurfaceToCameraDirection[#HOOK_POINT_LIGHTS];
 `;
 
 export {
-	pointLightsOutEs300,
-	pointLightsInEs300,
+	pointLightsEs300,
 	pointLightsEs100,
 };

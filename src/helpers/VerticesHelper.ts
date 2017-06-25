@@ -11,6 +11,8 @@ import ProjectionView from '../shaders/chunks/ProjectionView.glsl';
 import Color from '../math/Color';
 import { from3DTo2D } from '../math/Utils';
 
+let gl: WebGL2RenderingContext | WebGLRenderingContext;
+
 const vertexShaderEs300 = `${EsVersion}
 	${ProjectionView}
 
@@ -133,7 +135,8 @@ export default class VerticesHelper extends Mesh {
 	}
 
 	draw(modelViewMatrix: mat4, projectionMatrix: mat4) {
-		const gl = GL.get();
+		if (!this.visible) return;
+		gl = GL.get();
 
 		// Update modelMatrix
 		this.updateMatrix();

@@ -1,15 +1,19 @@
 const fs = require('fs');
+const shell = require('shelljs');
 const Obj = require('webgl-obj-loader');
+const fileName = require('file-name');
 
-fs.readFile('./mass.obj', 'utf8', (error, data) => {
-	const mesh = new Obj.Mesh(data);
-	const json = JSON.stringify({
-		vertices: mesh.vertices,
-		normals: mesh.vertexNormals,
-		indices: mesh.indices,
-		uvs: mesh.textures,
-	});
-	fs.writeFile('./mass.json', json, error => {
-		if (error) throw error;
-	});
+shell.ls('./obj/*.obj').forEach(file => {
+  const data = shell.cat(file);
+  const mesh = new Obj.Mesh(data);
+  const json = JSON.stringify({
+    vertices: mesh.vertices,
+    normals: mesh.vertexNormals,
+    indices: mesh.indices,
+    uvs: mesh.textures
+  });
+  const filename = fileName(file);
+  fs.writeFile(`./${filename}.json`, json, error => {
+    if (error) throw error;
+  });
 });

@@ -61,6 +61,7 @@ scene.directionalLights = directionalLights;
 const container = new Object3D();
 
 const material = new Shader({
+	type: 'lambert',
   uniforms: {
     uDiffuse: {
       type: '3f',

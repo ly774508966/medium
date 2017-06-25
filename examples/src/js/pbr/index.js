@@ -44,7 +44,7 @@ const directionalLights = new Lights([
   new DirectionalLight({
     intensity: {
       type: 'f',
-      value: 0.3
+      value: 0.21
     },
     color: {
       type: '3f',
@@ -203,7 +203,8 @@ function reflectiveObjects() {
         value: [0, 0, 0]
       }
     },
-    directionalLights
+    directionalLights,
+    type: 'lambert',
   });
 
   const geometry0 = new SphereGeometry(2, 64, 64);
