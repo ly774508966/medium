@@ -74,9 +74,7 @@
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_shaders_chunks_pointlights_glsl_.html#pointlightses100" class="tsd-kind-icon">point<wbr>Lights<wbr>Es100</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_shaders_chunks_pointlights_glsl_.html#pointlightsines300" class="tsd-kind-icon">point<wbr>Lights<wbr>InEs300</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_shaders_chunks_pointlights_glsl_.html#pointlightsoutes300" class="tsd-kind-icon">point<wbr>Lights<wbr>Out<wbr>Es300</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_shaders_chunks_pointlights_glsl_.html#structes300" class="tsd-kind-icon">struct<wbr>Es300</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_shaders_chunks_pointlights_glsl_.html#pointlightses300" class="tsd-kind-icon">point<wbr>Lights<wbr>Es300</a></li>
 							</ul>
 						</section>
 					</div>
@@ -87,40 +85,20 @@
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
 					<a name="pointlightses100" class="tsd-anchor"></a>
 					<h3>point<wbr>Lights<wbr>Es100</h3>
-					<div class="tsd-signature tsd-kind-icon">point<wbr>Lights<wbr>Es100<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;struct PointLight {vec3 position;vec3 color;vec3 specularColor;float shininess;float intensity;};uniform PointLight uPointLights[#HOOK_POINT_LIGHTS];varying vec3 vPointLightSurfaceToLightDirection[#HOOK_POINT_LIGHTS];varying vec3 vPointLightSurfaceToCameraDirection[#HOOK_POINT_LIGHTS];&#x60;</span></div>
+					<div class="tsd-signature tsd-kind-icon">point<wbr>Lights<wbr>Es100<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;struct PointLight {vec3 position;vec3 color;vec3 specularColor;float shininess;float intensity;};uniform PointLight uPointLights[#HOOK_POINT_LIGHTS];&#x60;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/shaders/chunks/PointLights.glsl.ts#L26">shaders/chunks/PointLights.glsl.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/shaders/chunks/PointLights.glsl.ts#L14">shaders/chunks/PointLights.glsl.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="pointlightsines300" class="tsd-anchor"></a>
-					<h3>point<wbr>Lights<wbr>InEs300</h3>
-					<div class="tsd-signature tsd-kind-icon">point<wbr>Lights<wbr>InEs300<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;${structEs300}in vec3 vPointLightSurfaceToLightDirection[#HOOK_POINT_LIGHTS];in vec3 vPointLightSurfaceToCameraDirection[#HOOK_POINT_LIGHTS];&#x60;</span></div>
+					<a name="pointlightses300" class="tsd-anchor"></a>
+					<h3>point<wbr>Lights<wbr>Es300</h3>
+					<div class="tsd-signature tsd-kind-icon">point<wbr>Lights<wbr>Es300<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;struct PointLight {vec4 position;vec4 color;vec4 specularColor;vec4 shininess;vec4 intensity;};uniform PointLights {PointLight uPointLights[#HOOK_POINT_LIGHTS];};&#x60;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/shaders/chunks/PointLights.glsl.ts#L20">shaders/chunks/PointLights.glsl.ts:20</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="pointlightsoutes300" class="tsd-anchor"></a>
-					<h3>point<wbr>Lights<wbr>Out<wbr>Es300</h3>
-					<div class="tsd-signature tsd-kind-icon">point<wbr>Lights<wbr>Out<wbr>Es300<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;${structEs300}out vec3 vPointLightSurfaceToLightDirection[#HOOK_POINT_LIGHTS];out vec3 vPointLightSurfaceToCameraDirection[#HOOK_POINT_LIGHTS];&#x60;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/shaders/chunks/PointLights.glsl.ts#L14">shaders/chunks/PointLights.glsl.ts:14</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="structes300" class="tsd-anchor"></a>
-					<h3>struct<wbr>Es300</h3>
-					<div class="tsd-signature tsd-kind-icon">struct<wbr>Es300<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;struct PointLight {vec4 position;vec4 color;vec4 specularColor;vec4 shininess;vec4 intensity;};uniform PointLights {PointLight uPointLights[#HOOK_POINT_LIGHTS];};&#x60;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/shaders/chunks/PointLights.glsl.ts#L1">shaders/chunks/PointLights.glsl.ts:1</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/shaders/chunks/PointLights.glsl.ts#L1">shaders/chunks/PointLights.glsl.ts:1</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -143,13 +121,7 @@
 						<a href="_shaders_chunks_pointlights_glsl_.html#pointlightses100" class="tsd-kind-icon">point<wbr>Lights<wbr>Es100</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_shaders_chunks_pointlights_glsl_.html#pointlightsines300" class="tsd-kind-icon">point<wbr>Lights<wbr>InEs300</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_shaders_chunks_pointlights_glsl_.html#pointlightsoutes300" class="tsd-kind-icon">point<wbr>Lights<wbr>Out<wbr>Es300</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_shaders_chunks_pointlights_glsl_.html#structes300" class="tsd-kind-icon">struct<wbr>Es300</a>
+						<a href="_shaders_chunks_pointlights_glsl_.html#pointlightses300" class="tsd-kind-icon">point<wbr>Lights<wbr>Es300</a>
 					</li>
 				</ul>
 			</nav>

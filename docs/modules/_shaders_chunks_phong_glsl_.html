@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;shaders/basic/Frag.glsl&quot; | Medium</title>
+	<title>&quot;shaders/chunks/Phong.glsl&quot; | Medium</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_shaders_basic_frag_glsl_.html">&quot;shaders/basic/Frag.glsl&quot;</a>
+					<a href="_shaders_chunks_phong_glsl_.html">&quot;shaders/chunks/Phong.glsl&quot;</a>
 				</li>
 			</ul>
-			<h1>External module &quot;shaders/basic/Frag.glsl&quot;</h1>
+			<h1>External module &quot;shaders/chunks/Phong.glsl&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -73,8 +73,8 @@
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_shaders_basic_frag_glsl_.html#fragmentshaderes100" class="tsd-kind-icon">fragment<wbr>Shader<wbr>Es100</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_shaders_basic_frag_glsl_.html#fragmentshaderes300" class="tsd-kind-icon">fragment<wbr>Shader<wbr>Es300</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_shaders_chunks_phong_glsl_.html#phonges100" class="tsd-kind-icon">phong<wbr>Es100</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_shaders_chunks_phong_glsl_.html#phonges300" class="tsd-kind-icon">phong<wbr>Es300</a></li>
 							</ul>
 						</section>
 					</div>
@@ -83,22 +83,22 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Variables</h2>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="fragmentshaderes100" class="tsd-anchor"></a>
-					<h3>fragment<wbr>Shader<wbr>Es100</h3>
-					<div class="tsd-signature tsd-kind-icon">fragment<wbr>Shader<wbr>Es100<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;#HOOK_PRECISION#HOOK_DEFINESvarying vec3 vDiffuse;varying vec3 vPosition;#ifdef normalsvarying vec3 vNormal;#endif#ifdef uvvarying vec2 vUv;#endif#ifdef directionalLights${directionalLightsEs100}#endif// Lighting#ifdef pointLights${pointLightsEs100}#endif${whenGreaterThan}#HOOK_FRAGMENT_PREvoid main(void){vec3 color &#x3D; vDiffuse;#ifdef normalsvec3 normal &#x3D; normalize(vNormal);#endif#HOOK_FRAGMENT_MAIN#ifdef directionalLightsfor (int i &#x3D; 0; i &lt; #HOOK_DIRECTIONAL_LIGHTS; i++) {float directionalLight &#x3D; dot(normal, normalize(uDirectionalLights[i].position));vec3 directionalColor &#x3D; uDirectionalLights[i].color * directionalLight;color +&#x3D; whenGreaterThan(directionalLight, 0.0) * (directionalColor * uDirectionalLights[i].intensity);}#endif#ifdef pointLightsfor (int i &#x3D; 0; i &lt; #HOOK_POINT_LIGHTS; i++) {vec3 pointLightSurfaceToLightDirection &#x3D; normalize(vPointLightSurfaceToLightDirection[i]);vec3 pointLightSurfaceToCameraDirection &#x3D; normalize(vPointLightSurfaceToCameraDirection[i]);vec3 halfVector &#x3D; normalize(pointLightSurfaceToLightDirection + pointLightSurfaceToCameraDirection);float pointLight &#x3D; max(dot(normal, pointLightSurfaceToLightDirection), 0.0);vec3 pointLightColor &#x3D; uPointLights[i].color * pointLight;color +&#x3D; pointLight * pointLightColor;float specular &#x3D; max(pow(dot(normal, halfVector), uPointLights[i].shininess), 0.0);color +&#x3D; specular * uPointLights[i].specularColor;}#endifgl_FragColor &#x3D; vec4(color.rgb, 1.0);#HOOK_FRAGMENT_END}&#x60;</span></div>
+					<a name="phonges100" class="tsd-anchor"></a>
+					<h3>phong<wbr>Es100</h3>
+					<div class="tsd-signature tsd-kind-icon">phong<wbr>Es100<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;vec3 CalculatePointLight(PointLight light, vec3 normal) {vec3 lightDirection &#x3D; normalize(light.position - vWorldPosition.xyz);// diffuse shadingfloat diff &#x3D; max(dot(normal, lightDirection), 0.0);// specular shadingvec3 reflectDirection &#x3D; reflect(-lightDirection, normal);// Fix the spec from showing on the backside by multiplying it by the lambert termfloat spec &#x3D; diff * pow(max(dot(lightDirection, reflectDirection), 0.0), light.shininess);// attenuationfloat constant &#x3D; 1.0;float linear &#x3D; 0.09;float quadratic &#x3D; 0.032;float dist &#x3D; length(light.position);float attenuation &#x3D; 1.0 / (constant + linear * dist + quadratic * (dist * dist));vec3 ambientColor &#x3D; vec3(0.5);float ambientIntensity &#x3D; 0.5;#ifdef ambientLightambientColor &#x3D; uAmbientLight.color;ambientIntensity &#x3D; uAmbientLight.intensity;#endif// combine resultsvec3 ambient &#x3D; (ambientColor * ambientIntensity) * vDiffuse;vec3 diffuse &#x3D; diff * vDiffuse;vec3 specular &#x3D; light.specularColor * spec * light.shininess;ambient  *&#x3D; attenuation;diffuse  *&#x3D; attenuation;specular *&#x3D; attenuation;return (ambient + diffuse + specular);}&#x60;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/shaders/basic/Frag.glsl.ts#L76">shaders/basic/Frag.glsl.ts:76</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/shaders/chunks/Phong.glsl.ts#L41">shaders/chunks/Phong.glsl.ts:41</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="fragmentshaderes300" class="tsd-anchor"></a>
-					<h3>fragment<wbr>Shader<wbr>Es300</h3>
-					<div class="tsd-signature tsd-kind-icon">fragment<wbr>Shader<wbr>Es300<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;${EsVersion}#HOOK_PRECISION#HOOK_DEFINESlayout(std140) uniform;in vec3 vDiffuse;in vec3 vPosition;#ifdef normalsin vec3 vNormal;#endif#ifdef uvin vec2 vUv;#endif#ifdef directionalLights${directionalLightsEs300}#endif// Lighting#ifdef pointLights${pointLightsInEs300}#endifout vec4 outgoingColor;${whenGreaterThan}#HOOK_FRAGMENT_PREvoid main(void){vec3 color &#x3D; vDiffuse;#ifdef normalsvec3 normal &#x3D; normalize(vNormal);#endif#HOOK_FRAGMENT_MAIN#ifdef directionalLightsfor (int i &#x3D; 0; i &lt; #HOOK_DIRECTIONAL_LIGHTS; i++) {float directionalLight &#x3D; dot(normal, normalize(uDirectionalLights[i].position.xyz));vec3 directionalColor &#x3D; uDirectionalLights[i].color.rgb * directionalLight;color +&#x3D; whenGreaterThan(directionalLight, 0.0) * (directionalColor * uDirectionalLights[i].intensity.x);}#endif#ifdef pointLightsfor (int i &#x3D; 0; i &lt; #HOOK_POINT_LIGHTS; i++) {vec3 pointLightSurfaceToLightDirection &#x3D; normalize(vPointLightSurfaceToLightDirection[i]);vec3 pointLightSurfaceToCameraDirection &#x3D; normalize(vPointLightSurfaceToCameraDirection[i]);vec3 halfVector &#x3D; normalize(pointLightSurfaceToLightDirection + pointLightSurfaceToCameraDirection);float pointLight &#x3D; max(dot(normal, pointLightSurfaceToLightDirection), 0.0);vec3 pointLightColor &#x3D; uPointLights[i].color.rgb * pointLight;color +&#x3D; pointLight * pointLightColor;float specular &#x3D; max(pow(dot(normal, halfVector), uPointLights[i].shininess.x), 0.0);color +&#x3D; specular * uPointLights[i].specularColor.rgb;}#endifoutgoingColor &#x3D; vec4(color.rgb, 1.0);#HOOK_FRAGMENT_END}&#x60;</span></div>
+					<a name="phonges300" class="tsd-anchor"></a>
+					<h3>phong<wbr>Es300</h3>
+					<div class="tsd-signature tsd-kind-icon">phong<wbr>Es300<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;vec3 CalculatePointLight(PointLight light, vec3 normal) {vec3 lightDirection &#x3D; normalize(light.position.xyz - vWorldPosition.xyz);// diffuse shadingfloat diff &#x3D; max(dot(normal, lightDirection), 0.0);// specular shadingvec3 reflectDirection &#x3D; reflect(-lightDirection, normal);// Fix the spec from showing on the backside by multiplying it by the lambert termfloat spec &#x3D; diff * pow(max(dot(lightDirection, reflectDirection), 0.0), light.shininess.x);// attenuationfloat constant &#x3D; 1.0;float linear &#x3D; 0.09;float quadratic &#x3D; 0.032;float dist &#x3D; length(light.position.xyz);float attenuation &#x3D; 1.0 / (constant + linear * dist + quadratic * (dist * dist));vec3 ambientColor &#x3D; vec3(0.5);float ambientIntensity &#x3D; 0.5;#ifdef ambientLightambientColor &#x3D; uAmbientLight.color.rgb;ambientIntensity &#x3D; uAmbientLight.intensity.x;#endif// combine resultsvec3 ambient &#x3D; (ambientColor * ambientIntensity) * vDiffuse;vec3 diffuse &#x3D; diff * vDiffuse;vec3 specular &#x3D; light.specularColor.rgb * spec * light.shininess.x;ambient  *&#x3D; attenuation;diffuse  *&#x3D; attenuation;specular *&#x3D; attenuation;return (ambient + diffuse + specular);}&#x60;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/shaders/basic/Frag.glsl.ts#L6">shaders/basic/Frag.glsl.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/shaders/chunks/Phong.glsl.ts#L3">shaders/chunks/Phong.glsl.ts:3</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -111,17 +111,17 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="_shaders_basic_frag_glsl_.html">"shaders/basic/<wbr>Frag.glsl"</a>
+						<a href="_shaders_chunks_phong_glsl_.html">"shaders/chunks/<wbr>Phong.glsl"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_shaders_basic_frag_glsl_.html#fragmentshaderes100" class="tsd-kind-icon">fragment<wbr>Shader<wbr>Es100</a>
+						<a href="_shaders_chunks_phong_glsl_.html#phonges100" class="tsd-kind-icon">phong<wbr>Es100</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_shaders_basic_frag_glsl_.html#fragmentshaderes300" class="tsd-kind-icon">fragment<wbr>Shader<wbr>Es300</a>
+						<a href="_shaders_chunks_phong_glsl_.html#phonges300" class="tsd-kind-icon">phong<wbr>Es300</a>
 					</li>
 				</ul>
 			</nav>

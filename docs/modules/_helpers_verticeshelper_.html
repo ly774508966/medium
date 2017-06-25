@@ -80,6 +80,7 @@
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_helpers_verticeshelper_.html#gl" class="tsd-kind-icon">gl</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_helpers_verticeshelper_.html#modelworldmatrix" class="tsd-kind-icon">model<wbr>World<wbr>Matrix</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_helpers_verticeshelper_.html#projectionviewmatrix" class="tsd-kind-icon">projection<wbr>View<wbr>Matrix</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_helpers_verticeshelper_.html#vertexshaderes100" class="tsd-kind-icon">vertex<wbr>Shader<wbr>Es100</a></li>
@@ -99,12 +100,22 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Variables</h2>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+					<a name="gl" class="tsd-anchor"></a>
+					<h3>gl</h3>
+					<div class="tsd-signature tsd-kind-icon">gl<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">WebGL2RenderingContext</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">WebGLRenderingContext</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/helpers/VerticesHelper.ts#L14">helpers/VerticesHelper.ts:14</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
 					<a name="modelworldmatrix" class="tsd-anchor"></a>
 					<h3>model<wbr>World<wbr>Matrix</h3>
 					<div class="tsd-signature tsd-kind-icon">model<wbr>World<wbr>Matrix<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">mat4</span><span class="tsd-signature-symbol"> =&nbsp;mat4.create()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/helpers/VerticesHelper.ts#L87">helpers/VerticesHelper.ts:87</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/helpers/VerticesHelper.ts#L89">helpers/VerticesHelper.ts:89</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -114,7 +125,7 @@
 					<div class="tsd-signature tsd-kind-icon">projection<wbr>View<wbr>Matrix<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">mat4</span><span class="tsd-signature-symbol"> =&nbsp;mat4.create()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/helpers/VerticesHelper.ts#L86">helpers/VerticesHelper.ts:86</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/helpers/VerticesHelper.ts#L88">helpers/VerticesHelper.ts:88</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -124,7 +135,7 @@
 					<div class="tsd-signature tsd-kind-icon">vertex<wbr>Shader<wbr>Es100<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;attribute vec3 aVertexPosition;uniform mat4 uProjectionMatrix;uniform mat4 uViewMatrix;uniform mat4 uModelMatrix;uniform float uSize;void main(void){vec4 mvPosition &#x3D; uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);gl_PointSize &#x3D; uSize * (100.0 / length(mvPosition.xyz));gl_Position &#x3D; mvPosition;}&#x60;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/helpers/VerticesHelper.ts#L29">helpers/VerticesHelper.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/helpers/VerticesHelper.ts#L31">helpers/VerticesHelper.ts:31</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -134,7 +145,7 @@
 					<div class="tsd-signature tsd-kind-icon">vertex<wbr>Shader<wbr>Es300<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;${EsVersion}${ProjectionView}in vec3 aVertexPosition;uniform mat4 uModelMatrix;uniform float uSize;void main(void){vec4 mvPosition &#x3D; uProjectionView.projectionMatrix * uProjectionView.viewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);gl_PointSize &#x3D; uSize * (100.0 / length(mvPosition.xyz));gl_Position &#x3D; mvPosition;}&#x60;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/helpers/VerticesHelper.ts#L14">helpers/VerticesHelper.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/helpers/VerticesHelper.ts#L16">helpers/VerticesHelper.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -151,7 +162,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/helpers/VerticesHelper.ts#L59">helpers/VerticesHelper.ts:59</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/helpers/VerticesHelper.ts#L61">helpers/VerticesHelper.ts:61</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -168,7 +179,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/helpers/VerticesHelper.ts#L44">helpers/VerticesHelper.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/helpers/VerticesHelper.ts#L46">helpers/VerticesHelper.ts:46</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -195,6 +206,9 @@
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
 						<a href="../classes/_helpers_verticeshelper_.verticeshelper.html" class="tsd-kind-icon">Vertices<wbr>Helper</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_helpers_verticeshelper_.html#gl" class="tsd-kind-icon">gl</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="_helpers_verticeshelper_.html#modelworldmatrix" class="tsd-kind-icon">model<wbr>World<wbr>Matrix</a>

@@ -80,9 +80,7 @@
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_helpers_camerahelper_.html#axisangle" class="tsd-kind-icon">axis<wbr>Angle</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_helpers_camerahelper_.html#gl" class="tsd-kind-icon">gl</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_helpers_camerahelper_.html#quaternionaxisangle" class="tsd-kind-icon">quaternion<wbr>Axis<wbr>Angle</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_helpers_camerahelper_.html#vertexshaderes100" class="tsd-kind-icon">vertex<wbr>Shader<wbr>Es100</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_helpers_camerahelper_.html#vertexshaderes300" class="tsd-kind-icon">vertex<wbr>Shader<wbr>Es300</a></li>
 							</ul>
@@ -100,32 +98,12 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Variables</h2>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="axisangle" class="tsd-anchor"></a>
-					<h3>axis<wbr>Angle</h3>
-					<div class="tsd-signature tsd-kind-icon">axis<wbr>Angle<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/helpers/CameraHelper.ts#L67">helpers/CameraHelper.ts:67</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
 					<a name="gl" class="tsd-anchor"></a>
 					<h3>gl</h3>
-					<div class="tsd-signature tsd-kind-icon">gl<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+					<div class="tsd-signature tsd-kind-icon">gl<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">WebGL2RenderingContext</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">WebGLRenderingContext</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/helpers/CameraHelper.ts#L66">helpers/CameraHelper.ts:66</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="quaternionaxisangle" class="tsd-anchor"></a>
-					<h3>quaternion<wbr>Axis<wbr>Angle</h3>
-					<div class="tsd-signature tsd-kind-icon">quaternion<wbr>Axis<wbr>Angle<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">vec3</span><span class="tsd-signature-symbol"> =&nbsp;vec3.create()</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/helpers/CameraHelper.ts#L68">helpers/CameraHelper.ts:68</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/helpers/CameraHelper.ts#L14">helpers/CameraHelper.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -135,7 +113,7 @@
 					<div class="tsd-signature tsd-kind-icon">vertex<wbr>Shader<wbr>Es100<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;attribute vec3 aVertexPosition;uniform mat4 uProjectionMatrix;uniform mat4 uViewMatrix;uniform mat4 uModelMatrix;uniform mat3 uNormalMatrix;void main(void){gl_Position &#x3D; uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);}&#x60;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/helpers/CameraHelper.ts#L32">helpers/CameraHelper.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/helpers/CameraHelper.ts#L29">helpers/CameraHelper.ts:29</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -145,7 +123,7 @@
 					<div class="tsd-signature tsd-kind-icon">vertex<wbr>Shader<wbr>Es300<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;${EsVersion}${ProjectionView}in vec3 aVertexPosition;uniform mat4 uModelMatrix;uniform mat3 uNormalMatrix;void main(void){gl_Position &#x3D; uProjectionView.projectionMatrix * uProjectionView.viewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);}&#x60;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/helpers/CameraHelper.ts#L19">helpers/CameraHelper.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/helpers/CameraHelper.ts#L16">helpers/CameraHelper.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -162,7 +140,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/helpers/CameraHelper.ts#L56">helpers/CameraHelper.ts:56</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/helpers/CameraHelper.ts#L53">helpers/CameraHelper.ts:53</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -179,7 +157,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/helpers/CameraHelper.ts#L45">helpers/CameraHelper.ts:45</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/helpers/CameraHelper.ts#L42">helpers/CameraHelper.ts:42</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -208,13 +186,7 @@
 						<a href="../classes/_helpers_camerahelper_.camerahelper.html" class="tsd-kind-icon">Camera<wbr>Helper</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_helpers_camerahelper_.html#axisangle" class="tsd-kind-icon">axis<wbr>Angle</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="_helpers_camerahelper_.html#gl" class="tsd-kind-icon">gl</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_helpers_camerahelper_.html#quaternionaxisangle" class="tsd-kind-icon">quaternion<wbr>Axis<wbr>Angle</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="_helpers_camerahelper_.html#vertexshaderes100" class="tsd-kind-icon">vertex<wbr>Shader<wbr>Es100</a>

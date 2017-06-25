@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;shaders/basic/Vertex.glsl&quot; | Medium</title>
+	<title>&quot;shaders/chunks/Matcap.glsl&quot; | Medium</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,53 +56,16 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_shaders_basic_vertex_glsl_.html">&quot;shaders/basic/Vertex.glsl&quot;</a>
+					<a href="_shaders_chunks_matcap_glsl_.html">&quot;shaders/chunks/Matcap.glsl&quot;</a>
 				</li>
 			</ul>
-			<h1>External module &quot;shaders/basic/Vertex.glsl&quot;</h1>
+			<h1>External module &quot;shaders/chunks/Matcap.glsl&quot;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel-group tsd-index-group">
-				<h2>Index</h2>
-				<section class="tsd-panel tsd-index-panel">
-					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-not-exported">
-							<h3>Variables</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_shaders_basic_vertex_glsl_.html#vertexshaderes100" class="tsd-kind-icon">vertex<wbr>Shader<wbr>Es100</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_shaders_basic_vertex_glsl_.html#vertexshaderes300" class="tsd-kind-icon">vertex<wbr>Shader<wbr>Es300</a></li>
-							</ul>
-						</section>
-					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
-				<h2>Variables</h2>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="vertexshaderes100" class="tsd-anchor"></a>
-					<h3>vertex<wbr>Shader<wbr>Es100</h3>
-					<div class="tsd-signature tsd-kind-icon">vertex<wbr>Shader<wbr>Es100<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;${definePI}${definePITwo}#HOOK_DEFINES// Positionuniform mat4 uProjectionMatrix;uniform mat4 uViewMatrix;uniform mat4 uViewMatrixInverse;uniform mat4 uModelMatrix;uniform mat4 uModelMatrixInverse;uniform mat3 uNormalMatrix;attribute vec3 aVertexPosition;varying vec3 vPosition;varying vec4 vWorldPosition;// Camerauniform vec3 uCameraPosition;#ifdef vertexColorsattribute vec3 aVertexColor;#endif// Coloruniform vec3 uDiffuse;varying vec3 vDiffuse;// Normal#ifdef normalsattribute vec3 aVertexNormal;varying vec3 vNormal;#endif// Uv#ifdef uvattribute vec2 aUv;varying vec2 vUv;#endif// Lighting#ifdef pointLights${pointLightsEs100}#endif#HOOK_VERTEX_PREvoid main(void){vDiffuse &#x3D; uDiffuse;// Override for custom positioningvec3 transformed &#x3D; vec3(0.0);#ifdef vertexColorsvDiffuse &#x3D; aVertexColor;#endif#ifdef uvvUv &#x3D; aUv;#endif#HOOK_VERTEX_MAIN#ifdef normalsvNormal &#x3D; uNormalMatrix * aVertexNormal;#endif// Vertex position + offsetvPosition &#x3D; aVertexPosition + transformed;// Calculate world position of vertex with transformedvWorldPosition &#x3D; uModelMatrix * vec4(aVertexPosition + transformed, 1.0);#ifdef pointLightsfor (int i &#x3D; 0; i &lt; #HOOK_POINT_LIGHTS; i++) {// Calculate word position of vertexvec3 surfaceWorldPosition &#x3D; (uModelMatrix * vec4(aVertexPosition, 1.0)).xyz;// Calculate directional vector of surface to the lightvPointLightSurfaceToLightDirection[i] &#x3D; uPointLights[i].position - vPosition;// Calculate directional vector of camera to the surfacevPointLightSurfaceToCameraDirection[i] &#x3D; uCameraPosition - vPosition;}#endifgl_Position &#x3D; uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(vPosition, 1.0);#HOOK_VERTEX_END}&#x60;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/shaders/basic/Vertex.glsl.ts#L98">shaders/basic/Vertex.glsl.ts:98</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="vertexshaderes300" class="tsd-anchor"></a>
-					<h3>vertex<wbr>Shader<wbr>Es300</h3>
-					<div class="tsd-signature tsd-kind-icon">vertex<wbr>Shader<wbr>Es300<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;${EsVersion}${definePI}${definePITwo}#HOOK_DEFINESlayout(std140) uniform;${ProjectionView}uniform mat4 uProjectionMatrix;uniform mat4 uViewMatrix;uniform mat4 uViewMatrixInverse;uniform mat4 uModelMatrix;uniform mat4 uModelMatrixInverse;uniform mat3 uNormalMatrix;in vec3 aVertexPosition;out vec3 vPosition;out vec4 vWorldPosition;// Camerauniform vec3 uCameraPosition;#ifdef vertexColorsin vec3 aVertexColor;#endif// Coloruniform vec3 uDiffuse;out vec3 vDiffuse;// Normal#ifdef normalsin vec3 aVertexNormal;out vec3 vNormal;#endif// Uv#ifdef uvin vec2 aUv;out vec2 vUv;#endif// Lighting#ifdef pointLights${pointLightsOutEs300}#endif#HOOK_VERTEX_PREvoid main(void){vDiffuse &#x3D; uDiffuse;// Override for custom positioningvec3 transformed &#x3D; vec3(0.0);#ifdef vertexColorsvDiffuse &#x3D; aVertexColor;#endif#ifdef uvvUv &#x3D; aUv;#endif#HOOK_VERTEX_MAIN#ifdef normalsvNormal &#x3D; uNormalMatrix * aVertexNormal;#endif// Vertex position + offsetvPosition &#x3D; aVertexPosition + transformed;// Calculate world position of vertex with transformedvWorldPosition &#x3D; uModelMatrix * vec4(aVertexPosition + transformed, 1.0);#ifdef pointLightsfor (int i &#x3D; 0; i &lt; #HOOK_POINT_LIGHTS; i++) {// Calculate directional vector of surface to the lightvPointLightSurfaceToLightDirection[i] &#x3D; uPointLights[i].position.xyz - vWorldPosition.xyz;// Calculate directional vector of camera to the surfacevPointLightSurfaceToCameraDirection[i] &#x3D; uCameraPosition - vWorldPosition.xyz;}#endifgl_Position &#x3D; uProjectionView.projectionMatrix * uProjectionView.viewMatrix * uModelMatrix * vec4(vPosition, 1.0);#HOOK_VERTEX_END}&#x60;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/shaders/basic/Vertex.glsl.ts#L6">shaders/basic/Vertex.glsl.ts:6</a></li>
-						</ul>
-					</aside>
-				</section>
-			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
@@ -111,18 +74,12 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="_shaders_basic_vertex_glsl_.html">"shaders/basic/<wbr>Vertex.glsl"</a>
+						<a href="_shaders_chunks_matcap_glsl_.html">"shaders/chunks/<wbr>Matcap.glsl"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_shaders_basic_vertex_glsl_.html#vertexshaderes100" class="tsd-kind-icon">vertex<wbr>Shader<wbr>Es100</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_shaders_basic_vertex_glsl_.html#vertexshaderes300" class="tsd-kind-icon">vertex<wbr>Shader<wbr>Es300</a>
-					</li>
 				</ul>
 			</nav>
 		</div>

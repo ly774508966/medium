@@ -90,9 +90,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_shader_.shader.html#ambientlight" class="tsd-kind-icon">ambient<wbr>Light</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_shader_.shader.html#culling" class="tsd-kind-icon">culling</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_shader_.shader.html#customuniforms" class="tsd-kind-icon">custom<wbr>Uniforms</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_shader_.shader.html#depthtest" class="tsd-kind-icon">depth<wbr>Test</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_shader_.shader.html#directionallights" class="tsd-kind-icon">directional<wbr>Lights</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_shader_.shader.html#drawtype" class="tsd-kind-icon">draw<wbr>Type</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_shader_.shader.html#fov" class="tsd-kind-icon">fov</a></li>
@@ -106,6 +106,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_shader_.shader.html#name" class="tsd-kind-icon">name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_shader_.shader.html#pointlights" class="tsd-kind-icon">point<wbr>Lights</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_shader_.shader.html#program" class="tsd-kind-icon">program</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_shader_.shader.html#type" class="tsd-kind-icon">type</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_shader_.shader.html#uniforms" class="tsd-kind-icon">uniforms</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_core_shader_.shader.html#vertexshader" class="tsd-kind-icon">vertex<wbr>Shader</a></li>
 							</ul>
@@ -128,19 +129,19 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Shader<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_core_shader_.options.html" class="tsd-signature-type">Options</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_core_shader_.shader.html" class="tsd-signature-type">Shader</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Shader<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_core_shader_.options.html" class="tsd-signature-type">Options</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_core_shader_.shader.html" class="tsd-signature-type">Shader</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L70">core/Shader.ts:70</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L79">core/Shader.ts:79</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>options: <a href="../interfaces/_core_shader_.options.html" class="tsd-signature-type">Options</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <a href="../interfaces/_core_shader_.options.html" class="tsd-signature-type">Options</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_core_shader_.shader.html" class="tsd-signature-type">Shader</a></h4>
@@ -151,12 +152,22 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="ambientlight" class="tsd-anchor"></a>
+					<h3>ambient<wbr>Light</h3>
+					<div class="tsd-signature tsd-kind-icon">ambient<wbr>Light<span class="tsd-signature-symbol">:</span> <a href="_lights_lights_.lights.html" class="tsd-signature-type">Lights</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L74">core/Shader.ts:74</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="culling" class="tsd-anchor"></a>
 					<h3>culling</h3>
 					<div class="tsd-signature tsd-kind-icon">culling<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L67">core/Shader.ts:67</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L77">core/Shader.ts:77</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -166,17 +177,7 @@
 					<div class="tsd-signature tsd-kind-icon">custom<wbr>Uniforms<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L70">core/Shader.ts:70</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="depthtest" class="tsd-anchor"></a>
-					<h3>depth<wbr>Test</h3>
-					<div class="tsd-signature tsd-kind-icon">depth<wbr>Test<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L68">core/Shader.ts:68</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L79">core/Shader.ts:79</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -186,7 +187,7 @@
 					<div class="tsd-signature tsd-kind-icon">directional<wbr>Lights<span class="tsd-signature-symbol">:</span> <a href="_lights_lights_.lights.html" class="tsd-signature-type">Lights</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L65">core/Shader.ts:65</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L75">core/Shader.ts:75</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -196,7 +197,7 @@
 					<div class="tsd-signature tsd-kind-icon">draw<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L64">core/Shader.ts:64</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L73">core/Shader.ts:73</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -206,7 +207,7 @@
 					<div class="tsd-signature tsd-kind-icon">fov<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L55">core/Shader.ts:55</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L64">core/Shader.ts:64</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -216,7 +217,7 @@
 					<div class="tsd-signature tsd-kind-icon">fragment<wbr>Shader<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L63">core/Shader.ts:63</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L72">core/Shader.ts:72</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -226,7 +227,7 @@
 					<div class="tsd-signature tsd-kind-icon">hook<wbr>Fragment<wbr>End<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L61">core/Shader.ts:61</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L70">core/Shader.ts:70</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -236,7 +237,7 @@
 					<div class="tsd-signature tsd-kind-icon">hook<wbr>Fragment<wbr>Main<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L60">core/Shader.ts:60</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L69">core/Shader.ts:69</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -246,7 +247,7 @@
 					<div class="tsd-signature tsd-kind-icon">hook<wbr>Fragment<wbr>Pre<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L59">core/Shader.ts:59</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L68">core/Shader.ts:68</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -256,7 +257,7 @@
 					<div class="tsd-signature tsd-kind-icon">hook<wbr>Vertex<wbr>End<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L58">core/Shader.ts:58</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L67">core/Shader.ts:67</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -266,7 +267,7 @@
 					<div class="tsd-signature tsd-kind-icon">hook<wbr>Vertex<wbr>Main<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L57">core/Shader.ts:57</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L66">core/Shader.ts:66</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -276,7 +277,7 @@
 					<div class="tsd-signature tsd-kind-icon">hook<wbr>Vertex<wbr>Pre<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L56">core/Shader.ts:56</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L65">core/Shader.ts:65</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -286,7 +287,7 @@
 					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L53">core/Shader.ts:53</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L61">core/Shader.ts:61</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -296,7 +297,7 @@
 					<div class="tsd-signature tsd-kind-icon">point<wbr>Lights<span class="tsd-signature-symbol">:</span> <a href="_lights_lights_.lights.html" class="tsd-signature-type">Lights</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L66">core/Shader.ts:66</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L76">core/Shader.ts:76</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -306,7 +307,17 @@
 					<div class="tsd-signature tsd-kind-icon">program<span class="tsd-signature-symbol">:</span> <a href="_core_program_.program.html" class="tsd-signature-type">Program</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L69">core/Shader.ts:69</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L78">core/Shader.ts:78</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="type" class="tsd-anchor"></a>
+					<h3>type</h3>
+					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L62">core/Shader.ts:62</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -316,7 +327,7 @@
 					<div class="tsd-signature tsd-kind-icon">uniforms<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L54">core/Shader.ts:54</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L63">core/Shader.ts:63</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -326,7 +337,7 @@
 					<div class="tsd-signature tsd-kind-icon">vertex<wbr>Shader<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L62">core/Shader.ts:62</a></li>
+							<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L71">core/Shader.ts:71</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -343,7 +354,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L214">core/Shader.ts:214</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L254">core/Shader.ts:254</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -372,7 +383,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L94">core/Shader.ts:94</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L118">core/Shader.ts:118</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -398,7 +409,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L427">core/Shader.ts:427</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L471">core/Shader.ts:471</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -415,7 +426,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/d11553c/src/core/Shader.ts#L265">core/Shader.ts:265</a></li>
+									<li>Defined in <a href="https://github.com/amelierosser/medium/blob/2a857d7/src/core/Shader.ts#L309">core/Shader.ts:309</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -461,13 +472,13 @@
 								<a href="_core_shader_.shader.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_core_shader_.shader.html#ambientlight" class="tsd-kind-icon">ambient<wbr>Light</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_core_shader_.shader.html#culling" class="tsd-kind-icon">culling</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_core_shader_.shader.html#customuniforms" class="tsd-kind-icon">custom<wbr>Uniforms</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_core_shader_.shader.html#depthtest" class="tsd-kind-icon">depth<wbr>Test</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_core_shader_.shader.html#directionallights" class="tsd-kind-icon">directional<wbr>Lights</a>
@@ -507,6 +518,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_core_shader_.shader.html#program" class="tsd-kind-icon">program</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_core_shader_.shader.html#type" class="tsd-kind-icon">type</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_core_shader_.shader.html#uniforms" class="tsd-kind-icon">uniforms</a>
