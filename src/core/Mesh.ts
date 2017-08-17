@@ -6,8 +6,9 @@ import Object3D from './Object3D';
 import Vao from './Vao';
 import Geometry from '../geometry/Geometry';
 import Shader from './Shader';
-import PerspectiveCamera from './PerspectiveCamera';
-import OrthographicCamera from './OrthographicCamera';
+import Camera from '../cameras/Camera';
+import PerspectiveCamera from '../cameras/PerspectiveCamera';
+import OrthographicCamera from '../cameras/OrthographicCamera';
 import { extensions } from './Capabilities';
 
 let gl: WebGL2RenderingContext | WebGLRenderingContext;
@@ -92,13 +93,13 @@ export default class Mesh extends Object3D {
 		}
 	}
 
-	draw(modelViewMatrix: mat4, projectionMatrix: mat4, camera: PerspectiveCamera | OrthographicCamera) {
+	draw(camera: Camera | PerspectiveCamera | OrthographicCamera) {
 		if (!this.visible) return;
 
 		gl = GL.get();
 
 		// Update modelMatrix
-		this.updateMatrix();
+		this.updateMatrix(camera);
 
 		this.shader.program.bind();
 
@@ -108,7 +109,7 @@ export default class Mesh extends Object3D {
 			gl.cullFace(this.shader.culling);
 		}
 
-		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix, camera);
+		this.shader.setUniforms(camera.projectionMatrix, this.modelViewMatrix, this.modelMatrix, camera);
 
 		if (extensions.vertexArrayObject) {
 			this.vao.bind();
@@ -135,16 +136,16 @@ export default class Mesh extends Object3D {
 		}
 	}
 
-	drawInstance(modelViewMatrix: mat4, projectionMatrix: mat4, camera: PerspectiveCamera | OrthographicCamera) {
+	drawInstance(camera: Camera | PerspectiveCamera | OrthographicCamera) {
 		if (!this.visible) return;
 
 		gl = GL.get();
 
 		// Update modelMatrix
-		this.updateMatrix();
+		this.updateMatrix(camera);
 
 		this.shader.program.bind();
-		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix, camera);
+		this.shader.setUniforms(camera.projectionMatrix, this.modelViewMatrix, this.modelMatrix, camera);
 
 		// Culling enable
 		if (this.shader.culling !== -1) {

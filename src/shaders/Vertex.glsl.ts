@@ -12,10 +12,8 @@ const vertexShaderEs300 = `${EsVersion}
 	${ProjectionView}
 
 	uniform mat4 uProjectionMatrix;
-	uniform mat4 uViewMatrix;
-	uniform mat4 uViewMatrixInverse;
+	uniform mat4 uModelViewMatrix;
 	uniform mat4 uModelMatrix;
-	uniform mat4 uModelMatrixInverse;
 	uniform mat3 uNormalMatrix;
 
 	in vec3 aVertexPosition;
@@ -74,7 +72,7 @@ const vertexShaderEs300 = `${EsVersion}
 		// Calculate world position of vertex with transformed
 		vWorldPosition = uModelMatrix * vec4(aVertexPosition + transformed, 1.0);
 
-		gl_Position = uProjectionView.projectionMatrix * uProjectionView.viewMatrix * uModelMatrix * vec4(vPosition, 1.0);
+		gl_Position = uProjectionView.projectionMatrix * uModelViewMatrix * vec4(vPosition, 1.0);
 
 		#HOOK_VERTEX_END
 	}
@@ -88,10 +86,8 @@ const vertexShaderEs100 = `
 
 	// Position
 	uniform mat4 uProjectionMatrix;
-	uniform mat4 uViewMatrix;
-	uniform mat4 uViewMatrixInverse;
+	uniform mat4 uModelViewMatrix;
 	uniform mat4 uModelMatrix;
-	uniform mat4 uModelMatrixInverse;
 	uniform mat3 uNormalMatrix;
 	attribute vec3 aVertexPosition;
 	varying vec3 vPosition;
@@ -149,7 +145,7 @@ const vertexShaderEs100 = `
 		// Calculate world position of vertex with transformed
 		vWorldPosition = uModelMatrix * vec4(aVertexPosition + transformed, 1.0);
 
-		gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(vPosition, 1.0);
+		gl_Position = uProjectionMatrix * uModelViewMatrix * vec4(vPosition, 1.0);
 
 		#HOOK_VERTEX_END
 	}

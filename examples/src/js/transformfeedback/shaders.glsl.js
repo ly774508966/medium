@@ -35,9 +35,9 @@ export default {
 					vec3 scaledVertex = aVertexPosition + normalize(aVertexPosition) * vec3(2.0);
 					vec3 normalLerp = mix(aVertexPosition, scaledVertex, sin(aPosition.y));
 					vColor = normalize(normalLerp) * 0.5 + 0.5;
-					vec4 mvPosition = uProjectionView.viewMatrix * uModelMatrix * vec4(normalLerp, 1.0);
+					vec4 mvPosition = uModelViewMatrix * vec4(normalLerp, 1.0);
 					gl_PointSize = uSize * (100.0 / length(mvPosition.xyz));
-					gl_Position = uProjectionView.projectionMatrix * uProjectionView.viewMatrix * uModelMatrix * vec4(normalLerp, 1.0);
+					gl_Position = uProjectionView.projectionMatrix * uModelViewMatrix * vec4(normalLerp, 1.0);
 		`,
     hookFragmentPre: `
 					uniform float uTime;

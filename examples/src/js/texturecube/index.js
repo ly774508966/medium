@@ -25,23 +25,15 @@ document.body.appendChild(renderer.canvas);
 const scene = new Scene();
 
 // Camera
-const cameras = {
-  dev: new PerspectiveCamera({
-    fov: 45
-  }),
-  main: new OrthographicCamera({
-    fov: 45
-  })
-};
+const camera = new PerspectiveCamera({
+  fov: 45
+});
 
-cameras.dev.position.set(10, 5, 10);
-cameras.dev.lookAt();
-
-cameras.main.position.set(0, 0, 1);
-cameras.main.lookAt(0, 0, 0);
+camera.position.set(10, 5, 10);
+camera.lookAt();
 
 // Helpers
-const controls = new OrbitControls(cameras.dev, renderer.canvas);
+const controls = new OrbitControls(camera, renderer.canvas);
 
 controls.update();
 
@@ -91,8 +83,8 @@ function resize() {
   const width = window.innerWidth;
   const height = window.innerHeight;
   renderer.setSize(width, height);
-  cameras.dev.ratio = width / height;
-  cameras.dev.updateProjectionMatrix();
+  camera.ratio = width / height;
+  camera.updateProjectionMatrix();
 }
 resize();
 
@@ -101,10 +93,12 @@ window.addEventListener('resize', resize);
 function update() {
   requestAnimationFrame(update);
 
+	camera.updateMatrixWorld();
+
   if (mesh) {
     mesh.rotation.y += 0.003;
   }
 
-  renderer.render(scene, cameras.dev);
+  renderer.render(scene, camera);
 }
 update();

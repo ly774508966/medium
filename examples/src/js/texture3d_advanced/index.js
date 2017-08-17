@@ -284,6 +284,7 @@ const quaternionAxis = vec3.create();
 
 function update() {
   requestAnimationFrame(update);
+  camera.updateMatrixWorld();
 
   plane.lookAt(camera.position);
   quat.identity(quaternionAxis);

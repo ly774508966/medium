@@ -5,10 +5,10 @@ import Ray from '../math/Ray';
 import Scene from './Scene';
 import Mesh from './Mesh';
 import Face from '../geometry/Face';
-import PerspectiveCamera from './PerspectiveCamera';
+import PerspectiveCamera from '../cameras/PerspectiveCamera';
 import { barycoordFromPoint } from '../math/Utils';
 
-const inversedProjectionMatrix: mat4 = mat4.create();
+const inversedProjectionViewMatrix: mat4 = mat4.create();
 const cameraDirection: vec3 = vec3.create();
 const directionVector = new Vector3();
 
@@ -32,16 +32,16 @@ export default class RayCaster {
 		this.far = far || Infinity;
 	}
 
-	setFromCamera(coords: Vector2, scene: Scene, camera: PerspectiveCamera) {
+	setFromCamera(coords: Vector2, scene: Scene, camera: PerspectiveCamera, object: Mesh) {
 		if (camera && camera.isPespectiveCamera) {
 			this.ray.origin.copy(camera.position);
 
 			vec3.copy(cameraDirection, [coords.x, coords.y, 0.5]);
 
-			mat4.multiply(inversedProjectionMatrix, camera.projectionMatrix, scene.modelViewMatrix);
-			mat4.invert(inversedProjectionMatrix, inversedProjectionMatrix);
+			mat4.multiply(inversedProjectionViewMatrix, camera.projectionMatrix, camera.worldInverseMatrix);
+			mat4.invert(inversedProjectionViewMatrix, inversedProjectionViewMatrix);
 
-			vec3.transformMat4(cameraDirection, cameraDirection, inversedProjectionMatrix);
+			vec3.transformMat4(cameraDirection, cameraDirection, inversedProjectionViewMatrix);
 
 			vec3.sub(cameraDirection, cameraDirection, camera.position.v);
 			vec3.normalize(cameraDirection, cameraDirection);

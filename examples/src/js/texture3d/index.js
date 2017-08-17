@@ -161,6 +161,7 @@ gl.blendFunc(gl.ONE, gl.SRC_ALPHA);
 
 function update() {
   requestAnimationFrame(update);
+  camera.updateMatrixWorld();
   plane.shader.uniforms.uTime.value += clock.getDelta();
   renderer.render(scene, camera);
 }

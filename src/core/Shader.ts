@@ -29,12 +29,11 @@ import UniformBuffers from './UniformBuffers';
 import Program from './Program';
 import Geometry from '../geometry/Geometry';
 import Lights from '../lights/Lights';
-import PerspectiveCamera from '../core/PerspectiveCamera';
-import OrthographicCamera from '../core/OrthographicCamera';
+import PerspectiveCamera from '../cameras/PerspectiveCamera';
+import OrthographicCamera from '../cameras/OrthographicCamera';
 
 let gl: WebGL2RenderingContext | WebGLRenderingContext;
 const normalMatrix: mat3 = mat3.create();
-const inversedViewMatrix: mat4 = mat4.create();
 const inversedModelViewMatrix: mat4 = mat4.create();
 
 interface Options {
@@ -210,26 +209,16 @@ export default class Shader {
 				value: mat4.create(),
 				location: null,
 			},
-			uViewMatrix: {
-				type: '4fv',
-				value: mat4.create(),
-				location: null,
-			},
 		};
 
 		// Default uniforms
 		this.uniforms = Object.assign({
-			uViewMatrixInverse: {
+			uModelViewMatrix: {
 				type: '4fv',
 				value: mat4.create(),
 				location: null,
 			},
 			uModelMatrix: {
-				type: '4fv',
-				value: mat4.create(),
-				location: null,
-			},
-			uModelMatrixInverse: {
 				type: '4fv',
 				value: mat4.create(),
 				location: null,
@@ -306,7 +295,7 @@ export default class Shader {
 		return ShaderParser(shader, type);
 	}
 
-	setUniforms(modelViewMatrix: mat4, projectionMatrix: mat4, modelMatrix: mat4, camera?: PerspectiveCamera | OrthographicCamera) {
+	setUniforms(projectionMatrix: mat4, modelViewMatrix: mat4, modelMatrix: mat4, camera?: PerspectiveCamera | OrthographicCamera) {
 		gl = GL.get();
 
 		// Update the other uniforms
@@ -429,22 +418,13 @@ export default class Shader {
 		if (!GL.webgl2) {
 			// Matrix
 			gl.uniformMatrix4fv(this.uniforms.uProjectionMatrix.location, false, projectionMatrix);
-			gl.uniformMatrix4fv(this.uniforms.uViewMatrix.location, false, modelViewMatrix);
 		}
 
-		// Inverse view matrix
-		mat4.identity(inversedViewMatrix);
-		mat4.invert(inversedViewMatrix, modelViewMatrix);
-
-		gl.uniformMatrix4fv(this.uniforms.uViewMatrixInverse.location, false, inversedViewMatrix);
-
-		// Inverse model matrix
+		gl.uniformMatrix4fv(this.uniforms.uModelViewMatrix.location, false, modelViewMatrix);
 		gl.uniformMatrix4fv(this.uniforms.uModelMatrix.location, false, modelMatrix);
 
 		mat4.identity(inversedModelViewMatrix);
 		mat4.invert(inversedModelViewMatrix, modelMatrix);
-
-		gl.uniformMatrix4fv(this.uniforms.uModelMatrixInverse.location, false, inversedModelViewMatrix);
 
 		// Create normal normalMatrix
 		// Removes scale and translation

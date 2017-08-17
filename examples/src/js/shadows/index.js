@@ -316,6 +316,8 @@ window.addEventListener('resize', resize);
 function update() {
   requestAnimationFrame(update);
 
+  camera.updateMatrixWorld();
+
   lightHelper.position.copy(directionalLights.get()[0].position);
 
   depthMaterial.uniforms.uLightFar.value = shadowMapRenderer.camera.far;

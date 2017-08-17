@@ -219,6 +219,8 @@ function render(camera, x, y, width, height) {
 function update() {
   requestAnimationFrame(update);
 
+  cameras.dev.updateMatrixWorld();
+  cameras.main.updateMatrixWorld();
   cameraHelper.update();
   controls.update();
 

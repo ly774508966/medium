@@ -10,6 +10,9 @@ import EsVersion from '../shaders/chunks/EsVersion.glsl';
 import ProjectionView from '../shaders/chunks/ProjectionView.glsl';
 import Color from '../math/Color';
 import { from3DTo2D } from '../math/Utils';
+import Camera from '../cameras/Camera';
+import PerspectiveCamera from '../cameras/PerspectiveCamera';
+import OrthographicCamera from '../cameras/OrthographicCamera';
 
 let gl: WebGL2RenderingContext | WebGLRenderingContext;
 
@@ -18,11 +21,11 @@ const vertexShaderEs300 = `${EsVersion}
 
 	in vec3 aVertexPosition;
 
-	uniform mat4 uModelMatrix;
+	uniform mat4 uModelViewMatrix;
 	uniform float uSize;
 
 	void main(void){
-		vec4 mvPosition = uProjectionView.projectionMatrix * uProjectionView.viewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
+		vec4 mvPosition = uProjectionView.projectionMatrix * uModelViewMatrix * vec4(aVertexPosition, 1.0);
 		gl_PointSize = uSize * (100.0 / length(mvPosition.xyz));
 		gl_Position = mvPosition;
 	}
@@ -32,12 +35,11 @@ const vertexShaderEs100 = `
 	attribute vec3 aVertexPosition;
 
 	uniform mat4 uProjectionMatrix;
-	uniform mat4 uViewMatrix;
-	uniform mat4 uModelMatrix;
+	uniform mat4 uModelViewMatrix;
 	uniform float uSize;
 
 	void main(void){
-		vec4 mvPosition = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
+		vec4 mvPosition = uProjectionMatrix * uModelViewMatrix * vec4(aVertexPosition, 1.0);
 		gl_PointSize = uSize * (100.0 / length(mvPosition.xyz));
 		gl_Position = mvPosition;
 	}
@@ -134,19 +136,18 @@ export default class VerticesHelper extends Mesh {
 		});
 	}
 
-	draw(modelViewMatrix: mat4, projectionMatrix: mat4) {
+	draw(camera: Camera | PerspectiveCamera | OrthographicCamera) {
 		if (!this.visible) return;
 		gl = GL.get();
 
 		// Update modelMatrix
-		this.updateMatrix();
+		this.updateMatrix(camera);
 
 		// Update
 		mat4.identity(projectionViewMatrix);
 		mat4.identity(modelWorldMatrix);
 
-		mat4.mul(modelWorldMatrix, modelViewMatrix, this.modelMatrix);
-		mat4.mul(projectionViewMatrix, projectionMatrix, modelWorldMatrix);
+		mat4.mul(projectionViewMatrix, camera.projectionMatrix, this.modelViewMatrix);
 
 		let screenPosition;
 		let vertex;
@@ -159,7 +160,7 @@ export default class VerticesHelper extends Mesh {
 		});
 
 		this.shader.program.bind();
-		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
+		this.shader.setUniforms(camera.projectionMatrix, this.modelViewMatrix, this.modelMatrix, camera);
 
 		if (extensions.vertexArrayObject) {
 			this.vao.bind();

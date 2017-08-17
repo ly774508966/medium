@@ -2,7 +2,7 @@ import {
 	clamp,
 } from '../math/Utils';
 import Vector3 from '../math/Vector3';
-import PerspectiveCamera from '../core/PerspectiveCamera';
+import PerspectiveCamera from '../cameras/PerspectiveCamera';
 
 const MODE_DRAG = 'MODE_DRAG';
 const MODE_PAN = 'MODE_PAN';

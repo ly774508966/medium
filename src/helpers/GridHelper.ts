@@ -11,6 +11,9 @@ import { capabilities, extensions } from '../core/Capabilities';
 import Geometry from '../geometry/Geometry';
 import EsVersion from '../shaders/chunks/EsVersion.glsl';
 import ProjectionView from '../shaders/chunks/ProjectionView.glsl';
+import Camera from '../cameras/Camera';
+import PerspectiveCamera from '../cameras/PerspectiveCamera';
+import OrthographicCamera from '../cameras/OrthographicCamera';
 
 let gl: WebGL2RenderingContext | WebGLRenderingContext;
 
@@ -19,10 +22,10 @@ const vertexShaderEs300 = `${EsVersion}
 
 	in vec3 aVertexPosition;
 
-	uniform mat4 uModelMatrix;
+	uniform mat4 uModelViewMatrix;
 
 	void main(void){
-		gl_Position = uProjectionView.projectionMatrix * uProjectionView.viewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
+		gl_Position = uProjectionView.projectionMatrix * uModelViewMatrix * vec4(aVertexPosition, 1.0);
 	}
 `;
 
@@ -30,11 +33,10 @@ const vertexShaderEs100 = `
 	attribute vec3 aVertexPosition;
 
 	uniform mat4 uProjectionMatrix;
-	uniform mat4 uViewMatrix;
-	uniform mat4 uModelMatrix;
+	uniform mat4 uModelViewMatrix;
 
 	void main(void){
-		gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
+		gl_Position = uProjectionMatrix * uModelViewMatrix * vec4(aVertexPosition, 1.0);
 	}
 `;
 
@@ -99,15 +101,15 @@ export default class GridHelper extends Mesh {
 		}));
 	}
 
-	draw(modelViewMatrix: mat4, projectionMatrix: mat4) {
+	draw(camera: Camera | PerspectiveCamera | OrthographicCamera) {
 		if (!this.visible) return;
 		gl = GL.get();
 
 		// Update modelMatrix
-		this.updateMatrix();
+		this.updateMatrix(camera);
 
 		this.shader.program.bind();
-		this.shader.setUniforms(modelViewMatrix, projectionMatrix, this.modelMatrix);
+		this.shader.setUniforms(camera.projectionMatrix, this.modelViewMatrix, this.modelMatrix, camera);
 
 		if (extensions.vertexArrayObject) {
 			this.vao.bind();

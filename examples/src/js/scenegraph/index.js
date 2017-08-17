@@ -114,6 +114,8 @@ window.addEventListener('resize', resize);
 function update() {
   requestAnimationFrame(update);
 
+	camera.updateMatrixWorld();
+
   container.rotation.x += 0.01;
   container.rotation.y += 0.01;
   container.rotation.z += 0.01;
@@ -123,7 +125,7 @@ function update() {
 
   // Container doesn't get drawn so updateMatrix() needs
   // to be called manually
-  container.updateMatrix();
+  container.updateMatrix(camera);
   renderer.render(scene, camera);
 }
 update();

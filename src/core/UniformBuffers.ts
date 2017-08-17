@@ -11,7 +11,6 @@ export function setup() {
 	// ProjectionView
 	const projectionViewData = new Float32Array([
 		...mat4.create(),
-		...mat4.create(),
 	]);
 
 	uniformBuffers.projectionView = new UniformBuffer(projectionViewData);
@@ -19,13 +18,12 @@ export function setup() {
 
 // Update projectionView buffer data
 let projectionViewData;
-export function updateProjectionView(gl: WebGL2RenderingContext, projectionMatrix: mat4, modelViewMatrix: mat4) {
+export function updateProjectionView(gl: WebGL2RenderingContext, projectionMatrix: mat4) {
 	gl.bindBufferBase(gl.UNIFORM_BUFFER, 0, uniformBuffers.projectionView.buffer);
 	gl.bindBuffer(gl.UNIFORM_BUFFER, uniformBuffers.projectionView.buffer);
 
 	projectionViewData = [
 		...projectionMatrix,
-		...modelViewMatrix,
 	];
 
 	uniformBuffers.projectionView.data.set(projectionViewData, 0);

@@ -109,6 +109,9 @@ window.addEventListener('resize', resize);
 function update(time) {
   requestAnimationFrame(update);
 
+  cameras.dev.updateMatrixWorld();
+  cameras.main.updateMatrixWorld();
+
   const t = time * 0.2;
 
   plane.shader.uniforms.uTime.value = t * 0.01;

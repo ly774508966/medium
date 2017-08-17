@@ -17,8 +17,9 @@ import * as Capabilities from './Capabilities';
 import * as UniformBuffers from './UniformBuffers';
 import Detect from '../utils/Detect';
 import Scene from '../core/Scene';
-import PerspectiveCamera from './PerspectiveCamera';
-import OrthorgraphicCamera from './OrthographicCamera';
+import Camera from '../cameras/Camera';
+import PerspectiveCamera from '../cameras/PerspectiveCamera';
+import OrthorgraphicCamera from '../cameras/OrthographicCamera';
 const config = require('../../package.json');
 
 let gl: WebGL2RenderingContext | WebGLRenderingContext;
@@ -39,6 +40,13 @@ interface Viewport {
 	height: number;
 }
 
+interface ClearColor {
+	r: number;
+	g: number;
+	b: number;
+	a: number;
+}
+
 export default class Renderer {
 	width: number;
 	height: number;
@@ -49,6 +57,7 @@ export default class Renderer {
 	canvas: HTMLCanvasElement;
 	viewport: Viewport;
 	autoClear: boolean;
+	clearColor: ClearColor;
 
 	constructor(options?: Options) {
 		// Default renderer settings
@@ -59,6 +68,7 @@ export default class Renderer {
 		this.pixelRatio = 1;
 		this.prefferedContext = RENDERER_DEFAULT_CONTEXT;
 		this.autoClear = true;
+		this.clearColor = {r: 0, g: 0, b: 0, a: 1};
 
 		// Apply defaults
 		Object.assign(this, options);
@@ -119,8 +129,10 @@ export default class Renderer {
 	}
 
 	setClearColor(r = 0, g = 0, b = 0, a = 1) {
-		gl = GL.get();
-		gl.clearColor(r, g, b, a);
+		this.clearColor.r = r;
+		this.clearColor.g = g;
+		this.clearColor.b = b;
+		this.clearColor.a = a;
 	}
 
 	setSize(width: number, height: number) {
@@ -168,18 +180,15 @@ export default class Renderer {
 		this.viewport.height = height * this.pixelRatio;
 	}
 
-	render(scene: Scene, camera: PerspectiveCamera | OrthorgraphicCamera) {
+	render(scene: Scene, camera: Camera | PerspectiveCamera | OrthorgraphicCamera) {
 		gl = GL.get();
 
 		gl.viewport(this.viewport.x, this.viewport.y, this.viewport.width, this.viewport.height);
 
 		if (this.autoClear) {
+			gl.clearColor(this.clearColor.r, this.clearColor.g, this.clearColor.b, this.clearColor.a);
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 		}
-
-		mat4.identity(scene.modelViewMatrix);
-
-		mat4.lookAt(scene.modelViewMatrix, camera.position.v, camera.target.v, camera.up.v);
 
 		// Update the scene
 		scene.update();
@@ -187,15 +196,15 @@ export default class Renderer {
 		// Draw the scene objects
 		if (gl instanceof WebGL2RenderingContext) {
 			// Update global uniform buffers
-			UniformBuffers.updateProjectionView(gl, camera.projectionMatrix, scene.modelViewMatrix);
+			UniformBuffers.updateProjectionView(gl, camera.projectionMatrix);
 		}
 
 		// Render the scene objects
 		scene.objects.forEach(child => {
 			if (child.isInstanced) {
-				child.drawInstance(scene.modelViewMatrix, camera.projectionMatrix, camera);
+				child.drawInstance(camera);
 			} else {
-				child.draw(scene.modelViewMatrix, camera.projectionMatrix, camera);
+				child.draw(camera);
 			}
 		});
 	}

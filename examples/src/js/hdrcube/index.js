@@ -203,6 +203,8 @@ window.addEventListener('resize', resize);
 function update() {
   requestAnimationFrame(update);
 
+  camera.updateMatrixWorld();
+
   hdrObjects.forEach(object => {
     object.shader.uniforms.uGamma.value = guiController.gamma;
     object.shader.uniforms.uExposure.value = guiController.exposure;

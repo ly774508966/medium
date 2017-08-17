@@ -9,13 +9,11 @@ export default class Scene {
 	ambientLight: Lights;
 	pointLights: Lights;
 	directionalLights: Lights;
-	modelViewMatrix: mat4;
 
 	constructor() {
 		this.objects = [];
 		this.pointLights = undefined;
 		this.directionalLights = undefined;
-		this.modelViewMatrix = mat4.create();
 	}
 
 	add(object: Mesh) {

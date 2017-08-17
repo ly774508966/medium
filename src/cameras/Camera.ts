@@ -3,8 +3,9 @@ import {
 } from 'gl-matrix';
 import {
 	RENDERER_DEFAULT_RATIO,
-} from './Constants';
+} from '../core/Constants';
 import Vector3 from '../math/Vector3';
+import Object3D from '../core/Object3D';
 
 interface Options {
 	near?: number;
@@ -15,8 +16,10 @@ interface Options {
 	up?: Vector3;
 }
 
-export default class PerspectiveCamera {
+export default class Camera {
 	projectionMatrix: mat4;
+	worldInverseMatrix: mat4;
+	isCamera: boolean;
 	isPespectiveCamera: boolean;
 	isOrthographicCamera: boolean;
 	near: number;
@@ -29,7 +32,9 @@ export default class PerspectiveCamera {
 
 	constructor(options: Options) {
 		this.projectionMatrix = mat4.create();
-		this.isPespectiveCamera = true;
+		this.worldInverseMatrix = mat4.create();
+		this.isCamera = true;
+		this.isPespectiveCamera = false;
 		this.isOrthographicCamera = false;
 		this.near = 0.1;
 		this.far = 100;
@@ -45,7 +50,12 @@ export default class PerspectiveCamera {
 		this.target.set(x, y, z);
 	}
 
+	updateMatrixWorld() {
+		mat4.identity(this.worldInverseMatrix);
+		mat4.lookAt(this.worldInverseMatrix, this.position.v, this.target.v, this.up.v);
+	}
+
 	updateProjectionMatrix() {
-		mat4.perspective(this.projectionMatrix, this.fov, this.ratio, this.near, this.far);
+		// override
 	}
 }

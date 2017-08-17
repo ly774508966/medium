@@ -4,8 +4,9 @@ import * as Constants from './core/Constants';
 import * as GL from './core/GL';
 import Mesh from './core/Mesh';
 import Object3D from './core/Object3D';
-import OrthographicCamera from './core/OrthographicCamera';
-import PerspectiveCamera from './core/PerspectiveCamera';
+import Camera from './cameras/Camera';
+import OrthographicCamera from './cameras/OrthographicCamera';
+import PerspectiveCamera from './cameras/PerspectiveCamera';
 import RayCaster from './core/Raycaster';
 import Renderer from './core/Renderer';
 import RenderTarget from './core/RenderTarget';
@@ -72,6 +73,7 @@ export {
 	GL,
 	Mesh,
 	Object3D,
+	Camera,
 	OrthographicCamera,
 	PerspectiveCamera,
 	RayCaster,

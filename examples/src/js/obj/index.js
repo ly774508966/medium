@@ -130,6 +130,8 @@ window.addEventListener('resize', resize);
 function update(time) {
   requestAnimationFrame(update);
 
+	camera.updateMatrixWorld();
+
   const radius = 20;
   const t = time * 0.0005;
 

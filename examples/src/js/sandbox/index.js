@@ -222,6 +222,8 @@ const radius = 30;
 function update() {
   requestAnimationFrame(update);
 
+  camera.updateMatrixWorld();
+
   delta = clock.getDelta();
 
   box.rotation.x += delta;

@@ -8,7 +8,7 @@ import SphereGeometry from '../geometry/SphereGeometry';
 import Mesh from '../core/Mesh';
 import Scene from '../core/Scene';
 import Shader from '../core/Shader';
-import PerspectiveCamera from '../core/PerspectiveCamera';
+import PerspectiveCamera from '../cameras/PerspectiveCamera';
 
 interface IDollyCurves {
 	origin: Bezier;

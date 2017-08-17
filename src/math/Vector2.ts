@@ -71,4 +71,7 @@ export default class Vector2 {
 	equals(vector2: Vector2): boolean {
 		return vec2.equals(this.v, vector2.v);
 	}
+	fromArray(values: Array<number>) {
+		return vec2.copy(this.v, values);
+	}
 }

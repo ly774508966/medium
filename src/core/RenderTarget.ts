@@ -4,8 +4,9 @@ import {
 } from 'gl-matrix';
 import * as UniformBuffers from './UniformBuffers';
 import Scene from './Scene';
-import PerspectiveCamera from './PerspectiveCamera';
-import OrthographicCamera from './OrthographicCamera';
+import Camera from '../cameras/PerspectiveCamera';
+import PerspectiveCamera from '../cameras/PerspectiveCamera';
+import OrthographicCamera from '../cameras/OrthographicCamera';
 
 let gl: WebGL2RenderingContext | WebGLRenderingContext;
 
@@ -127,24 +128,20 @@ export default class RenderTarget {
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 		}
 
-		mat4.identity(scene.modelViewMatrix);
-
-		mat4.lookAt(scene.modelViewMatrix, camera.position.v, camera.target.v, camera.up.v);
-
 		// Update the scene
 		scene.update();
 
 		if (gl instanceof WebGL2RenderingContext) {
 			// Update global uniform buffers
-			UniformBuffers.updateProjectionView(gl, camera.projectionMatrix, scene.modelViewMatrix);
+			UniformBuffers.updateProjectionView(gl, camera.projectionMatrix);
 		}
 
 		// Render the scene objects
 		scene.objects.forEach(child => {
 			if (child.isInstanced) {
-				child.drawInstance(scene.modelViewMatrix, camera.projectionMatrix, camera);
+				child.drawInstance(camera);
 			} else {
-				child.draw(scene.modelViewMatrix, camera.projectionMatrix, camera);
+				child.draw(camera);
 			}
 		});
 

@@ -88,4 +88,7 @@ export default class Vector3 {
 	equals(vector3: Vector3): boolean {
 		return vec3.equals(this.v, vector3.v);
 	}
+	fromArray(values: Array<number>) {
+		return vec3.copy(this.v, values);
+	}
 }
