@@ -75,9 +75,6 @@
     "redux-saga/yield-effects": 2
   },
   "settings": {
-    "import/resolver": {
-      "babel-module": {}
-    },
     "polyfills": [
       "fetch"
     ]
