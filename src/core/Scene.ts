@@ -1,48 +1,46 @@
-import {
-	mat4,
-} from 'gl-matrix';
+import { mat4 } from 'gl-matrix';
 import Mesh from '../core/Mesh';
 import Lights from '../lights/Lights';
 
 export default class Scene {
-	objects: Array<Mesh>;
-	ambientLight: Lights;
-	pointLights: Lights;
-	directionalLights: Lights;
+  public objects: Mesh[];
+  public ambientLight: Lights;
+  public pointLights: Lights;
+  public directionalLights: Lights;
 
-	constructor() {
-		this.objects = [];
-		this.pointLights = undefined;
-		this.directionalLights = undefined;
-	}
+  constructor() {
+    this.objects = [];
+    this.pointLights = undefined;
+    this.directionalLights = undefined;
+  }
 
-	add(object: Mesh) {
-		this.objects.push(object);
-	}
+  public add(object: Mesh) {
+    this.objects.push(object);
+  }
 
-	remove(object: Mesh, dispose = false) {
-		const objectIndex = this.objects.indexOf(object);
-		if (objectIndex !== -1) {
-			this.objects.splice(objectIndex, 1);
-			if (dispose) {
-				object.dispose();
-				object = undefined;
-			}
-		}
-	}
+  public remove(object: Mesh, dispose = false) {
+    const objectIndex = this.objects.indexOf(object);
+    if (objectIndex !== -1) {
+      this.objects.splice(objectIndex, 1);
+      if (dispose) {
+        object.dispose();
+        object = undefined;
+      }
+    }
+  }
 
-	update() {
-		if (this.ambientLight) {
-			this.ambientLight.update();
-			this.ambientLight.bind();
-		}
-		if (this.directionalLights) {
-			this.directionalLights.update();
-			this.directionalLights.bind();
-		}
-		if (this.pointLights) {
-			this.pointLights.update();
-			this.pointLights.bind();
-		}
-	}
+  public update() {
+    if (this.ambientLight) {
+      this.ambientLight.update();
+      this.ambientLight.bind();
+    }
+    if (this.directionalLights) {
+      this.directionalLights.update();
+      this.directionalLights.bind();
+    }
+    if (this.pointLights) {
+      this.pointLights.update();
+      this.pointLights.bind();
+    }
+  }
 }

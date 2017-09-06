@@ -13,7 +13,4 @@ const ambientLightEs100 = `
 	uniform AmbientLight uAmbientLight;
 `;
 
-export {
-	ambientLightEs300,
-	ambientLightEs100,
-};
+export { ambientLightEs300, ambientLightEs100 };

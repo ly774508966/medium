@@ -70,7 +70,4 @@ const basicFragmentShaderEs100 = `
 	}
 `;
 
-export {
-	basicFragmentShaderEs300,
-	basicFragmentShaderEs100,
-};
+export { basicFragmentShaderEs300, basicFragmentShaderEs100 };

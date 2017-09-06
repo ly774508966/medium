@@ -1,17 +1,15 @@
-import {
-	mat4,
-} from 'gl-matrix';
+import { mat4 } from 'gl-matrix';
+import Camera from '../cameras/Camera';
+import OrthographicCamera from '../cameras/OrthographicCamera';
+import PerspectiveCamera from '../cameras/PerspectiveCamera';
+import { capabilities, extensions } from '../core/Capabilities';
+import { DRAW_LINE_STRIP } from '../core/Constants';
+import * as GL from '../core/GL';
 import Mesh from '../core/Mesh';
 import Shader from '../core/Shader';
-import * as GL from '../core/GL';
-import { capabilities, extensions } from '../core/Capabilities';
 import Geometry from '../geometry/Geometry';
 import EsVersion from '../shaders/chunks/EsVersion.glsl';
 import ProjectionView from '../shaders/chunks/ProjectionView.glsl';
-import { DRAW_LINE_STRIP } from '../core/Constants';
-import Camera from '../cameras/Camera';
-import PerspectiveCamera from '../cameras/PerspectiveCamera';
-import OrthographicCamera from '../cameras/OrthographicCamera';
 
 let gl: WebGL2RenderingContext | WebGLRenderingContext;
 
@@ -41,7 +39,7 @@ const vertexShaderEs100 = `
 `;
 
 function fragmentShaderEs300() {
-	return `${EsVersion}
+  return `${EsVersion}
 	precision ${capabilities.precision} float;
 	out vec4 outgoingColor;
 
@@ -52,7 +50,7 @@ function fragmentShaderEs300() {
 }
 
 function fragmentShaderEs100() {
-	return `
+  return `
 	precision ${capabilities.precision} float;
 
 	void main(void){
@@ -62,104 +60,118 @@ function fragmentShaderEs100() {
 }
 
 class CameraGeometry extends Geometry {
-	constructor(mesh: Mesh, size = 0.5) {
-		let vertices = [];
+  constructor(mesh: Mesh, size = 0.5) {
+    let vertices = [];
 
-		const addVertex = (x, y, z) => {
-			vertices = vertices.concat([x, y, z]);
-		};
+    const addVertex = (x, y, z) => {
+      vertices = vertices.concat([x, y, z]);
+    };
 
-		function box(z, scale = 1) {
-			// bottom left
-			addVertex(-1 * scale, -1 * scale, z);
+    function box(z, scale = 1) {
+      // bottom left
+      addVertex(-1 * scale, -1 * scale, z);
 
-			// top left
-			addVertex(-1 * scale, 1 * scale, z);
-			addVertex(-1 * scale, 1 * scale, z);
+      // top left
+      addVertex(-1 * scale, 1 * scale, z);
+      addVertex(-1 * scale, 1 * scale, z);
 
-			// top right
-			addVertex(1 * scale, 1 * scale, z);
-			addVertex(1 * scale, 1 * scale, z);
+      // top right
+      addVertex(1 * scale, 1 * scale, z);
+      addVertex(1 * scale, 1 * scale, z);
 
-			// bottom right
-			addVertex(1 * scale, -1 * scale, z);
-			addVertex(1 * scale, -1 * scale, z);
+      // bottom right
+      addVertex(1 * scale, -1 * scale, z);
+      addVertex(1 * scale, -1 * scale, z);
 
-			// bottom left
-			addVertex(-1 * scale, -1 * scale, z);
-		}
+      // bottom left
+      addVertex(-1 * scale, -1 * scale, z);
+    }
 
-		const z = 3.5;
-		const scaleNear = 0.5;
-		const scaleFar = 3;
+    const zPosition = 3.5;
+    const scaleNear = 0.5;
+    const scaleFar = 3;
 
-		// Boxes
-		box(0, scaleNear);
-		box(z, scaleFar);
+    // Boxes
+    box(0, scaleNear);
+    box(zPosition, scaleFar);
 
-		// Lines
+    // Lines
 
-		// Bottom left
-		addVertex(-1 * scaleNear, -1 * scaleNear, 0);
-		addVertex(-1 * scaleFar, -1 * scaleFar, z);
+    // Bottom left
+    addVertex(-1 * scaleNear, -1 * scaleNear, 0);
+    addVertex(-1 * scaleFar, -1 * scaleFar, zPosition);
 
-		// Top left
-		addVertex(-1 * scaleNear, 1 * scaleNear, 0);
-		addVertex(-1 * scaleFar, 1 * scaleFar, z);
+    // Top left
+    addVertex(-1 * scaleNear, 1 * scaleNear, 0);
+    addVertex(-1 * scaleFar, 1 * scaleFar, zPosition);
 
-		// Top right
-		addVertex(1 * scaleNear, 1 * scaleNear, 0);
-		addVertex(1 * scaleFar, 1 * scaleFar, z);
+    // Top right
+    addVertex(1 * scaleNear, 1 * scaleNear, 0);
+    addVertex(1 * scaleFar, 1 * scaleFar, zPosition);
 
-		// Bottom right
-		addVertex(1 * scaleNear, -1 * scaleNear, 0);
-		addVertex(1 * scaleFar, -1 * scaleFar, z);
+    // Bottom right
+    addVertex(1 * scaleNear, -1 * scaleNear, 0);
+    addVertex(1 * scaleFar, -1 * scaleFar, zPosition);
 
-		super(new Float32Array(vertices));
-	}
+    super(new Float32Array(vertices));
+  }
 }
 
 export default class CameraHelper extends Mesh {
-	camera: PerspectiveCamera;
-	constructor(camera) {
-		const vertexShader = GL.webgl2 ? vertexShaderEs300 : vertexShaderEs100;
-		const fragmentShader = GL.webgl2 ? fragmentShaderEs300() : fragmentShaderEs100();
-		super(new CameraGeometry(camera), new Shader({
-			name: 'CameraHelper',
-			vertexShader,
-			fragmentShader,
-			drawType: DRAW_LINE_STRIP,
-		}));
-		this.camera = camera;
-	}
+  public camera: PerspectiveCamera;
+  constructor(camera) {
+    const vertexShader = GL.webgl2 ? vertexShaderEs300 : vertexShaderEs100;
+    const fragmentShader = GL.webgl2
+      ? fragmentShaderEs300()
+      : fragmentShaderEs100();
+    super(
+      new CameraGeometry(camera),
+      new Shader({
+        name: 'CameraHelper',
+        vertexShader,
+        fragmentShader,
+        drawType: DRAW_LINE_STRIP
+      })
+    );
+    this.camera = camera;
+  }
 
-	update() {
-		this.position.copy(this.camera.position);
-		this.lookAt(this.camera.target);
-	}
+  public update() {
+    this.position.copy(this.camera.position);
+    this.lookAt(this.camera.target);
+  }
 
-	draw(camera: Camera | PerspectiveCamera | OrthographicCamera) {
-		if (!this.visible) return;
-		gl = GL.get();
+  public draw(camera: Camera | PerspectiveCamera | OrthographicCamera) {
+    if (!this.visible) return;
+    gl = GL.get();
 
-		// Update modelMatrix
-		this.updateMatrix(camera);
+    // Update modelMatrix
+    this.updateMatrix(camera);
 
-		this.shader.program.bind();
-		this.shader.setUniforms(camera.projectionMatrix, this.modelViewMatrix, this.modelMatrix, camera);
+    this.shader.program.bind();
+    this.shader.setUniforms(
+      camera.projectionMatrix,
+      this.modelViewMatrix,
+      this.modelMatrix,
+      camera
+    );
 
-		if (extensions.vertexArrayObject) {
-			this.vao.bind();
-		} else {
-			this.bindAttributes();
-			this.bindAttributesInstanced();
-			this.bindIndexBuffer();
-		}
+    if (extensions.vertexArrayObject) {
+      this.vao.bind();
+    } else {
+      this.bindAttributes();
+      this.bindAttributesInstanced();
+      this.bindIndexBuffer();
+    }
 
-		gl.drawArrays(gl.LINES, 0, this.geometry.attributes.aVertexPosition.numItems);
+    gl.drawArrays(
+      gl.LINES,
+      0,
+      this.geometry.attributes.aVertexPosition.numItems
+    );
 
-		if (extensions.vertexArrayObject) {
-			this.vao.unbind();
-		}
-	}
+    if (extensions.vertexArrayObject) {
+      this.vao.unbind();
+    }
+  }
 }

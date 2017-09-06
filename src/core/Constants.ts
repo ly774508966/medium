@@ -1,4 +1,3 @@
-
 // Contexts
 export const WEBGL_CONTEXT: string = 'webgl';
 export const WEBGL2_CONTEXT: string = 'webgl2';
@@ -7,7 +6,8 @@ export const WEBGL2_CONTEXT: string = 'webgl2';
 export const RENDERER_DEFAULT_CONTEXT: string = WEBGL2_CONTEXT;
 export const RENDERER_DEFAULT_WIDTH: number = 1280;
 export const RENDERER_DEFAULT_HEIGHT: number = 720;
-export const RENDERER_DEFAULT_RATIO: number = RENDERER_DEFAULT_WIDTH / RENDERER_DEFAULT_HEIGHT;
+export const RENDERER_DEFAULT_RATIO: number =
+  RENDERER_DEFAULT_WIDTH / RENDERER_DEFAULT_HEIGHT;
 
 // Precision
 export const PRECISION: string = 'highp';

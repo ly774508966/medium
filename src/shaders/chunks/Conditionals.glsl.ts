@@ -23,8 +23,8 @@ float whenGreaterThan(float x, float y) {
 `;
 
 export default {
-	whenEquals,
-	whenEqualsInt,
-	whenLessThan,
-	whenGreaterThan,
+  whenEquals,
+  whenEqualsInt,
+  whenLessThan,
+  whenGreaterThan
 };

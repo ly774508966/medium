@@ -27,7 +27,7 @@ float fogExp2(
 `;
 
 export default {
-	linear,
-	exp,
-	exp2,
+  linear,
+  exp,
+  exp2
 };

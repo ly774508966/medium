@@ -5,54 +5,54 @@
 
 let diff: number;
 let newTime: number;
-const dateType = (window.performance || Date);
+const dateType = window.performance || Date;
 
 export default class Clock {
-	autoStart: boolean;
-	startTime: number;
-	oldTime: number;
-	elapsedTime: number;
-	isRunning: boolean;
+  public autoStart: boolean;
+  public startTime: number;
+  public oldTime: number;
+  public elapsedTime: number;
+  public isRunning: boolean;
 
-	constructor(autoStart = false) {
-		this.startTime = 0;
-		this.oldTime = 0;
-		this.elapsedTime = 0;
-		this.isRunning = autoStart;
-	}
+  constructor(autoStart = false) {
+    this.startTime = 0;
+    this.oldTime = 0;
+    this.elapsedTime = 0;
+    this.isRunning = autoStart;
+  }
 
-	start() {
-		this.startTime = dateType.now();
-		this.oldTime = this.startTime;
-		this.elapsedTime = 0;
-		this.isRunning = true;
-	}
+  public start() {
+    this.startTime = dateType.now();
+    this.oldTime = this.startTime;
+    this.elapsedTime = 0;
+    this.isRunning = true;
+  }
 
-	stop() {
-		this.getElapsedTime();
-		this.isRunning = false;
-	}
+  public stop() {
+    this.getElapsedTime();
+    this.isRunning = false;
+  }
 
-	getElapsedTime() {
-		this.getDelta();
-		return this.elapsedTime;
-	}
+  public getElapsedTime() {
+    this.getDelta();
+    return this.elapsedTime;
+  }
 
-	getDelta() {
-		diff = 0;
-		if (this.autoStart && !this.isRunning) {
-			this.start();
-		}
+  public getDelta() {
+    diff = 0;
+    if (this.autoStart && !this.isRunning) {
+      this.start();
+    }
 
-		if (this.isRunning) {
-			newTime = dateType.now();
+    if (this.isRunning) {
+      newTime = dateType.now();
 
-			diff = (newTime - this.oldTime) / 1000;
-			this.oldTime = newTime;
+      diff = (newTime - this.oldTime) / 1000;
+      this.oldTime = newTime;
 
-			this.elapsedTime += diff;
-		}
+      this.elapsedTime += diff;
+    }
 
-		return diff;
-	}
+    return diff;
+  }
 }

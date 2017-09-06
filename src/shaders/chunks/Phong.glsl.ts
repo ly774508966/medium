@@ -76,7 +76,4 @@ const phongEs100 = `
 	}
 `;
 
-export {
-	phongEs300,
-	phongEs100,
-};
+export { phongEs300, phongEs100 };

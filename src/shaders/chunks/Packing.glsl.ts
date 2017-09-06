@@ -5,5 +5,5 @@ export const packNormalToRGB = `
 `;
 
 export default {
-	packNormalToRGB,
+  packNormalToRGB
 };

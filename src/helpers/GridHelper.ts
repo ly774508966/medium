@@ -1,19 +1,15 @@
-import {
-	mat4,
-} from 'gl-matrix';
-import {
-	lerp,
-} from '../math/Utils';
+import { mat4 } from 'gl-matrix';
+import Camera from '../cameras/Camera';
+import OrthographicCamera from '../cameras/OrthographicCamera';
+import PerspectiveCamera from '../cameras/PerspectiveCamera';
+import { capabilities, extensions } from '../core/Capabilities';
+import * as GL from '../core/GL';
 import Mesh from '../core/Mesh';
 import Shader from '../core/Shader';
-import * as GL from '../core/GL';
-import { capabilities, extensions } from '../core/Capabilities';
 import Geometry from '../geometry/Geometry';
+import { lerp } from '../math/Utils';
 import EsVersion from '../shaders/chunks/EsVersion.glsl';
 import ProjectionView from '../shaders/chunks/ProjectionView.glsl';
-import Camera from '../cameras/Camera';
-import PerspectiveCamera from '../cameras/PerspectiveCamera';
-import OrthographicCamera from '../cameras/OrthographicCamera';
 
 let gl: WebGL2RenderingContext | WebGLRenderingContext;
 
@@ -41,7 +37,7 @@ const vertexShaderEs100 = `
 `;
 
 function fragmentShaderEs300() {
-	return `${EsVersion}
+  return `${EsVersion}
 	precision ${capabilities.precision} float;
 	out vec4 outgoingColor;
 
@@ -52,7 +48,7 @@ function fragmentShaderEs300() {
 }
 
 function fragmentShaderEs100() {
-	return `
+  return `
 	precision ${capabilities.precision} float;
 
 	void main(void){
@@ -62,67 +58,81 @@ function fragmentShaderEs100() {
 }
 
 class GridGeometry extends Geometry {
-	constructor(size: number, divisions: number) {
-		let vertices = [];
-		const halfSize = size * 0.5;
+  constructor(size: number, divisions: number) {
+    let vertices = [];
+    const halfSize = size * 0.5;
 
-		for (let i = 0; i < divisions + 1; i += 1) {
-			const x1 = lerp(-halfSize, halfSize, i / divisions);
-			const y1 = 0;
-			const z1 = -halfSize;
-			const x2 = lerp(-halfSize, halfSize, i / divisions);
-			const y2 = 0;
-			const z2 = halfSize;
-			vertices = vertices.concat([x1, y1, z1, x2, y2, z2]);
-		}
+    for (let i = 0; i < divisions + 1; i += 1) {
+      const x1 = lerp(-halfSize, halfSize, i / divisions);
+      const y1 = 0;
+      const z1 = -halfSize;
+      const x2 = lerp(-halfSize, halfSize, i / divisions);
+      const y2 = 0;
+      const z2 = halfSize;
+      vertices = vertices.concat([x1, y1, z1, x2, y2, z2]);
+    }
 
-		for (let i = 0; i < divisions + 1; i += 1) {
-			const x1 = -halfSize;
-			const y1 = 0;
-			const z1 = lerp(-halfSize, halfSize, i / divisions);
-			const x2 = halfSize;
-			const y2 = 0;
-			const z2 = lerp(-halfSize, halfSize, i / divisions);
-			vertices = vertices.concat([x1, y1, z1, x2, y2, z2]);
-		}
+    for (let i = 0; i < divisions + 1; i += 1) {
+      const x1 = -halfSize;
+      const y1 = 0;
+      const z1 = lerp(-halfSize, halfSize, i / divisions);
+      const x2 = halfSize;
+      const y2 = 0;
+      const z2 = lerp(-halfSize, halfSize, i / divisions);
+      vertices = vertices.concat([x1, y1, z1, x2, y2, z2]);
+    }
 
-		super(new Float32Array(vertices));
-	}
+    super(new Float32Array(vertices));
+  }
 }
 
 export default class GridHelper extends Mesh {
-	constructor(size = 1, divisions = 10) {
-		const vertexShader = GL.webgl2 ? vertexShaderEs300 : vertexShaderEs100;
-		const fragmentShader = GL.webgl2 ? fragmentShaderEs300() : fragmentShaderEs100();
-		super(new GridGeometry(size, divisions), new Shader({
-			name: 'GridHelper',
-			vertexShader,
-			fragmentShader,
-		}));
-	}
+  constructor(size = 1, divisions = 10) {
+    const vertexShader = GL.webgl2 ? vertexShaderEs300 : vertexShaderEs100;
+    const fragmentShader = GL.webgl2
+      ? fragmentShaderEs300()
+      : fragmentShaderEs100();
+    super(
+      new GridGeometry(size, divisions),
+      new Shader({
+        name: 'GridHelper',
+        vertexShader,
+        fragmentShader
+      })
+    );
+  }
 
-	draw(camera: Camera | PerspectiveCamera | OrthographicCamera) {
-		if (!this.visible) return;
-		gl = GL.get();
+  public draw(camera: Camera | PerspectiveCamera | OrthographicCamera) {
+    if (!this.visible) return;
+    gl = GL.get();
 
-		// Update modelMatrix
-		this.updateMatrix(camera);
+    // Update modelMatrix
+    this.updateMatrix(camera);
 
-		this.shader.program.bind();
-		this.shader.setUniforms(camera.projectionMatrix, this.modelViewMatrix, this.modelMatrix, camera);
+    this.shader.program.bind();
+    this.shader.setUniforms(
+      camera.projectionMatrix,
+      this.modelViewMatrix,
+      this.modelMatrix,
+      camera
+    );
 
-		if (extensions.vertexArrayObject) {
-			this.vao.bind();
-		} else {
-			this.bindAttributes();
-			this.bindAttributesInstanced();
-			this.bindIndexBuffer();
-		}
+    if (extensions.vertexArrayObject) {
+      this.vao.bind();
+    } else {
+      this.bindAttributes();
+      this.bindAttributesInstanced();
+      this.bindIndexBuffer();
+    }
 
-		gl.drawArrays(gl.LINES, 0, this.geometry.attributes.aVertexPosition.numItems);
+    gl.drawArrays(
+      gl.LINES,
+      0,
+      this.geometry.attributes.aVertexPosition.numItems
+    );
 
-		if (extensions.vertexArrayObject) {
-			this.vao.unbind();
-		}
-	}
+    if (extensions.vertexArrayObject) {
+      this.vao.unbind();
+    }
+  }
 }

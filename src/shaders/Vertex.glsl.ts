@@ -151,7 +151,4 @@ const vertexShaderEs100 = `
 	}
 `;
 
-export {
-	vertexShaderEs300,
-	vertexShaderEs100,
-};
+export { vertexShaderEs300, vertexShaderEs100 };

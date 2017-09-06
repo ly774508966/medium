@@ -13,7 +13,7 @@ float mapLinear(float value, float in_min, float in_max, float out_min, float ou
 `;
 
 export default {
-	definePI,
-	definePITwo,
-	mapLinear,
+  definePI,
+  definePITwo,
+  mapLinear
 };

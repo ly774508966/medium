@@ -40,7 +40,4 @@ const lambertEs100 = `
 	}
 `;
 
-export {
-	lambertEs300,
-	lambertEs100,
-};
+export { lambertEs300, lambertEs100 };

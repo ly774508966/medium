@@ -22,7 +22,4 @@ const pointLightsEs100 = `
 	uniform PointLight uPointLights[#HOOK_POINT_LIGHTS];
 `;
 
-export {
-	pointLightsEs300,
-	pointLightsEs100,
-};
+export { pointLightsEs300, pointLightsEs100 };

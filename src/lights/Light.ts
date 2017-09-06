@@ -1,10 +1,12 @@
 export default class Light {
-	type: string;
-	data: Float32Array;
+  public type: string;
+  public data: Float32Array;
 
-	update() {return; }
+  public update() {
+    return;
+  }
 
-	setValues(values: Array<number> | Float32Array, offset = 0) {
-		this.data.set(values, offset);
-	}
+  public setValues(values: number[] | Float32Array, offset = 0) {
+    this.data.set(values, offset);
+  }
 }

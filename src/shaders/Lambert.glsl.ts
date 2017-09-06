@@ -1,7 +1,13 @@
+import {
+  ambientLightEs100,
+  ambientLightEs300
+} from './chunks/AmbientLight.glsl';
+import {
+  directionalLightsEs100,
+  directionalLightsEs300
+} from './chunks/DirectionalLights.glsl';
 import EsVersion from './chunks/EsVersion.glsl';
-import { ambientLightEs300, ambientLightEs100 } from './chunks/AmbientLight.glsl';
-import { lambertEs300, lambertEs100 } from './chunks/Lambert.glsl';
-import { directionalLightsEs300, directionalLightsEs100 } from './chunks/DirectionalLights.glsl';
+import { lambertEs100, lambertEs300 } from './chunks/Lambert.glsl';
 
 const lambertFragmentShaderEs300 = `${EsVersion}
 	#HOOK_PRECISION
@@ -104,7 +110,4 @@ const lambertFragmentShaderEs100 = `
 	}
 `;
 
-export {
-	lambertFragmentShaderEs300,
-	lambertFragmentShaderEs100,
-};
+export { lambertFragmentShaderEs300, lambertFragmentShaderEs100 };
