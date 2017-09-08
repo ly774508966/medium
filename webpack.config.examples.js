@@ -1,5 +1,8 @@
 const fs = require('fs');
 const path = require('path');
+const BabiliPlugin = require('babili-webpack-plugin');
+
+const production = process.env.NODE_ENV === 'production';
 
 function isDir(file) {
   return fs.statSync(path.join('./examples/src/js/', file)).isDirectory();
@@ -34,7 +37,7 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.ts(x?)$/,
+        test: /\.ts$/,
         exclude: /node_modules/,
         loader: 'babel-loader!ts-loader'
       },
@@ -48,7 +51,11 @@ module.exports = {
               'env',
               {
                 targets: {
-                  browsers: ['last 2 versions', 'ios_saf >= 8', 'not IE <= 10']
+                  browsers: [
+                    'last 2 versions',
+                    'ios_saf >= 10.2',
+                    'not IE <= 10'
+                  ]
                 }
               }
             ]
@@ -58,5 +65,6 @@ module.exports = {
       }
     ]
   },
-  stats: 'minimal'
+  stats: 'minimal',
+  plugins: production ? [new BabiliPlugin()] : []
 };
