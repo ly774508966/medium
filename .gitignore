@@ -2,7 +2,6 @@ node_modules
 .DS_Store
 npm-debug.log
 .eslintcache
-*.js.map
+examples/js/*.js.map
 examples/js/*.js
 examples/*.html
-/examples/files.json
