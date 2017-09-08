@@ -15,7 +15,7 @@ import {
   JsonLoader,
   Geometry,
   BoxGeometry,
-	AmbientLight
+  AmbientLight
 } from '../../../../src/index.ts';
 import ShadowMapRenderer from './ShadowMapRenderer';
 
@@ -67,7 +67,7 @@ const ambientLight = new Lights([
       type: '3f',
       value: new Color(0x404040).v
     }
-  }),
+  })
 ]);
 
 const directionalLights = new Lights([
@@ -164,7 +164,7 @@ const hookFragmentEnd = `
 
 const objectMaterial = new Shader({
   type: 'lambert',
-	// ambientLight,
+  // ambientLight,
   directionalLights,
   hookFragmentPre,
   hookFragmentEnd,
@@ -204,7 +204,7 @@ gui.add(objectMaterial.uniforms.uBias, 'value', 0, 0.01).name('shadow bias');
 
 // Obj
 let objMesh;
-new JsonLoader('assets/models/mass.json')
+new JsonLoader('assets/models/json/mass.json')
   .then(data => {
     const geometry = new Geometry(data.vertices, data.indices, data.normals);
 

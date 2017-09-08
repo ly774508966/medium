@@ -50,7 +50,7 @@ const texture = new TextureCube({
 
 let mesh;
 
-new JsonLoader('assets/models/mass.json')
+new JsonLoader('assets/models/json/mass.json')
   .then(data => {
     const geometry = new Geometry(data.vertices, data.indices, data.normals);
 
@@ -93,7 +93,7 @@ window.addEventListener('resize', resize);
 function update() {
   requestAnimationFrame(update);
 
-	camera.updateMatrixWorld();
+  camera.updateMatrixWorld();
 
   if (mesh) {
     mesh.rotation.y += 0.003;
