@@ -3,5 +3,3 @@ node_modules
 npm-debug.log
 .eslintcache
 examples/js/*.js.map
-examples/js/*.js
-examples/*.html
