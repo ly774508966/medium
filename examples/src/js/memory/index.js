@@ -46,7 +46,7 @@ let count = 0;
 
 function addBox() {
   const texture = new Texture({
-    src: '/assets/textures/texture-nopow2.jpg'
+    src: 'assets/textures/texture-nopow2.jpg'
   });
   const geometry = new BoxGeometry(1, 1, 1);
   const material = new Shader({

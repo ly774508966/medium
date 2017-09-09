@@ -66,25 +66,25 @@ scene.directionalLights = directionalLights;
 
 const environmentMap = new TextureCube({
   src: [
-    '/assets/textures/cube/pisa-hdr/px.hdr',
-    '/assets/textures/cube/pisa-hdr/nx.hdr',
-    '/assets/textures/cube/pisa-hdr/py.hdr',
-    '/assets/textures/cube/pisa-hdr/ny.hdr',
-    '/assets/textures/cube/pisa-hdr/pz.hdr',
-    '/assets/textures/cube/pisa-hdr/nz.hdr'
+    'assets/textures/cube/pisa-hdr/px.hdr',
+    'assets/textures/cube/pisa-hdr/nx.hdr',
+    'assets/textures/cube/pisa-hdr/py.hdr',
+    'assets/textures/cube/pisa-hdr/ny.hdr',
+    'assets/textures/cube/pisa-hdr/pz.hdr',
+    'assets/textures/cube/pisa-hdr/nz.hdr'
   ]
 });
 
 const albedoMap = new Texture({
-  src: '/assets/textures/pbr/rusted-metal/albedo.png'
+  src: 'assets/textures/pbr/rusted-metal/albedo.png'
 });
 
 const normalMap = new Texture({
-  src: '/assets/textures/pbr/rusted-metal/normal.png'
+  src: 'assets/textures/pbr/rusted-metal/normal.png'
 });
 
 const metalnessMap = new Texture({
-  src: '/assets/textures/pbr/rusted-metal/metalness.jpg'
+  src: 'assets/textures/pbr/rusted-metal/metalness.jpg'
 });
 
 guiController.exposure = 2.0;
@@ -204,7 +204,7 @@ function reflectiveObjects() {
       }
     },
     directionalLights,
-    type: 'lambert',
+    type: 'lambert'
   });
 
   const geometry0 = new SphereGeometry(2, 64, 64);

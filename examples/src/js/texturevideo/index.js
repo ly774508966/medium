@@ -34,7 +34,7 @@ camera.lookAt();
 
 // Objects
 const textureVideo = new TextureVideo({
-  src: '/assets/textures/texture.mp4',
+  src: 'assets/textures/texture.mp4',
   loop: true
 });
 
@@ -90,7 +90,7 @@ window.addEventListener('resize', resize);
 
 function update() {
   requestAnimationFrame(update);
-	camera.updateMatrixWorld();
+  camera.updateMatrixWorld();
   box.rotation.x += 0.01;
   box.rotation.y += 0.01;
   textureVideo.update();

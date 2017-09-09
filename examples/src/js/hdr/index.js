@@ -34,7 +34,7 @@ camera.lookAt();
 
 // Objects
 const texture0 = new Texture({
-  src: '/assets/textures/cube/pisa-hdr/nx.hdr'
+  src: 'assets/textures/cube/pisa-hdr/nx.hdr'
 });
 
 const geometry = new PlaneGeometry(1, 1);
