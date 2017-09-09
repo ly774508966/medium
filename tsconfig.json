@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"sourceMap": true,
+		"target": "es6",
+		"module": "es6",
+		"moduleResolution": "node",
+		"lib": [
+			"dom",
+			"es2015",
+			"es2016"
+		]
+	},
+	"compileOnSave": false
+}

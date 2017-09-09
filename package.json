@@ -1,0 +1,89 @@
+{
+  "name": "ixviii.medium",
+  "version": "0.3.0",
+  "description": "Progressive WebGL toolkit for art.",
+  "main": "lib/ixviii.medium.js",
+  "scripts": {
+    "start":
+      "concurrently 'npm run server' 'npm run examples:js' 'npm run examples:html'",
+    "server":
+      "live-server ./examples --port 3000 --quiet --watch ./examples --watch ./src --wait 0",
+    "examples:js":
+      "webpack --config webpack.config.examples.js --colors --watch",
+    "examples:html": "node ./pug.config.js",
+    "examples:build":
+      "NODE_ENV=production webpack --config webpack.config.examples.js --colors; node ./pug.config.js",
+    "build":
+      "NODE_ENV=production npm run lint; webpack --config webpack.config.build.js --colors; NODE_ENV=production webpack --config webpack.config.build.js --colors",
+    "prepublish": "npm run docs; npm run build",
+    "formatting":
+      "prettier --write --single-quote --print-width 80 './src/**/*.ts'",
+    "formatting:examples":
+      "prettier --write --single-quote --print-width 80 './examples/src/js/**/*.js'",
+    "lint:examples": "eslint --ext .js ./examples/src ./internals --cache",
+    "lint:src": "tslint --fix ./src/**/*.ts",
+    "lint": "npm run lint:src; npm run lint:examples;",
+    "docs":
+      "typedoc --target es6 --tsconfig ./tsconfig.json --ignoreCompilerErrors --theme default --name Medium --out ./docs ./src",
+    "precommit": "npm run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/amelierosser/medium.git"
+  },
+  "author":
+    "Amelie Rosser <amelierosser1986@gmail.com> (https://www.ixviii.io)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/amelierosser/medium/issues"
+  },
+  "homepage": "https://github.com/amelierosser/medium",
+  "devDependencies": {
+    "@types/gl-matrix": "^2.2.34",
+    "@types/webgl2": "^0.0.2",
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^7.2.3",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-module-resolver": "^2.7.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-minify": "^0.2.0",
+    "babili-webpack-plugin": "^0.1.2",
+    "concurrently": "^3.5.0",
+    "eslint": "^4.6.1",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-config-prettier": "^2.4.0",
+    "eslint-plugin-compat": "^1.0.4",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-prettier": "^2.2.0",
+    "eslint-plugin-react": "^7.3.0",
+    "eslint-plugin-redux-saga": "^0.4.0",
+    "husky": "^0.14.3",
+    "install": "^0.10.1",
+    "json-loader": "^0.5.7",
+    "live-server": "^1.2.0",
+    "prettier": "^1.6.1",
+    "pug-cli": "^1.0.0-alpha6",
+    "redux-saga": "^0.15.6",
+    "ts-loader": "^2.3.4",
+    "tslint": "^5.7.0",
+    "tslint-config-prettier": "^1.5.0",
+    "typedoc": "^0.8.0",
+    "typescript": "^2.5.2",
+    "webpack": "^3.5.6"
+  },
+  "dependencies": {
+    "@types/dat-gui": "^0.6.3",
+    "bezier-js": "^2.2.3",
+    "dat-gui": "^0.5.0",
+    "file-name": "^0.1.0",
+    "gl-matrix": "^2.4.0",
+    "parse-hdr": "^1.0.0",
+    "query-string": "^5.0.0",
+    "shelljs": "^0.7.8",
+    "simplex-noise": "^2.3.0",
+    "uuid": "^3.1.0",
+    "webgl-obj-loader": "^0.1.1"
+  }
+}
