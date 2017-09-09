@@ -39,12 +39,12 @@ controls.update();
 
 const texture = new TextureCube({
   src: [
-    '/assets/textures/cube/blackice/px.jpg',
-    '/assets/textures/cube/blackice/nx.jpg',
-    '/assets/textures/cube/blackice/py.jpg',
-    '/assets/textures/cube/blackice/ny.jpg',
-    '/assets/textures/cube/blackice/pz.jpg',
-    '/assets/textures/cube/blackice/nz.jpg'
+    'assets/textures/cube/blackice/px.jpg',
+    'assets/textures/cube/blackice/nx.jpg',
+    'assets/textures/cube/blackice/py.jpg',
+    'assets/textures/cube/blackice/ny.jpg',
+    'assets/textures/cube/blackice/pz.jpg',
+    'assets/textures/cube/blackice/nz.jpg'
   ]
 });
 

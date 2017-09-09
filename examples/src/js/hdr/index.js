@@ -34,7 +34,7 @@ camera.lookAt();
 
 // Objects
 const texture0 = new Texture({
-  src: '/assets/textures/cube/pisa-hdr/nx.hdr'
+  src: 'assets/textures/cube/pisa-hdr/nx.hdr'
 });
 
 const geometry = new PlaneGeometry(1, 1);
@@ -88,7 +88,7 @@ window.addEventListener('resize', resize);
 
 function update() {
   requestAnimationFrame(update);
-	camera.updateMatrixWorld();
+  camera.updateMatrixWorld();
   renderer.render(scene, camera);
 }
 update();

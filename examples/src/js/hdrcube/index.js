@@ -38,23 +38,23 @@ controls.update();
 
 const environmentMap = new TextureCube({
   src: [
-    '/assets/textures/cube/pisa-hdr/px.hdr',
-    '/assets/textures/cube/pisa-hdr/nx.hdr',
-    '/assets/textures/cube/pisa-hdr/py.hdr',
-    '/assets/textures/cube/pisa-hdr/ny.hdr',
-    '/assets/textures/cube/pisa-hdr/pz.hdr',
-    '/assets/textures/cube/pisa-hdr/nz.hdr'
+    'assets/textures/cube/pisa-hdr/px.hdr',
+    'assets/textures/cube/pisa-hdr/nx.hdr',
+    'assets/textures/cube/pisa-hdr/py.hdr',
+    'assets/textures/cube/pisa-hdr/ny.hdr',
+    'assets/textures/cube/pisa-hdr/pz.hdr',
+    'assets/textures/cube/pisa-hdr/nz.hdr'
   ]
 });
 
 // const environmentMap = new TextureCube({
 // 	src: [
-// 		'/assets/textures/cube/pisa/px.png',
-// 		'/assets/textures/cube/pisa/nx.png',
-// 		'/assets/textures/cube/pisa/py.png',
-// 		'/assets/textures/cube/pisa/ny.png',
-// 		'/assets/textures/cube/pisa/pz.png',
-// 		'/assets/textures/cube/pisa/nz.png',
+// 		'assets/textures/cube/pisa/px.png',
+// 		'assets/textures/cube/pisa/nx.png',
+// 		'assets/textures/cube/pisa/py.png',
+// 		'assets/textures/cube/pisa/ny.png',
+// 		'assets/textures/cube/pisa/pz.png',
+// 		'assets/textures/cube/pisa/nz.png',
 // 	],
 // });
 

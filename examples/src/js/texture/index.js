@@ -33,11 +33,11 @@ camera.position.set(10, 5, 10);
 camera.lookAt();
 
 const texture0 = new Texture({
-  src: '/assets/textures/texture-nopow2.jpg'
+  src: 'assets/textures/texture-nopow2.jpg'
 });
 
 const texture1 = new Texture({
-  src: '/assets/textures/texture-nopow2-2.jpg'
+  src: 'assets/textures/texture-nopow2-2.jpg'
 });
 
 const geometry = new PlaneGeometry(1, 1, 1, 1, 'XY');

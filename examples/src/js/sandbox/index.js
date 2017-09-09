@@ -10,7 +10,7 @@ import {
   OrbitControls,
   AxisHelper,
   NormalsHelper,
-	AmbientLight,
+  AmbientLight,
   DirectionalLight,
   PointLight,
   Texture,
@@ -100,7 +100,7 @@ const ambientLight = new Lights([
       type: '3f',
       value: new Color(0x404040).v
     }
-  }),
+  })
 ]);
 
 const directionalLights = new Lights([
@@ -157,11 +157,11 @@ scene.pointLights = pointLights;
 scene.directionalLights = directionalLights;
 
 const texture = new Texture({
-  src: '/assets/textures/texture.jpg'
+  src: 'assets/textures/texture.jpg'
 });
 geometry = new BoxGeometry();
 const material = new Shader({
-	type: 'phong',
+  type: 'phong',
   name: 'Box',
   hookFragmentPre: `
 		uniform sampler2D uTexture0;
@@ -175,7 +175,7 @@ const material = new Shader({
       value: texture.texture
     }
   },
-	ambientLight,
+  ambientLight,
   directionalLights,
   pointLights
 });
