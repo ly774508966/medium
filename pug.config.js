@@ -11,7 +11,7 @@ shell.ls(`${dir}`).forEach(file => {
 });
 
 const obj = JSON.stringify({
-  demos
+  demos,
 });
 
 const production = process.env.NODE_ENV === 'production';
@@ -29,7 +29,7 @@ if (exampleDir !== undefined) {
   entry = `./examples/src/templates/${exampleDir}.pug`;
 }
 
-const cmd = `pug --obj '${obj}' ${watch} ${entry} --out ./examples`;
+const cmd = `pug --silent --obj '${obj}' ${watch} ${entry} --out ./examples`;
 
 shell.exec(cmd, code => {
   if (code !== 0) {

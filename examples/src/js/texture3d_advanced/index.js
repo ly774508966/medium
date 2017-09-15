@@ -11,8 +11,6 @@ import {
   PlaneGeometry,
   OrbitControls,
   Texture3d,
-  BoxGeometry,
-  Constants,
   ShaderChunks,
   Capabilities,
   Lights,
@@ -20,15 +18,17 @@ import {
   Color
 } from '../../../../src/index.ts';
 
-const { gui, guiController, getQuery, setQuery } = require('../gui')(['webgl2']);
+const { gui, guiController, getQuery, setQuery } = require('../gui')([
+  'webgl2'
+]);
 
 guiController.df = getQuery('df') || 'torus';
 guiController.size = getQuery('size') || 80;
 
 if (getQuery('lights') === undefined) {
-	guiController.lights = true;
+  guiController.lights = true;
 } else {
-	guiController.lights = getQuery('lights') === 'true'
+  guiController.lights = getQuery('lights') === 'true';
 }
 
 // Renderer
@@ -53,15 +53,6 @@ const zoom = 20;
 camera.position.set(1 * zoom, 0.45 * zoom, 1 * zoom);
 camera.lookAt();
 
-const boundsGeometry = new BoxGeometry(5, 5, 5);
-const boundsMesh = new Mesh(
-  boundsGeometry,
-  new Shader({
-    drawType: Constants.DRAW_LINE_STRIP
-  })
-);
-// scene.add(boundsMesh);
-
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas);
 
@@ -72,16 +63,16 @@ const ray = vec3.create();
 function generateGrid(size) {
   const src = new Uint8Array(size * size * size);
 
-		const intersect = (ray, x, y, z) => {
-			switch (guiController.df) {
-				case 'torus':
-					return DF.torus(ray, [0.2, 0.1]);
-					case 'noise':
-						return  Math.abs(simplex.noise3D(x * 0.035, y * 0.035, z * 0.035));
-				default:
-					return DF.sphere(ray, 0.25);
-			}
-		};
+  const intersect = (ray_, x, y, z) => {
+    switch (guiController.df) {
+      case 'torus':
+        return DF.torus(ray_, [0.2, 0.1]);
+      case 'noise':
+        return Math.abs(simplex.noise3D(x * 0.035, y * 0.035, z * 0.035));
+      default:
+        return DF.sphere(ray_, 0.25);
+    }
+  };
 
   for (let z = 0; z < size; z += 1) {
     for (let y = 0; y < size; y += 1) {
@@ -114,7 +105,7 @@ directionalLights.get()[0].position.set(1, 1, 1);
 scene.directionalLights = directionalLights;
 
 gui.add(guiController, 'lights').onChange(value => {
-		setQuery('lights', value);
+  setQuery('lights', value);
 });
 
 const range = 1;
@@ -229,14 +220,14 @@ const material = new Shader({
     },
     uAngle: {
       type: 'f',
-      value: 0,
+      value: 0
     },
     uAxis: {
       type: '3f',
       value: [0, 0, 0]
     }
   },
-  directionalLights: guiController.lights ? directionalLights : null,
+  directionalLights: guiController.lights ? directionalLights : null
 });
 
 gui.add(material.uniforms.uFogDensity, 'value', 0, 0.1).name('fog density');
@@ -255,13 +246,16 @@ scene.add(plane);
 
 const size = [32, 64, 80, 128];
 gui.add(guiController, 'size', size).onChange(value => {
-		setQuery('size', value);
+  setQuery('size', value);
 });
 
 const distanceFunctions = ['torus', 'noise', 'sphere'];
-gui.add(guiController, 'df', distanceFunctions).name('distance function').onChange(value => {
-		setQuery('df', value);
-});
+gui
+  .add(guiController, 'df', distanceFunctions)
+  .name('distance function')
+  .onChange(value => {
+    setQuery('df', value);
+  });
 
 function resize() {
   const width = window.innerWidth;
@@ -288,7 +282,7 @@ function update() {
 
   plane.lookAt(camera.position);
   quat.identity(quaternionAxis);
-  axisAngle = quat.getAxisAngle(quaternionAxis, plane._quaternion);
+  axisAngle = quat.getAxisAngle(quaternionAxis, plane.quaternion);
 
   plane.shader.uniforms.uAxis.value[0] = -quaternionAxis[0];
   plane.shader.uniforms.uAxis.value[1] = -quaternionAxis[1];

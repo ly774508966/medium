@@ -61,7 +61,7 @@ scene.directionalLights = directionalLights;
 const container = new Object3D();
 
 const material = new Shader({
-	type: 'lambert',
+  type: 'lambert',
   uniforms: {
     uDiffuse: {
       type: '3f',
@@ -114,7 +114,7 @@ window.addEventListener('resize', resize);
 function update() {
   requestAnimationFrame(update);
 
-	camera.updateMatrixWorld();
+  camera.updateMatrixWorld();
 
   container.rotation.x += 0.01;
   container.rotation.y += 0.01;

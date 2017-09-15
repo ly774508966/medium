@@ -95,8 +95,8 @@ function update() {
   cameraHelper.update();
   controls.update();
 
-	cameras.dev.updateMatrixWorld();
-	cameras.main.updateMatrixWorld();
+  cameras.dev.updateMatrixWorld();
+  cameras.main.updateMatrixWorld();
 
   if (guiController.debug) {
     render(cameras.dev, 0, 0, 1, 1);

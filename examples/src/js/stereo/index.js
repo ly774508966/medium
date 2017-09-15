@@ -20,7 +20,6 @@ const renderer = new StereoRender({
   ratio: window.innerWidth / window.innerHeight,
   prefferedContext: guiController.context
 });
-console.log(renderer);
 renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
 
@@ -133,7 +132,7 @@ const mesh = new Mesh(
 					outgoingColor = vec4(mix(color, fogColor, vFogAmount), 1.0);
 				`,
     directionalLights
-  })
+  }),
 );
 
 mesh.setInstanceCount(totalInstances);
@@ -172,7 +171,7 @@ function update() {
     cameraR.projectionMatrix,
     scene.modelViewMatrix,
     cameraL,
-    cameraR
+    cameraR,
   );
 }
 update();

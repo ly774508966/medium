@@ -7,7 +7,7 @@
     "start":
       "concurrently 'npm run server' 'npm run examples:js' 'npm run examples:html'",
     "server":
-      "live-server ./examples --port 3000 --quiet --watch ./examples --watch ./src --wait 0",
+      "live-server ./examples --quiet --port=3000 --watch='js/*,assets/**/*,*.html' --ignore='src'",
     "examples:js":
       "webpack --config webpack.config.examples.js --colors --watch",
     "examples:html": "node ./pug.config.js",
@@ -20,8 +20,9 @@
       "prettier --write --single-quote --print-width 80 './src/**/*.ts'",
     "formatting:examples":
       "prettier --write --single-quote --print-width 80 './examples/src/js/**/*.js'",
-    "lint:examples": "eslint --ext .js ./examples/src ./internals --cache",
     "lint:src": "tslint --fix ./src/**/*.ts",
+    "lint:examples":
+      "eslint --fix --ext .js ./examples/src ./internals --cache",
     "lint": "npm run lint:src; npm run lint:examples;",
     "docs":
       "typedoc --target es6 --tsconfig ./tsconfig.json --ignoreCompilerErrors --theme default --name Medium --out ./docs ./src",
@@ -39,10 +40,10 @@
   },
   "homepage": "https://github.com/amelierosser/medium",
   "devDependencies": {
-    "@types/gl-matrix": "^2.2.34",
+    "@types/gl-matrix": "^2.3.0",
     "@types/webgl2": "^0.0.2",
     "babel-cli": "^6.26.0",
-    "babel-eslint": "^7.2.3",
+    "babel-eslint": "^8.0.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-module-resolver": "^2.7.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
@@ -52,21 +53,17 @@
     "concurrently": "^3.5.0",
     "eslint": "^4.6.1",
     "eslint-config-airbnb": "^15.1.0",
+    "eslint-config-airbnb-base": "^12.0.0",
     "eslint-config-prettier": "^2.4.0",
-    "eslint-plugin-compat": "^1.0.4",
     "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-prettier": "^2.2.0",
-    "eslint-plugin-react": "^7.3.0",
-    "eslint-plugin-redux-saga": "^0.4.0",
     "husky": "^0.14.3",
     "install": "^0.10.1",
     "json-loader": "^0.5.7",
     "live-server": "^1.2.0",
     "prettier": "^1.6.1",
     "pug-cli": "^1.0.0-alpha6",
-    "redux-saga": "^0.15.6",
-    "ts-loader": "^2.3.4",
+    "ts-loader": "^2.3.7",
     "tslint": "^5.7.0",
     "tslint-config-prettier": "^1.5.0",
     "typedoc": "^0.8.0",

@@ -12,7 +12,7 @@ export default class BufferAttribute {
 
   constructor(
     type: GLenum,
-    data: Float32Array | Uint16Array,
+    data: Float32Array | Uint16Array | Uint32Array,
     itemSize: number,
     shaderAttribute = true
   ) {

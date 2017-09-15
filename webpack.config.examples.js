@@ -29,17 +29,17 @@ module.exports = {
   devtool: 'source-map',
   output: {
     path: path.join(process.cwd(), 'examples/js'),
-    filename: '[name].js'
+    filename: '[name].js',
   },
   resolve: {
-    extensions: ['.ts', '.js']
+    extensions: ['.ts', '.js'],
   },
   module: {
     loaders: [
       {
         test: /\.ts$/,
         exclude: /node_modules/,
-        loader: 'babel-loader!ts-loader'
+        loader: 'babel-loader!ts-loader',
       },
       {
         test: /\.js$/,
@@ -54,17 +54,17 @@ module.exports = {
                   browsers: [
                     'last 2 versions',
                     'ios_saf >= 10.2',
-                    'not IE <= 10'
-                  ]
-                }
-              }
-            ]
+                    'not IE <= 10',
+                  ],
+                },
+              },
+            ],
           ],
-          plugins: ['babel-plugin-transform-class-properties']
-        }
-      }
-    ]
+          plugins: ['babel-plugin-transform-class-properties'],
+        },
+      },
+    ],
   },
   stats: 'minimal',
-  plugins: production ? [new BabiliPlugin()] : []
+  plugins: production ? [new BabiliPlugin()] : [],
 };

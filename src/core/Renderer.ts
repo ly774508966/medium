@@ -92,11 +92,14 @@ export default class Renderer {
       } else {
         contextType = WEBGL_CONTEXT;
         const _gl =
-          this.canvas.getContext('webgl', attributes) as WebGLRenderingContext ||
-          this.canvas.getContext(
+          (this.canvas.getContext(
+            'webgl',
+            attributes
+          ) as WebGLRenderingContext) ||
+          (this.canvas.getContext(
             'experimental-webgl',
             attributes
-          ) as WebGLRenderingContext;
+          ) as WebGLRenderingContext);
         GL.set(_gl, contextType);
       }
     } else {

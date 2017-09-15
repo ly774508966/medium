@@ -3,7 +3,6 @@ import {
   Scene,
   PerspectiveCamera,
   OrbitControls,
-  OrthographicCamera,
   TextureCube,
   Shader,
   Mesh,

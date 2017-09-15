@@ -7,21 +7,21 @@ const gui = new dat.GUI();
 module.exports = modes => {
   const options = modes !== undefined ? modes : ['webgl2', 'webgl'];
 
-  const queries = queryString.parse(location.search);
+  const queries = queryString.parse(window.location.search);
 
-		const getQuery = (query) => {
-			return queries[query];
-		}
+  function getQuery(query) {
+    return queries[query];
+  }
 
-		const setQuery = (query, val) => {
-			const newQueries = Object.assign({}, queries, {
-				[query]: val,
-			});
-			const stringified = queryString.stringify(newQueries);
+  const setQuery = (query, val) => {
+    const newQueries = Object.assign({}, queries, {
+      [query]: val
+    });
+    const stringified = queryString.stringify(newQueries);
 
-			const url = `${window.location.pathname}?${stringified}`;
-			window.location.href = url;
-		}
+    const url = `${window.location.pathname}?${stringified}`;
+    window.location.href = url;
+  };
 
   const guiController = {
     context: getQuery('context') || options[0]
@@ -34,7 +34,7 @@ module.exports = modes => {
   return {
     gui,
     guiController,
-				getQuery,
-				setQuery,
+    getQuery,
+    setQuery
   };
 };

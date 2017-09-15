@@ -112,7 +112,7 @@ window.addEventListener('resize', resize);
 
 function update() {
   requestAnimationFrame(update);
-	camera.updateMatrixWorld();
+  camera.updateMatrixWorld();
   renderer.render(scene, camera);
 }
 update();

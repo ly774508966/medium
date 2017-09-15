@@ -14,8 +14,7 @@ import {
   Shader,
   JsonLoader,
   Geometry,
-  BoxGeometry,
-  AmbientLight
+  BoxGeometry
 } from '../../../../src/index.ts';
 import ShadowMapRenderer from './ShadowMapRenderer';
 
@@ -56,19 +55,6 @@ const axis = new AxisHelper(6);
 scene.add(axis);
 
 controls.update();
-
-const ambientLight = new Lights([
-  new AmbientLight({
-    intensity: {
-      type: 'f',
-      value: 0.5
-    },
-    color: {
-      type: '3f',
-      value: new Color(0x404040).v
-    }
-  })
-]);
 
 const directionalLights = new Lights([
   new DirectionalLight({

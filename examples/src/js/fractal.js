@@ -5,7 +5,7 @@ export class Sierpinski {
     size = 20,
     iterations = 2,
     grid = 3,
-    holes = [4, 10, 12, 13, 14, 16, 22]
+    holes = [4, 10, 12, 13, 14, 16, 22],
   ) {
     this.size = size;
     this.grid = grid;
@@ -22,7 +22,7 @@ export class Sierpinski {
       for (let j = 0; j < positions.length; j += 1) {
         const position = positions[j];
         tmp = tmp.concat(
-          this._sponge(position, cubeSize, this.grid, this.holes)
+          this.sponge(position, cubeSize, this.grid, this.holes),
         );
       }
 
@@ -42,14 +42,14 @@ export class Sierpinski {
     return positions;
   }
 
-  _sponge(position, cubeSize, grid, holes) {
+  sponge(position, cubeSize, grid, holes) {
     let i = 0;
     const positions = [];
 
     for (let levels = 0; levels < grid; levels += 1) {
       for (let rows = 0; rows < grid; rows += 1) {
         for (let columns = 0; columns < grid; columns += 1) {
-          if (!this._inList(i, holes)) {
+          if (!this.inList(i, holes)) {
             const positionNew = vec3.create();
             positionNew[0] = position[0] + rows * cubeSize;
             positionNew[1] = position[1] + levels * cubeSize;
@@ -64,7 +64,7 @@ export class Sierpinski {
     return positions;
   }
 
-  _inList(val, list) {
+  inList = (val, list) => {
     let result = false;
     let item;
 
@@ -76,7 +76,7 @@ export class Sierpinski {
       }
     }
     return result;
-  }
+  };
 
   logarithmicScale() {
     return this.size / this.grid ** this.iterations;

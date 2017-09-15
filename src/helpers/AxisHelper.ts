@@ -98,7 +98,7 @@ class AxisGeometry extends Geometry {
       0,
       1
     ]);
-    super(new Float32Array(vertices), null, null, null, colors);
+    super(new Float32Array(vertices), undefined, undefined, undefined, colors);
   }
 }
 

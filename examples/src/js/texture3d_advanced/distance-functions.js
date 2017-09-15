@@ -1,11 +1,6 @@
 import { vec2, vec3 } from 'gl-matrix';
 // http://iquilezles.org/www/articles/distfunctions/distfunctions.htm
 
-// Utils
-function abs(v) {
-  return [Math.abs(v[0]), Math.abs(v[1]), Math.abs(v[2])];
-}
-
 /**
 	float sdSphere( vec3 p, float s )
 	{
@@ -27,9 +22,9 @@ export function sphere(p, s) {
 export function torus(p, t) {
   let lengthPxz;
   const q = vec2.create();
-  return ((p, t) => {
-    lengthPxz = vec2.length([p[0], p[2]]);
-    vec2.set(q, lengthPxz - t[0], p[1]);
-    return vec2.length(q) - t[1];
+  return ((p_, t_) => {
+    lengthPxz = vec2.length([p_[0], p_[2]]);
+    vec2.set(q, lengthPxz - t_[0], p_[1]);
+    return vec2.length(q) - t_[1];
   })(p, t);
 }

@@ -1,5 +1,4 @@
 import {
-  GL,
   Renderer,
   Scene,
   PerspectiveCamera,

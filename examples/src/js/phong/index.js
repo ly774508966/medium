@@ -13,7 +13,6 @@ import {
   Mesh,
   SphereGeometry,
   Shader,
-  PlaneGeometry,
   PointLight
 } from '../../../../src/index.ts';
 
@@ -139,15 +138,15 @@ pointLights.get()[0].position.set(5, 5, 5);
 pointLights.get()[1].position.set(-5, 5, 5);
 
 const range = 5;
-gui.add(pointLights.get()[0].position, 'x', -range, range).name('light 0 x')
-gui.add(pointLights.get()[0].position, 'y', -range, range).name('light 0 y')
-gui.add(pointLights.get()[0].position, 'z', -range, range).name('light 0 z')
-gui.add(pointLights.get()[1].position, 'x', -range, range).name('light 1 x')
-gui.add(pointLights.get()[1].position, 'y', -range, range).name('light 1 y')
-gui.add(pointLights.get()[1].position, 'z', -range, range).name('light 1 z')
+gui.add(pointLights.get()[0].position, 'x', -range, range).name('light 0 x');
+gui.add(pointLights.get()[0].position, 'y', -range, range).name('light 0 y');
+gui.add(pointLights.get()[0].position, 'z', -range, range).name('light 0 z');
+gui.add(pointLights.get()[1].position, 'x', -range, range).name('light 1 x');
+gui.add(pointLights.get()[1].position, 'y', -range, range).name('light 1 y');
+gui.add(pointLights.get()[1].position, 'z', -range, range).name('light 1 z');
 
 const lightHelpers = [];
-for (let i = 0; i < pointLights.length; i++) {
+for (let i = 0; i < pointLights.length; i += 1) {
   lightHelpers.push(
     new Mesh(
       new SphereGeometry(0.1, 32, 32),
