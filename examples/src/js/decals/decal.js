@@ -2,6 +2,11 @@ import { mat4, vec3 } from 'gl-matrix';
 
 import { Vector2, Vector3, Object3D } from '../../../../src/index.ts';
 
+/**
+ * Based on the original script by Jaume Sanchez Elias, @thespite
+ * https://github.com/spite/THREE.DecalGeometry/blob/master/src/THREE.DecalGeometry.js
+ */
+
 class DecalVertex {
   constructor(v, n) {
     this.vertex = v;
