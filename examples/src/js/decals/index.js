@@ -241,7 +241,6 @@ function onMouseClick() {
         if (texel.r > 0.9) {
           discard;
         }
-        outgoingColor.a = 1.0 - texel.r;
       `,
       uniforms: {
         uPaint: {
@@ -252,8 +251,7 @@ function onMouseClick() {
           type: 't',
           value: normalMap.texture
         }
-      },
-      blending: false
+      }
     })
   );
 
