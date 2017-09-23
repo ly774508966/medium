@@ -7,7 +7,7 @@ const uniformBuffers: any = {};
 // Create buffers when gl context is ready
 export function setup() {
   // ProjectionView
-  const projectionViewData = new Float32Array([...mat4.create()]);
+  const projectionViewData = new Float32Array(mat4.create());
 
   uniformBuffers.projectionView = new UniformBuffer(projectionViewData);
 }

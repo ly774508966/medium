@@ -88,7 +88,7 @@ const dracoLoader = new DRACOLoader(undefined, 'assets/third-party/draco');
 
 dracoLoader.setVerbosity(1);
 
-dracoLoader.load('assets/models/draco/mass.drc', geometry => {
+dracoLoader.load('assets/models/draco/mass/mass.drc', geometry => {
   const mesh = new Mesh(
     geometry,
     new Shader({

@@ -178,6 +178,12 @@ export default class Mesh extends Object3D {
       gl.cullFace(this.shader.culling);
     }
 
+    // Blending enable
+    if (this.shader.blending) {
+      gl.enable(gl.BLEND);
+      gl.blendFunc(this.shader.blendFunc[0], this.shader.blendFunc[1]);
+    }
+
     if (extensions.vertexArrayObject) {
       this.vao.bind();
     } else {
@@ -212,6 +218,9 @@ export default class Mesh extends Object3D {
     if (this.shader.culling !== -1) {
       gl.disable(gl.CULL_FACE);
     }
+
+    // Disable blending
+    gl.disable(gl.BLEND);
   }
 
   public dispose() {

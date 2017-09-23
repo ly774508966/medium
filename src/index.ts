@@ -128,6 +128,9 @@ import ShaderChunks from './shaders/chunks/index';
 export { ShaderChunks };
 
 // Utils
+import * as ArrayUtils from './utils/Array';
+export { ArrayUtils };
+
 import CameraDolly from './utils/CameraDolly';
 export { CameraDolly };
 

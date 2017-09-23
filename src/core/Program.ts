@@ -142,13 +142,9 @@ export default class Program {
       gl.uniformBlockBinding(
         this.program,
         this.uniformBlocks[uniformName],
-        this.uniformBlocks[uniformName]
+        index
       );
-      gl.bindBufferBase(
-        gl.UNIFORM_BUFFER,
-        this.uniformBlocks[uniformName],
-        uniformBuffer
-      );
+      gl.bindBufferBase(gl.UNIFORM_BUFFER, index, uniformBuffer);
     }
   }
 

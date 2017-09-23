@@ -80,10 +80,11 @@ export default class RayCaster {
   public intersectObject(object: Mesh) {
     let intersect;
     let uv;
-    for (const face of object.geometry.faces) {
-      vec3.copy(fvA.v, face.vertices[0].v);
-      vec3.copy(fvB.v, face.vertices[1].v);
-      vec3.copy(fvC.v, face.vertices[2].v);
+    let face;
+    for (const f of object.geometry.faces) {
+      vec3.copy(fvA.v, f.vertices[0].v);
+      vec3.copy(fvB.v, f.vertices[1].v);
+      vec3.copy(fvC.v, f.vertices[2].v);
 
       // Multiply vertices by object matrix
       vec3.transformMat4(fvA.v, fvA.v, object.modelMatrix);
@@ -94,14 +95,15 @@ export default class RayCaster {
 
       if (intersect) {
         // Get uv intersection
-        vec2.copy(uvA.v, object.geometry.uvs[face.uvs[0]].v);
-        vec2.copy(uvB.v, object.geometry.uvs[face.uvs[1]].v);
-        vec2.copy(uvC.v, object.geometry.uvs[face.uvs[2]].v);
+        vec2.copy(uvA.v, object.geometry.uvs[f.uvs[0]].v);
+        vec2.copy(uvB.v, object.geometry.uvs[f.uvs[1]].v);
+        vec2.copy(uvC.v, object.geometry.uvs[f.uvs[2]].v);
+        face = f;
         uv = this.uvIntersection(intersect, fvA, fvB, fvC);
         break;
       }
     }
 
-    return intersect ? { point: intersect, uv } : null;
+    return intersect ? { point: intersect, uv, face } : null;
   }
 }

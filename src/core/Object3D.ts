@@ -1,4 +1,5 @@
 import { mat4, quat, vec3 } from 'gl-matrix';
+
 import Camera from '../cameras/Camera';
 import OrthographicCamera from '../cameras/OrthographicCamera';
 import PerspectiveCamera from '../cameras/PerspectiveCamera';
@@ -73,11 +74,13 @@ export default class Object3D {
     }
 
     // Model View Matrix
-    mat4.multiply(
-      this.modelViewMatrix,
-      camera.worldInverseMatrix,
-      this.modelMatrix
-    );
+    if (camera) {
+      mat4.multiply(
+        this.modelViewMatrix,
+        camera.worldInverseMatrix,
+        this.modelMatrix
+      );
+    }
   }
 
   public lookAt(target: Vector3) {

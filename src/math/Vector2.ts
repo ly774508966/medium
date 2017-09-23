@@ -69,6 +69,11 @@ export default class Vector2 {
   public equals(vector2: Vector2): boolean {
     return vec2.equals(this.v, vector2.v);
   }
+  public multiply(vector2: Vector2) {
+    this.v[0] *= vector2.v[0];
+    this.v[1] *= vector2.v[1];
+    return this;
+  }
   public fromArray(values: number[]) {
     return vec2.copy(this.v, values);
   }

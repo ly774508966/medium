@@ -1,6 +1,7 @@
 import { vec3 } from 'gl-matrix';
 
 export default class Vector3 {
+  public static up = new Vector3(0, 1, 0);
   public v: vec3;
   constructor(x = 0, y = 0, z = 0) {
     this.v = vec3.create();
@@ -85,6 +86,12 @@ export default class Vector3 {
   }
   public equals(vector3: Vector3): boolean {
     return vec3.equals(this.v, vector3.v);
+  }
+  public multiply(vector3: Vector3) {
+    this.v[0] *= vector3.v[0];
+    this.v[1] *= vector3.v[1];
+    this.v[2] *= vector3.v[2];
+    return this;
   }
   public fromArray(values: number[]) {
     return vec3.copy(this.v, values);

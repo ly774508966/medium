@@ -1,11 +1,11 @@
 import * as GL from '../core/GL';
 import Vector2 from '../math/Vector2';
 import Vector3 from '../math/Vector3';
+import { flatten } from '../utils/Array';
 import BufferAttribute from './BufferAttribute';
 import Face from './Face';
 
 let gl: WebGL2RenderingContext | WebGLRenderingContext;
-let bufferNormalsTmp = [];
 
 export default class Geometry {
   public bufferVertices: Float32Array;
@@ -21,7 +21,7 @@ export default class Geometry {
 
   constructor(
     vertices: Float32Array,
-    indices?: Uint16Array | Uint32Array,
+    indices?: any, // Uint16Array | Uint32Array, (typings are wrong for createBuffer)
     normals?: Float32Array,
     uvs?: Float32Array,
     colors?: Float32Array
@@ -155,13 +155,7 @@ export default class Geometry {
       normals[face.indices[1]] = face.normal.v;
       normals[face.indices[2]] = face.normal.v;
     });
-    // Flatten
-    bufferNormalsTmp = [];
-    normals.forEach(normal => {
-      bufferNormalsTmp = bufferNormalsTmp.concat(...normal);
-    });
-    // Copy from temp
-    this.bufferNormals.set(bufferNormalsTmp);
+    this.bufferNormals.set(flatten(normals));
     this.attributes.aVertexNormal.update(this.bufferNormals);
   }
 

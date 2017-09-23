@@ -66,14 +66,16 @@ export default class Shader {
   public directionalLights: Lights;
   public pointLights: Lights;
   public culling: number;
+  public blending: boolean;
+  public blendFunc: number[];
   public program: Program;
   public customUniforms: object;
 
-  constructor(options?: Options) {
+  constructor(options: Options = {}) {
     const vertexShader = GL.webgl2 ? vertexShaderEs300 : vertexShaderEs100;
     let fragmentShader;
 
-    switch (options.type) {
+    switch (options.type || '') {
       case CONSTANTS.SHADER_LAMBERT: {
         fragmentShader = GL.webgl2
           ? lambertFragmentShaderEs300
@@ -93,6 +95,8 @@ export default class Shader {
       }
     }
 
+    gl = GL.get();
+
     this.name = '';
     this.type = CONSTANTS.SHADER_BASIC;
     this.uniforms = {};
@@ -108,6 +112,8 @@ export default class Shader {
     this.directionalLights = undefined;
     this.pointLights = undefined;
     this.culling = CONSTANTS.CULL_NONE;
+    this.blending = false;
+    this.blendFunc = [gl.SRC_ALPHA, gl.ONE];
     Object.assign(this, options);
     this.program = new Program();
   }
