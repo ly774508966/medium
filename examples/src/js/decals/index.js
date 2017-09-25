@@ -1,6 +1,7 @@
 import { mat4 } from 'gl-matrix';
 
 import {
+  GL,
   AmbientLight,
   Color,
   Constants,
@@ -197,7 +198,7 @@ function onMouseClick() {
 
   const position = intersect.point.clone();
   const rotation = new Vector3(x, y, z);
-  const scale = MathUtils.lerp(4, 10, Math.random());
+  const scale = MathUtils.lerp(4, 6, Math.random());
   const dimensions = new Vector3(scale, scale, scale);
   const check = new Vector3(1, 1, 1);
 
@@ -215,6 +216,7 @@ function onMouseClick() {
   const verts = ArrayUtils.flatten(data.vertices);
   const normals = ArrayUtils.flatten(data.normals);
   const uvs = ArrayUtils.flatten(data.uvs);
+  const uvNormal = ArrayUtils.flatten(data.uvsObjectSpace);
 
   const geometry = new Geometry(
     new Float32Array(verts),
@@ -223,18 +225,30 @@ function onMouseClick() {
     new Float32Array(uvs)
   );
 
+  const gl = GL.get();
+  geometry.addAttribute('uvNormal', gl.ARRAY_BUFFER, uvNormal, 2);
+
   const decalMesh = new Mesh(
     geometry,
     new Shader({
       type: 'lambert',
       ambientLight,
-      directionalLights,
+      hookVertexPre: `
+        in vec2 uvNormal;
+        out vec2 vUvNormal;
+      `,
+      hookVertexEnd: `
+        vUvNormal = uvNormal;
+     `,
       hookFragmentPre: `
+        in vec2 vUvNormal;
         uniform sampler2D uPaint;
+        uniform sampler2D uNormalMap;
         ${ShaderChunks.Packing.packNormalToRGB}
     `,
       hookFragmentMain: `
-        color = packNormalToRGB(normal);
+        normal = texture(uNormalMap, vUvNormal).xyz;
+        color = normal;
         vec4 texel = texture(uPaint, vUv);
     `,
       hookFragmentEnd: `
