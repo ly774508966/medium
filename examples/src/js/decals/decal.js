@@ -7,14 +7,19 @@ import { Vector2, Vector3, Object3D } from '../../../../src/index.ts';
  * https://github.com/spite/THREE.DecalGeometry/blob/master/src/THREE.DecalGeometry.js
  */
 
-class DecalVertex {
-  constructor(v, n) {
+class DecalData {
+  constructor(v, n, uv) {
     this.vertex = v;
     this.normal = n;
+    this.uv = uv;
   }
 
   clone() {
-    return new DecalVertex(this.vertex.clone(), this.normal.clone());
+    return new DecalData(
+      this.vertex.clone(),
+      this.normal.clone(),
+      this.uv.clone()
+    );
   }
 }
 
@@ -41,6 +46,7 @@ export default class Decal {
     this.vertices = [];
     this.normals = [];
     this.uvs = [];
+    this.uvsObjectSpace = [];
   }
 
   clip = (v0, v1, p, size) => {
@@ -48,7 +54,7 @@ export default class Decal {
     const d1 = v1.vertex.dot(p) - size;
 
     const s = d0 / (d0 - d1);
-    const v = new DecalVertex(
+    const v = new DecalData(
       new Vector3(
         v0.vertex.x + s * (v1.vertex.x - v0.vertex.x),
         v0.vertex.y + s * (v1.vertex.y - v0.vertex.y),
@@ -58,7 +64,8 @@ export default class Decal {
         v0.normal.x + s * (v1.normal.x - v0.normal.x),
         v0.normal.y + s * (v1.normal.y - v0.normal.y),
         v0.normal.z + s * (v1.normal.z - v0.normal.z)
-      )
+      ),
+      v0.uv
     );
 
     return v;
@@ -171,11 +178,13 @@ export default class Decal {
     return outVertices;
   };
 
-  pushVertex(vertices, index, n) {
+  pushVertex(vertices, index, normal, uv) {
     const vertex = this.mesh.geometry.vertices[index].clone();
     vec3.transformMat4(vertex.v, vertex.v, this.mesh.modelMatrix);
     vec3.transformMat4(vertex.v, vertex.v, this.inverseCubeMatrix);
-    vertices.push(new DecalVertex(vertex, n.clone()));
+    vertices.push(
+      new DecalData(vertex, normal.clone(), this.mesh.geometry.uvs[uv].clone())
+    );
   }
 
   compute() {
@@ -194,17 +203,17 @@ export default class Decal {
       let vertices = [];
 
       if (n === 3) {
-        this.pushVertex(vertices, f.indices[0], f.normal);
-        this.pushVertex(vertices, f.indices[1], f.normal);
-        this.pushVertex(vertices, f.indices[2], f.normal);
+        this.pushVertex(vertices, f.indices[0], f.normal, f.uvs[0]);
+        this.pushVertex(vertices, f.indices[1], f.normal, f.uvs[1]);
+        this.pushVertex(vertices, f.indices[2], f.normal, f.uvs[2]);
       } else {
-        this.pushVertex(vertices, f.indices[0], f.normal);
-        this.pushVertex(vertices, f.indices[1], f.normal);
-        this.pushVertex(vertices, f.indices[2], f.normal);
+        this.pushVertex(vertices, f.indices[0], f.normal, f.uvs[0]);
+        this.pushVertex(vertices, f.indices[1], f.normal, f.uvs[1]);
+        this.pushVertex(vertices, f.indices[2], f.normal, f.uvs[2]);
 
-        this.pushVertex(vertices, f.indices[3], f.normal);
-        this.pushVertex(vertices, f.indices[0], f.normal);
-        this.pushVertex(vertices, f.indices[2], f.normal);
+        this.pushVertex(vertices, f.indices[3], f.normal, f.uvs[3]);
+        this.pushVertex(vertices, f.indices[0], f.normal, f.uvs[0]);
+        this.pushVertex(vertices, f.indices[2], f.normal, f.uvs[2]);
       }
 
       if (this.check.x) {
@@ -229,6 +238,8 @@ export default class Decal {
             0.5 + v.vertex.y / this.dimensions.y
           )
         );
+
+        this.uvsObjectSpace.push(v.uv.clone());
 
         vec3.transformMat4(
           vertices[j].vertex.v,
@@ -262,7 +273,8 @@ export default class Decal {
       vertices: this.vertices,
       normals: this.normals,
       indices: this.indices,
-      uvs: this.uvs
+      uvs: this.uvs,
+      uvsObjectSpace: this.uvsObjectSpace
     };
   }
 
@@ -276,5 +288,6 @@ export default class Decal {
     this.vertices = undefined;
     this.normals = undefined;
     this.uvs = undefined;
+    this.uvsObjectSpace = undefined;
   }
 }
