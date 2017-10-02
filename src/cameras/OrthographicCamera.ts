@@ -3,6 +3,10 @@ import Vector3 from '../math/Vector3';
 import Camera from './Camera';
 
 interface Options {
+  left?: number;
+  right?: number;
+  bottom?: number;
+  top?: number;
   near?: number;
   far?: number;
   fov?: number;
@@ -12,18 +16,26 @@ interface Options {
 }
 
 export default class OrthographicCamera extends Camera {
+  public left: number;
+  public right: number;
+  public bottom: number;
+  public top: number;
   constructor(options: Options) {
     super(options);
+    this.left = options.left || -1;
+    this.right = options.right || 1;
+    this.bottom = options.bottom || -1;
+    this.top = options.top || 1;
     this.isOrthographicCamera = true;
   }
 
   public updateProjectionMatrix() {
     mat4.ortho(
       this.projectionMatrix,
-      -1.0,
-      1.0,
-      -1.0,
-      1.0,
+      this.left,
+      this.right,
+      this.bottom,
+      this.top,
       this.near,
       this.far
     );
