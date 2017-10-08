@@ -27,8 +27,8 @@ export default class RenderTarget {
   public height: number;
   public ratio: number;
   public pixelRatio: number;
-  public _frameBuffer: WebGLFramebuffer;
-  public _renderBuffer: WebGLRenderbuffer;
+  public frameBuffer: WebGLFramebuffer;
+  public renderBuffer: WebGLRenderbuffer;
   public texture: WebGLTexture;
   public viewport: Viewport;
   public autoClear: boolean;
@@ -49,8 +49,8 @@ export default class RenderTarget {
     this.setClearColor();
 
     gl = GL.get();
-    this._frameBuffer = gl.createFramebuffer();
-    gl.bindFramebuffer(gl.FRAMEBUFFER, this._frameBuffer);
+    this.frameBuffer = gl.createFramebuffer();
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this.frameBuffer);
     this.texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -71,8 +71,8 @@ export default class RenderTarget {
       gl.UNSIGNED_BYTE,
       null
     );
-    this._renderBuffer = gl.createRenderbuffer();
-    gl.bindRenderbuffer(gl.RENDERBUFFER, this._renderBuffer);
+    this.renderBuffer = gl.createRenderbuffer();
+    gl.bindRenderbuffer(gl.RENDERBUFFER, this.renderBuffer);
     gl.renderbufferStorage(
       gl.RENDERBUFFER,
       gl.DEPTH_COMPONENT16,
@@ -90,7 +90,7 @@ export default class RenderTarget {
       gl.FRAMEBUFFER,
       gl.DEPTH_ATTACHMENT,
       gl.RENDERBUFFER,
-      this._renderBuffer
+      this.renderBuffer
     );
     gl.bindTexture(gl.TEXTURE_2D, null);
     gl.bindRenderbuffer(gl.RENDERBUFFER, null);
@@ -124,7 +124,7 @@ export default class RenderTarget {
         null
       );
       gl.bindTexture(gl.TEXTURE_2D, null);
-      gl.bindRenderbuffer(gl.RENDERBUFFER, this._renderBuffer);
+      gl.bindRenderbuffer(gl.RENDERBUFFER, this.renderBuffer);
       gl.renderbufferStorage(
         gl.RENDERBUFFER,
         gl.DEPTH_COMPONENT16,
@@ -173,7 +173,7 @@ export default class RenderTarget {
       this.viewport.height
     );
 
-    gl.bindFramebuffer(gl.FRAMEBUFFER, this._frameBuffer);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this.frameBuffer);
 
     if (this.autoClear) {
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);

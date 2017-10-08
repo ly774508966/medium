@@ -3,6 +3,7 @@ import Camera from '../cameras/Camera';
 import OrthographicCamera from '../cameras/OrthographicCamera';
 import PerspectiveCamera from '../cameras/PerspectiveCamera';
 import Geometry from '../geometry/Geometry';
+import Sphere from '../math/Sphere';
 import { extensions } from './Capabilities';
 import * as GL from './GL';
 import Object3D from './Object3D';
@@ -18,6 +19,7 @@ export default class Mesh extends Object3D {
   public visible: boolean;
   public instanceCount: number;
   public isInstanced: boolean;
+  public boundingSphere: Sphere;
 
   constructor(geometry: Geometry, shader: Shader) {
     super();
@@ -102,6 +104,7 @@ export default class Mesh extends Object3D {
 
   public draw(camera: Camera | PerspectiveCamera | OrthographicCamera) {
     if (!this.visible) return;
+    if (!this.shader.program.created) return;
 
     gl = GL.get();
 
@@ -158,6 +161,7 @@ export default class Mesh extends Object3D {
 
   public drawInstance(camera: Camera | PerspectiveCamera | OrthographicCamera) {
     if (!this.visible) return;
+    if (!this.shader.program.created) return;
 
     gl = GL.get();
 
@@ -221,6 +225,19 @@ export default class Mesh extends Object3D {
 
     // Disable blending
     gl.disable(gl.BLEND);
+  }
+
+  public computeBoundingSphere() {
+    this.boundingSphere = new Sphere();
+    let maxDistance = 0;
+    let distance;
+    this.geometry.vertices.forEach(vertex => {
+      distance = vertex.distance(this.boundingSphere.center);
+      if (distance > maxDistance) {
+        maxDistance = distance;
+      }
+    });
+    this.boundingSphere.radius = maxDistance;
   }
 
   public dispose() {

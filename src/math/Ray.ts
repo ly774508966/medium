@@ -1,10 +1,12 @@
 import { vec3 } from 'gl-matrix';
+import Sphere from './Sphere';
 import Vector3 from './Vector3';
 
 const diff = vec3.create();
 const edge1 = vec3.create();
 const edge2 = vec3.create();
 const normal = vec3.create();
+const v1 = vec3.create();
 
 export default class Ray {
   public origin: Vector3;
@@ -84,5 +86,40 @@ export default class Ray {
       .add(this.origin);
 
     return result;
+  }
+
+  public at(scale: number) {
+    const result = vec3.fromValues(
+      this.direction.v[0],
+      this.direction.v[1],
+      this.direction.v[2]
+    );
+    vec3.scale(result, result, scale);
+    vec3.add(result, result, this.origin.v);
+  }
+
+  public intersectsSphere(sphere) {
+    return this.distanceToPoint(sphere.center) <= sphere.radius;
+  }
+
+  public distanceToPoint(point) {
+    return Math.sqrt(this.distanceSqToPoint(point));
+  }
+
+  public distanceSqToPoint(point: Vector3) {
+    vec3.subtract(v1, point.v, this.origin.v);
+    const directionDistance = vec3.dot(v1, this.direction.v);
+
+    // point behind the ray
+    if (directionDistance < 0) {
+      // return this.origin.distanceToSquared(point);
+      return vec3.squaredDistance(this.origin.v, point.v);
+    }
+
+    vec3.copy(v1, this.direction.v);
+    vec3.scale(v1, v1, directionDistance);
+    vec3.add(v1, v1, this.origin.v);
+
+    return vec3.squaredDistance(v1, point.v);
   }
 }

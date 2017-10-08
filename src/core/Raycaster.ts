@@ -2,6 +2,7 @@ import { mat4, vec2, vec3 } from 'gl-matrix';
 import PerspectiveCamera from '../cameras/PerspectiveCamera';
 import Face from '../geometry/Face';
 import Ray from '../math/Ray';
+import Sphere from '../math/Sphere';
 import { barycoordFromPoint } from '../math/Utils';
 import Vector2 from '../math/Vector2';
 import Vector3 from '../math/Vector3';
@@ -19,6 +20,7 @@ const fvC = new Vector3();
 const uvA = new Vector2();
 const uvB = new Vector2();
 const uvC = new Vector2();
+const sphere = new Sphere();
 
 export default class RayCaster {
   public ray: Ray;
@@ -78,9 +80,22 @@ export default class RayCaster {
   }
 
   public intersectObject(object: Mesh) {
+    if (!object.visible) return;
     let intersect;
     let uv;
     let face;
+
+    // Check sphere
+    if (object.boundingSphere === undefined) object.computeBoundingSphere();
+    sphere.copy(object.boundingSphere);
+    // Apply object modelMatrix, incase object has been transformed
+    sphere.applyMatrix(object.modelMatrix);
+
+    // Exit if the ray doesn't intersect the sphere
+    if (!this.ray.intersectsSphere(sphere)) {
+      return;
+    }
+
     for (const f of object.geometry.faces) {
       vec3.copy(fvA.v, f.vertices[0].v);
       vec3.copy(fvB.v, f.vertices[1].v);

@@ -25,13 +25,13 @@ export default class Texture extends EventDispatcher {
   public resizeToPow2: boolean;
   public texture: WebGLTexture;
   public _isHdr: boolean;
-  public image: HTMLImageElement;
+  public image: HTMLImageElement | HTMLCanvasElement | ImageData;
 
   constructor(options: Options) {
     super();
     gl = GL.get();
 
-    this.src = '';
+    this.src = null;
     this.magFilter = gl.NEAREST;
     this.minFilter = gl.NEAREST;
     this.wrapS = gl.CLAMP_TO_EDGE;
@@ -56,8 +56,10 @@ export default class Texture extends EventDispatcher {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, this.wrapT);
     gl.bindTexture(gl.TEXTURE_2D, null);
 
-    this._isHdr = this.src.split('.').pop() === 'hdr';
-    this.load(this.src);
+    if (this.src) {
+      this._isHdr = this.src.split('.').pop() === 'hdr';
+      this.load(this.src);
+    }
   }
 
   public load(src: string) {
@@ -94,6 +96,7 @@ export default class Texture extends EventDispatcher {
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
     if (image instanceof ImageData && gl instanceof WebGL2RenderingContext) {
+      this.image = image;
       // This is only for hdr data texture atm
       gl.texImage2D(
         gl.TEXTURE_2D,
@@ -106,14 +109,17 @@ export default class Texture extends EventDispatcher {
         gl.FLOAT,
         image.data
       );
-    } else {
+    } else if (
+      image instanceof HTMLCanvasElement ||
+      image instanceof HTMLImageElement
+    ) {
       gl.texImage2D(
         gl.TEXTURE_2D,
         0,
         gl.RGBA,
         gl.RGBA,
         gl.UNSIGNED_BYTE,
-        this._resizeImage()
+        image
       );
     }
     gl.bindTexture(gl.TEXTURE_2D, null);
@@ -126,9 +132,8 @@ export default class Texture extends EventDispatcher {
     return canvas;
   }
 
-  public _resizeImage() {
-    if (!this.resizeToPow2 || this.image instanceof ImageData)
-      return this.image;
+  public _resizeImage(image) {
+    if (!this.resizeToPow2 || image instanceof ImageData) return this.image;
 
     // 2, 4, 8, 16... 4096
     const sizes = Array(12)
@@ -139,13 +144,13 @@ export default class Texture extends EventDispatcher {
 
     // Return if the image size is already a power of 2
     sizes.forEach(powSize => {
-      if (this.image.width === powSize && this.image.height === powSize) {
-        return this.image;
+      if (image.width === powSize && image.height === powSize) {
+        return image;
       }
       return false;
     });
 
-    const imageSize = Math.max(this.image.width, this.image.height);
+    const imageSize = Math.max(image.width, image.height);
 
     const size = sizes.reduce((prev, curr) => {
       return Math.abs(curr - imageSize) < Math.abs(prev - imageSize)
@@ -158,7 +163,7 @@ export default class Texture extends EventDispatcher {
     const ctx = canvas.getContext('2d');
     canvas.width = size;
     canvas.height = size;
-    ctx.drawImage(this.image, 0, 0, size, size);
+    ctx.drawImage(image, 0, 0, size, size);
 
     return canvas;
   }

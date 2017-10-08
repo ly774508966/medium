@@ -80,7 +80,8 @@ export default class Program {
     gl.compileShader(shader);
 
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-      warn('Failed to compile shader:', gl.getShaderInfoLog(shader));
+      warn('Failed to compile shader:');
+      warn(gl.getShaderInfoLog(shader));
       return false;
     }
 
@@ -88,6 +89,7 @@ export default class Program {
   }
 
   public setAttributeLocation(attributeName: string) {
+    if (!this.created) return;
     gl = GL.get();
     this.attributeLocations[attributeName] = gl.getAttribLocation(
       this.program,
@@ -121,6 +123,7 @@ export default class Program {
   }
 
   public setUniformLocation(uniforms: object, uniformName: string) {
+    if (!this.created) return;
     gl = GL.get();
     uniforms[uniformName].location = gl.getUniformLocation(
       this.program,

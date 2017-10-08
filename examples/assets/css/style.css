@@ -50,3 +50,19 @@ header {
 #ixviii:hover {
   opacity: 1;
 }
+
+#fps {
+  background-color: black !important;
+}
+
+#fpsGraph > span {
+  background-color: black !important;
+}
+
+#fpsText {
+  color: white !important;
+}
+
+#fpsGraph {
+  background-color: white !important;
+}

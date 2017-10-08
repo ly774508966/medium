@@ -120,6 +120,9 @@ export { Vector2 };
 import Ray from './math/Ray';
 export { Ray };
 
+import Sphere from './math/Sphere';
+export { Sphere };
+
 import * as MathUtils from './math/Utils';
 export { MathUtils };
 

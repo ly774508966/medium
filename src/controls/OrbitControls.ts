@@ -15,6 +15,7 @@ export default class OrbitControls {
   public pan: boolean;
   public smoothing: boolean;
   public easing: number;
+  public isDragging: boolean;
   public _camera: PerspectiveCamera;
   public _element: HTMLElement;
   public _zoomMin: number;
@@ -54,6 +55,7 @@ export default class OrbitControls {
     this.pan = true;
     this.smoothing = false;
     this.easing = 0.1;
+    this.isDragging = false;
     this._camera = camera;
     this._element = element;
     this._zoomMin = 0.1;
@@ -149,6 +151,7 @@ export default class OrbitControls {
 
   public _onTouchMove = event => {
     if (this.isDown) {
+      this.isDragging = true;
       switch (this._mode) {
         case MODE_PAN: {
           if (!this.pan) return;
@@ -198,6 +201,7 @@ export default class OrbitControls {
 
   public _onTouchEnd = () => {
     this.isDown = false;
+    this.isDragging = false;
   };
 
   public _onContextMenu = event => {
