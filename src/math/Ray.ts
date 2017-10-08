@@ -112,7 +112,6 @@ export default class Ray {
 
     // point behind the ray
     if (directionDistance < 0) {
-      // return this.origin.distanceToSquared(point);
       return vec3.squaredDistance(this.origin.v, point.v);
     }
 
