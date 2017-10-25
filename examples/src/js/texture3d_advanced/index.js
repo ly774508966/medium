@@ -14,6 +14,7 @@ import {
   ShaderChunks,
   Capabilities,
   Lights,
+  AmbientLight,
   DirectionalLight,
   Color
 } from '../../../../src/index.ts';
@@ -87,6 +88,19 @@ function generateGrid(size) {
 
 const src = generateGrid(guiController.size);
 
+const ambientLight = new Lights([
+  new AmbientLight({
+    intensity: {
+      type: 'f',
+      value: 0.5
+    },
+    color: {
+      type: '3f',
+      value: new Color(0x404040).v
+    }
+  })
+]);
+
 const directionalLights = new Lights([
   new DirectionalLight({
     intensity: {
@@ -102,6 +116,7 @@ const directionalLights = new Lights([
 
 directionalLights.get()[0].position.set(1, 1, 1);
 
+scene.ambientLight = ambientLight;
 scene.directionalLights = directionalLights;
 
 gui.add(guiController, 'lights').onChange(value => {
@@ -130,6 +145,7 @@ const texture3d = new Texture3d({
 const PLANE_SIZE = 15;
 const geometry = new PlaneGeometry(PLANE_SIZE, PLANE_SIZE, 1, 1, 'XY');
 const material = new Shader({
+  // type: 'lambert',
   hookVertexPre: `
 		precision ${capabilities.precision} int;
 		precision ${capabilities.precision} sampler3D;
@@ -226,8 +242,9 @@ const material = new Shader({
       type: '3f',
       value: [0, 0, 0]
     }
-  },
-  directionalLights: guiController.lights ? directionalLights : null
+  }
+  // ambientLight: guiController.lights ? ambientLight : null,
+  // directionalLights: guiController.lights ? directionalLights : null
 });
 
 gui.add(material.uniforms.uFogDensity, 'value', 0, 0.1).name('fog density');
@@ -261,7 +278,7 @@ function resize() {
   const width = window.innerWidth;
   const height = window.innerHeight;
   renderer.setSize(width, height);
-  camera.ratio = width / height;
+  camera.aspect = width / height;
   camera.updateProjectionMatrix();
 }
 resize();

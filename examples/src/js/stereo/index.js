@@ -153,9 +153,9 @@ function resize() {
   const width = window.innerWidth;
   const height = window.innerHeight;
   renderer.setSize(width, height);
-  cameraL.ratio = width / height;
+  cameraL.aspect = width / height;
   cameraL.updateProjectionMatrix();
-  cameraR.ratio = width / height;
+  cameraR.aspect = width / height;
   cameraR.updateProjectionMatrix();
 }
 resize();

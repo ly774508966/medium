@@ -28,7 +28,7 @@ export default class ShadowMapRenderer {
   }
 
   resize(width, height) {
-    this.camera.ratio = width / height;
+    this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
   }
 

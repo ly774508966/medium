@@ -97,9 +97,9 @@ function resize() {
   const height = window.innerHeight;
   renderTarget.setSize(width, height);
   renderer.setSize(width, height);
-  cameras.dev.ratio = width / height;
+  cameras.dev.aspect = width / height;
   cameras.dev.updateProjectionMatrix();
-  cameras.main.ratio = width / height;
+  cameras.main.aspect = width / height;
   cameras.main.updateProjectionMatrix();
 }
 resize();
