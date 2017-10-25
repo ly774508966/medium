@@ -224,7 +224,9 @@ export default class Mesh extends Object3D {
     }
 
     // Disable blending
-    gl.disable(gl.BLEND);
+    if (this.shader.blending) {
+      gl.disable(gl.BLEND);
+    }
   }
 
   public computeBoundingSphere() {
