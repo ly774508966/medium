@@ -1,4 +1,5 @@
 import EventDispatcher from '../core/EventDispatcher';
+import { createCanvas } from '../utils/Canvas';
 import * as GL from './GL';
 
 let gl;
@@ -49,16 +50,10 @@ export default class VideoTexture extends EventDispatcher {
     this.video.addEventListener('ended', this._onEnded, true);
     this._currentTime = 0;
 
+    const { canvas } = createCanvas(1, 1);
     this.texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
-    gl.texImage2D(
-      gl.TEXTURE_2D,
-      0,
-      gl.RGBA,
-      gl.RGBA,
-      gl.UNSIGNED_BYTE,
-      this.placeholder()
-    );
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, this.magFilter);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, this.minFilter);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, this.wrapS);
@@ -85,13 +80,6 @@ export default class VideoTexture extends EventDispatcher {
       }
       this._currentTime = this.video.currentTime;
     }
-  }
-
-  public placeholder() {
-    const canvas = document.createElement('canvas');
-    canvas.width = 1;
-    canvas.height = 1;
-    return canvas;
   }
 
   public _onCanPlayThrough = () => {

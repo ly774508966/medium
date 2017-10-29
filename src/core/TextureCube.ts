@@ -1,6 +1,8 @@
 import EventDispatcher from '../core/EventDispatcher';
 import HdrLoader from '../loaders/HdrLoader';
 import ImageLoader from '../loaders/ImageLoader';
+import { isPowerOf2, nearestPowerOf2 } from '../math/Utils';
+import { createCanvas } from '../utils/Canvas';
 import { warn } from '../utils/Console';
 import * as GL from './GL';
 import ImageData from './ImageData';
@@ -45,7 +47,13 @@ export default class TextureCube extends EventDispatcher {
     this.images = [];
     this.loaders = [];
 
-    this.update(this.placeholder());
+    const images = [];
+    const { canvas } = createCanvas(1, 1);
+    for (let i = 0; i < 6; i += 1) {
+      images.push(canvas);
+    }
+
+    this.update(images);
 
     // Check media type
     this._isHdr = this.src[0].split('.').pop() === 'hdr';
@@ -133,49 +141,17 @@ export default class TextureCube extends EventDispatcher {
     gl.bindTexture(gl.TEXTURE_CUBE_MAP, null);
   }
 
-  public placeholder() {
-    const canvases = [];
-    for (let i = 0; i < 6; i += 1) {
-      const canvas = document.createElement('canvas');
-      canvas.width = 128;
-      canvas.height = 128;
-      canvases.push(canvas);
-    }
-    return canvases;
-  }
-
   public _resizeImage(image: HTMLCanvasElement | HTMLImageElement | ImageData) {
     if (!this.resizeToPow2 || image instanceof ImageData) return image;
 
-    // 2, 4, 8, 16... 4096
-    const sizes = Array(12)
-      .fill(0)
-      .map((i, j) => {
-        return Math.pow(2, j + 1);
-      });
-
     // Return if the image size is already a power of 2
-    sizes.forEach(powSize => {
-      if (image.width === powSize && image.height === powSize) {
-        return image;
-      }
-      return false;
-    });
+    if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+      return image;
+    }
 
-    const imageSize = Math.max(image.width, image.height);
+    const size = nearestPowerOf2(Math.max(image.width, image.height));
 
-    const size = sizes.reduce((prev, curr) => {
-      return Math.abs(curr - imageSize) < Math.abs(prev - imageSize)
-        ? curr
-        : prev;
-    });
-
-    // Draw canvas with texture cropped inside
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = size;
-    canvas.height = size;
-
+    const { canvas, ctx } = createCanvas(size, size);
     ctx.drawImage(image, 0, 0, size, size);
 
     return canvas;
