@@ -7,11 +7,7 @@ export default class StereoRender extends Renderer {
   drawObjects = (scene, camera) => {
     if (gl instanceof window.WebGL2RenderingContext) {
       // Update global uniform buffers
-      UniformBuffers.updateProjectionView(
-        gl,
-        camera.projectionMatrix,
-        scene.modelViewMatrix,
-      );
+      UniformBuffers.updateProjectionView(gl, camera.projectionMatrix);
     }
 
     // Render the scene objects
@@ -20,7 +16,7 @@ export default class StereoRender extends Renderer {
         child.drawInstance(
           scene.modelViewMatrix,
           camera.projectionMatrix,
-          camera,
+          camera
         );
       } else {
         child.draw(scene.modelViewMatrix, camera.projectionMatrix, camera);
@@ -35,7 +31,7 @@ export default class StereoRender extends Renderer {
     rightProjectionMatrix,
     rightViewMatrix,
     cameraL,
-    cameraR,
+    cameraR
   ) {
     gl = GL.get();
 
@@ -54,7 +50,7 @@ export default class StereoRender extends Renderer {
       leftViewMatrix,
       cameraL.position.v,
       cameraL.target.v,
-      cameraL.up.v,
+      cameraL.up.v
     );
 
     this.drawObjects(scene, cameraL, leftViewMatrix);
@@ -64,14 +60,14 @@ export default class StereoRender extends Renderer {
       gl.drawingBufferWidth * 0.5,
       0,
       gl.drawingBufferWidth * 0.5,
-      gl.drawingBufferHeight,
+      gl.drawingBufferHeight
     );
 
     mat4.lookAt(
       rightViewMatrix,
       cameraR.position.v,
       cameraR.target.v,
-      cameraR.up.v,
+      cameraR.up.v
     );
 
     this.drawObjects(scene, cameraR, rightViewMatrix);
