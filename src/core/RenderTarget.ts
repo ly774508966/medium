@@ -22,6 +22,13 @@ interface Viewport {
   height: number;
 }
 
+interface ClearColor {
+  r: number;
+  g: number;
+  b: number;
+  a: number;
+}
+
 export default class RenderTarget {
   public width: number;
   public height: number;
@@ -32,6 +39,7 @@ export default class RenderTarget {
   public texture: WebGLTexture;
   public viewport: Viewport;
   public autoClear: boolean;
+  public clearColor: ClearColor;
 
   constructor(options: Options) {
     this.pixelRatio = options.pixelRatio || 1;
@@ -45,8 +53,7 @@ export default class RenderTarget {
       height: this.height
     };
     this.autoClear = true;
-
-    this.setClearColor();
+    this.clearColor = { r: 0, g: 0, b: 0, a: 1 };
 
     gl = GL.get();
     this.frameBuffer = gl.createFramebuffer();
@@ -95,8 +102,10 @@ export default class RenderTarget {
   }
 
   public setClearColor(r = 0, g = 0, b = 0, a = 1) {
-    gl = GL.get();
-    gl.clearColor(r, g, b, a);
+    this.clearColor.r = r;
+    this.clearColor.g = g;
+    this.clearColor.b = b;
+    this.clearColor.a = a;
   }
 
   public setSize(width: number, height: number) {
@@ -173,6 +182,12 @@ export default class RenderTarget {
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.frameBuffer);
 
     if (this.autoClear) {
+      gl.clearColor(
+        this.clearColor.r,
+        this.clearColor.g,
+        this.clearColor.b,
+        this.clearColor.a
+      );
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     }
 
