@@ -31,10 +31,10 @@ export const UNIFORM_AMBIENT_LIGHT_LOCATION: number = 1;
 export const UNIFORM_DIRECTIONAL_LIGHTS_LOCATION: number = 2;
 export const UNIFORM_POINT_LIGHTS_LOCATION: number = 3;
 
-// Shader types
-export const SHADER_BASIC = 'basic';
-export const SHADER_LAMBERT = 'lambert';
-export const SHADER_PHONG = 'phong';
+// Material types
+export const MATERIAL_BASIC = 'basic';
+export const MATERIAL_LAMBERT = 'lambert';
+export const MATERIAL_PHONG = 'phong';
 
 export const LIGHT_AMBIENT = 'ambient';
 export const LIGHT_DIRECTIONAL = 'directional';
