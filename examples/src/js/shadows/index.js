@@ -14,7 +14,8 @@ import {
   Material,
   JsonLoader,
   Geometry,
-  BoxGeometry
+  BoxGeometry,
+  AmbientLight
 } from '../../../../src/index.ts';
 import ShadowMapRenderer from './ShadowMapRenderer';
 import stats from '../stats';
@@ -57,6 +58,19 @@ scene.add(axis);
 
 controls.update();
 
+const ambientLight = new Lights([
+  new AmbientLight({
+    intensity: {
+      type: 'f',
+      value: 0.5
+    },
+    color: {
+      type: '3f',
+      value: new Color(0x404040).v
+    }
+  })
+]);
+
 const directionalLights = new Lights([
   new DirectionalLight({
     intensity: {
@@ -69,8 +83,11 @@ const directionalLights = new Lights([
     }
   })
 ]);
+
 const s = 1;
 directionalLights.get()[0].position.set(10 * s, 10 * s, 10 * s);
+
+scene.ambientLight = ambientLight;
 scene.directionalLights = directionalLights;
 
 // Visible light helper
@@ -151,7 +168,7 @@ const hookFragmentEnd = `
 
 const objectMaterial = new Material({
   type: 'lambert',
-  // ambientLight,
+  ambientLight,
   directionalLights,
   hookFragmentPre,
   hookFragmentEnd,
@@ -325,7 +342,7 @@ function update() {
 
   // set normal material for objects
   sceneShadow.objects.forEach(object => {
-    object.shader = objectMaterial;
+    object.material = objectMaterial;
   });
 
   if (objMesh) {
