@@ -48,7 +48,7 @@ interface Options {
   culling?: number;
 }
 
-export default class Shader {
+export default class Material {
   public name: string;
   public type: string;
   public uniforms: any;
@@ -76,13 +76,13 @@ export default class Shader {
     let fragmentShader;
 
     switch (options.type || '') {
-      case CONSTANTS.SHADER_LAMBERT: {
+      case CONSTANTS.MATERIAL_LAMBERT: {
         fragmentShader = GL.webgl2
           ? lambertFragmentShaderEs300
           : lambertFragmentShaderEs100;
         break;
       }
-      case CONSTANTS.SHADER_PHONG: {
+      case CONSTANTS.MATERIAL_PHONG: {
         fragmentShader = GL.webgl2
           ? phongFragmentShaderEs300
           : phongFragmentShaderEs100;
@@ -98,7 +98,7 @@ export default class Shader {
     gl = GL.get();
 
     this.name = '';
-    this.type = CONSTANTS.SHADER_BASIC;
+    this.type = CONSTANTS.MATERIAL_BASIC;
     this.uniforms = {};
     this.hookVertexPre = '';
     this.hookVertexMain = '';
