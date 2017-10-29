@@ -4,9 +4,9 @@ import uuid from 'uuid/v1';
 import PerspectiveCamera from '../cameras/PerspectiveCamera';
 import { DRAW_LINES } from '../core/Constants';
 import EventDispatcher from '../core/EventDispatcher';
+import Material from '../core/Material';
 import Mesh from '../core/Mesh';
 import Scene from '../core/Scene';
-import Shader from '../core/Shader';
 import LineGeometry from '../geometry/LineGeometry';
 import SphereGeometry from '../geometry/SphereGeometry';
 
@@ -164,7 +164,7 @@ class DollyHelper extends EventDispatcher {
     points.forEach((point: any, i) => {
       this.points[id][i] = new Mesh(
         new SphereGeometry(0.2, 4, 5),
-        new Shader({
+        new Material({
           drawType: DRAW_LINES
         })
       );
@@ -204,7 +204,7 @@ class DollyHelper extends EventDispatcher {
     const bufferVertices = new Float32Array(this.flatten(points));
     this.lines[id] = new Mesh(
       new LineGeometry(bufferVertices),
-      new Shader({
+      new Material({
         drawType: DRAW_LINES
       })
     );

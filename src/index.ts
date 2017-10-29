@@ -35,8 +35,8 @@ export { RenderTarget };
 import Scene from './core/Scene';
 export { Scene };
 
-import Shader from './core/Shader';
-export { Shader };
+import Material from './core/Material';
+export { Material };
 
 import Texture from './core/Texture';
 export { Texture };

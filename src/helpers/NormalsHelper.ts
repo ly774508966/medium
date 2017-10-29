@@ -4,8 +4,8 @@ import OrthographicCamera from '../cameras/OrthographicCamera';
 import PerspectiveCamera from '../cameras/PerspectiveCamera';
 import { capabilities, extensions } from '../core/Capabilities';
 import * as GL from '../core/GL';
+import Material from '../core/Material';
 import Mesh from '../core/Mesh';
-import Shader from '../core/Shader';
 import Geometry from '../geometry/Geometry';
 import EsVersion from '../shaders/chunks/EsVersion.glsl';
 import ProjectionView from '../shaders/chunks/ProjectionView.glsl';
@@ -92,7 +92,7 @@ export default class NormalsHelper extends Mesh {
       : fragmentShaderEs100();
     super(
       new NormalsGeometry(mesh, size),
-      new Shader({
+      new Material({
         name: 'NormalsHelper',
         vertexShader,
         fragmentShader
@@ -107,8 +107,8 @@ export default class NormalsHelper extends Mesh {
     // Update modelMatrix
     this.updateMatrix(camera);
 
-    this.shader.program.bind();
-    this.shader.setUniforms(
+    this.material.program.bind();
+    this.material.setUniforms(
       camera.projectionMatrix,
       this.modelViewMatrix,
       this.modelMatrix,

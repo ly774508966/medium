@@ -5,8 +5,8 @@ import PerspectiveCamera from '../cameras/PerspectiveCamera';
 import { capabilities, extensions } from '../core/Capabilities';
 import { DRAW_LINE_STRIP } from '../core/Constants';
 import * as GL from '../core/GL';
+import Material from '../core/Material';
 import Mesh from '../core/Mesh';
-import Shader from '../core/Shader';
 import Geometry from '../geometry/Geometry';
 import EsVersion from '../shaders/chunks/EsVersion.glsl';
 import ProjectionView from '../shaders/chunks/ProjectionView.glsl';
@@ -126,7 +126,7 @@ export default class CameraHelper extends Mesh {
       : fragmentShaderEs100();
     super(
       new CameraGeometry(camera),
-      new Shader({
+      new Material({
         name: 'CameraHelper',
         vertexShader,
         fragmentShader,
@@ -148,8 +148,8 @@ export default class CameraHelper extends Mesh {
     // Update modelMatrix
     this.updateMatrix(camera);
 
-    this.shader.program.bind();
-    this.shader.setUniforms(
+    this.material.program.bind();
+    this.material.setUniforms(
       camera.projectionMatrix,
       this.modelViewMatrix,
       this.modelMatrix,

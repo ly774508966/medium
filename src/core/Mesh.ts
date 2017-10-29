@@ -6,31 +6,31 @@ import Geometry from '../geometry/Geometry';
 import Sphere from '../math/Sphere';
 import { extensions } from './Capabilities';
 import * as GL from './GL';
+import Material from './Material';
 import Object3D from './Object3D';
-import Shader from './Shader';
 import Vao from './Vao';
 
 let gl: WebGL2RenderingContext | WebGLRenderingContext;
 
 export default class Mesh extends Object3D {
   public geometry: Geometry;
-  public shader: Shader;
+  public material: Material;
   public vao: Vao;
   public visible: boolean;
   public instanceCount: number;
   public isInstanced: boolean;
   public boundingSphere: Sphere;
 
-  constructor(geometry: Geometry, shader: Shader) {
+  constructor(geometry: Geometry, material: Material) {
     super();
     this.geometry = geometry;
-    this.shader = shader;
+    this.material = material;
     this.vao = new Vao();
     this.visible = true;
     this.instanceCount = 0;
     // Allow meshes to share shaders and programs
-    if (!this.shader.program.created) {
-      this.shader.create(this.geometry);
+    if (!this.material.program.created) {
+      this.material.create(this.geometry);
     }
     this.isInstanced = false;
 
@@ -55,11 +55,11 @@ export default class Mesh extends Object3D {
     Object.keys(this.geometry.attributes).forEach(attributeName => {
       if (attributeName !== 'aIndex') {
         // enableVertexAttribArray
-        this.shader.program.setAttributeLocation(attributeName);
+        this.material.program.setAttributeLocation(attributeName);
         // Bind buffer
         this.geometry.attributes[attributeName].bind();
         // vertexAttribPointer
-        this.shader.program.setAttributePointer(
+        this.material.program.setAttributePointer(
           attributeName,
           this.geometry.attributes[attributeName].itemSize
         );
@@ -72,22 +72,22 @@ export default class Mesh extends Object3D {
     Object.keys(this.geometry.attributesInstanced).forEach(attributeName => {
       if (attributeName !== 'aIndex') {
         // enableVertexAttribArray
-        this.shader.program.setAttributeLocation(attributeName);
+        this.material.program.setAttributeLocation(attributeName);
         // Bind buffer
         this.geometry.attributesInstanced[attributeName].bind();
         // vertexAttribPointer
-        this.shader.program.setAttributeInstancedPointer(
+        this.material.program.setAttributeInstancedPointer(
           attributeName,
           this.geometry.attributesInstanced[attributeName].itemSize
         );
         if (gl instanceof WebGL2RenderingContext) {
           gl.vertexAttribDivisor(
-            this.shader.program.attributeLocations[attributeName],
+            this.material.program.attributeLocations[attributeName],
             1
           );
         } else {
           extensions.angleInstancedArrays.vertexAttribDivisorANGLE(
-            this.shader.program.attributeLocations[attributeName],
+            this.material.program.attributeLocations[attributeName],
             1
           );
         }
@@ -104,22 +104,22 @@ export default class Mesh extends Object3D {
 
   public draw(camera: Camera | PerspectiveCamera | OrthographicCamera) {
     if (!this.visible) return;
-    if (!this.shader.program.created) return;
+    if (!this.material.program.created) return;
 
     gl = GL.get();
 
     // Update modelMatrix
     this.updateMatrix(camera);
 
-    this.shader.program.bind();
+    this.material.program.bind();
 
     // Culling enable
-    if (this.shader.culling !== -1) {
+    if (this.material.culling !== -1) {
       gl.enable(gl.CULL_FACE);
-      gl.cullFace(this.shader.culling);
+      gl.cullFace(this.material.culling);
     }
 
-    this.shader.setUniforms(
+    this.material.setUniforms(
       camera.projectionMatrix,
       this.modelViewMatrix,
       this.modelMatrix,
@@ -136,14 +136,14 @@ export default class Mesh extends Object3D {
 
     if (this.geometry.attributes.aIndex) {
       gl.drawElements(
-        this.shader.drawType,
+        this.material.drawType,
         this.geometry.attributes.aIndex.numItems,
         gl.UNSIGNED_SHORT,
         0
       );
     } else {
       gl.drawArrays(
-        this.shader.drawType,
+        this.material.drawType,
         0,
         this.geometry.attributes.aVertexPosition.numItems
       );
@@ -154,22 +154,22 @@ export default class Mesh extends Object3D {
     }
 
     // Culling disable
-    if (this.shader.culling !== -1) {
+    if (this.material.culling !== -1) {
       gl.disable(gl.CULL_FACE);
     }
   }
 
   public drawInstance(camera: Camera | PerspectiveCamera | OrthographicCamera) {
     if (!this.visible) return;
-    if (!this.shader.program.created) return;
+    if (!this.material.program.created) return;
 
     gl = GL.get();
 
     // Update modelMatrix
     this.updateMatrix(camera);
 
-    this.shader.program.bind();
-    this.shader.setUniforms(
+    this.material.program.bind();
+    this.material.setUniforms(
       camera.projectionMatrix,
       this.modelViewMatrix,
       this.modelMatrix,
@@ -177,15 +177,15 @@ export default class Mesh extends Object3D {
     );
 
     // Culling enable
-    if (this.shader.culling !== -1) {
+    if (this.material.culling !== -1) {
       gl.enable(gl.CULL_FACE);
-      gl.cullFace(this.shader.culling);
+      gl.cullFace(this.material.culling);
     }
 
     // Blending enable
-    if (this.shader.blending) {
+    if (this.material.blending) {
       gl.enable(gl.BLEND);
-      gl.blendFunc(this.shader.blendFunc[0], this.shader.blendFunc[1]);
+      gl.blendFunc(this.material.blendFunc[0], this.material.blendFunc[1]);
     }
 
     if (extensions.vertexArrayObject) {
@@ -198,7 +198,7 @@ export default class Mesh extends Object3D {
 
     if (gl instanceof WebGL2RenderingContext) {
       gl.drawElementsInstanced(
-        this.shader.drawType,
+        this.material.drawType,
         this.geometry.attributes.aIndex.numItems,
         gl.UNSIGNED_SHORT,
         0,
@@ -206,7 +206,7 @@ export default class Mesh extends Object3D {
       );
     } else {
       extensions.angleInstancedArrays.drawElementsInstancedANGLE(
-        this.shader.drawType,
+        this.material.drawType,
         this.geometry.attributes.aIndex.numItems,
         gl.UNSIGNED_SHORT,
         0,
@@ -219,12 +219,12 @@ export default class Mesh extends Object3D {
     }
 
     // Culling disable
-    if (this.shader.culling !== -1) {
+    if (this.material.culling !== -1) {
       gl.disable(gl.CULL_FACE);
     }
 
     // Disable blending
-    if (this.shader.blending) {
+    if (this.material.blending) {
       gl.disable(gl.BLEND);
     }
   }
@@ -243,11 +243,11 @@ export default class Mesh extends Object3D {
   }
 
   public dispose() {
-    this.shader.dispose();
+    this.material.dispose();
     this.geometry.dispose();
     this.vao.dispose();
     this.geometry = null;
-    this.shader = null;
+    this.material = null;
     super.dispose();
   }
 }

@@ -4,8 +4,8 @@ import OrthographicCamera from '../cameras/OrthographicCamera';
 import PerspectiveCamera from '../cameras/PerspectiveCamera';
 import { capabilities, extensions } from '../core/Capabilities';
 import * as GL from '../core/GL';
+import Material from '../core/Material';
 import Mesh from '../core/Mesh';
-import Shader from '../core/Shader';
 import Geometry from '../geometry/Geometry';
 import Color from '../math/Color';
 import { from3DTo2D } from '../math/Utils';
@@ -104,7 +104,7 @@ export default class VerticesHelper extends Mesh {
       : fragmentShaderEs100();
     super(
       new VerticesGeometry(mesh, size),
-      new Shader({
+      new Material({
         name: 'VerticesHelper',
         vertexShader,
         fragmentShader,
@@ -171,8 +171,8 @@ export default class VerticesHelper extends Mesh {
       label.element.innerHTML = `${label.indice}`;
     });
 
-    this.shader.program.bind();
-    this.shader.setUniforms(
+    this.material.program.bind();
+    this.material.setUniforms(
       camera.projectionMatrix,
       this.modelViewMatrix,
       this.modelMatrix,
