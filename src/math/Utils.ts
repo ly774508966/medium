@@ -122,3 +122,13 @@ export function lookAt(eye: vec3, target: vec3, up: vec3) {
 
   return quatOut;
 }
+
+// https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
+export function isPowerOf2(value) {
+  return (value & (value - 1)) === 0;
+}
+
+// https://bocoup.com/blog/find-the-closest-power-of-2-with-javascript
+export function nearestPowerOf2(size) {
+  return Math.pow(2, Math.round(Math.log(size) / Math.log(2)));
+}
