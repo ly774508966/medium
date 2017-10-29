@@ -8,11 +8,12 @@ import {
   Lights,
   DirectionalLight,
   AmbientLight,
-  Shader,
+  Material,
   Color,
   Mesh
 } from '../../../../src/index.ts';
 import DRACOLoader from './DRACOLoader';
+import stats from '../stats';
 
 const { guiController } = require('../gui')();
 
@@ -91,7 +92,7 @@ dracoLoader.setVerbosity(1);
 dracoLoader.load('assets/models/draco/mass/mass.drc', geometry => {
   const mesh = new Mesh(
     geometry,
-    new Shader({
+    new Material({
       directionalLights,
       ambientLight,
       type: 'lambert',
@@ -101,7 +102,7 @@ dracoLoader.load('assets/models/draco/mass/mass.drc', geometry => {
           value: new Color(0xffffff).v
         }
       }
-    }),
+    })
   );
 
   scene.add(mesh);
@@ -121,9 +122,13 @@ window.addEventListener('resize', resize);
 function update() {
   requestAnimationFrame(update);
 
+  stats.begin();
+
   controls.update();
 
   camera.updateMatrixWorld();
   renderer.render(scene, camera);
+
+  stats.end();
 }
 update();

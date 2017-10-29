@@ -7,9 +7,10 @@ import {
   AxisHelper,
   Mesh,
   LineGeometry,
-  Shader,
+  Material,
   Constants
 } from '../../../../src/index.ts';
+import stats from '../stats';
 
 const { guiController } = require('../gui')();
 
@@ -57,7 +58,7 @@ const bufferVertices = new Float32Array(points);
 
 const mesh = new Mesh(
   new LineGeometry(bufferVertices),
-  new Shader({
+  new Material({
     drawType: Constants.DRAW_LINES
   })
 );
@@ -76,7 +77,9 @@ window.addEventListener('resize', resize);
 
 function update() {
   requestAnimationFrame(update);
+  stats.begin();
   camera.updateMatrixWorld();
   renderer.render(scene, camera);
+  stats.end();
 }
 update();

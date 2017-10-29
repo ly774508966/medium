@@ -5,7 +5,7 @@ import {
   OrbitControls,
   ObjLoader,
   Geometry,
-  Shader,
+  Material,
   Mesh,
   Color,
   PointLight,
@@ -13,6 +13,7 @@ import {
   AmbientLight,
   DirectionalLight
 } from '../../../../src/index.ts';
+import stats from '../stats';
 
 const { guiController } = require('../gui')();
 
@@ -93,7 +94,7 @@ new ObjLoader('assets/models/obj/mass.obj')
   .then(data => {
     const geometry = new Geometry(data.vertices, data.indices, data.normals);
 
-    const material = new Shader({
+    const material = new Material({
       type: 'phong',
       ambientLight,
       directionalLights,
@@ -130,6 +131,8 @@ window.addEventListener('resize', resize);
 function update(time) {
   requestAnimationFrame(update);
 
+  stats.begin();
+
   camera.updateMatrixWorld();
 
   const radius = 20;
@@ -144,5 +147,7 @@ function update(time) {
   });
 
   renderer.render(scene, camera);
+
+  stats.end();
 }
 update();

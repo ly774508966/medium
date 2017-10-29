@@ -3,7 +3,7 @@ import {
   Scene,
   PerspectiveCamera,
   Mesh,
-  Shader,
+  Material,
   PlaneGeometry,
   BoxGeometry,
   GridHelper,
@@ -19,6 +19,7 @@ import {
   VerticesHelper,
   Clock
 } from '../../../../src/index.ts';
+import stats from '../stats';
 
 const { guiController } = require('../gui')();
 
@@ -63,7 +64,7 @@ let geometry = new PlaneGeometry(
   'XY',
   colors
 );
-const material1 = new Shader({
+const material1 = new Material({
   name: 'Plane'
 });
 
@@ -160,7 +161,7 @@ const texture = new Texture({
   src: 'assets/textures/texture.jpg'
 });
 geometry = new BoxGeometry();
-const material = new Shader({
+const material = new Material({
   type: 'phong',
   name: 'Box',
   hookFragmentPre: `
@@ -222,6 +223,8 @@ const radius = 30;
 function update() {
   requestAnimationFrame(update);
 
+  stats.begin();
+
   camera.updateMatrixWorld();
 
   delta = clock.getDelta();
@@ -240,5 +243,7 @@ function update() {
   });
 
   renderer.render(scene, camera);
+
+  stats.end();
 }
 update();

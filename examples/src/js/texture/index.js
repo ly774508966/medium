@@ -3,13 +3,14 @@ import {
   Scene,
   PerspectiveCamera,
   Mesh,
-  Shader,
+  Material,
   PlaneGeometry,
   GridHelper,
   OrbitControls,
   AxisHelper,
   Texture
 } from '../../../../src/index.ts';
+import stats from '../stats';
 
 const { gui, guiController } = require('../gui')();
 
@@ -41,7 +42,7 @@ const texture1 = new Texture({
 });
 
 const geometry = new PlaneGeometry(1, 1, 1, 1, 'XY');
-const material = new Shader({
+const material = new Material({
   name: 'Plane',
   hookFragmentPre: `
 		uniform sampler2D uTexture0;
@@ -54,7 +55,7 @@ const material = new Shader({
   uniforms: {
     uMix: {
       type: 'f',
-      value: 0.5
+      value: 1
     },
     uTexture0: {
       type: 't',
@@ -70,7 +71,7 @@ const material = new Shader({
 const plane = new Mesh(geometry, material);
 scene.add(plane);
 
-gui.add(plane.shader.uniforms.uMix, 'value', 0, 1);
+gui.add(plane.material.uniforms.uMix, 'value', 0, 1);
 
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas);
@@ -96,7 +97,12 @@ window.addEventListener('resize', resize);
 
 function update() {
   requestAnimationFrame(update);
+
+  stats.begin();
+
   camera.updateMatrixWorld();
   renderer.render(scene, camera);
+
+  stats.end();
 }
 update();

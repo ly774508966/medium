@@ -10,7 +10,7 @@ import {
   CameraHelper,
   Mesh,
   SphereGeometry,
-  Shader,
+  Material,
   Texture,
   AmbientLight,
   DirectionalLight,
@@ -18,6 +18,7 @@ import {
   Color,
   OrthographicCamera
 } from '../../../../src/index.ts';
+import stats from '../stats';
 
 const { gui, guiController } = require('../gui')();
 
@@ -89,7 +90,7 @@ const projectiveTexture = new Texture({
   src: 'assets/textures/paint/splatter-1.jpg'
 });
 
-const shader = new Shader({
+const shader = new Material({
   type: 'lambert',
   ambientLight,
   directionalLights,
@@ -122,7 +123,9 @@ const shader = new Shader({
   hookFragmentEnd: `
     vec4 shadowCoord = vShadowCoord / vShadowCoord.w;
     const float shadowBias = 0.00005;
-    outgoingColor *= ${GL.webgl2 ? 'textureProj' : 'texture2DProj'}(uProjectiveTexture, shadowCoord, shadowBias);
+    outgoingColor *= ${GL.webgl2
+      ? 'textureProj'
+      : 'texture2DProj'}(uProjectiveTexture, shadowCoord, shadowBias);
 `
 });
 
@@ -133,7 +136,7 @@ mesh.position.set(0, 0, 0);
 guiController.x = 1;
 guiController.y = 1;
 guiController.z = 1;
-guiController.textureSize = 0.8
+guiController.textureSize = 0.8;
 
 // Texture Projection
 const projectionCamera = new OrthographicCamera({
@@ -177,8 +180,16 @@ function updateProjection() {
   projectionCamera.top = cameraTop;
   projectionCamera.updateProjectionMatrix();
 
-  projectionCamera.position.set(guiController.x, guiController.y, guiController.z);
-  projectionCamera.target.set(mesh.position.x, mesh.position.y, mesh.position.z);
+  projectionCamera.position.set(
+    guiController.x,
+    guiController.y,
+    guiController.z
+  );
+  projectionCamera.target.set(
+    mesh.position.x,
+    mesh.position.y,
+    mesh.position.z
+  );
   projectionCamera.updateMatrixWorld();
 
   mat4.multiply(
@@ -187,7 +198,7 @@ function updateProjection() {
     projectionCamera.worldInverseMatrix
   );
 
-  mesh.shader.uniforms.uTextureProjectionMatrix.value.set(
+  mesh.material.uniforms.uTextureProjectionMatrix.value.set(
     textureProjectionMatrix
   );
 }
@@ -222,10 +233,14 @@ window.addEventListener('resize', resize);
 function update() {
   requestAnimationFrame(update);
 
+  stats.begin();
+
   cameraHelper.update();
   controls.update();
 
   camera.updateMatrixWorld();
   renderer.render(scene, camera);
+
+  stats.end();
 }
 update();

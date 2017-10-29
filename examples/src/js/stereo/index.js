@@ -2,7 +2,7 @@ import {
   Scene,
   PerspectiveCamera,
   Mesh,
-  Shader,
+  Material,
   BoxGeometry,
   OrbitControls,
   Color,
@@ -89,7 +89,7 @@ geometry.addInstancedBufferAttribute('aOffset', data, 3);
 
 const mesh = new Mesh(
   geometry,
-  new Shader({
+  new Material({
     uniforms: {
       uDiffuse: {
         type: '3f',
@@ -143,7 +143,7 @@ const controller = {
   fov: cameraL.fov
 };
 
-gui.add(mesh.shader.uniforms.uFogDensity, 'value', 0, 0.1);
+gui.add(mesh.material.uniforms.uFogDensity, 'value', 0, 0.1);
 gui.add(controller, 'fov', 0, 100).onChange(val => {
   cameraL.fov = val;
   cameraR.fov = val;

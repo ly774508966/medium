@@ -7,7 +7,7 @@ import {
   Scene,
   PerspectiveCamera,
   Mesh,
-  Shader,
+  Material,
   PlaneGeometry,
   OrbitControls,
   Texture3d,
@@ -18,6 +18,7 @@ import {
   DirectionalLight,
   Color
 } from '../../../../src/index.ts';
+import stats from '../stats';
 
 const { gui, guiController, getQuery, setQuery } = require('../gui')([
   'webgl2'
@@ -144,8 +145,8 @@ const texture3d = new Texture3d({
 
 const PLANE_SIZE = 15;
 const geometry = new PlaneGeometry(PLANE_SIZE, PLANE_SIZE, 1, 1, 'XY');
-const material = new Shader({
-  // type: 'lambert',
+const material = new Material({
+  type: 'lambert',
   hookVertexPre: `
 		precision ${capabilities.precision} int;
 		precision ${capabilities.precision} sampler3D;
@@ -242,9 +243,9 @@ const material = new Shader({
       type: '3f',
       value: [0, 0, 0]
     }
-  }
-  // ambientLight: guiController.lights ? ambientLight : null,
-  // directionalLights: guiController.lights ? directionalLights : null
+  },
+  ambientLight: guiController.lights ? ambientLight : null,
+  directionalLights: guiController.lights ? directionalLights : null
 });
 
 gui.add(material.uniforms.uFogDensity, 'value', 0, 0.1).name('fog density');
@@ -261,7 +262,7 @@ const plane = new Mesh(geometry, material);
 plane.setInstanceCount(guiController.size);
 scene.add(plane);
 
-const size = [32, 64, 80, 128];
+const size = [32, 64, 80, 128, 256];
 gui.add(guiController, 'size', size).onChange(value => {
   setQuery('size', value);
 });
@@ -295,18 +296,23 @@ const quaternionAxis = vec3.create();
 
 function update() {
   requestAnimationFrame(update);
+
+  stats.begin();
+
   camera.updateMatrixWorld();
 
   plane.lookAt(camera.position);
   quat.identity(quaternionAxis);
   axisAngle = quat.getAxisAngle(quaternionAxis, plane.quaternion);
 
-  plane.shader.uniforms.uAxis.value[0] = -quaternionAxis[0];
-  plane.shader.uniforms.uAxis.value[1] = -quaternionAxis[1];
-  plane.shader.uniforms.uAxis.value[2] = -quaternionAxis[2];
-  plane.shader.uniforms.uAngle.value = axisAngle;
+  plane.material.uniforms.uAxis.value[0] = -quaternionAxis[0];
+  plane.material.uniforms.uAxis.value[1] = -quaternionAxis[1];
+  plane.material.uniforms.uAxis.value[2] = -quaternionAxis[2];
+  plane.material.uniforms.uAngle.value = axisAngle;
 
   renderer.render(scene, camera);
+
+  stats.end();
 }
 
 update();

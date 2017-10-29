@@ -7,6 +7,7 @@ import {
   AxisHelper,
   CameraHelper
 } from '../../../../src/index.ts';
+import stats from '../stats';
 
 const { gui, guiController } = require('../gui')();
 
@@ -92,6 +93,8 @@ function render(camera, x, y, width, height) {
 function update() {
   requestAnimationFrame(update);
 
+  stats.begin();
+
   cameraHelper.update();
   controls.update();
 
@@ -104,5 +107,7 @@ function update() {
   } else {
     render(cameras.main, 0, 0, 1, 1);
   }
+
+  stats.end();
 }
 update();

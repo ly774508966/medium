@@ -3,7 +3,7 @@ import {
   Scene,
   PerspectiveCamera,
   Mesh,
-  Shader,
+  Material,
   BoxGeometry,
   OrbitControls,
   Color,
@@ -12,6 +12,7 @@ import {
   Lights
 } from '../../../../src/index.ts';
 import { Sierpinski, jerusalem } from '../fractal';
+import stats from '../stats';
 
 const { gui, guiController } = require('../gui')();
 
@@ -81,7 +82,7 @@ geometry.addInstancedBufferAttribute('aOffset', data, 3);
 
 const mesh = new Mesh(
   geometry,
-  new Shader({
+  new Material({
     type: 'lambert',
     uniforms: {
       uDiffuse: {
@@ -121,7 +122,9 @@ mesh.setInstanceCount(totalInstances);
 
 scene.add(mesh);
 
-gui.add(mesh.shader.uniforms.uFogDensity, 'value', 0, 0.1);
+gui
+  .add(mesh.material.uniforms.uFogDensity, 'value', 0, 0.1)
+  .name('fog density');
 
 function resize() {
   const width = window.innerWidth;
@@ -136,7 +139,9 @@ window.addEventListener('resize', resize);
 
 function update() {
   requestAnimationFrame(update);
+  stats.begin();
   camera.updateMatrixWorld();
   renderer.render(scene, camera);
+  stats.end();
 }
 update();

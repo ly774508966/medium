@@ -5,13 +5,14 @@ import {
   Scene,
   PerspectiveCamera,
   Mesh,
-  Shader,
+  Material,
   PlaneGeometry,
   OrbitControls,
   Texture3d,
   Clock,
   ShaderChunks
 } from '../../../../src/index.ts';
+import stats from '../stats';
 
 const { gui, guiController } = require('../gui')(['webgl2']);
 
@@ -57,7 +58,7 @@ const texture3d = new Texture3d({
 
 const PLANE_SIZE = 20;
 const geometry = new PlaneGeometry(PLANE_SIZE, PLANE_SIZE, 1, 1, 'XY');
-const material = new Shader({
+const material = new Material({
   name: 'Plane',
   hookVertexPre: `
 		precision highp int;
@@ -161,8 +162,13 @@ gl.blendFunc(gl.ONE, gl.SRC_ALPHA);
 
 function update() {
   requestAnimationFrame(update);
+
+  stats.begin();
+
   camera.updateMatrixWorld();
-  plane.shader.uniforms.uTime.value += clock.getDelta();
+  plane.material.uniforms.uTime.value += clock.getDelta();
   renderer.render(scene, camera);
+
+  stats.end();
 }
 update();

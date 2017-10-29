@@ -7,7 +7,7 @@ import {
   OrbitControls,
   CameraHelper,
   Mesh,
-  Shader,
+  Material,
   Texture,
   AmbientLight,
   DirectionalLight,
@@ -24,8 +24,6 @@ import {
 } from '../../../../src/index.ts';
 import stats from '../stats';
 import DRACOLoader from '../draco/DRACOLoader';
-
-document.body.appendChild(stats.domElement);
 
 const { /* gui, */ guiController } = require('../gui')();
 
@@ -97,7 +95,7 @@ const bufferVertices = new Float32Array(points);
 
 const line = new Mesh(
   new LineGeometry(bufferVertices),
-  new Shader({
+  new Material({
     drawType: Constants.DRAW_LINES
   })
 );
@@ -167,7 +165,7 @@ const normalMap = new Texture({
   src: 'assets/models/draco/goethe-lifemask/normal-map.jpg'
 });
 
-const shaderProjection = new Shader({
+const shaderProjection = new Material({
   uniforms: {
     uTextureProjectionMatrix: {
       type: 'Matrix4fv',
@@ -221,7 +219,7 @@ const shaderProjection = new Shader({
 `
 });
 
-const shaderWithProjectionTexture = new Shader({
+const shaderWithProjectionTexture = new Material({
   type: 'lambert',
   ambientLight,
   directionalLights,
@@ -422,12 +420,12 @@ function update() {
         Math.floor(Math.random() * projectiveTextures.length)
       ].texture;
 
-    mesh.shader = shaderProjection;
+    mesh.material = shaderProjection;
     // Render scene
     renderTarget.render(sceneRtt, camera);
 
     // Swap shader back
-    mesh.shader = shaderWithProjectionTexture;
+    mesh.material = shaderWithProjectionTexture;
     projectionChanged = false;
 
     updateTexture();

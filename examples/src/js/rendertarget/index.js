@@ -6,12 +6,14 @@ import {
   OrbitControls,
   AxisHelper,
   RenderTarget,
-  Shader,
+  Material,
   Mesh,
   PlaneGeometry,
   OrthographicCamera,
-  ShaderChunks
+  ShaderChunks,
+  Clock
 } from '../../../../src/index.ts';
+import stats from '../stats';
 
 const { guiController } = require('../gui')();
 
@@ -24,10 +26,15 @@ renderer.setDevicePixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.canvas);
 
 // Render target
+// const renderTarget = new RenderTarget({
+//   width: window.innerWidth,
+//   height: window.innerHeight,
+//   pixelRatio: renderer.pixelRatio
+// });
 const renderTarget = new RenderTarget({
-  width: window.innerWidth,
-  height: window.innerHeight,
-  pixelRatio: window.devicePixelRatio
+  width: 1024,
+  height: 1024,
+  pixelRatio: renderer.pixelRatio
 });
 
 // Scene
@@ -36,22 +43,22 @@ const scene2 = new Scene();
 
 // Camera
 const cameras = {
-  dev: new PerspectiveCamera({
+  main: new PerspectiveCamera({
     fov: 45
   }),
-  main: new OrthographicCamera({
+  rtt: new OrthographicCamera({
     fov: 45
   })
 };
 
-cameras.dev.position.set(10, 5, 10);
-cameras.dev.lookAt();
+cameras.main.position.set(10, 5, 10);
+cameras.main.lookAt();
 
-cameras.main.position.set(0, 0, 1);
-cameras.main.lookAt(0, 0, 0);
+cameras.rtt.position.set(0, 0, 1);
+cameras.rtt.lookAt(0, 0, 0);
 
 // Helpers
-const controls = new OrbitControls(cameras.dev, renderer.canvas);
+const controls = new OrbitControls(cameras.main, renderer.canvas);
 
 const grid = new GridHelper(10);
 scene.add(grid);
@@ -61,7 +68,9 @@ scene.add(axis);
 
 controls.update();
 
-const material = new Shader({
+const clock = new Clock(true);
+
+const material = new Material({
   uniforms: {
     uTexture0: {
       type: 't',
@@ -97,26 +106,31 @@ function resize() {
   const height = window.innerHeight;
   renderTarget.setSize(width, height);
   renderer.setSize(width, height);
-  cameras.dev.aspect = width / height;
-  cameras.dev.updateProjectionMatrix();
   cameras.main.aspect = width / height;
   cameras.main.updateProjectionMatrix();
+  cameras.rtt.aspect = width / height;
+  cameras.rtt.updateProjectionMatrix();
 }
 resize();
 
 window.addEventListener('resize', resize);
 
-function update(time) {
+let delta;
+function update() {
   requestAnimationFrame(update);
 
-  cameras.dev.updateMatrixWorld();
+  stats.begin();
+
   cameras.main.updateMatrixWorld();
+  cameras.rtt.updateMatrixWorld();
 
-  const t = time * 0.2;
+  delta = clock.getDelta();
 
-  plane.shader.uniforms.uTime.value = t * 0.01;
+  plane.material.uniforms.uTime.value += delta;
 
-  renderTarget.render(scene, cameras.dev);
-  renderer.render(scene2, cameras.main);
+  renderTarget.render(scene, cameras.main);
+  renderer.render(scene2, cameras.rtt);
+
+  stats.end();
 }
 update();

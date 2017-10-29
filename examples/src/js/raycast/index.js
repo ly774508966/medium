@@ -4,7 +4,7 @@ import {
   Scene,
   PerspectiveCamera,
   Mesh,
-  Shader,
+  Material,
   GridHelper,
   OrbitControls,
   AxisHelper,
@@ -16,6 +16,7 @@ import {
   BoxGeometry,
   Lights
 } from '../../../../src/index.ts';
+import stats from '../stats';
 
 const { guiController } = require('../gui')();
 
@@ -35,7 +36,7 @@ const camera = new PerspectiveCamera({
   fov: 45
 });
 
-camera.position.set(10, 5, 10);
+camera.position.set(15, 10, 15);
 camera.lookAt();
 
 const directionalLights = new Lights([
@@ -52,11 +53,12 @@ directionalLights.get()[0].position.set(0.75, 1, 0.75);
 scene.directionalLights = directionalLights;
 
 const geometry = new BoxGeometry(2, 2, 2);
-const material = new Shader({
+const material = new Material({
   type: 'lambert',
   name: 'Box',
   hookFragmentPre: `
 		uniform vec2 uIntersect;
+		uniform float uVisible;
 	`,
   hookFragmentMain: `
 		float circleRadius = 0.25;
@@ -71,7 +73,9 @@ const material = new Shader({
 
 		if (dist < circleRadius) {
 			color = vec3(1.0);
-		}
+    }
+
+    color *= uVisible;
 	`,
   hookFragmentEnd: `
 		outgoingColor = vec4(color, 1.0);
@@ -80,6 +84,10 @@ const material = new Shader({
     uDiffuse: {
       type: '3f',
       value: new Color(0xff2a9d).v
+    },
+    uVisible: {
+      type: 'f',
+      value: 0
     },
     uIntersect: {
       type: '2f',
@@ -92,7 +100,7 @@ const box = new Mesh(geometry, material);
 
 const intersectHelper = new Mesh(
   new SphereGeometry(0.2),
-  new Shader({
+  new Material({
     uniforms: {
       uDiffuse: {
         type: '3f',
@@ -143,6 +151,8 @@ window.addEventListener('mousemove', onMouseMove);
 function update() {
   requestAnimationFrame(update);
 
+  stats.begin();
+
   camera.updateMatrixWorld();
 
   raycaster.setFromCamera(mouse, scene, camera, box);
@@ -151,9 +161,11 @@ function update() {
   if (intersect) {
     intersectHelper.position.copy(intersect.point);
     intersectHelper.visible = true;
-    vec2.copy(box.shader.uniforms.uIntersect.value, intersect.uv.v);
+    box.material.uniforms.uVisible.value = 1;
+    vec2.copy(box.material.uniforms.uIntersect.value, intersect.uv.v);
   } else {
     intersectHelper.visible = false;
+    box.material.uniforms.uVisible.value = 0;
   }
 
   box.rotation.x += 0.01;
@@ -161,5 +173,7 @@ function update() {
   box.rotation.z += 0.01;
 
   renderer.render(scene, camera);
+
+  stats.end();
 }
 update();

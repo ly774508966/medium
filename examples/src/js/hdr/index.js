@@ -3,15 +3,16 @@ import {
   Scene,
   PerspectiveCamera,
   Mesh,
-  Shader,
+  Material,
   PlaneGeometry,
   GridHelper,
   OrbitControls,
   AxisHelper,
   Texture
 } from '../../../../src/index.ts';
+import stats from '../stats';
 
-const { gui, guiController } = require('../gui')(['webgl2']);
+const { guiController } = require('../gui')(['webgl2']);
 
 // Renderer
 const renderer = new Renderer({
@@ -33,36 +34,29 @@ camera.position.set(10, 5, 10);
 camera.lookAt();
 
 // Objects
-const texture0 = new Texture({
+const hdrMap = new Texture({
   src: 'assets/textures/cube/pisa-hdr/nx.hdr'
 });
 
 const geometry = new PlaneGeometry(1, 1);
-const material = new Shader({
+const material = new Material({
   name: 'Plane',
   hookFragmentPre: `
-		uniform sampler2D uTexture0;
-		uniform float uMix;
+		uniform sampler2D uMap;
 	`,
   hookFragmentMain: `
-		color = texture(uTexture0, vUv).rgb;
+		color = texture(uMap, vUv).rgb;
 	`,
   uniforms: {
-    uMix: {
-      type: 'f',
-      value: 0.5
-    },
-    uTexture0: {
+    uMap: {
       type: 't',
-      value: texture0.texture
+      value: hdrMap.texture
     }
   }
 });
 
 const plane = new Mesh(geometry, material);
 scene.add(plane);
-
-gui.add(plane.shader.uniforms.uMix, 'value', 0, 1);
 
 // Helpers
 const controls = new OrbitControls(camera, renderer.canvas);
@@ -88,7 +82,9 @@ window.addEventListener('resize', resize);
 
 function update() {
   requestAnimationFrame(update);
+  stats.begin();
   camera.updateMatrixWorld();
   renderer.render(scene, camera);
+  stats.end();
 }
 update();

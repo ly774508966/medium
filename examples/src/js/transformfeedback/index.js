@@ -6,7 +6,7 @@ import {
   OrbitControls,
   MathUtils,
   Geometry,
-  Shader,
+  Material,
   Vao
 } from '../../../../src/index.ts';
 import Shaders from './shaders.glsl';
@@ -39,12 +39,12 @@ const controls = new OrbitControls(camera, renderer.canvas);
 controls.update();
 
 // Objects
-const shaderEmit = new Shader({
+const shaderEmit = new Material({
   vertexShader: Shaders.emit.vertexShader,
   fragmentShader: Shaders.emit.fragmentShader
 });
 
-const shaderDraw = new Shader({
+const shaderDraw = new Material({
   hookVertexPre: Shaders.draw.hookVertexPre,
   hookVertexEnd: Shaders.draw.hookVertexEnd,
   hookFragmentPre: Shaders.draw.hookFragmentPre,

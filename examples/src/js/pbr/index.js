@@ -4,7 +4,7 @@ import {
   PerspectiveCamera,
   OrbitControls,
   SphereGeometry,
-  Shader,
+  Material,
   Mesh,
   Texture,
   TextureCube,
@@ -14,6 +14,7 @@ import {
   DirectionalLight
 } from '../../../../src/index.ts';
 import { hookFragmentPre, hookFragmentMain } from './shader.glsl';
+import stats from '../stats';
 
 const { gui, guiController } = require('../gui')(['webgl2']);
 
@@ -94,7 +95,7 @@ gui.add(guiController, 'exposure', 0, 2);
 const hdrObjects = [];
 
 function skybox() {
-  const material = new Shader({
+  const material = new Material({
     hookFragmentPre: `
 				uniform samplerCube uEnvironment;
 				uniform float uGamma;
@@ -142,7 +143,7 @@ function skybox() {
 skybox();
 
 function reflectiveObjects() {
-  const material = new Shader({
+  const material = new Material({
     hookVertexPre: `out vec3 vReflect;
 					`,
     hookVertexEnd: `
@@ -211,7 +212,7 @@ function reflectiveObjects() {
   const mesh0 = new Mesh(geometry0, material);
   scene.add(mesh0);
 
-  gui.add(mesh0.shader.uniforms.uMetalness, 'value', 0, 1).name('metalness');
+  gui.add(mesh0.material.uniforms.uMetalness, 'value', 0, 1).name('metalness');
   hdrObjects.push(mesh0);
 }
 reflectiveObjects();
@@ -230,13 +231,17 @@ window.addEventListener('resize', resize);
 function update() {
   requestAnimationFrame(update);
 
+  stats.begin();
+
   camera.updateMatrixWorld();
 
   hdrObjects.forEach(object => {
-    object.shader.uniforms.uGamma.value = guiController.gamma;
-    object.shader.uniforms.uExposure.value = guiController.exposure;
+    object.material.uniforms.uGamma.value = guiController.gamma;
+    object.material.uniforms.uExposure.value = guiController.exposure;
   });
 
   renderer.render(scene, camera);
+
+  stats.end();
 }
 update();

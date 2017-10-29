@@ -4,11 +4,12 @@ import {
   PerspectiveCamera,
   OrbitControls,
   TextureCube,
-  Shader,
+  Material,
   Mesh,
   JsonLoader,
   Geometry
 } from '../../../../src/index.ts';
+import stats from '../stats';
 
 const { guiController } = require('../gui')();
 
@@ -53,7 +54,7 @@ new JsonLoader('assets/models/json/mass.json')
   .then(data => {
     const geometry = new Geometry(data.vertices, data.indices, data.normals);
 
-    const material = new Shader({
+    const material = new Material({
       hookFragmentPre: `
 			uniform samplerCube uTexture0;
 		`,
@@ -92,6 +93,8 @@ window.addEventListener('resize', resize);
 function update() {
   requestAnimationFrame(update);
 
+  stats.begin();
+
   camera.updateMatrixWorld();
 
   if (mesh) {
@@ -99,5 +102,7 @@ function update() {
   }
 
   renderer.render(scene, camera);
+
+  stats.end();
 }
 update();

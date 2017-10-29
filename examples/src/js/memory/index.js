@@ -3,11 +3,12 @@ import {
   Scene,
   PerspectiveCamera,
   Mesh,
-  Shader,
+  Material,
   BoxGeometry,
   OrbitControls,
   Texture
 } from '../../../../src/index.ts';
+import stats from '../stats';
 
 const { guiController } = require('../gui')();
 
@@ -49,7 +50,7 @@ function addBox() {
     src: 'assets/textures/texture-nopow2.jpg'
   });
   const geometry = new BoxGeometry(1, 1, 1);
-  const material = new Shader({
+  const material = new Material({
     name: 'Box',
     hookFragmentPre: `
 			uniform sampler2D uTexture0;
@@ -96,7 +97,9 @@ window.addEventListener('resize', resize);
 
 function update() {
   requestAnimationFrame(update);
+  stats.begin();
   camera.updateMatrixWorld();
   renderer.render(scene, camera);
+  stats.end();
 }
 update();

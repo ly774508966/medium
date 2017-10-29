@@ -3,13 +3,14 @@ import {
   Scene,
   PerspectiveCamera,
   Mesh,
-  Shader,
+  Material,
   BoxGeometry,
   GridHelper,
   OrbitControls,
   AxisHelper,
   TextureVideo
 } from '../../../../src/index.ts';
+import stats from '../stats';
 
 const { guiController } = require('../gui')();
 
@@ -47,7 +48,7 @@ textureVideo.on('ended', () => {
 });
 
 const geometry = new BoxGeometry(1, 1, 1);
-const material = new Shader({
+const material = new Material({
   name: 'Box',
   hookFragmentPre: `
 		uniform sampler2D uTexture0;
@@ -90,10 +91,15 @@ window.addEventListener('resize', resize);
 
 function update() {
   requestAnimationFrame(update);
+
+  stats.begin();
+
   camera.updateMatrixWorld();
   box.rotation.x += 0.01;
   box.rotation.y += 0.01;
   textureVideo.update();
   renderer.render(scene, camera);
+
+  stats.end();
 }
 update();

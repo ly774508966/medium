@@ -9,7 +9,7 @@ import {
   Geometry,
   MathUtils,
   Mesh,
-  Shader,
+  Material,
   Constants
 } from '../../../../src/index.ts';
 
@@ -78,7 +78,7 @@ const hookFragmentEnd = `
 	outgoingColor = vec4(1.0);
 `;
 
-const shader = new Shader({
+const shader = new Material({
   hookVertexPre: `
 		uniform float uSize;
 	`,

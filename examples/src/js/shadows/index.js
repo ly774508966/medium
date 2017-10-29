@@ -11,12 +11,13 @@ import {
   Mesh,
   PlaneGeometry,
   SphereGeometry,
-  Shader,
+  Material,
   JsonLoader,
   Geometry,
   BoxGeometry
 } from '../../../../src/index.ts';
 import ShadowMapRenderer from './ShadowMapRenderer';
+import stats from '../stats';
 
 const { gui, guiController } = require('../gui')();
 
@@ -75,7 +76,7 @@ scene.directionalLights = directionalLights;
 // Visible light helper
 const lightHelper = new Mesh(
   new SphereGeometry(0.1, 16, 16),
-  new Shader({
+  new Material({
     uniforms: {
       uDiffuse: {
         type: '3f',
@@ -148,7 +149,7 @@ const hookFragmentEnd = `
 	outgoingColor = vec4(color * illuminated, 1.0);
 `;
 
-const objectMaterial = new Shader({
+const objectMaterial = new Material({
   type: 'lambert',
   // ambientLight,
   directionalLights,
@@ -221,7 +222,7 @@ scene.add(box);
 const floor = new Mesh(new PlaneGeometry(10, 10, 1, 1, 'XZ'), objectMaterial);
 scene.add(floor);
 
-const depthMaterial = new Shader({
+const depthMaterial = new Material({
   hookVertexPre: `
 		uniform mat4 uLightProjectionMatrix;
 		uniform mat4 uLightViewMatrix;
@@ -261,7 +262,7 @@ depthMaterial.create(sphere.geometry);
 // Debug plane for shadow map
 const shadowMapDebug = new Mesh(
   new PlaneGeometry(3, 3),
-  new Shader({
+  new Material({
     hookFragmentPre: `
 		uniform sampler2D uTexture0;
 	`,
@@ -302,6 +303,8 @@ window.addEventListener('resize', resize);
 function update() {
   requestAnimationFrame(update);
 
+  stats.begin();
+
   camera.updateMatrixWorld();
 
   lightHelper.position.copy(directionalLights.get()[0].position);
@@ -311,11 +314,11 @@ function update() {
 
   // set depth material for objects
   sceneShadow.objects.forEach(object => {
-    object.shader = depthMaterial;
+    object.material = depthMaterial;
   });
 
   if (objMesh) {
-    objMesh.shader = depthMaterial;
+    objMesh.material = depthMaterial;
   }
 
   shadowMapRenderer.render(sceneShadow);
@@ -326,7 +329,7 @@ function update() {
   });
 
   if (objMesh) {
-    objMesh.shader = objectMaterial;
+    objMesh.material = objectMaterial;
     objMesh.rotation.y += 0.005;
   }
 
@@ -335,5 +338,7 @@ function update() {
   box.rotation.z += 0.005;
 
   renderer.render(scene, camera);
+
+  stats.end();
 }
 update();

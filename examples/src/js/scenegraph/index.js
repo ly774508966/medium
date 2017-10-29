@@ -6,7 +6,7 @@ import {
   GridHelper,
   OrbitControls,
   SphereGeometry,
-  Shader,
+  Material,
   Mesh,
   Color,
   DirectionalLight,
@@ -15,6 +15,7 @@ import {
   Lights,
   Constants
 } from '../../../../src/index.ts';
+import stats from '../stats';
 
 const { gui, guiController } = require('../gui')();
 
@@ -60,7 +61,7 @@ scene.directionalLights = directionalLights;
 
 const container = new Object3D();
 
-const material = new Shader({
+const material = new Material({
   type: 'lambert',
   uniforms: {
     uDiffuse: {
@@ -71,7 +72,7 @@ const material = new Shader({
   directionalLights
 });
 
-const material2 = new Shader({
+const material2 = new Material({
   drawType: Constants.DRAW_LINES,
   uniforms: {
     uDiffuse: {
@@ -114,6 +115,8 @@ window.addEventListener('resize', resize);
 function update() {
   requestAnimationFrame(update);
 
+  stats.begin();
+
   camera.updateMatrixWorld();
 
   container.rotation.x += 0.01;
@@ -127,5 +130,7 @@ function update() {
   // to be called manually
   container.updateMatrix(camera);
   renderer.render(scene, camera);
+
+  stats.end();
 }
 update();

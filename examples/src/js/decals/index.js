@@ -17,7 +17,7 @@ import {
   RayCaster,
   Renderer,
   Scene,
-  Shader,
+  Material,
   ShaderChunks,
   SphereGeometry,
   Texture,
@@ -26,6 +26,7 @@ import {
 } from '../../../../src/index.ts';
 import DRACOLoader from '../draco/DRACOLoader';
 import Decal from './decal';
+import stats from '../stats';
 
 const { guiController } = require('../gui')(['webgl2']);
 
@@ -95,7 +96,7 @@ dracoLoader.load(
   geometry => {
     face = new Mesh(
       geometry,
-      new Shader({
+      new Material({
         directionalLights,
         ambientLight,
         type: 'lambert',
@@ -146,13 +147,13 @@ const bufferVertices = new Float32Array(points);
 
 const line = new Mesh(
   new LineGeometry(bufferVertices),
-  new Shader({
+  new Material({
     drawType: Constants.DRAW_LINES
   })
 );
 scene.add(line);
 
-const intersectHelper = new Mesh(new SphereGeometry(0.2), new Shader());
+const intersectHelper = new Mesh(new SphereGeometry(0.2), new Material());
 scene.add(intersectHelper);
 
 const raycaster = new RayCaster();
@@ -230,7 +231,7 @@ function onMouseClick() {
 
   const decalMesh = new Mesh(
     geometry,
-    new Shader({
+    new Material({
       type: 'lambert',
       ambientLight,
       hookVertexPre: `
@@ -293,6 +294,8 @@ window.addEventListener('click', onMouseClick);
 function update() {
   requestAnimationFrame(update);
 
+  stats.begin();
+
   controls.update();
 
   if (face) {
@@ -317,5 +320,7 @@ function update() {
 
   camera.updateMatrixWorld();
   renderer.render(scene, camera);
+
+  stats.end();
 }
 update();

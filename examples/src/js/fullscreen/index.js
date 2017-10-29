@@ -3,9 +3,10 @@ import {
   Scene,
   OrthographicCamera,
   Mesh,
-  Shader,
+  Material,
   PlaneGeometry
 } from '../../../../src/index.ts';
+import stats from '../stats';
 
 const { guiController } = require('../gui')();
 
@@ -27,7 +28,7 @@ camera.position.set(0, 0, 1);
 camera.lookAt();
 
 const geometry = new PlaneGeometry(2, 2);
-const material = new Shader({
+const material = new Material({
   name: 'Plane',
   hookFragmentEnd: 'outgoingColor = vec4(vUv, 1.0, 1.0);'
 });
@@ -50,8 +51,12 @@ window.addEventListener('resize', resize);
 function update() {
   requestAnimationFrame(update);
 
+  stats.begin();
+
   camera.updateMatrixWorld();
 
   renderer.render(scene, camera);
+
+  stats.end();
 }
 update();

@@ -10,6 +10,7 @@ import {
 } from '../../../../src/index.ts';
 import data0 from './data0.json';
 import data1 from './data1.json';
+import stats from '../stats';
 
 const { gui, guiController } = require('../gui')();
 
@@ -122,6 +123,8 @@ function render(camera, x, y, width, height) {
 function update() {
   requestAnimationFrame(update);
 
+  stats.begin();
+
   cameraHelper.update();
 
   cameras.dev.updateMatrixWorld();
@@ -133,5 +136,7 @@ function update() {
   } else {
     render(cameras.main, 0, 0, 1, 1);
   }
+
+  stats.end();
 }
 update();
