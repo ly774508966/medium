@@ -1,9 +1,18 @@
 extends includes/_layout
 
 block content
-	header
-		h1 Medium
-		nav
-			ul.demos
-				for demo in locals.demos
-					li: a(href=`${demo}.html`) #{demo}
+  header
+    h1 Medium
+    p.description #{locals.description}
+    hr
+    nav.nav
+      for category, key in locals.examples
+        .nav__item
+          h3 #{key}
+          ul
+            for demo in category
+              li
+                a(href=`${demo.id}.html`) #{demo.title}
+
+      .nav__item
+        a.ixviii(href='https://www.ixviii.io', title="ixviii")
