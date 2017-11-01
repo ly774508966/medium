@@ -1,0 +1,106 @@
+{
+  "Materials": [
+    {
+      "id": "lambert",
+      "title": "Lambert"
+    },
+    {
+      "id": "phong",
+      "title": "Phong"
+    }
+  ],
+  "Textures": [
+    {
+      "id": "texture",
+      "title": "Texture"
+    },
+    {
+      "id": "texturevideo",
+      "title": "Texture Video"
+    },
+    {
+      "id": "texturecube",
+      "title": "Texture Cube"
+    },
+    {
+      "id": "texture3d",
+      "title": "Texture 3D"
+    },
+    {
+      "id": "texture3d_advanced",
+      "title": "Texture 3D Advanced"
+    },
+    {
+      "id": "textureproj",
+      "title": "Texture Projection"
+    },
+    {
+      "id": "textureproj_advanced",
+      "title": "Texture Projection Advanced"
+    },
+    {
+      "id": "hdrcube",
+      "title": "HDR Cube"
+    }
+  ],
+  "Interaction": [
+    {
+      "id": "raycast",
+      "title": "Raycast"
+    },
+    {
+      "id": "decals",
+      "title": "Decals"
+    }
+  ],
+  "Camera": [
+    {
+      "id": "cameradolly",
+      "title": "Camera Dolly"
+    }
+  ],
+  "Shadows": [
+    {
+      "id": "shadows",
+      "title": "Shadows"
+    }
+  ],
+  "Geometry": [
+    {
+      "id": "instancing",
+      "title": "Instancing"
+    }
+  ],
+  "File formats": [
+    {
+      "id": "draco",
+      "title": "Draco"
+    },
+    {
+      "id": "obj",
+      "title": "Obj"
+    }
+  ],
+  "Misc": [
+    {
+      "id": "sandbox",
+      "title": "Sandbox"
+    },
+    {
+      "id": "scenegraph",
+      "title": "Scene graph"
+    },
+    {
+      "id": "points",
+      "title": "Points"
+    },
+    {
+      "id": "memory",
+      "title": "Memory"
+    },
+    {
+      "id": "fullscreen",
+      "title": "Fullscreen shader"
+    }
+  ]
+}
