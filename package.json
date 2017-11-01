@@ -1,6 +1,6 @@
 {
   "name": "ixviii.medium",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Progressive WebGL toolkit for art.",
   "main": "lib/ixviii.medium.js",
   "scripts": {
