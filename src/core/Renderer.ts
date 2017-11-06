@@ -206,13 +206,14 @@ export default class Renderer {
       this.viewport.height
     );
 
+    gl.clearColor(
+      this.clearColor.r,
+      this.clearColor.g,
+      this.clearColor.b,
+      this.clearColor.a
+    );
+
     if (this.autoClear) {
-      gl.clearColor(
-        this.clearColor.r,
-        this.clearColor.g,
-        this.clearColor.b,
-        this.clearColor.a
-      );
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     }
 
