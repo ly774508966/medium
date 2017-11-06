@@ -1,3 +1,16 @@
+declare global {
+  interface Window {
+    WebGL2RenderingContext: any;
+  }
+}
+
+// Polyfill
+if (window.WebGL2RenderingContext === undefined) {
+  window.WebGL2RenderingContext = function WebGL2RenderingContext() {
+    return this;
+  };
+}
+
 // Core
 import * as Capabilities from './core/Capabilities';
 export { Capabilities };
