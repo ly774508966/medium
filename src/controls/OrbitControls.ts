@@ -1,6 +1,7 @@
 import PerspectiveCamera from '../cameras/PerspectiveCamera';
 import { clamp } from '../math/Utils';
 import Vector3 from '../math/Vector3';
+import Vector2 from '../math/Vector2';
 
 const MODE_DRAG = 'MODE_DRAG';
 const MODE_PAN = 'MODE_PAN';
@@ -16,6 +17,7 @@ export default class OrbitControls {
   public smoothing: boolean;
   public easing: number;
   public isDragging: boolean;
+  public rotation: Vector2;
   public _camera: PerspectiveCamera;
   public _element: HTMLElement;
   public _zoomMin: number;
@@ -23,17 +25,13 @@ export default class OrbitControls {
   public _radius: number;
   public _radiusOffset: number;
   public _defaultRadius: number;
-  public _rotationX: number;
-  public _rotationY: number;
-  public _defaultRotationX: number;
-  public _defaultRotationY: number;
+  public _rotation: Vector2;
+  public _defaultRotation: Vector2;
   public _x: number;
   public _y: number;
   public _z: number;
-  public _offsetX: number;
-  public _offsetY: number;
-  public _offsetPanX: number;
-  public _offsetPanY: number;
+  public _offset: Vector2;
+  public _offsetPan: Vector2;
   public target: Vector3;
   public _targetOffset: Vector3;
   public _direction: Vector3;
@@ -42,8 +40,7 @@ export default class OrbitControls {
   public _height: number;
   public _mode: string;
   public isDown: boolean;
-  public _startX: number;
-  public _startY: number;
+  public _start: Vector2;
 
   constructor(
     camera: PerspectiveCamera,
@@ -63,29 +60,31 @@ export default class OrbitControls {
     this._radius = Math.max(camera.position.x, camera.position.z);
     this._radiusOffset = 0;
     this._defaultRadius = Math.max(camera.position.x, camera.position.z);
-    this._rotationX = Math.atan2(camera.position.y - 0, +this._radius - 0);
-    this._rotationY = Math.atan2(camera.position.z - 0, camera.position.x - 0);
-    this._defaultRotationX = Math.atan2(
+    this.rotation = new Vector2();
+    this._rotation = new Vector2();
+    this._rotation.x = Math.atan2(camera.position.y - 0, +this._radius - 0);
+    this._rotation.y = Math.atan2(camera.position.z - 0, camera.position.x - 0);
+    this._defaultRotation = new Vector2();
+    this._defaultRotation.x = Math.atan2(
       camera.position.y - 0,
       +this._radius - 0
     );
-    this._defaultRotationY = Math.atan2(
+    this._defaultRotation.y = Math.atan2(
       camera.position.z - 0,
       camera.position.x - 0
     );
 
-    const y = this._radius * Math.sin(this._rotationX);
-    const r = this._radius * Math.cos(this._rotationX);
-    const x = Math.sin(this._rotationY) * r;
-    const z = Math.cos(this._rotationY) * r;
+    const y = this._radius * Math.sin(this._rotation.x);
+    const r = this._radius * Math.cos(this._rotation.x);
+    const x = Math.sin(this._rotation.y) * r;
+    const z = Math.cos(this._rotation.y) * r;
 
     this._x = x;
     this._y = y;
     this._z = z;
-    this._offsetX = 0;
-    this._offsetY = 0;
-    this._offsetPanX = 0;
-    this._offsetPanY = 0;
+    this._start = new Vector2();
+    this._offset = new Vector2();
+    this._offsetPan = new Vector2();
     this.target = new Vector3();
     this._targetOffset = new Vector3();
     this._direction = new Vector3();
@@ -112,8 +111,8 @@ export default class OrbitControls {
       switch (event.touches.length) {
         case 1:
           this._mode = MODE_DRAG;
-          this._offsetY = this._rotationY;
-          this._offsetX = this._rotationX;
+          this._offset.y = this._rotation.y;
+          this._offset.x = this._rotation.x;
           break;
         case 2: {
           this._mode = MODE_ZOOM;
@@ -122,8 +121,8 @@ export default class OrbitControls {
         }
         default: {
           this._mode = MODE_PAN;
-          this._offsetY = this.target.y;
-          this._offsetX = this.target.x;
+          this._offset.y = this.target.y;
+          this._offset.x = this.target.x;
         }
       }
     } else {
@@ -131,19 +130,19 @@ export default class OrbitControls {
       switch (event.which) {
         case 3:
           this._mode = MODE_PAN;
-          this._offsetY = this.target.y;
-          this._offsetX = this.target.x;
+          this._offset.y = this.target.y;
+          this._offset.x = this.target.x;
           break;
         default: {
           this._mode = MODE_DRAG;
-          this._offsetY = this._rotationY;
-          this._offsetX = this._rotationX;
+          this._offset.y = this._rotation.y;
+          this._offset.x = this._rotation.x;
         }
       }
     }
 
-    this._startY = event.pageX / this._width;
-    this._startX = event.pageY / this._height;
+    this._start.y = event.pageX / this._width;
+    this._start.x = event.pageY / this._height;
     this._targetOffset.copy(this.target);
     this._radiusOffset = this._radius;
     this.isDown = true;
@@ -164,11 +163,12 @@ export default class OrbitControls {
           const cross = this._direction.cross(UP);
           const tx =
             this._targetOffset.x +
-            -(this._startY - y) * this.panSpeed * cross.x;
-          const ty = this._targetOffset.y + -(this._startX - x) * this.panSpeed;
+            -(this._start.y - y) * this.panSpeed * cross.x;
+          const ty =
+            this._targetOffset.y + -(this._start.x - x) * this.panSpeed;
           const tz =
             this._targetOffset.z +
-            -(this._startY - y) * this.panSpeed * cross.z;
+            -(this._start.y - y) * this.panSpeed * cross.z;
           this.target.set(tx, ty, tz);
           break;
         }
@@ -187,11 +187,11 @@ export default class OrbitControls {
           // Drag
           const y = event.pageX / this._width;
           const x = event.pageY / this._height;
-          this._rotationX =
-            this._offsetX + -(this._startX - x) * this.rotationSpeed;
-          this._rotationY =
-            this._offsetY + (this._startY - y) * this.rotationSpeed;
-          this._rotationX = clamp(this._rotationX, -Math.PI / 2, Math.PI / 2);
+          this._rotation.x =
+            this._offset.x + -(this._start.x - x) * this.rotationSpeed;
+          this._rotation.y =
+            this._offset.y + (this._start.y - y) * this.rotationSpeed;
+          this._rotation.x = clamp(this._rotation.x, -Math.PI / 2, Math.PI / 2);
         }
       }
 
@@ -218,32 +218,28 @@ export default class OrbitControls {
   }
 
   public update() {
-    const y = this._radius * Math.sin(this._rotationX);
-    const r = this._radius * Math.cos(this._rotationX); // radius of the sphere
-    const x = Math.sin(this._rotationY) * r;
-    const z = Math.cos(this._rotationY) * r;
-
     if (this.smoothing) {
-      this._x += (x - this._x) * this.easing;
-      this._y += (y - this._y) * this.easing;
-      this._z += (z - this._z) * this.easing;
-
-      if (Math.abs(this._x - x) < EASE_THRESHOLD) {
-        this._x = x;
+      this.rotation.x += (this._rotation.x - this.rotation.x) * this.easing;
+      this.rotation.y += (this._rotation.y - this.rotation.y) * this.easing;
+      if (Math.abs(this.rotation.x - this._rotation.x) < EASE_THRESHOLD) {
+        this.rotation.x = this._rotation.x;
       }
-
-      if (Math.abs(this._y - y) < EASE_THRESHOLD) {
-        this._y = y;
-      }
-
-      if (Math.abs(this._z - z) < EASE_THRESHOLD) {
-        this._z = z;
+      if (Math.abs(this.rotation.y - this._rotation.y) < EASE_THRESHOLD) {
+        this.rotation.y = this._rotation.y;
       }
     } else {
-      this._x = x;
-      this._y = y;
-      this._z = z;
+      this.rotation.x = this._rotation.x;
+      this.rotation.y = this._rotation.y;
     }
+
+    const y = this._radius * Math.sin(this.rotation.x);
+    const r = this._radius * Math.cos(this.rotation.x); // radius of the sphere
+    const x = Math.sin(this.rotation.y) * r;
+    const z = Math.cos(this.rotation.y) * r;
+
+    this._x = x;
+    this._y = y;
+    this._z = z;
 
     this._camera.position.set(this._x, this._y, this._z).add(this.target);
     this._camera.lookAt(this.target.x, this.target.y, this.target.z);
@@ -275,8 +271,8 @@ export default class OrbitControls {
 
   public reset() {
     this.target.set(0, 0, 0);
-    this._rotationY = this._defaultRotationY;
-    this._rotationX = this._defaultRotationX;
+    this._rotation.y = this._defaultRotation.y;
+    this._rotation.x = this._defaultRotation.x;
     this._radius = this._defaultRadius;
     this.update();
   }
