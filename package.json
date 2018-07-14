@@ -10,13 +10,12 @@
     "examples:html": "node ./pug.config.js",
     "examples:build": "NODE_ENV=production webpack --config webpack.config.examples.js --colors; node ./pug.config.js",
     "build": "NODE_ENV=production npm run lint; webpack --config webpack.config.build.js --colors; NODE_ENV=production webpack --config webpack.config.build.js --colors",
-    "prepublish": "npm run docs; npm run build",
+    "prepublish": "npm run build",
     "formatting": "prettier --write --single-quote --print-width 80 './src/**/*.ts'",
     "formatting:examples": "prettier --write --single-quote --print-width 80 './examples/src/js/**/*.js'",
     "lint:src": "tslint --fix ./src/**/*.ts",
     "lint:examples": "eslint --fix --ext .js ./examples/src ./internals --cache",
     "lint": "npm run lint:src; npm run lint:examples;",
-    "docs": "typedoc --target es6 --tsconfig ./tsconfig.json --ignoreCompilerErrors --theme default --name Medium --out ./docs ./src",
     "precommit": "npm run lint"
   },
   "repository": {
@@ -57,7 +56,6 @@
     "ts-loader": "^2.3.7",
     "tslint": "^5.7.0",
     "tslint-config-prettier": "^1.5.0",
-    "typedoc": "^0.8.0",
     "typescript": "^2.5.2",
     "webpack": "^3.5.6"
   },
