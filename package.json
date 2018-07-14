@@ -1,20 +1,28 @@
 {
   "name": "ixviii.medium",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Progressive WebGL toolkit for art.",
   "main": "lib/ixviii.medium.js",
   "scripts": {
-    "start": "concurrently 'npm run server' 'npm run examples:js' 'npm run examples:html'",
-    "server": "live-server ./examples --quiet --port=3000 --watch='js/*,assets/**/*,*.html' --ignore='src'",
-    "examples:js": "webpack --config webpack.config.examples.js --colors --watch",
+    "start":
+      "concurrently 'npm run server' 'npm run examples:js' 'npm run examples:html'",
+    "server":
+      "live-server ./examples --quiet --port=3000 --watch='js/*,assets/**/*,*.html' --ignore='src'",
+    "examples:js":
+      "webpack --config webpack.config.examples.js --colors --watch",
     "examples:html": "node ./pug.config.js",
-    "examples:build": "NODE_ENV=production webpack --config webpack.config.examples.js --colors; node ./pug.config.js",
-    "build": "NODE_ENV=production npm run lint; webpack --config webpack.config.build.js --colors; NODE_ENV=production webpack --config webpack.config.build.js --colors",
+    "examples:build":
+      "NODE_ENV=production webpack --config webpack.config.examples.js --colors; node ./pug.config.js",
+    "build":
+      "NODE_ENV=production npm run lint; webpack --config webpack.config.build.js --colors; NODE_ENV=production webpack --config webpack.config.build.js --colors",
     "prepublish": "npm run build",
-    "formatting": "prettier --write --single-quote --print-width 80 './src/**/*.ts'",
-    "formatting:examples": "prettier --write --single-quote --print-width 80 './examples/src/js/**/*.js'",
+    "formatting":
+      "prettier --write --single-quote --print-width 80 './src/**/*.ts'",
+    "formatting:examples":
+      "prettier --write --single-quote --print-width 80 './examples/src/js/**/*.js'",
     "lint:src": "tslint --fix ./src/**/*.ts",
-    "lint:examples": "eslint --fix --ext .js ./examples/src ./internals --cache",
+    "lint:examples":
+      "eslint --fix --ext .js ./examples/src ./internals --cache",
     "lint": "npm run lint:src; npm run lint:examples;",
     "precommit": "npm run lint"
   },
@@ -22,7 +30,8 @@
     "type": "git",
     "url": "https://github.com/amelierosser/medium.git"
   },
-  "author": "Amelie Rosser <amelierosser1986@gmail.com> (https://www.ixviii.io)",
+  "author":
+    "Amelie Rosser <amelierosser1986@gmail.com> (https://www.ixviii.io)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/amelierosser/medium/issues"
