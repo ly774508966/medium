@@ -5,3 +5,4 @@ npm-debug.log
 examples/js/*.js.map
 examples/js/*.js
 examples/*.html
+.vscode
