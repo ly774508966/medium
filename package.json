@@ -30,6 +30,7 @@
   "homepage": "https://github.com/amelierosser/medium",
   "devDependencies": {
     "@types/gl-matrix": "^2.3.0",
+    "@types/node": "^10.5.2",
     "@types/webgl2": "^0.0.2",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.0.0",

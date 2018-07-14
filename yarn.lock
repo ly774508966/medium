@@ -10,6 +10,10 @@
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/@types/gl-matrix/-/gl-matrix-2.4.0.tgz#a27affbaf3a849894817f648bf68ac710dedf4a3"
 
+"@types/node@^10.5.2":
+  version "10.5.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.5.2.tgz#f19f05314d5421fe37e74153254201a7bf00a707"
+
 "@types/webgl2@^0.0.2":
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@types/webgl2/-/webgl2-0.0.2.tgz#0ea93b1976c7d57ee19abcda3d04ba9aa1787d11"
